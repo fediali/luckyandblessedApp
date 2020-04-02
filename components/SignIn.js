@@ -9,7 +9,10 @@ class SignIn extends Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.subContainer}>
-                    <Image style={{ width: 300, height: 250 }} resizeMode="contain" source={require("../static/logo-signIn.png")} /> 
+                    <Image style={{
+                        width: 200,
+                        height: 200,
+                    }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                     {/* TODO: Image has to be changed with orignal one */}
                     <View style={styles.emailInputView}>
                         <TextInput style={styles.input} placeholder="Email" />
@@ -18,7 +21,7 @@ class SignIn extends Component {
                         <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" />
                     </View>
                     <View style={styles.buttonContainer}>
-                    {/* TODO: Check whether to apply the touchable opacity or ripple */}
+                        {/* TODO: Check whether to apply the touchable opacity or ripple */}
                         <TouchableOpacity style={styles.buttonSignUp}>
                             <Text style={styles.buttonText}>Sign up</Text>
                         </TouchableOpacity>
@@ -49,7 +52,7 @@ styles = StyleSheet.create({
         backgroundColor: "#f6f6f6",
         flex: 1,
         paddingHorizontal: 15,
-        fontFamily: "Avenir",
+        fontFamily: "Avenir-Book",
         fontSize: 18,
         fontWeight: "normal",
         fontStyle: "normal",
@@ -77,7 +80,7 @@ styles = StyleSheet.create({
 
     },
     buttonText: {
-        fontFamily: "Montserrat",
+        fontFamily: "Montserrat-SemiBold",
         fontSize: 18,
         fontWeight: "600",
         fontStyle: "normal",
@@ -87,7 +90,7 @@ styles = StyleSheet.create({
         color: "#ffffff"
     },
     forgotPassword: {
-        fontFamily: "Avenir",
+        fontFamily: "Avenir-Book",
         fontSize: 16,
         fontWeight: "normal",
         fontStyle: "normal",
