@@ -3,12 +3,13 @@ import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from "reac
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // TODO: code onPress to the Buttons
+// Naming Conventions for assets camelCase = **assetName-componentName**
 class SignIn extends Component {
     render() {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.subContainer}>
-                    <Image style={{ width: 300, height: 250 }} resizeMode="contain" source={require("../static/download.png")} />
+                    <Image style={{ width: 300, height: 250 }} resizeMode="contain" source={require("../static/logo-signIn.png")} /> 
                     {/* TODO: Image has to be changed with orignal one */}
                     <View style={styles.emailInputView}>
                         <TextInput style={styles.input} placeholder="Email" />
