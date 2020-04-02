@@ -10,8 +10,8 @@ class SignIn extends Component {
             <View style={styles.mainContainer}>
                 <View style={styles.subContainer}>
                     <Image style={{
-                        width: 200,
-                        height: 200,
+                        width: "50%",
+                        height: "40%",
                     }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                     {/* TODO: Image has to be changed with orignal one */}
                     <View style={styles.emailInputView}>
@@ -51,7 +51,7 @@ styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: "#f6f6f6",
         flex: 1,
-        paddingHorizontal: 15,
+        paddingHorizontal: "5%",
         fontFamily: "Avenir-Book",
         fontSize: 18,
         fontWeight: "normal",
@@ -103,12 +103,12 @@ styles = StyleSheet.create({
     },
     passwordInputView: {
         flexDirection: "row",
-        paddingHorizontal: 40,
-        marginTop: 15
+        paddingHorizontal:"11%",
+        marginTop: "4%"
     },
     emailInputView: {
         flexDirection: "row",
-        paddingHorizontal: 40
+        paddingHorizontal: "11%"
     }
 })
 
