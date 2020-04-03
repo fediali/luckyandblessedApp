@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from "react-native"
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView} from "react-native"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
@@ -8,6 +8,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 class SignIn extends Component {
     render() {
         return (
+            <SafeAreaView>
             <View style={styles.mainContainer}>
                 <View style={styles.subContainer}>
                     <Image style={styles.logo} resizeMode="contain" source={require("../static/logo-signIn.png")} />
@@ -33,6 +34,7 @@ class SignIn extends Component {
                 </View>
 
             </View>
+            </SafeAreaView>
         )
     }
 }
