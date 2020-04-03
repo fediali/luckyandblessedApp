@@ -52,10 +52,10 @@ export default class WalkThrough extends Component {
           <View style={styles.buttonContainer}>
             {/* TODO: Check whether to apply the touchable opacity or ripple */}
             <TouchableOpacity style={styles.buttonRegisterNow}>
-              <Text style={styles.buttonText}>Register now</Text>
+              <Text style={styles.registerButtonText}>Register now</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonLogIn}>
-              <Text style={styles.buttonText}>Log-in</Text>
+              <Text style={styles.loginButtonText}>Log-in</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -138,15 +138,15 @@ const styles = StyleSheet.create({
   buttonLogIn: {
     width: wp('38.4%'),
     height: hp('5.4%'),
-    backgroundColor: '#2967ff',
+    backgroundColor: '#f6f6f6',
     borderRadius: 2,
     marginLeft: 8,
     paddingTop: 3.9,
     paddingHorizontal: 15.3,
     paddingBottom: 4.4
   },
-  buttonText: {
-    fontFamily: 'Montserrat-SemiBold',
+  registerButtonText: {
+    fontFamily: 'Montserrat-Medium',
     fontSize: 18,
     fontWeight: '600',
     fontStyle: 'normal',
@@ -154,5 +154,15 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
     color: '#ffffff',
+  },
+  loginButtonText: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 18,
+    fontWeight: '600',
+    fontStyle: 'normal',
+    lineHeight: 22,
+    letterSpacing: 0,
+    textAlign: 'center',
+    color: '#2d2d2f',
   },
 });
