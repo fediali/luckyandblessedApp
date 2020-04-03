@@ -6,12 +6,12 @@
  * @flow strict-local
  */
 
-import React, { Component } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator,TransitionPresets } from '@react-navigation/stack';
-import SignIn from "./components/SignIn"
+import React, {Component} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
 class App extends Component {
-
   render() {
     const Stack = createStackNavigator();
 
@@ -20,15 +20,14 @@ class App extends Component {
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
-            ...TransitionPresets.SlideFromRightIOS
-          }}
-        >
-          <Stack.Screen name="SignIn" component={SignIn} />
+            ...TransitionPresets.SlideFromRightIOS,
+          }}>
+          {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
+          <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
 }
-
 
 export default App;
