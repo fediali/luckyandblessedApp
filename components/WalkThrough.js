@@ -14,8 +14,8 @@ export default class WalkThrough extends Component {
 
   render() {
     var featuredImagesList = [
-      '../static/demoimg1-walkthrough.png',
-      '../static/demoimg2-walkthrough.png',
+      require('../static/demoimg1-walkthrough.png'),
+      require('../static/demoimg2-walkthrough.png'),
     ];
     var featuredImages = [];
 
@@ -26,7 +26,7 @@ export default class WalkThrough extends Component {
           style={styles.images}
           key={index}
           resizeMode="contain"
-          source={require('../static/demoimg1-walkthrough.png')} //TODO: Fix this
+          source={img} //TODO: Fix this
         />,
       );
     });
