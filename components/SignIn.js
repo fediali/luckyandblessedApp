@@ -8,8 +8,8 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 class SignIn extends Component {
     render() {
         return (
-            <SafeAreaView>
             <View style={styles.mainContainer}>
+                <SafeAreaView></SafeAreaView>
                 <View style={styles.subContainer}>
                     <Image style={styles.logo} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                     {/* TODO: Image has to be changed with orignal one */}
@@ -34,14 +34,13 @@ class SignIn extends Component {
                 </View>
 
             </View>
-            </SafeAreaView>
         )
     }
 }
 styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
     },
     subContainer: {
         flex: 1,

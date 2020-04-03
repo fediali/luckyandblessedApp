@@ -10,6 +10,8 @@ import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator,TransitionPresets } from '@react-navigation/stack';
 import SignIn from "./components/SignIn"
+import WalkThrough from "./components/WalkThrough"
+
 class App extends Component {
 
   render() {
@@ -23,7 +25,8 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
-          <Stack.Screen name="SignIn" component={SignIn} />
+          {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
+          <Stack.Screen name="WalkThrough" component={WalkThrough} />
         </Stack.Navigator>
       </NavigationContainer>
     );
