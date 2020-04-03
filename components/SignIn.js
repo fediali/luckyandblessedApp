@@ -83,7 +83,7 @@ styles = StyleSheet.create({
         marginRight: 15
     },
     buttonSignIn: {
-        backgroundColor: "#2967ff",
+        backgroundColor: "#f6f6f6",
         borderRadius: 6,
         paddingVertical: 11,
         paddingHorizontal: 38

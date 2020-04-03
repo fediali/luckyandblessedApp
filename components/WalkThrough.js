@@ -20,7 +20,7 @@ export default class WalkThrough extends Component {
     var featuredImages = [];
 
     featuredImagesList.forEach((img, index) => {
-      console.log(img.toString());
+    //   console.log(img.toString());
       featuredImages.push(
         <Image
           style={styles.images}
@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
 
   },
   newCollection: {
-    width: 103.7,
-    height: 9.7,
+    width: wp('82.9%'),
+    height: hp('3.6%'),
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 8,
     fontStyle: 'normal',
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
   },
   youAreRegistering: {
-    width: 82.3,
-    height: 14.7,
+    width: wp('65.9%'),
+    height: hp('5.4%'),
     fontFamily: 'Avenir-Heavy',
     fontSize: 5.3,
     fontWeight: 'normal',
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
     marginLeft: 10.7
   },
   buttonRegisterNow: {
-    width: 48,
-    height: 14.7,
+    width: wp('38.4%'),
+    height: hp('5.4%'),
     borderRadius: 2,
     backgroundColor: '#22242a',
     paddingTop: 4,
@@ -136,8 +136,10 @@ const styles = StyleSheet.create({
     paddingBottom: 4.3
   },
   buttonLogIn: {
+    width: wp('38.4%'),
+    height: hp('5.4%'),
     backgroundColor: '#2967ff',
-    borderRadius: 6,
+    borderRadius: 2,
     marginLeft: 8,
     paddingTop: 3.9,
     paddingHorizontal: 15.3,
