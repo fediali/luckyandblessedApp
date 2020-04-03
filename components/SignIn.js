@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from "react-native"
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // TODO: code onPress to the Buttons
@@ -9,10 +10,7 @@ class SignIn extends Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.subContainer}>
-                    <Image style={{
-                        width: "50%",
-                        height: "40%",
-                    }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
+                    <Image style={styles.logo} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                     {/* TODO: Image has to be changed with orignal one */}
                     <View style={styles.emailInputView}>
                         <TextInput style={styles.input} placeholder="Email" />
@@ -51,7 +49,10 @@ styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: "#f6f6f6",
         flex: 1,
-        paddingHorizontal: "5%",
+        top: 6.7,
+        paddingTop: 4.1,
+        paddingLeft: 6.7,
+        paddingBottom: 2.2,
         fontFamily: "Avenir-Book",
         fontSize: 18,
         fontWeight: "normal",
@@ -60,6 +61,13 @@ styles = StyleSheet.create({
         letterSpacing: 0,
         color: "#2d2d2f"
 
+    },
+    logo : {
+        width: wp("53%"),
+        height: hp("17.8%"),
+        marginTop: 21.7,
+        marginLeft: 28.3,
+        marginRight: 30.4
     },
     buttonContainer: {
         flexDirection: "row",
@@ -102,13 +110,19 @@ styles = StyleSheet.create({
 
     },
     passwordInputView: {
+        marginTop: 5,
+        marginHorizontal: 10.7,
         flexDirection: "row",
-        paddingHorizontal:"11%",
-        marginTop: "4%"
+        width: wp('82.9%'),
+        height: hp('5.4%'),
+        
     },
     emailInputView: {
         flexDirection: "row",
-        paddingHorizontal: "11%"
+        marginTop: 21.4,
+        marginHorizontal: 10.7,
+        width: wp('82.9%'),
+        height: hp('5.4%'),
     }
 })
 
