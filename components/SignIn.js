@@ -72,7 +72,8 @@ styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: "row",
-        marginTop: 25
+        marginTop: 25,
+        marginBottom: 36.3
     },
     buttonSignUp: {
         backgroundColor: "#2d2d2f",
