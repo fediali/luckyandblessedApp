@@ -6,14 +6,13 @@ export default StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   subParentContainer: {
-    flex: 3,
     alignItems: 'center',
   },
   input: {
     borderRadius: 6,
     backgroundColor: '#f6f6f6',
     flex: 1,
-    paddingHorizontal: '5%',
+    paddingHorizontal: 15,
     fontFamily: 'Avenir-Book',
     fontSize: 18,
     fontWeight: 'normal',
@@ -23,12 +22,12 @@ export default StyleSheet.create({
     color: '#2d2d2f',
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    width: '100%'
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
-    fontWeight: '600',
     fontStyle: 'normal',
     lineHeight: 22,
     letterSpacing: 0,
@@ -36,12 +35,12 @@ export default StyleSheet.create({
   },
   inputView: {
     flexDirection: 'row',
-    paddingHorizontal: '11%',
-    marginTop: '3%',
+    paddingHorizontal: 15,
+    marginTop: 10,
   },
   line: {
     borderBottomColor: 'black',
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.3,
     alignSelf:'stretch'
   }
 });
