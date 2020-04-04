@@ -1,6 +1,14 @@
-import React, { Component } from 'react';
-import { Text, Image, StyleSheet, View, TouchableOpacity, Dimensions,SafeAreaView } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import React, {Component} from 'react';
+import {
+  Text,
+  Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  SafeAreaView,
+} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default class WalkThrough extends Component {
   constructor() {
@@ -36,23 +44,19 @@ export default class WalkThrough extends Component {
             source={require('../static/logo-walkthrough.png')}
           />
           <View style={styles.imageContainer}>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
               {featuredImages}
             </ScrollView>
           </View>
           <View style={styles.texts}>
             <Text style={styles.newCollection}>New Collection</Text>
             <View style={styles.youAreRegistering}>
-              <Text style={styles.text1}>
-                You are registering for a
-                </Text>
-              <View style={{ flexDirection: "row" }}>
-                <Text style={styles.text2}>
-                  {" WHOLESALE"}
-                </Text>
-                <Text style={styles.text1}>
-                  {" account."}
-                </Text>
+              <Text style={styles.text1}>You are registering for a</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.text2}>{' WHOLESALE'}</Text>
+                <Text style={styles.text1}>{' account.'}</Text>
               </View>
             </View>
           </View>
@@ -66,14 +70,15 @@ export default class WalkThrough extends Component {
             </TouchableOpacity>
           </View>
 
+          <View style={styles.footer}></View>
         </View>
       </SafeAreaView>
     );
   }
 }
 
-const height = Dimensions.get("window").height
-const width = Dimensions.get("window").width
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -98,7 +103,7 @@ const styles = StyleSheet.create({
     height: height * 0.5, //Here 0.5 means 50 percent of screen width ; setting for image container as well for the images container doesn't need the width as its horizontal scroll view
   },
   images: {
-    width: width * 0.66, //Here 0.66 means 66 percent of screen width 
+    width: width * 0.66, //Here 0.66 means 66 percent of screen width
     height: height * 0.5, //Here 0.5 means 50 percent of screen width cause direct percentage was causing issue under scrollview
     borderRadius: 6,
     // marginHorizontal: 5
@@ -107,7 +112,7 @@ const styles = StyleSheet.create({
   texts: {
     // marginHorizontal: 32,
     // marginTop: 31,
-    textAlign: "center",
+    textAlign: 'center',
   },
   newCollection: {
     // width: '82.9%',
@@ -119,13 +124,13 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
     color: '#2d2d2f',
-    marginTop:10
+    marginTop: 10,
   },
   youAreRegistering: {
     // width: '65.9%',
     // height: '5.4%',
     marginTop: 9,
-    marginHorizontal: 32
+    marginHorizontal: 32,
   },
   text1: {
     fontFamily: 'Avenir-Book',
@@ -149,14 +154,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 23,
     // marginLeft: 32,
-
   },
   buttonRegisterNow: {
     // width: '38.4%', no need to give height and width to button
     // height: '5.4%',
     borderRadius: 6,
     backgroundColor: '#22242a',
-
   },
   buttonLogIn: {
     // width: '38.4%', no need to give height and width to button
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     paddingTop: 11.8,
     paddingHorizontal: 46,
-    paddingBottom: 13.3
+    paddingBottom: 13.3,
   },
   registerButtonText: {
     // width: '28.8%', no need to give height and width to button
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     paddingTop: 12,
     paddingHorizontal: 18,
-    paddingBottom: 13
+    paddingBottom: 13,
   },
   loginButtonText: {
     // width: '13.9%', no need to give height and width to button
@@ -192,5 +195,17 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
     color: '#2d2d2f',
+  },
+  footer: {
+    flex: 1,
+    flexDirection: "row",
+    width: '35.7%',
+    height: '0.6%',
+    borderRadius: 100,
+    backgroundColor: '#1b1b1d',
+    marginBottom: 8,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end', //TODO: Make it correct
+    
   },
 });
