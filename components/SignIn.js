@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from "react-native"
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from "react-native"
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // TODO: code onPress to the Buttons
@@ -7,34 +7,36 @@ import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from "reac
 class SignIn extends Component {
     render() {
         return (
-            <View style={styles.mainContainer}>
-                <View style={styles.subContainer}>
-                    <Image style={{
-                        width: "50%",
-                        height: "40%",
-                    }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
-                    {/* TODO: Image has to be changed with orignal one */}
-                    <View style={styles.emailInputView}>
-                        <TextInput style={styles.input} placeholder="Email" />
-                    </View>
-                    <View style={styles.passwordInputView}>
-                        <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" />
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        {/* TODO: Check whether to apply the touchable opacity or ripple */}
-                        <TouchableOpacity style={styles.buttonSignUp}>
-                            <Text style={styles.buttonText}>Sign up</Text>
+            // <SafeAreaView>
+                <SafeAreaView style={styles.mainContainer}>
+                    <View style={styles.subContainer}>
+                        <Image style={{
+                            width: "53%",
+                            height: "35%",
+                        }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
+                        {/* TODO: Image has to be changed with orignal one */}
+                        <View style={styles.emailInputView}>
+                            <TextInput style={styles.input} placeholder="Email" />
+                        </View>
+                        <View style={styles.passwordInputView}>
+                            <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" />
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            {/* TODO: Check whether to apply the touchable opacity or ripple */}
+                            <TouchableOpacity style={styles.buttonSignUp}>
+                                <Text style={styles.buttonText}>Sign up</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.buttonSignIn}>
+                                <Text style={styles.buttonText}>Sign in</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity>
+                            <Text style={styles.forgotPassword}>Forgot Password?</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.buttonSignIn}>
-                            <Text style={styles.buttonText}>Sign in</Text>
-                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity>
-                        <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                    </TouchableOpacity>
-                </View>
 
-            </View>
+                {/* </View> */}
+            </SafeAreaView>
         )
     }
 }
@@ -51,14 +53,16 @@ styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: "#f6f6f6",
         flex: 1,
-        paddingHorizontal: "5%",
+        paddingHorizontal: 15,
         fontFamily: "Avenir-Book",
         fontSize: 18,
         fontWeight: "normal",
         fontStyle: "normal",
-        lineHeight: 24,
+        // lineHeight: 24,
         letterSpacing: 0,
-        color: "#2d2d2f"
+        color: "#2d2d2f",
+        paddingVertical:11,
+
 
     },
     buttonContainer: {
@@ -103,12 +107,14 @@ styles = StyleSheet.create({
     },
     passwordInputView: {
         flexDirection: "row",
-        paddingHorizontal:"11%",
-        marginTop: "4%"
+        paddingHorizontal: 40,
+        marginTop: 15,
+
     },
     emailInputView: {
         flexDirection: "row",
-        paddingHorizontal: "11%"
+        paddingHorizontal: 40,
+
     }
 })
 
