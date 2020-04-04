@@ -1,9 +1,5 @@
 import React, {Component} from 'react';
 import {Text, Image, StyleSheet, View, TouchableOpacity} from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 import {ScrollView} from 'react-native-gesture-handler';
 
 export default class WalkThrough extends Component {
@@ -44,9 +40,19 @@ export default class WalkThrough extends Component {
           </View>
           <View style={styles.texts}> 
             <Text style={styles.newCollection}>New Collection</Text>
-            <Text style={styles.youAreRegistering}>
-                You are registering for a WHOLESALE account.
-            </Text>
+            <View style={styles.youAreRegistering}>
+                <Text style={styles.text1}>
+                  You are registering for a
+                </Text>
+                <View style={{flexDirection: "row"}}>
+                <Text style={styles.text2}>
+                  WHOLESALE 
+                </Text>
+                <Text style={styles.text1}>
+                 {" account"}
+                </Text>
+                </View>
+            </View>
           </View>
           
           <View style={styles.buttonContainer}>
@@ -74,93 +80,106 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: wp('30.6%'),
-    height: hp('10.5%'),
-    marginTop: 17.3,
-    marginLeft: 42.7,
-    marginRight: 44,
+    width: '30.6%',
+    height: '10.5%',
+    marginTop: 52,
+    marginLeft: 128,
+    marginRight: 132.1,
   },
   imageContainer: {
     flexDirection: 'row',
-    marginTop: 3.3,
-    marginLeft: 5.3,
+    marginTop: 10,
+    marginLeft: 16,
   },
   images: {
-    width: wp('66.7%'),
-    height: hp('44.5%'),
-    borderRadius: 2,
-    marginRight: 4,
+    width: '66.7%',
+    height: '44.5%',
+    borderRadius: 6,
+    marginRight: 12,
   },
   texts: {
-    marginHorizontal: 10.7,
-    marginTop: 10.3,
-
+    marginHorizontal: 32,
+    marginTop: 31,
+    textAlign: "center"
   },
   newCollection: {
-    width: wp('82.9%'),
-    height: hp('3.6%'),
+    width: '82.9%',
+    height: '3.6%',
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 8,
+    fontSize: 24,
     fontStyle: 'normal',
-    lineHeight: 9.3,
+    lineHeight: 28,
     letterSpacing: 0,
     textAlign: 'center',
     color: '#2d2d2f',
   },
   youAreRegistering: {
-    width: wp('65.9%'),
-    height: hp('5.4%'),
-    fontFamily: 'Avenir-Heavy',
-    fontSize: 5.3,
-    fontWeight: 'normal',
+    width: '65.9%',
+    height: '5.4%',
+    marginTop: 9,
+    marginHorizontal: 32
+  },
+  text1: {
+    fontFamily: 'Avenir-Books',
+    fontSize: 16,
     fontStyle: 'normal',
-    lineHeight: 7.3,
+    lineHeight: 22,
     letterSpacing: 0,
     textAlign: 'center',
     color: '#2d2d2f',
-    marginTop: 3,
-    marginHorizontal: 10.7
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    marginTop: 7.7,
-    marginLeft: 10.7
-  },
-  buttonRegisterNow: {
-    width: wp('38.4%'),
-    height: hp('5.4%'),
-    borderRadius: 2,
-    backgroundColor: '#22242a',
-    paddingTop: 4,
-    paddingHorizontal: 6,
-    paddingBottom: 4.3
-  },
-  buttonLogIn: {
-    width: wp('38.4%'),
-    height: hp('5.4%'),
-    backgroundColor: '#f6f6f6',
-    borderRadius: 2,
-    marginLeft: 8,
-    paddingTop: 3.9,
-    paddingHorizontal: 15.3,
-    paddingBottom: 4.4
-  },
-  registerButtonText: {
-    fontFamily: 'Montserrat-Medium',
-    fontSize: 18,
-    fontWeight: '600',
+  text2: {
+    fontFamily: 'Avenir-Heavy',
+    fontSize: 16,
     fontStyle: 'normal',
     lineHeight: 22,
     letterSpacing: 0,
     textAlign: 'center',
+    color: '#2d2d2f',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginTop: 23,
+    marginLeft: 32
+  },
+  buttonRegisterNow: {
+    width: '38.4%',
+    height: '5.4%',
+    borderRadius: 6,
+    backgroundColor: '#22242a',
+    
+  },
+  buttonLogIn: {
+    width: '38.4%',
+    height: '5.4%',
+    backgroundColor: '#f6f6f6',
+    borderRadius: 6,
+    marginLeft: 24,
+    paddingTop: 11.8,
+    paddingHorizontal: 46,
+    paddingBottom: 13.3
+  },
+  registerButtonText: {
+    width: '28.8%',
+    height: '2.3%',
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 16,
+    fontStyle: 'normal',
+    lineHeight: 20,
+    letterSpacing: 0,
+    textAlign: 'center',
     color: '#ffffff',
+    paddingTop: 12,
+    paddingHorizontal: 18,
+    paddingBottom: 13
   },
   loginButtonText: {
+    width: '13.9%',
+    height: '2.3%',
     fontFamily: 'Montserrat-Medium',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 16,
     fontStyle: 'normal',
-    lineHeight: 22,
+    lineHeight: 20,
     letterSpacing: 0,
     textAlign: 'center',
     color: '#2d2d2f',
