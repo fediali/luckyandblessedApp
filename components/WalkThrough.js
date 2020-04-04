@@ -94,11 +94,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     // flexDirection: 'row',
     marginTop: 10,
-    height: height * 0.5,
+    height: height * 0.5, //Here 0.5 means 50 percent of screen width ; setting for image container as well for the images container doesn't need the width as its horizontal scroll view
   },
   images: {
-    width: width * 0.66,
-    height: height * 0.5,
+    width: width * 0.66, //Here 0.66 means 66 percent of screen width 
+    height: height * 0.5, //Here 0.5 means 50 percent of screen width cause direct percentage was causing issue under scrollview
     borderRadius: 6,
     marginHorizontal: 5
     // marginRight: 12,
@@ -151,14 +151,14 @@ const styles = StyleSheet.create({
 
   },
   buttonRegisterNow: {
-    // width: '38.4%',
+    // width: '38.4%', no need to give height and width to button
     // height: '5.4%',
     borderRadius: 6,
     backgroundColor: '#22242a',
 
   },
   buttonLogIn: {
-    // width: '38.4%',
+    // width: '38.4%', no need to give height and width to button
     // height: '5.4%',
     backgroundColor: '#f6f6f6',
     borderRadius: 6,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13.3
   },
   registerButtonText: {
-    // width: '28.8%',
+    // width: '28.8%', no need to give height and width to button
     // height: '2.3%',
     fontFamily: 'Montserrat-Medium',
     fontSize: 16,
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13
   },
   loginButtonText: {
-    // width: '13.9%',
+    // width: '13.9%', no need to give height and width to button
     // height: '2.3%',
     fontFamily: 'Montserrat-Medium',
     fontSize: 16,
