@@ -6,11 +6,12 @@
  * @flow strict-local
  */
 
-import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
+import React, { Component } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator,TransitionPresets } from '@react-navigation/stack';
+import SignIn from "./components/SignIn"
+import WalkThrough from "./components/WalkThrough"
+
 class App extends Component {
   render() {
     const Stack = createStackNavigator();
@@ -20,10 +21,11 @@ class App extends Component {
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
-            ...TransitionPresets.SlideFromRightIOS,
-          }}>
+            ...TransitionPresets.SlideFromRightIOS
+          }}
+        >
           {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
-          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="WalkThrough" component={WalkThrough} />
         </Stack.Navigator>
       </NavigationContainer>
     );
