@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from "react-native"
-
+import Header from "./Header"
+import Footer from "./Footer"
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // TODO: code onPress to the Buttons
 // Naming Conventions for assets camelCase = **assetName-componentName**
@@ -9,6 +10,7 @@ class SignIn extends Component {
         return (
             // <SafeAreaView>
                 <SafeAreaView style={styles.mainContainer}>
+                <Header centerText={"hello"}/>
                     <View style={styles.subContainer}>
                         <Image style={{
                             width: "53%",
@@ -36,6 +38,7 @@ class SignIn extends Component {
                     </View>
 
                 {/* </View> */}
+                <Footer />
             </SafeAreaView>
         )
     }
