@@ -8,6 +8,7 @@ export default StyleSheet.create({
   },
   subParentContainer: {
     alignItems: 'center',
+    backgroundColor:"#fff"
   },
   input: {
     borderRadius: 6,

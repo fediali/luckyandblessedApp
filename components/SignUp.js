@@ -17,9 +17,9 @@ class SignUp extends Component {
     return (
       <ScrollView
         contentContainerStyle={{
-          // flex:1,
-          // flexGrow: 1,
-          // justifyContent: 'space-between',
+          backgroundColor:"#fff",
+          flexGrow: 1,
+          justifyContent: 'space-between',
         }}>
         <SafeAreaView style={styles.parentContainer}>
 

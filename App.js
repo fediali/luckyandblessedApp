@@ -8,11 +8,12 @@
 
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator,TransitionPresets } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import SignIn from "./components/SignIn"
 import WalkThrough from "./components/WalkThrough"
 import ConfirmationSuccess from "./components/ConfirmationSuccess"
 import SignUp from "./components/SignUp"
+import CustomHeader from "./components/CustomHeader"
 class App extends Component {
   render() {
     const Stack = createStackNavigator();
@@ -25,6 +26,8 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
+          {/* <Stack.Screen name="CustomHeader" component={CustomHeader} /> */}
+
           {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
           <Stack.Screen name="SignUp" component={SignUp} />
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} /> */}

@@ -43,7 +43,7 @@ class SignIn extends Component {
 styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: "#ffffff",
+        backgroundColor: "#ffffff"
     },
     subContainer: {
         flex: 1,
@@ -67,8 +67,7 @@ styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: "row",
-        marginTop: 25,
-        marginBottom: 36.3
+        marginTop: 25
     },
     buttonSignUp: {
         backgroundColor: "#2d2d2f",
@@ -78,7 +77,7 @@ styles = StyleSheet.create({
         marginRight: 15
     },
     buttonSignIn: {
-        backgroundColor: "#f6f6f6",
+        backgroundColor: "#2967ff",
         borderRadius: 6,
         paddingVertical: 11,
         paddingHorizontal: 38
@@ -107,8 +106,6 @@ styles = StyleSheet.create({
 
     },
     passwordInputView: {
-        marginTop: 5,
-        marginHorizontal: 10.7,
         flexDirection: "row",
         paddingHorizontal: 40,
         marginTop: 15,
