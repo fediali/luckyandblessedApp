@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -10,17 +10,19 @@ import {
 } from 'react-native';
 
 import styles from './Styles/Style';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 class SignUp extends Component {
   render() {
     return (
-      <SafeAreaView style={styles.parentContainer}>
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: 'space-between',
-          }}>
+      <ScrollView
+        contentContainerStyle={{
+          // flex:1,
+          // flexGrow: 1,
+          // justifyContent: 'space-between',
+        }}>
+        <SafeAreaView style={styles.parentContainer}>
+
           <View style={styles.subParentContainer}>
             <Image
               style={innerStyles.logoImage}
@@ -61,28 +63,28 @@ class SignUp extends Component {
                 placeholder="Upload Sales TX ID"
               />
               <Image
-                style={{width: 70, height: 50}}
+                style={{ width: 70, height: 50 }}
                 resizeMode="contain"
                 source={require('../static/logo-signIn.png')}
               />
             </View>
             <Text style={innerStyles.customTextBold}>OR</Text>
-            <View style={[styles.line, {marginTop: 10}]} />
+            <View style={[styles.line, { marginTop: 10 }]} />
 
-            <View style={[styles.buttonContainer, {paddingHorizontal: 15}]}>
+            <View style={[styles.buttonContainer, { paddingHorizontal: 15 }]}>
               <TouchableOpacity>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <Text
                     style={[
                       innerStyles.customTextNormal,
-                      {paddingHorizontal: 15},
+                      { paddingHorizontal: 15 },
                     ]}>
                     Fill out TX ID Form Online
                   </Text>
                   {/*TODO: replace this image with right arrow*/}
 
                   <Image
-                    style={{width: 70, height: 50}}
+                    style={{ width: 70, height: 50 }}
                     resizeMode="contain"
                     source={require('../static/logo-signIn.png')}
                   />
@@ -114,8 +116,8 @@ class SignUp extends Component {
               </TouchableOpacity>
             </View>
           </View>
-        </ScrollView>
-      </SafeAreaView>
+        </SafeAreaView>
+      </ScrollView>
     );
   }
 }
