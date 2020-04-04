@@ -28,8 +28,8 @@ class App extends Component {
         >
           {/* <Stack.Screen name="Header" component={Header} /> */}
 
-          <Stack.Screen name="SignIn" component={SignIn} />
-          {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
+          {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
+          <Stack.Screen name="SignUp" component={SignUp} />
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} /> */}
           {/* <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} /> */}
         </Stack.Navigator>

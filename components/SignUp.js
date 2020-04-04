@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 
 import styles from './Styles/Style';
+import Header from "./Header"
+import LogoSmall from "./Styles/LogoSmall"
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 class SignUp extends Component {
@@ -22,6 +25,7 @@ class SignUp extends Component {
           justifyContent: 'space-between',
         }}>
         <SafeAreaView style={styles.parentContainer}>
+        <Header centerText={""}/>
 
           <View style={styles.subParentContainer}>
             <Image
