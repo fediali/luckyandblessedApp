@@ -36,7 +36,7 @@ export default StyleSheet.create({
   inputView: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    marginTop: 10,
+    paddingVertical: 5,
   },
   line: {
     borderBottomColor: 'black',
