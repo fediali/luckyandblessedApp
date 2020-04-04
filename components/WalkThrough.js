@@ -70,8 +70,8 @@ export default class WalkThrough extends Component {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.footer}></View>
         </View>
+
       </SafeAreaView>
     );
   }
@@ -197,15 +197,12 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
   },
   footer: {
-    flex: 1,
-    flexDirection: "row",
     width: '35.7%',
     height: '0.6%',
     borderRadius: 100,
     backgroundColor: '#1b1b1d',
     marginBottom: 8,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end', //TODO: Make it correct
+    alignSelf: 'flex-end',
     
   },
 });

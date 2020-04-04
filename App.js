@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator,TransitionPresets } from '@react-navigation/stack';
 import SignIn from "./components/SignIn"
 import WalkThrough from "./components/WalkThrough"
+import ConfirmationSuccess from "./components/ConfirmationSuccess"
 
 class App extends Component {
   render() {
@@ -25,7 +26,8 @@ class App extends Component {
           }}
         >
           {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
-          <Stack.Screen name="WalkThrough" component={WalkThrough} />
+          {/* <Stack.Screen name="WalkThrough" component={WalkThrough} /> */}
+          <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} />
         </Stack.Navigator>
       </NavigationContainer>
     );
