@@ -48,10 +48,10 @@ export default class WalkThrough extends Component {
                 </Text>
               <View style={{ flexDirection: "row" }}>
                 <Text style={styles.text2}>
-                  WHOLESALE
+                  {" WHOLESALE"}
                 </Text>
                 <Text style={styles.text1}>
-                  {" account"}
+                  {" account."}
                 </Text>
               </View>
             </View>
@@ -94,14 +94,15 @@ const styles = StyleSheet.create({
   imageContainer: {
     // flexDirection: 'row',
     marginTop: 10,
+    marginLeft: 16,
     height: height * 0.5, //Here 0.5 means 50 percent of screen width ; setting for image container as well for the images container doesn't need the width as its horizontal scroll view
   },
   images: {
     width: width * 0.66, //Here 0.66 means 66 percent of screen width 
     height: height * 0.5, //Here 0.5 means 50 percent of screen width cause direct percentage was causing issue under scrollview
     borderRadius: 6,
-    marginHorizontal: 5
-    // marginRight: 12,
+    // marginHorizontal: 5
+    marginRight: 12,
   },
   texts: {
     // marginHorizontal: 32,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 32
   },
   text1: {
-    fontFamily: 'Avenir-Books',
+    fontFamily: 'Avenir-Book',
     fontSize: 16,
     fontStyle: 'normal',
     lineHeight: 22,
