@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {Text, View, SafeAreaView, StyleSheet, Image} from 'react-native';
-import Footer from './Footer';
+import Footer from '../reusableComponents/Footer';
 import {Icon} from 'react-native-elements';
 
 export default class ConfirmationSuccess extends PureComponent {

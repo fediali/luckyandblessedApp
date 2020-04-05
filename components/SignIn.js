@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from "react-native"
-import Header from "./Header"
-import Footer from "./Footer"
+import Header from "../reusableComponents/Header"
+import Footer from "../reusableComponents/Footer"
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // TODO: code onPress to the Buttons
 // Naming Conventions for assets camelCase = **assetName-componentName**
@@ -43,7 +43,7 @@ class SignIn extends Component {
         )
     }
 }
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: "#ffffff"

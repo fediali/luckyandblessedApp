@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Text, View, StyleSheet, SafeAreaView, Image} from 'react-native';
-import Header from './Header';
-import Footer from './Footer';
+import Header from '../reusableComponents/Header';
+import Footer from '../reusableComponents/Footer';
 import { ScrollView } from 'react-native-gesture-handler';
 
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
