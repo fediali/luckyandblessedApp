@@ -16,7 +16,7 @@ import LogoSmall from "./Styles/LogoSmall"
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
-innerStyles = StyleSheet.create({
+const innerStyles = StyleSheet.create({
   
 
   customTextNormal: {

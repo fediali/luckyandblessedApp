@@ -21,7 +21,7 @@ export default StyleSheet.create({
     fontStyle: 'normal',
     lineHeight: 24,
     letterSpacing: 0,
-    color: '#2d2d2f',
+    color: '#2d2d2f'
   },
   customTextBold: {
     fontFamily: 'Montserrat-SemiBold',
@@ -47,7 +47,7 @@ export default StyleSheet.create({
   inputView: {
     flexDirection: 'row',
     paddingHorizontal: 15,
-    paddingVertical: 5,
+    paddingVertical: 10,
   },
   line: {
     borderBottomColor: 'black',

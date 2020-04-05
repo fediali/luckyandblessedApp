@@ -15,6 +15,7 @@ import ConfirmationSuccess from "./components/ConfirmationSuccess"
 import SignUp from "./components/SignUp"
 import Header from "./components/Header"
 import TaxID from "./components/TaxID"
+import TaxIDCont from "./components/TaxIDCont"
 class App extends Component {
   render() {
     const Stack = createStackNavigator();
@@ -27,11 +28,12 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
-          <Stack.Screen name="Categories" component={Categories} />
+          {/* <Stack.Screen name="Categories" component={Categories} /> */}
 
           {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
           {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
           {/* <Stack.Screen name="TaxID" component={TaxID} /> */}
+          <Stack.Screen name="TaxIDCont" component={TaxIDCont} />
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} /> */}
           {/* <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} /> */}
         </Stack.Navigator>
