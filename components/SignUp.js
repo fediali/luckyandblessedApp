@@ -10,8 +10,45 @@ import {
 } from 'react-native';
 
 import styles from './Styles/Style';
+import Header from "./Header"
+import LogoSmall from "./Styles/LogoSmall"
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+
+const innerStyles = StyleSheet.create({
+  
+
+  customTextNormal: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 20,
+    fontStyle: 'normal',
+    lineHeight: 35,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#2d2d2f',
+    marginTop: 10,
+  },
+  
+  buttonSignUp: {
+    width: '100%',
+    backgroundColor: '#2d2d2f',
+    borderRadius: 6,
+    paddingVertical: 11,
+    paddingHorizontal: 38,
+    marginRight: 15,
+    marginTop: 15,
+  },
+  buttonAlreadyHaveAccount: {
+    width: '100%',
+    backgroundColor: '#f6f6f6',
+    borderRadius: 6,
+    paddingVertical: 11,
+    paddingHorizontal: 38,
+    marginRight: 15,
+    marginTop: 8,
+  },
+});
 class SignUp extends Component {
   render() {
     return (
@@ -22,14 +59,11 @@ class SignUp extends Component {
           justifyContent: 'space-between',
         }}>
         <SafeAreaView style={styles.parentContainer}>
+        <Header centerText={""} rightIcon= "info"/>
 
           <View style={styles.subParentContainer}>
-            <Image
-              style={innerStyles.logoImage}
-              resizeMode="contain"
-              source={require('../static/logo-signIn.png')}
-            />
-            <Text style={innerStyles.customTextBold}>Register Now</Text>
+            <LogoSmall/>
+            <Text style={styles.customTextBold}>Register Now</Text>
 
             <View style={styles.inputView}>
               <TextInput style={styles.input} placeholder="Full Name" />
@@ -68,7 +102,7 @@ class SignUp extends Component {
                 source={require('../static/logo-signIn.png')}
               />
             </View>
-            <Text style={innerStyles.customTextBold}>OR</Text>
+            <Text style={styles.customTextBold}>OR</Text>
             <View style={[styles.line, { marginTop: 10 }]} />
 
             <View style={[styles.buttonContainer, { paddingHorizontal: 15 }]}>
@@ -122,50 +156,5 @@ class SignUp extends Component {
   }
 }
 
-innerStyles = StyleSheet.create({
-  customTextBold: {
-    fontFamily: 'Montserrat-SemiBold',
-    fontSize: 30,
-    lineHeight: 30,
-    letterSpacing: 0,
-    textAlign: 'center',
-    color: '#2d2d2f',
-    marginTop: 10,
-  },
-
-  customTextNormal: {
-    fontFamily: 'Montserrat-SemiBold',
-    fontSize: 20,
-    fontStyle: 'normal',
-    lineHeight: 35,
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '#2d2d2f',
-    marginTop: 10,
-  },
-  logoImage: {
-    width: '20%',
-    height: '15%',
-    marginTop: 10,
-  },
-  buttonSignUp: {
-    width: '100%',
-    backgroundColor: '#2d2d2f',
-    borderRadius: 6,
-    paddingVertical: 11,
-    paddingHorizontal: 38,
-    marginRight: 15,
-    marginTop: 15,
-  },
-  buttonAlreadyHaveAccount: {
-    width: '100%',
-    backgroundColor: '#f6f6f6',
-    borderRadius: 6,
-    paddingVertical: 11,
-    paddingHorizontal: 38,
-    marginRight: 15,
-    marginTop: 8,
-  },
-});
 
 export default SignUp;
