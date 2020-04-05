@@ -28,7 +28,7 @@ class SignIn extends Component {
                             <TouchableOpacity style={styles.buttonSignUp}>
                                 <Text style={styles.buttonText}>Sign up</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.buttonSignIn}>
+                            <TouchableOpacity style={styles.buttonSignIn} onPress={()=>{this.props.navigation.navigate("UserProfile")}}>
                                 <Text style={styles.buttonText}>Sign in</Text>
                             </TouchableOpacity>
                         </View>

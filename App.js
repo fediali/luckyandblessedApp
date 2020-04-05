@@ -16,6 +16,9 @@ import SignUp from "./components/SignUp"
 import Header from "./components/Header"
 import TaxID from "./components/TaxID"
 import TaxIDCont from "./components/TaxIDCont"
+import Categories from "./components/Categories"
+import UserProfile from "./components/UserProfile"
+
 class App extends Component {
   render() {
     const Stack = createStackNavigator();
@@ -36,6 +39,7 @@ class App extends Component {
           <Stack.Screen name="TaxIDCont" component={TaxIDCont} />
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} /> */}
           {/* <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} /> */}
+          {/* <Stack.Screen name="UserProfile" component={UserProfile} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     );
