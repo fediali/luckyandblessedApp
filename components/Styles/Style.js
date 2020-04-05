@@ -4,7 +4,7 @@ export default StyleSheet.create({
   parentContainer: {
     flex: 1,
     backgroundColor: '#ffffff',
-    marginBottom: 100
+    marginBottom: 10
   },
   subParentContainer: {
     alignItems: 'center',
