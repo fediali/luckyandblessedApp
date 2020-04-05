@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import styles from './Styles/Style';
-import Header from "./Header"
+import Header from "../reusableComponents/Header"
 import LogoSmall from "./Styles/LogoSmall"
 
 import { SafeAreaView } from 'react-native-safe-area-context';
