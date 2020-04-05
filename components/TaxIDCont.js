@@ -71,7 +71,7 @@ class TaxIDCont extends Component {
                             <TextInput
                                 placeholder="type here"
                                 onChangeText={(value1) => this.setState({ value1 })}
-                                style={[innerStyles.customInput, newStyle1]}
+                                style={[innerStyles.customInput]}
                                 editable={true}
                                 multiline={true}
                                 value={value1}
@@ -85,7 +85,7 @@ class TaxIDCont extends Component {
                             <TextInput
                                 placeholder="Sign Here"
                                 onChangeText={(value2) => this.setState({ value2 })}
-                                style={[innerStyles.customInput, newStyle2]}
+                                style={[innerStyles.customInput]}
                                 editable={true}
                                 multiline={true}
                                 value={value2}
