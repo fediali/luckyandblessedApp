@@ -29,7 +29,7 @@ class TaxID extends Component {
                     justifyContent: 'space-between',
                 }}>
                 <SafeAreaView style={styles.parentContainer}>
-                    <Header centerText={""} />
+                <Header centerText={""} rightIcon= "info"/>
                     <View style={styles.subParentContainer}>
                         <LogoSmall/>
                         <Text style={[styles.customTextBold, { marginTop: 20 }]}>Use & Sale Tax Form</Text>

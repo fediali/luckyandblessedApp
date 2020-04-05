@@ -61,54 +61,54 @@ class TaxIDCont extends Component {
                 }}
             >
                 <SafeAreaView style={styles.parentContainer}>
-                    <Header centerText={""} />
+                    <Header centerText={""} rightIcon="info" />
                     <View style={styles.subParentContainer}>
-                        <LogoSmall/>
+                        <LogoSmall />
                         <Text style={styles.customTextBold}>Use & Sale Tax Form</Text>
                         <Text style={[innerStyles.customTextBoldSmall]}>Description of the type of business activity generally engaged in or type of items normally sold by the purchaser:</Text>
 
-                    <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
-                        <TextInput
-                            placeholder="type here"
-                            onChangeText={(value1) => this.setState({ value1 })}
-                            style={[innerStyles.customInput, newStyle1]}
-                            editable={true}
-                            multiline={true}
-                            value={value1}
-                            onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
-                        >
+                        <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
+                            <TextInput
+                                placeholder="type here"
+                                onChangeText={(value1) => this.setState({ value1 })}
+                                style={[innerStyles.customInput, newStyle1]}
+                                editable={true}
+                                multiline={true}
+                                value={value1}
+                                onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
+                            >
 
-                        </TextInput>
-                    </View>
-                    <Text style={[innerStyles.customTextBoldSmall, { marginTop: 15 }]}>This certificate should be furnished to the supplier. Do not send the completed certificate to the Comptroller of Public Accounts.</Text>
-                    <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
-                        <TextInput
-                            placeholder="Sign Here"
-                            onChangeText={(value2) => this.setState({ value2 })}
-                            style={[innerStyles.customInput, newStyle2]}
-                            editable={true}
-                            multiline={true}
-                            value={value2}
-                            onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
-                        >
+                            </TextInput>
+                        </View>
+                        <Text style={[innerStyles.customTextBoldSmall, { marginTop: 15 }]}>This certificate should be furnished to the supplier. Do not send the completed certificate to the Comptroller of Public Accounts.</Text>
+                        <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
+                            <TextInput
+                                placeholder="Sign Here"
+                                onChangeText={(value2) => this.setState({ value2 })}
+                                style={[innerStyles.customInput, newStyle2]}
+                                editable={true}
+                                multiline={true}
+                                value={value2}
+                                onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
+                            >
 
-                        </TextInput>
-                    </View>
-                    <Text style={[innerStyles.customTextBoldSmall, { width: '100%',textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
-                    <View style={styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }}>
-                        <TouchableOpacity style={[innerStyles.buttonSubmit]}>
-                            <Text
-                                style={[
-                                    styles.buttonText,
-                                    {
-                                        color: '#ffffff',
-                                        fontSize: 20
-                                    },
-                                ]}>
-                                Submit
+                            </TextInput>
+                        </View>
+                        <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
+                        <View style={styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }}>
+                            <TouchableOpacity style={[innerStyles.buttonSubmit]}>
+                                <Text
+                                    style={[
+                                        styles.buttonText,
+                                        {
+                                            color: '#ffffff',
+                                            fontSize: 20
+                                        },
+                                    ]}>
+                                    Submit
                             </Text>
-                        </TouchableOpacity>
-                    </View>
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
                 </SafeAreaView>
@@ -132,7 +132,7 @@ const innerStyles = StyleSheet.create({
     },
     customInputView: {
         height: 130,
-        width:'100%',
+        width: '100%',
         paddingHorizontal: 15,
         paddingVertical: 10,
     },
