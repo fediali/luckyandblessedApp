@@ -11,7 +11,7 @@ import {
 
 import styles from './Styles/Style'
 import LogoSmall from './Styles/LogoSmall'
-import Header from './Header'
+import Header from '../reusableComponents/Header'
 import {
     SafeAreaView
 } from 'react-native-safe-area-context';
