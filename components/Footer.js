@@ -47,15 +47,15 @@ class Footer extends PureComponent {
                         {this.state.selected == "Home" ?
                             <Icon
                                 size={35}
-                                name='arrow-left'
-                                type='feather'
+                                name='home'
+                                type='entypo'
                                 color="#2967ff"
                             />
                             :
                             <Icon
                                 size={35}
-                                name='arrow-left'
-                                type='feather'
+                                name='home'
+                                type='entypo'
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
@@ -87,8 +87,8 @@ class Footer extends PureComponent {
                             :
                             <Icon
                                 size={35}
-                                name='iconfontdesktop'
-                                type='antdesign'
+                                name='ios-person'
+                                type='ionicon'
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
