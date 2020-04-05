@@ -13,7 +13,7 @@ import SignIn from "./components/SignIn"
 import WalkThrough from "./components/WalkThrough"
 import ConfirmationSuccess from "./components/ConfirmationSuccess"
 import SignUp from "./components/SignUp"
-import Header from "./components/Header"
+import Categories from "./components/Categories"
 class App extends Component {
   render() {
     const Stack = createStackNavigator();
@@ -26,7 +26,7 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
-          {/* <Stack.Screen name="Header" component={Header} /> */}
+          <Stack.Screen name="Categories" component={Categories} />
 
           <Stack.Screen name="SignIn" component={SignIn} />
           {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
