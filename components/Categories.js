@@ -1,61 +1,67 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from "react-native"
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, FlatList } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import { ScrollView } from 'react-native-gesture-handler';
-
+import CategoriesListItem from "../reusableComponents/CategoriesListItem"
 class Categories extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            selected: 0 //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
+            selected: 0, //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
+            data: [{ imageUrl: { key: "1", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, quantity: "5,287 items", name: "Jeans" }, { key: "2", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/27.jpg" }, quantity: "2,509 items", name: "Top" }, { key: "3", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/28_jp1x-s7.jpg" }, quantity: "1,335 items", name: "Dresses" }, { key: "3", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg" }, quantity: "932 items", name: "Pants" }]
         }
     }
-    changeTextColor(item){
-        this.setState({selected:item})
+    changeTextColor(item) {
+        this.setState({ selected: item })
     }
-    render() {
-        console.log(this.state.selected)
-        const textItems = ["New Arrivals", "Lookbook", "Kids", "Sale"]
-        // const textComponents = []
-        // for (var i = 0; i < 4; i++) {
-        //     textComponents.push(
-        //         <TouchableOpacity key={i} onPress={(x) => { console.log(x.key) }}>
-        //             {this.state.selected == i ?
-        //                 <Text style={[styles.text, { color: "#00f" }]}>
-        //                     {textItems[i]}
-        //                 </Text> :
-        //                 <Text style={[styles.text, { color: "#2d2d2f" }]}>
-        //                     {textItems[i]}
-        //                 </Text>
-        //             }
-        //         </TouchableOpacity>
-        //     )
-        // }
+    renderSeparator = (item) => {
         return (
-            <View style={{ flex: 1 }}>
+            <View
+                style={{
+                    paddingBottom: 15
+                }}
+            />
+        );
+    };
+    render() {
+        const textItems = ["New Arrivals", "Lookbook", "Kids", "Sale"]
+        return (
+            <SafeAreaView style={{
+                flex: 1, backgroundColor: "#fff",
+            }}>
                 <Header centerText="Women" rightIcon="search" />
-                <ScrollView>
-
+                <View>
                     <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 10 }}>
-
                         {textItems.map((item, key) => (
-                            <TouchableOpacity style={{paddingVertical:7}} key={key} onPress={() => { this.changeTextColor(key) }}>
+                            <TouchableOpacity style={{ paddingVertical: 7 }} key={key} onPress={() => { this.changeTextColor(key) }}>
                                 {this.state.selected == key ?
                                     <Text style={[styles.text, { color: "#2967ff" }]}>
                                         {item}
                                     </Text> :
                                     <Text style={[styles.text, { color: "#2d2d2f" }]}>
-                                        { item }
+                                        {item}
                                     </Text>
                                 }
                             </TouchableOpacity>
                         ))}
                     </View>
-                </ScrollView>
+                    <FlatList
+                        style={{ paddingTop: 10, marginBottom: 150 }}
+                        data={this.state.data}
+                        keyExtractor={(item, index) => item.name}
+                        renderItem={({ item }) => (
+                            <CategoriesListItem key={item.name}
+                                imageUrl={item.imageUrl} quantity={item.quantity} name={item.name} />
+                        )}
+                        ItemSeparatorComponent={this.renderSeparator}
+
+                    />
+
+                </View>
                 <Footer />
-            </View >
+            </SafeAreaView >
         )
     }
 }
