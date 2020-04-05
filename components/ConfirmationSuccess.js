@@ -7,7 +7,7 @@ export default class ConfirmationSuccess extends PureComponent {
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <View style={{height: 50, flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View
             style={{
               flex: 1,
@@ -20,7 +20,6 @@ export default class ConfirmationSuccess extends PureComponent {
               style={{
                 fontFamily: 'Montserrat-Bold',
                 fontSize: 30,
-                lineHeight: 36,
                 color: "#2d2d2f"
               }}>
               Success
