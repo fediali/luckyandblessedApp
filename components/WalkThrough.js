@@ -30,7 +30,7 @@ export default class WalkThrough extends Component {
           style={styles.images}
           key={index}
           resizeMode="contain"
-          source={img} //TODO: Fix this
+          source={img}
         />,
       );
     });

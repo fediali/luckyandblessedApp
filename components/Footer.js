@@ -27,7 +27,6 @@ class Footer extends PureComponent {
         }
     }
 
-    // TODO: Change Icons Correspondingly
     render() {
         return (
             <View style={{
@@ -57,21 +56,23 @@ class Footer extends PureComponent {
                                 size={35}
                                 name='arrow-left'
                                 type='feather'
+                                color="#d0d0d0"
                             />}
                     </TouchableOpacity>
                     <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Shop" }) }}>
                         {this.state.selected == "Shop" ?
                             <Icon
                                 size={35}
-                                name='md-information-circle-outline'
-                                type='ionicon'
+                                name='shoppingcart'
+                                type='antdesign'
                                 color="#2967ff"
                             />
                             :
                             <Icon
                                 size={35}
-                                name='md-information-circle-outline'
-                                type='ionicon'
+                                name='shoppingcart'
+                                type='antdesign'
+                                color="#d0d0d0"
                             />}
                     </TouchableOpacity>
 
@@ -79,30 +80,32 @@ class Footer extends PureComponent {
                         {this.state.selected == "Van" ?
                             <Icon
                                 size={35}
-                                name='md-information-circle-outline'
-                                type='ionicon'
+                                name='ios-person'
+                                type='ionicon' //TODO: Find the truck icon
                                 color="#2967ff"
                             />
                             :
                             <Icon
                                 size={35}
-                                name='md-information-circle-outline'
-                                type='ionicon'
+                                name='iconfontdesktop'
+                                type='antdesign'
+                                color="#d0d0d0"
                             />}
                     </TouchableOpacity>
                     <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Person" }) }}>
                         {this.state.selected == "Person" ?
                             <Icon
                                 size={35}
-                                name='md-information-circle-outline'
+                                name='ios-person'
                                 type='ionicon'
                                 color="#2967ff"
                             />
                             :
                             <Icon
                                 size={35}
-                                name='md-information-circle-outline'
+                                name='ios-person'
                                 type='ionicon'
+                                color="#d0d0d0"
                             />}
                     </TouchableOpacity>
                     <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Info" }) }}>
@@ -118,6 +121,7 @@ class Footer extends PureComponent {
                                 size={35}
                                 name='md-information-circle-outline'
                                 type='ionicon'
+                                color="#d0d0d0"
                             />}
                     </TouchableOpacity>
                 </View>
