@@ -10,7 +10,7 @@ class SignIn extends Component {
         return (
             // <SafeAreaView>
                 <SafeAreaView style={styles.mainContainer}>
-                <Header centerText={"hello"}/>
+                {/* <Header centerText={"hello"}/> */}
                     <View style={styles.subContainer}>
                         <Image style={{
                             width: "53%",
@@ -38,7 +38,7 @@ class SignIn extends Component {
                     </View>
 
                 {/* </View> */}
-                <Footer />
+                {/* <Footer /> */}
             </SafeAreaView>
         )
     }
