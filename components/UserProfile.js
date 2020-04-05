@@ -9,7 +9,7 @@ export default class UserProfile extends PureComponent {
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Account" />
+        <Header centerText="Account" rightIcon="edit" />
         <View style={styles.subContainer}>
           <Image
             style={{height: 88, width: 88, borderRadius: 88}}
@@ -21,7 +21,7 @@ export default class UserProfile extends PureComponent {
             <View style={styles.divider}></View>
         </ScrollView>
         </View>
-        <Footer />
+        <Footer selected="Person" />
       </SafeAreaView>
     );
   }

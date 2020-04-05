@@ -22,10 +22,17 @@ class Footer extends PureComponent {
     */
     constructor(props) {
         super(props)
-        this.state = {
-            selected: "Home"
+        if (this.props.selected != null) {
+            this.state={
+                selected: this.props.selected
+            }
+        } else {
+            this.state = {
+                selected: "Home"
+            }
         }
     }
+    
 
     render() {
         return (
@@ -46,14 +53,14 @@ class Footer extends PureComponent {
                     <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Home" }) }}>
                         {this.state.selected == "Home" ?
                             <Icon
-                                size={35}
+                                size={32}
                                 name='home'
                                 type='entypo'
                                 color="#2967ff"
                             />
                             :
                             <Icon
-                                size={35}
+                                size={32}
                                 name='home'
                                 type='entypo'
                                 color="#d0d0d0"
@@ -80,15 +87,15 @@ class Footer extends PureComponent {
                         {this.state.selected == "Van" ?
                             <Icon
                                 size={35}
-                                name='ios-person'
-                                type='ionicon' //TODO: Find the truck icon
+                                name='truck'
+                                type='material-community' //TODO: Find the truck icon
                                 color="#2967ff"
                             />
                             :
                             <Icon
                                 size={35}
-                                name='ios-person'
-                                type='ionicon'
+                                name='truck'
+                                type='material-community'
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>

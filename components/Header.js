@@ -15,41 +15,65 @@ import { Icon } from 'react-native-elements'
 
 Props:
 centerText: "provide the text to show in center"
-rightIcon: "search" provide icon name ,supported icon names info,search,share,edit
+rightIcon: "search" provide icon name ,supported icon names { info,search,share,edit }
 
 
 */
 class Header extends PureComponent {
+
+    getRightIcon() {
+        if (this.props.rightIcon == "info") {
+            return < Icon
+                size={30}
+                name='md-information-circle-outline'
+                type='ionicon'
+                color='#000'
+            />
+        }
+        else if (this.props.rightIcon == "search"){
+            return < Icon
+            size={30}
+            name='ios-search'
+            type='ionicon'
+            color='#000'
+        />
+        }
+        else if (this.props.rightIcon == "share"){
+            return < Icon
+            size={26}
+            name='upload'
+            type='feather'
+            color='#000'
+        />
+        }
+        else if (this.props.rightIcon == "edit"){
+            return < Icon
+            size={26}
+            name='edit'
+            type='feather'
+            color='#000'
+        />
+        }
+    }
     render() {
         return (
             <View style={{ height: 50, flexDirection: "row", alignItems: "center" }}>
 
-                <View style={{ flex: 1, justifyContent: "space-between", flexDirection: "row", paddingHorizontal: 10, alignItems: "center" }}>
+                <View style={{ flex: 1, justifyContent: "space-between", flexDirection: "row", paddingHorizontal: 12, alignItems: "center" }}>
 
                     <View>
                         <Icon
-                        size={30}
-                        name='arrow-left'
-                        type='feather'
-                    />
-                        {/* <Image 
-                    source={require("../static/Arrow.png")}
-                    />  */}
-
+                            size={30}
+                            name='arrow-left'
+                            type='feather'
+                        />
                     </View>
                     <View>
                         <Text style={{ fontFamily: "Montserrat-SemiBold", fontSize: 18, lineHeight: 22 }}>{this.props.centerText}</Text>
                     </View>
                     <View>
-                        <Icon
-                        size={30}
-                        name='md-information-circle-outline'
-                        type='ionicon'
-                        color='#000'
-                    />
-                        {/* <Image 
-                    source={require("../static/info.png")}
-                    />  */}
+                        {this.getRightIcon()}
+
                     </View>
 
 
