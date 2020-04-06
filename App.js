@@ -29,14 +29,14 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
-          <Stack.Screen name="Payment" component={Payment} />
+          {/* <Stack.Screen name="Payment" component={Payment} /> */}
           {/* <Stack.Screen name="Categories" component={Categories} /> */}
           {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
           {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
           {/* <Stack.Screen name="TaxID" component={TaxID} /> */}
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} /> */}
           {/* <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} /> */}
-          {/* <Stack.Screen name="UserProfile" component={UserProfile} /> */}
+          <Stack.Screen name="UserProfile" component={UserProfile} />
         </Stack.Navigator>
       </NavigationContainer>
     );
