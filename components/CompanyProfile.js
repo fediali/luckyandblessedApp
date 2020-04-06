@@ -11,17 +11,18 @@ import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import {ScrollView} from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/ProfileText';
-//TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
+
 //TODO: Check why last row is not appearing
-//TODO: SafeAreaView and ScrollView ka masla haii apas mei
-export default class UserProfile extends PureComponent {
+
+export default class CompanyProfile extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       data: {
         fullName: 'Monika Willems',
         email: 'blackcherry@gmail.com',
-        longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
+        longAddress1: '455 Larkspur Dr. California',
+        longAddress2: 'Springs, CA 92926, USA',
         shortAddress: '455 Larkspur Dr. Califo...',
         payment: 'Visa **** **** **** 6280',
         wishList: 5,
@@ -40,67 +41,48 @@ export default class UserProfile extends PureComponent {
           justifyContent: 'space-between',
         }}>
         <SafeAreaView style={styles.mainContainer}>
-          <Header centerText="Account" rightIcon="edit" />
+          <Header centerText="Help & Info" rightIcon="edit" />
           <View style={styles.subContainer}>
             <Image
-              style={{height: 88, width: 88, borderRadius: 88}}
-              source={require('../static/dp-userProfile.png')}></Image>
-            <Text style={styles.userNameText}>Monika Willems</Text>
-            <Text style={styles.userAddress}>455 Larkspur Dr. California</Text>
-            <Text style={styles.userAddress}>Springs, CA 92926, USA</Text>
-            <View style={{marginTop: 50}}></View>
+              style={{height: 168.9, width: 198.7, marginBottom: 26}}
+              source={require('../static/logo-companyProfile.png')}></Image>
+
+            <Text style={styles.userAddress}>
+              {this.state.data.longAddress1}
+            </Text>
+            <Text style={styles.userAddress}>
+              {this.state.data.longAddress2}
+            </Text>
+            <View style={{marginTop: 33}}></View>
             <View style={styles.divider}></View>
           </View>
 
           <ProfileText
-            keyText="Full Name"
+            keyText="Call"
             valueText={this.state.data.fullName}></ProfileText>
           <ProfileText
             keyText="Email"
             valueText={this.state.data.email}></ProfileText>
           <ProfileText
-            keyText="Address"
+            keyText="Online Orders"
             valueText={this.state.data.shortAddress}></ProfileText>
-          <ProfileText
-            keyText="Payment"
-            valueText={this.state.data.payment}
-            containIcon={true}></ProfileText>
+
           <View style={styles.divider}></View>
 
+          <ProfileText keyText="Company" containIcon={true}></ProfileText>
+          <ProfileText keyText="Locations" containIcon={true}></ProfileText>
           <ProfileText
-            keyText="Wishlist"
-            valueText={this.state.data.wishList}
+            keyText="Wholesale Info"
             containIcon={true}></ProfileText>
-          <ProfileText
-            keyText="My bag"
-            valueText={this.state.data.myBag}
-            containIcon={true}></ProfileText>
-          <ProfileText
-            keyText="My orders"
-            valueText={this.state.data.myOrders}
-            containIcon={true}></ProfileText>
-          <View style={styles.divider}></View>
-          <ProfileText keyText="Newsletter" containIcon={true}></ProfileText>
+          <ProfileText keyText="Use and Sales TX ID form" containIcon={true}></ProfileText>
           <ProfileText keyText="Settings" containIcon={true}></ProfileText>
-
-          <View
-            style={{
-              height: '7.4%',
-              width: '100%',
-              backgroundColor: '#f6f6f6',
-              padding: 20,
-              alignItems: 'center',
-            }}>
-            <TouchableOpacity
-              style={styles.buttonSignIn}
-              onPress={() => {
-                this.props.navigation.navigate('UserProfile');
-              }}>
-              <Text style={styles.buttonText}>Log out</Text>
-            </TouchableOpacity>
-          </View>
-          
-          <Footer selected="Person" />
+          <View style={styles.divider}></View>
+          <ProfileText
+            keyText="Return Policy"
+            containIcon={true}></ProfileText>
+          <ProfileText keyText="FAQs" containIcon={true}></ProfileText>
+          <ProfileText keyText="Upcoming Tradeshows" containIcon={true}></ProfileText>
+          <Footer selected="Info" />
         </SafeAreaView>
       </ScrollView>
     );
@@ -115,7 +97,7 @@ const styles = StyleSheet.create({
   subContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 33.1,
   },
   userNameText: {
     fontFamily: 'Montserrat-SemiBold',
@@ -146,6 +128,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffffff',
     paddingVertical: 11,
-    paddingHorizontal: 131.5
+    paddingHorizontal: 131.5,
   },
 });
