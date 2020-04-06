@@ -23,7 +23,7 @@ class ProfileText extends PureComponent {
             <TouchableOpacity
               style={{
                 marginBottom: 21.5,
-                marginTop: 27,
+                marginTop: 21.5,
                 marginRight: 7,
                 marginLeft: 19.5,
               }}>

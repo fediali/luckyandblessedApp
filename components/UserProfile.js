@@ -98,11 +98,7 @@ export default class UserProfile extends PureComponent {
               <Text style={styles.buttonText}>Log out</Text>
             </TouchableOpacity>
           </View>
-          <ProfileText
-            keyText="Settings"
-            valueText={this.state.data.myBag}
-            containIcon={true}></ProfileText>
-
+          
           <Footer selected="Person" />
         </SafeAreaView>
       </ScrollView>
