@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
   Text,
   View,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/ProfileText';
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 //TODO: Check why last row is not appearing
@@ -33,25 +33,25 @@ export default class UserProfile extends PureComponent {
   }
 
   render() {
-    let Height = Dimensions.get("window").height
-    let Width = Dimensions.get("window").width
+    let Height = Dimensions.get('window').height;
+    let Width = Dimensions.get('window').width;
     return (
-      <ScrollView
-        contentContainerStyle={{
-          backgroundColor: '#fff',
-          flexGrow: 1,
-          justifyContent: 'space-between',
-        }}>
-        <SafeAreaView style={styles.mainContainer}>
-          <Header centerText="Account" rightIcon="edit" />
+      <SafeAreaView style={styles.mainContainer}>
+        <Header centerText="Account" rightIcon="edit" />
+        <ScrollView
+          contentContainerStyle={{
+            backgroundColor: '#fff',
+            flexGrow: 1,
+            justifyContent: 'space-between',
+          }}>
           <View style={styles.subContainer}>
             <Image
-              style={{ height: 88, width: 88, borderRadius: 88 }}
+              style={{height: 88, width: 88, borderRadius: 88}}
               source={require('../static/dp-userProfile.png')}></Image>
             <Text style={styles.userNameText}>Monika Willems</Text>
             <Text style={styles.userAddress}>455 Larkspur Dr. California</Text>
             <Text style={styles.userAddress}>Springs, CA 92926, USA</Text>
-            <View style={{ marginTop: 50 }}></View>
+            <View style={{marginTop: 50}}></View>
             <View style={styles.divider}></View>
           </View>
 
@@ -85,7 +85,7 @@ export default class UserProfile extends PureComponent {
           <View style={styles.divider}></View>
           <ProfileText keyText="Newsletter" containIcon={true}></ProfileText>
           <ProfileText keyText="Settings" containIcon={true}></ProfileText>
-          <View style={{paddingBottom:80,backgroundColor:'#f6f6f6'}}>
+          <View style={{paddingBottom: 80, backgroundColor: '#f6f6f6'}}>
             <View
               style={{
                 height: Height * 0.074,
@@ -103,15 +103,16 @@ export default class UserProfile extends PureComponent {
               </TouchableOpacity>
             </View>
           </View>
-          <Footer selected="Person" />
-        </SafeAreaView>
-      </ScrollView>
+        </ScrollView>
+
+        <Footer selected="Person" />
+      </SafeAreaView>
     );
   }
 }
 
-let Height = Dimensions.get("window").height
-let Width = Dimensions.get("window").width
+let Height = Dimensions.get('window').height;
+let Width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -122,7 +123,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
     // marginBottom:150
-
   },
   userNameText: {
     fontFamily: 'Montserrat-SemiBold',
@@ -152,6 +152,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffffff',
     paddingVertical: 11,
-    width: Width * 0.8
+    width: Width * 0.8,
   },
 });

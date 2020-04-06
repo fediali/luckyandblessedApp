@@ -5,7 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Image,
-  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -33,15 +33,17 @@ export default class CompanyProfile extends PureComponent {
   }
 
   render() {
+    let Height = Dimensions.get('window').height;
+    let Width = Dimensions.get('window').width;
     return (
-      <ScrollView
-        contentContainerStyle={{
-          backgroundColor: '#fff',
-          flexGrow: 1,
-          justifyContent: 'space-between',
-        }}>
-        <SafeAreaView style={styles.mainContainer}>
-          <Header centerText="Help & Info" rightIcon="edit" />
+      <SafeAreaView style={styles.mainContainer}>
+        <Header centerText="Help & Info" rightIcon="edit" />
+        <ScrollView
+          contentContainerStyle={{
+            backgroundColor: '#fff',
+            flexGrow: 1,
+            justifyContent: 'space-between',
+          }}>
           <View style={styles.subContainer}>
             <Image
               style={{height: 168.9, width: 198.7, marginBottom: 26}}
@@ -74,21 +76,28 @@ export default class CompanyProfile extends PureComponent {
           <ProfileText
             keyText="Wholesale Info"
             containIcon={true}></ProfileText>
-          <ProfileText keyText="Use and Sales TX ID form" containIcon={true}></ProfileText>
+          <ProfileText
+            keyText="Use and Sales TX ID form"
+            containIcon={true}></ProfileText>
           <ProfileText keyText="Settings" containIcon={true}></ProfileText>
           <View style={styles.divider}></View>
-          <ProfileText
-            keyText="Return Policy"
-            containIcon={true}></ProfileText>
+          <ProfileText keyText="Return Policy" containIcon={true}></ProfileText>
           <ProfileText keyText="FAQs" containIcon={true}></ProfileText>
-          <ProfileText keyText="Upcoming Tradeshows" containIcon={true}></ProfileText>
-          <Footer selected="Info" />
-        </SafeAreaView>
-      </ScrollView>
+          <ProfileText
+            keyText="Upcoming Tradeshows"
+            containIcon={true}></ProfileText>
+            {/* Below view is useless */}
+          <View style={{paddingBottom: 60, backgroundColor: '#ffffff'}}></View> 
+        </ScrollView>
+
+        <Footer selected="Info" />
+      </SafeAreaView>
     );
   }
 }
 
+let Height = Dimensions.get('window').height;
+let Width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -112,8 +121,8 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   divider: {
-    height: '0.9%',
-    width: '100%',
+    height: Height * 0.009,
+    width: Width,
     backgroundColor: '#f6f6f6',
   },
   buttonSignIn: {
