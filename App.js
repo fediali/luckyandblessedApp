@@ -18,7 +18,7 @@ import Categories from "./components/Categories"
 import UserProfile from "./components/UserProfile"
 import Payment from "./components/Payment"
 import CompanyProfile from "./components/CompanyProfile"
-
+import CategoriesProduct from "./components/CategoriesProduct"
 class App extends Component {
   render() {
     const Stack = createStackNavigator();
@@ -31,6 +31,7 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
+          <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} />
           {/* <Stack.Screen name="Payment" component={Payment} /> */}
           {/* <Stack.Screen name="Categories" component={Categories} /> */}
           {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
