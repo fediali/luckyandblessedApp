@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
   Text,
   View,
@@ -6,10 +6,11 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/ProfileText';
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 //TODO: Check why last row is not appearing
@@ -32,6 +33,8 @@ export default class UserProfile extends PureComponent {
   }
 
   render() {
+    let Height = Dimensions.get("window").height
+    let Width = Dimensions.get("window").width
     return (
       <ScrollView
         contentContainerStyle={{
@@ -43,12 +46,12 @@ export default class UserProfile extends PureComponent {
           <Header centerText="Account" rightIcon="edit" />
           <View style={styles.subContainer}>
             <Image
-              style={{height: 88, width: 88, borderRadius: 88}}
+              style={{ height: 88, width: 88, borderRadius: 88 }}
               source={require('../static/dp-userProfile.png')}></Image>
             <Text style={styles.userNameText}>Monika Willems</Text>
             <Text style={styles.userAddress}>455 Larkspur Dr. California</Text>
             <Text style={styles.userAddress}>Springs, CA 92926, USA</Text>
-            <View style={{marginTop: 50}}></View>
+            <View style={{ marginTop: 50 }}></View>
             <View style={styles.divider}></View>
           </View>
 
@@ -82,24 +85,24 @@ export default class UserProfile extends PureComponent {
           <View style={styles.divider}></View>
           <ProfileText keyText="Newsletter" containIcon={true}></ProfileText>
           <ProfileText keyText="Settings" containIcon={true}></ProfileText>
-
-          <View
-            style={{
-              height: '7.4%',
-              width: '100%',
-              backgroundColor: '#f6f6f6',
-              padding: 20,
-              alignItems: 'center',
-            }}>
-            <TouchableOpacity
-              style={styles.buttonSignIn}
-              onPress={() => {
-                this.props.navigation.navigate('UserProfile');
+          <View style={{paddingBottom:80,backgroundColor:'#f6f6f6'}}>
+            <View
+              style={{
+                height: Height * 0.074,
+                width: Width,
+                backgroundColor: '#f6f6f6',
+                padding: 20,
+                alignItems: 'center',
               }}>
-              <Text style={styles.buttonText}>Log out</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonSignIn}
+                onPress={() => {
+                  this.props.navigation.navigate('UserProfile');
+                }}>
+                <Text style={styles.buttonText}>Logout</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          
           <Footer selected="Person" />
         </SafeAreaView>
       </ScrollView>
@@ -107,6 +110,8 @@ export default class UserProfile extends PureComponent {
   }
 }
 
+let Height = Dimensions.get("window").height
+let Width = Dimensions.get("window").width
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -116,6 +121,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     marginTop: 50,
+    // marginBottom:150
+
   },
   userNameText: {
     fontFamily: 'Montserrat-SemiBold',
@@ -130,8 +137,8 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   divider: {
-    height: '0.9%',
-    width: '100%',
+    height: Height * 0.009,
+    width: Width,
     backgroundColor: '#f6f6f6',
   },
   buttonSignIn: {
@@ -142,10 +149,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
     lineHeight: 22,
-    letterSpacing: 0,
     textAlign: 'center',
     color: '#ffffff',
     paddingVertical: 11,
-    paddingHorizontal: 131.5
+    width: Width * 0.8
   },
 });
