@@ -5,6 +5,9 @@ import {
     TouchableOpacity,
     ScrollView,
     StyleSheet,
+    Dimensions,
+    Image,
+    ImageBackground
 } from 'react-native'
 
 import LogoMedium from './Styles/LogoMedium'
@@ -15,7 +18,10 @@ import Footer from '../reusableComponents/Footer'
 import { TextInput } from 'react-native-gesture-handler';
 
 class Delivery extends Component {
+
     render() {
+        let width = Dimensions.get('window').width;
+        let height = Dimensions.get('window').height;
         return (
             <View style={{ flex: 1 }}>
                 <Header />
@@ -39,11 +45,29 @@ class Delivery extends Component {
 
                             <View style={innerStyles.horizontalView}>
                                 <TouchableOpacity style={[innerStyles.squareBoxButtons, { flex: 0.5 }]}>
-                                    <LogoMedium />
+                                    <Image style={{
+                                        width: width * 0.12,
+                                        height: height * 0.12,
+                                    }} resizeMode="contain" source={require("../static/icon_done3x.png")} />
                                     <Text style={[innerStyles.lightText, { textAlign: 'center' }]}>Billing and delivery info are the same</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={[innerStyles.squareBoxButtons, { flex: 0.5, marginStart: 20 }]}>
-                                    <LogoMedium />
+                                    <ImageBackground style={{
+                                        width: width * 0.12,
+                                        height: height * 0.12,
+                                        alignItems: 'center'
+                                    }} resizeMode="contain" source={require("../static/icon_empty_round.png")} >
+                                        <View style={{
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+
+                                        }}>
+                                            <Image style={{
+                                                width: width * 0.08,
+                                                height: height * 0.08,
+                                            }} resizeMode="contain" source={require("../static/icon_plus.png")} />
+                                        </View>
+                                    </ImageBackground>
                                     <Text style={[innerStyles.lightText, { textAlign: 'center' }]}>Create a new profile</Text>
                                 </TouchableOpacity>
                             </View>
@@ -74,15 +98,13 @@ class Delivery extends Component {
                             </View>
                         </View>
                         <View style={innerStyles.showOrderView}>
-                            <View style={{ flexDirection: 'column', alignItems: 'flex-start', paddingHorizontal: 20 }}>
-                                <Text style={[styles.buttonText, { fontSize: 25, lineHeight: 30 }]}>Order amount: </Text>
-                                <Text style={[innerStyles.lightText, { lineHeight: 30 }]}>Your total amount of discount:</Text>
-
-
+                            <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+                                <Text style={[styles.buttonText, { fontSize: 18, lineHeight: 30 }]}>Order amount: </Text>
+                                <Text style={[styles.buttonText, { flex: 1, fontSize: 18, lineHeight: 30, textAlign: 'right' }]}>$103.88</Text>
                             </View>
-                            <View style={{ flexDirection: 'column', flex: 1, alignItems: 'flex-end', paddingHorizontal: 20, marginEnd: 0 }}>
-                                <Text style={[styles.buttonText, { fontSize: 25, lineHeight: 30 }]}>$103.88</Text>
-                                <Text style={[innerStyles.lightText, { lineHeight: 30 }]}>-$55.02</Text>
+                            <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+                                <Text style={[innerStyles.lightText, { lineHeight: 30 }]}>Your total amount of discount:</Text>
+                                <Text style={[innerStyles.lightText, { flex: 1, lineHeight: 30, textAlign: 'right' }]}>-$55.02</Text>
                             </View>
                         </View>
                         <View style={styles.buttonContainer, {
@@ -96,7 +118,8 @@ class Delivery extends Component {
                                         styles.buttonText,
                                         {
                                             color: '#ffffff',
-                                            fontSize: 20
+                                            fontSize: 18,
+                                            lineHeight: 22
                                         },
                                     ]}>
                                     Payment method
@@ -115,7 +138,7 @@ class Delivery extends Component {
 const innerStyles = StyleSheet.create({
     mainTextBold: {
         fontFamily: "Montserrat-Bold",
-        fontSize: 40,
+        fontSize: 30,
         fontStyle: "normal",
         lineHeight: 45,
         letterSpacing: 0,
@@ -141,7 +164,7 @@ const innerStyles = StyleSheet.create({
         borderWidth: 2,
         borderColor: "#007de3",
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: 18,
     },
     horizontalView: {
         flexDirection: 'row',
@@ -158,8 +181,8 @@ const innerStyles = StyleSheet.create({
         alignItems: 'center',
     },
     showOrderView: {
-        paddingTop:15,
-        flexDirection: 'row',
+        paddingTop: 15,
+        flexDirection: 'column',
         flex: 1,
         marginTop: 15,
         width: '100%',
