@@ -55,11 +55,12 @@ class Delivery extends Component {
                                     <ImageBackground style={{
                                         width: width * 0.12,
                                         height: height * 0.12,
-                                        alignItems: 'center'
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
                                     }} resizeMode="contain" source={require("../static/icon_empty_round.png")} >
                                         <View style={{
                                             alignItems: 'center',
-                                            justifyContent: 'center'
+                                            
 
                                         }}>
                                             <Image style={{
