@@ -15,6 +15,7 @@ export default StyleSheet.create({
     backgroundColor: '#f6f6f6',
     flex: 1,
     paddingHorizontal: 15,
+    paddingVertical: 10,
     fontFamily: 'Avenir-Book',
     fontSize: 18,
     fontWeight: 'normal',
