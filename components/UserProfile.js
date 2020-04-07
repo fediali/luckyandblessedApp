@@ -38,7 +38,7 @@ export default class UserProfile extends PureComponent {
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Account" rightIcon="edit" />
-        <ScrollView
+        <ScrollView showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             backgroundColor: '#fff',
             flexGrow: 1,
