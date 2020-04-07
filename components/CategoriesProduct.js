@@ -40,11 +40,8 @@ class CategoriesProduct extends Component {
                         <Text style={{ fontSize: 14, lineHeight: 18, color: "#8d8d8e", fontFamily: "Avenir-Book" }}>2,825 products</Text>
                     </View>
                     <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingTop: 20,paddingBottom:5}}>
-                        <Icon
-                            size={25}
-                            name='list'
-                            type='feather'
-                        />
+                    <Image source={require('../static/listIcon.png')}></Image>
+
                         <Text style={{ paddingLeft: 13, fontSize: 16, lineHeight: 20, color: "#2d2d2f", fontFamily: "Montserrat-Medium" }}>Clothing</Text>
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}>
                             <TouchableOpacity style={{paddingLeft:10}}>
