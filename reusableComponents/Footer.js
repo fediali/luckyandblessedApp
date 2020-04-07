@@ -69,9 +69,9 @@ class Footer extends PureComponent {
                     </TouchableOpacity>
                     <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Shop" }) }}>
                         {this.state.selected == "Shop" ?
-                            <Image source={require('../static/cartSelected.png')}></Image>
+                            <Image style={{width:30,height:30}} source={require('../static/cartSelected.png')}></Image>
                             :
-                            <Image source={require('../static/cart.png')}></Image>
+                            <Image style={{width:30,height:30}} source={require('../static/cart.png')}></Image>
                         }
                     </TouchableOpacity>
 
