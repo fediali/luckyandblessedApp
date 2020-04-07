@@ -23,7 +23,7 @@ class Delivery extends Component {
         let width = Dimensions.get('window').width;
         let height = Dimensions.get('window').height;
         return (
-            <View style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1 }}>
                 <Header />
                 <ScrollView contentContainerStyle={
                     {
@@ -34,7 +34,7 @@ class Delivery extends Component {
                     }
                 }>
 
-                    <SafeAreaView styles={styles.parentContainer}>
+                    <View styles={styles.parentContainer}>
                         <View style={{ paddingHorizontal: 20 }}>
                             <Text style={innerStyles.mainTextBold}>Delivery</Text>
                             <Text style={[innerStyles.lightText, { textAlign: "left" }]}>Order number is 4839200012</Text>
@@ -87,7 +87,7 @@ class Delivery extends Component {
 
                             <View style={styles.inputView}>
                                 <TextInput style={styles.input} placeholder="State" />
-                                <TextInput style={styles.input} placeholder="Zip code" />
+                                <TextInput style={[styles.input, {marginStart: 20}]} placeholder="Zip code" />
                             </View>
 
                             <View style={styles.inputView}>
@@ -127,11 +127,11 @@ class Delivery extends Component {
                                         </Text>
                             </TouchableOpacity>
                         </View>
-                    </SafeAreaView>
+                    </View>
 
                 </ScrollView>
                 <Footer />
-            </View>
+            </SafeAreaView>
         )
     }
 }
