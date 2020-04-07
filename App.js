@@ -17,6 +17,7 @@ import TaxID from "./components/TaxID"
 import Categories from "./components/Categories"
 import UserProfile from "./components/UserProfile"
 import Payment from "./components/Payment"
+import Delivery from "./components/Delivery"
 import CompanyProfile from "./components/CompanyProfile"
 
 class App extends Component {
@@ -31,12 +32,13 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
-          <Stack.Screen name="Payment" component={Payment} />
+          {/* <Stack.Screen name="Payment" component={Payment} /> */}
           {/* <Stack.Screen name="Categories" component={Categories} /> */}
           {/* <Stack.Screen name="SignIn" component={SignIn} /> */}
           {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
           {/* <Stack.Screen name="TaxID" component={TaxID} /> */}
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} /> */}
+          <Stack.Screen name="Delivery" component={Delivery} />
           {/* <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} /> */}
           {/* <Stack.Screen name="UserProfile" component={UserProfile} /> */}
           {/* <Stack.Screen name="CompanyProfile" component={CompanyProfile} /> */}

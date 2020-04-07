@@ -142,7 +142,7 @@ class TaxID extends Component {
     }
 }
 
-innerStyles = StyleSheet.create({
+const innerStyles = StyleSheet.create({
     customText1: {
         fontFamily: "Avenir",
         fontSize: 16,
