@@ -21,7 +21,7 @@ class Payment extends Component {
         return (
             <SafeAreaView style={styles.mainContainer}>
                 <Header />
-                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}>
                     <View style={{ marginBottom: 50 }}>
                         <View style={styles.subContainer}>
                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -58,12 +58,12 @@ class Payment extends Component {
                                     <Text style={styles.heading}>Credit card</Text>
                                     <Text style={styles.textButton}>Clear All</Text>
                                 </View>
-                                <TextInput style={styles.textInput} placeholder="Card holder name" />
-                                <TextInput style={[styles.textInput, { marginTop: 20 }]} placeholder="Card holder name" />
+                                <TextInput style={[styles.textInput,{borderRadius:6}]} placeholder="Card holder name" />
+                                <TextInput style={[styles.textInput, { marginTop: 20 ,borderRadius:6}]} placeholder="Card number" />
                                 <View style={{ flexDirection: "row", marginTop: 20, marginBottom: 25 }}>
-                                    <TextInput style={[styles.textInput, { marginRight: 5, flex: 1 }]} placeholder="mm" />
-                                    <TextInput style={[styles.textInput, { marginRight: 5, flex: 1 }]} placeholder="yyyy" />
-                                    <TextInput style={[styles.textInput, { flex: 1 }]} placeholder="CVV" />
+                                    <TextInput style={[styles.textInput, { marginRight: 13, flex: 1,borderRadius:6 }]} placeholder="mm" />
+                                    <TextInput style={[styles.textInput, { marginRight: 13, flex: 1,borderRadius:6 }]} placeholder="yyyy" />
+                                    <TextInput style={[styles.textInput, { flex: 1,borderRadius:6 }]} placeholder="CVV" />
                                 </View>
 
                             </View>
@@ -71,7 +71,7 @@ class Payment extends Component {
                         <View style={styles.divider}></View>
                         <View style={{ paddingHorizontal: 20 }}>
                             <TextInput
-                                style={[styles.textInput, { marginTop: 13, marginBottom: 15 }]}
+                                style={[styles.textInput, { marginTop: 13, marginBottom: 15,borderRadius:6 }]}
                                 multiline={true}
                                 numberOfLines={4}
                                 placeholder="You can leave us a comment here" />

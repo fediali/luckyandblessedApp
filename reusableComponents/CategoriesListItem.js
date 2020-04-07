@@ -19,7 +19,7 @@ class CategoriesListItem extends PureComponent {
         let Height = Dimensions.get("window").height
         return (
             <View style={{ flexDirection: "row", paddingHorizontal: 20,alignItems:"center" }} >
-                <Image source={this.props.imageUrl} resizeMode="contain" style={{ height: Height * 0.20, width: Width * 0.24 }} />
+                <Image source={this.props.imageUrl} resizeMode="contain" style={{ height: Height * 0.20, width: Width * 0.24,borderRadius:6 }} />
                 {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
                 <View style={{paddingLeft:20}}>
                     <Text style={{fontFamily:"Montserrat-SemiBold",fontSize:24,lineHeight:28}}>{this.props.name}</Text>
