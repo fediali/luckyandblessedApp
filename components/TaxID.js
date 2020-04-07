@@ -7,7 +7,8 @@ import {
     TextInput,
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    Dimensions
 } from 'react-native';
 
 import styles from './Styles/Style'
@@ -58,7 +59,7 @@ class TaxID extends Component {
                     flexGrow: 1,
                     justifyContent: 'space-between',
                 }}>
-                <SafeAreaView style={styles.parentContainer}>
+                <SafeAreaView style={[styles.parentContainer,{marginBottom: 38}]}>
                     <Header centerText={""} rightIcon="info" />
 
                     <View style={styles.subParentContainer}>
@@ -89,8 +90,8 @@ class TaxID extends Component {
                             I, the purchaser named above, claim the right to make a non-taxable purchase (for resale of the taxable items described below or on the attached order or invoice) from:
                         </Text>
                         <Text style={[innerStyles.customText1, { marginTop: 15 }]}><Text style={[styles.customTextBold, { fontSize: 20 }]}>L&B</Text> - 12801 N STEMMONS FWY STE 710 FARMERS BRANCH, TX 75234</Text>
-
-                        <Text style={[innerStyles.customTextBoldSmall]}>Description of the type of business activity generally engaged in or type of items normally sold by the purchaser:</Text>
+                        <View style={innerStyles.divider}></View>
+                        <Text style={[innerStyles.customTextBoldSmall, {marginTop: 15}]}>Description of the type of business activity generally engaged in or type of items normally sold by the purchaser:</Text>
 
                         <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
                             <TextInput
@@ -141,6 +142,9 @@ class TaxID extends Component {
         )
     }
 }
+
+let Height = Dimensions.get('window').height;
+let Width = Dimensions.get('window').width;
 
 const innerStyles = StyleSheet.create({
     customText1: {
@@ -193,6 +197,12 @@ const innerStyles = StyleSheet.create({
         paddingHorizontal: 30,
         marginTop: 15,
     },
+    divider: {
+        marginTop: 15,
+        height: Height * 0.009,
+        width: Width,
+        backgroundColor: '#f6f6f6',
+      }
 })
 
 export default TaxID;
