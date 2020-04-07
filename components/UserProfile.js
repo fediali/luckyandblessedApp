@@ -13,8 +13,8 @@ import Footer from '../reusableComponents/Footer';
 import {ScrollView} from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/ProfileText';
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
-//TODO: Check why last row is not appearing
-//TODO: SafeAreaView and ScrollView ka masla haii apas mei
+//TODO: Data on pressing the arrow
+//TODO: What is the use of edit icon?
 export default class UserProfile extends PureComponent {
   constructor(props) {
     super(props);
@@ -71,19 +71,16 @@ export default class UserProfile extends PureComponent {
           <View style={styles.divider}></View>
 
           <ProfileText
-            keyText="Wishlist"
-            valueText={this.state.data.wishList}
+            keyText="Referral Link"
             containIcon={true}></ProfileText>
           <ProfileText
-            keyText="My bag"
-            valueText={this.state.data.myBag}
+            keyText="TAX ID"
             containIcon={true}></ProfileText>
           <ProfileText
             keyText="My orders"
-            valueText={this.state.data.myOrders}
             containIcon={true}></ProfileText>
           <View style={styles.divider}></View>
-          <ProfileText keyText="Newsletter" containIcon={true}></ProfileText>
+          <ProfileText keyText="Return Request" containIcon={true}></ProfileText>
           <ProfileText keyText="Settings" containIcon={true}></ProfileText>
           <View style={{paddingBottom: 80, backgroundColor: '#f6f6f6'}}>
             <View
@@ -137,7 +134,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   divider: {
-    height: Height * 0.009,
+    height: Height * 0.01,
     width: Width,
     backgroundColor: '#f6f6f6',
   },

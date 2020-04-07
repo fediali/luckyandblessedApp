@@ -12,8 +12,8 @@ import Footer from '../reusableComponents/Footer';
 import {ScrollView} from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/ProfileText';
 
-//TODO: Check why last row is not appearing
-
+//TODO: Data on pressing the arrow
+//TODO: What is the use of edit icon?
 export default class CompanyProfile extends PureComponent {
   constructor(props) {
     super(props);
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   divider: {
-    height: Height * 0.009,
+    height: Height * 0.01,
     width: Width,
     backgroundColor: '#f6f6f6',
   },

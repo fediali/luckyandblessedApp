@@ -13,18 +13,17 @@ class ProfileText extends PureComponent {
           <Text style={styles.keyText}>{this.props.keyText}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <View style={{paddingBottom: 12.2, paddingTop: 22.8}}>
+          <View style={{paddingVertical: 18}}>
             <Text style={styles.valueText} numberOfLines={1}>
-              {this.props.valueText}{' '}
+              {this.props.valueText}
             </Text>
           </View>
 
           {this.props.containIcon && (
             <TouchableOpacity
               style={{
-                marginBottom: 21.5,
-                marginTop: 21.5,
-                marginRight: 7,
+                marginVertical: 18,
+                marginRight: 6,
                 marginLeft: 19.5,
               }}>
               <Icon size={20} name="right" type="antdesign" />
