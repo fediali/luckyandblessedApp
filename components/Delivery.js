@@ -48,7 +48,7 @@ class Delivery extends Component {
                                     <Image style={{
                                         width: width * 0.12,
                                         height: height * 0.12,
-                                    }} resizeMode="contain" source={require("../static/icon_done3x.png")} />
+                                    }} resizeMode="contain" source={require("../static/icon_done.png")} />
                                     <Text style={[innerStyles.lightText, { textAlign: 'center' }]}>Billing and delivery info are the same</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={[innerStyles.squareBoxButtons, { flex: 0.5, marginStart: 20 }]}>

@@ -29,17 +29,24 @@ class Payment extends Component {
                                     <Text style={{ fontFamily: "Montserrat-Bold", fontSize: 30, lineHeight: 36, color: "#2d2d2f" }}>Payment</Text>
                                     <Text style={{ fontFamily: "Avenir-Book", fontSize: 14, lineHeight: 18, color: "#8d8d8e" }}>Secure Checkout</Text>
                                 </View>
-
-                                <Image style={{
-                                    alignSelf: "flex-end",
-                                    width: width * 0.2,
-                                    height: height * 0.15,
-                                    marginTop: -15
-                                }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                             </View>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                <Text style={{ fontFamily: "Montserrat-SemiBold", fontSize: 18, lineHeight: 22, color: "#2967ff" }}>Credit Card</Text>
-                                <Text style={styles.heading}>Paypal</Text>
+                            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 25 }}>
+                                <TouchableOpacity>
+                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+
+                                        <Image style={{ height: 25, width: 25, marginRight: 5 }} source={require("../static/icon_done.png")} />
+                                        <Image style={{ height: 24, width: 149 }} source={require("../static/visaLogo.png")} />
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity>
+
+                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                        <Image style={{ height: 25, width: 25, marginRight: 5 }} source={require("../static/icon_done.png")} />
+                                        <Image style={{ height: 21, width: 89 }} source={require("../static/paypalLogo.png")} />
+                                    </View>
+                                </TouchableOpacity>
+                                {/* <Text style={{ fontFamily: "Montserrat-SemiBold", fontSize: 18, lineHeight: 22, color: "#2967ff" }}>Credit Card</Text> */}
+                                {/* <Text style={styles.heading}>Paypal</Text> */}
                             </View>
                             <View>
                                 <Text style={[styles.heading, { marginTop: 29, marginBottom: 18 }]}>Delivery details:</Text>
@@ -58,12 +65,12 @@ class Payment extends Component {
                                     <Text style={styles.heading}>Credit card</Text>
                                     <Text style={styles.textButton}>Clear All</Text>
                                 </View>
-                                <TextInput style={[styles.textInput,{borderRadius:6}]} placeholder="Card holder name" />
-                                <TextInput style={[styles.textInput, { marginTop: 20 ,borderRadius:6}]} placeholder="Card number" />
+                                <TextInput style={[styles.textInput, { borderRadius: 6 }]} placeholder="Card holder name" />
+                                <TextInput style={[styles.textInput, { marginTop: 20, borderRadius: 6 }]} placeholder="Card number" />
                                 <View style={{ flexDirection: "row", marginTop: 20, marginBottom: 25 }}>
-                                    <TextInput style={[styles.textInput, { marginRight: 13, flex: 1,borderRadius:6 }]} placeholder="mm" />
-                                    <TextInput style={[styles.textInput, { marginRight: 13, flex: 1,borderRadius:6 }]} placeholder="yyyy" />
-                                    <TextInput style={[styles.textInput, { flex: 1,borderRadius:6 }]} placeholder="CVV" />
+                                    <TextInput style={[styles.textInput, { marginRight: 13, flex: 1, borderRadius: 6 }]} placeholder="mm" />
+                                    <TextInput style={[styles.textInput, { marginRight: 13, flex: 1, borderRadius: 6 }]} placeholder="yyyy" />
+                                    <TextInput style={[styles.textInput, { flex: 1, borderRadius: 6 }]} placeholder="CVV" />
                                 </View>
 
                             </View>
@@ -71,7 +78,7 @@ class Payment extends Component {
                         <View style={styles.divider}></View>
                         <View style={{ paddingHorizontal: 20 }}>
                             <TextInput
-                                style={[styles.textInput, { marginTop: 13, marginBottom: 15,borderRadius:6 }]}
+                                style={[styles.textInput, { marginTop: 13, marginBottom: 15, borderRadius: 6 }]}
                                 multiline={true}
                                 numberOfLines={4}
                                 placeholder="You can leave us a comment here" />
@@ -85,13 +92,13 @@ class Payment extends Component {
                                 <Text style={styles.smallGreyText}>Gift card/Promo applied:</Text>
                                 <Text style={styles.smallGreyText}>-$55.02</Text>
                             </View>
-                            <TouchableOpacity style={{backgroundColor:"#2967ff",alignItems:"center",borderRadius:6}}>
+                            <TouchableOpacity style={{ backgroundColor: "#2967ff", alignItems: "center", borderRadius: 6 }}>
                                 <Text style={{
                                     fontFamily: "Montserrat-SemiBold",
                                     fontSize: 18,
                                     lineHeight: 22,
-                                    color:"#fff",
-                                    paddingVertical:11
+                                    color: "#fff",
+                                    paddingVertical: 11
                                 }}>Place Order</Text>
                             </TouchableOpacity>
                         </View>
