@@ -38,7 +38,8 @@ class ShoppingCart extends Component {
                     color: ['Turquoise'],
                     quantity: 14,
                     unknownNum: 6,
-                    hexColor: '#05c2bd'
+                    hexColor: '#05c2bd',
+                    path:"../static/item_cart1.png"
                 }, {
                     itemNum: 1,
                     name: 'Tuxedo Blouse',
@@ -48,7 +49,8 @@ class ShoppingCart extends Component {
                     color: ['Turquoise'],
                     quantity: 14,
                     unknownNum: 12,
-                    hexColor: '#3c3c3e'
+                    hexColor: '#3c3c3e',
+                    path:"../static/item_cart2.png"
                 }, {
                     itemNum: 2,
                     name: 'Linear Near Tee',
@@ -58,7 +60,8 @@ class ShoppingCart extends Component {
                     color: ['Turquoise'],
                     quantity: 14,
                     unknownNum: 12,
-                    hexColor: '#ff671c'
+                    hexColor: '#ff671c',
+                    path:"../static/item_cart3.png"
                 }
             ]
         }
