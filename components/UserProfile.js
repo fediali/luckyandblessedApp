@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -15,7 +15,7 @@ import ProfileText from '../reusableComponents/ProfileText';
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 //TODO: Data on pressing the arrow
 //TODO: What is the use of edit icon?
-export default class UserProfile extends PureComponent {
+export default class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,9 +1,9 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {Text, View, SafeAreaView, StyleSheet, Image} from 'react-native';
 import Footer from '../reusableComponents/Footer';
 import {Icon} from 'react-native-elements';
 
-export default class ConfirmationSuccess extends PureComponent {
+export default class ConfirmationSuccess extends Component {
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>

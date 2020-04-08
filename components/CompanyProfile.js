@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -14,7 +14,7 @@ import ProfileText from '../reusableComponents/ProfileText';
 
 //TODO: Data on pressing the arrow
 //TODO: What is the use of edit icon?
-export default class CompanyProfile extends PureComponent {
+export default class CompanyProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
