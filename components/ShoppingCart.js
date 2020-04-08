@@ -86,17 +86,17 @@ class ShoppingCart extends Component {
                         </View>
                         <View style={[styles.line, { marginTop: 10 }]} />
                         <FlatList
-                            keyExtractor={(item) => item.itemNum}
+                            keyExtractor={(item) => item.itemNum.toString()}
                             data={this.state.itemList}
                             numColumns={1}
                             renderItem={({ item }) => (
                                 <View style={[innerStyles.itemView]}>
                                     <View style={{ flexDirection: 'column', padding: 15 }}>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image style={innerStyles.itemImage}
+                                            <Image style={[innerStyles.itemImage]}
                                                 resizeMode='contain' source={require("../static/item_cart1.png")}
                                             />
-                                            <View style={{ flex: 1, flexDirection: 'column' }}>
+                                            <View style={{ flex: 1, flexDirection: 'column', marginLeft:10 }}>
                                                 <View style={{ flexDirection: 'row', paddingBottom: 4 }}>
                                                     <Text style={[innerStyles.itemNameText, { textAlign: 'left', flex: 2 }]}>{item.name}</Text>
                                                     <Text style={[innerStyles.itemNameText, { textAlign: 'right', flex: 1 }]}>${item.price}</Text>
@@ -126,7 +126,7 @@ class ShoppingCart extends Component {
                                             </TouchableOpacity>
                                             <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5, marginStart: 40 }]}>
                                                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <View style={{width: '100%', height: '100%',borderRadius: 25, backgroundColor: item.color}}/>
+                                                    <View style={{ width: 25, height: 25,marginStart: 15, borderRadius: 25, backgroundColor: item.hexColor }} />
                                                     <Image
                                                         style={{
                                                             height: '33.3%',
@@ -180,8 +180,8 @@ innerStyles = StyleSheet.create({
         // flex:1
     },
     itemImage: {
-        width: '26.7%',
-        height: '53%'
+        width: Width*0.2,
+        height: Height*0.15,
     },
     rowStyling: {
         backgroundColor: "#ffffff",
