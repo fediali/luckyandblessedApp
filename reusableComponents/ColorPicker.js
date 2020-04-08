@@ -14,6 +14,7 @@ class ColorPicker extends PureComponent {
     //TODO: Find a better workaround to update this.state.isChange
     constructor(props) {
         super(props)
+        this.setupState();
     }
     
     setupState(){
@@ -29,7 +30,7 @@ class ColorPicker extends PureComponent {
                     { id: 5, color: '#edaf23', isCheck: false },
                     { id: 6, color: '#896745', isCheck: false },
                     { id: 7, color: '#000000', isCheck: false },
-                    { id: 8, color: '#64af12', isCheck: true },
+                    { id: 8, color: '#64af12', isCheck: false },
                     { id: 9, color: '#346723', isCheck: false },
                     { id: 10, color: '#2323dd', isCheck: false },
                     { id: 11, color: '#85836a', isCheck: false },
@@ -61,7 +62,6 @@ class ColorPicker extends PureComponent {
 
     render() {
         //TODO: this I want to call only once, but it is getting called on every click
-        {this.setupState()}
         return (
             <View style={{ paddingBottom: 10}}>
                 <FlatList
