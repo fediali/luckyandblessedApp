@@ -111,16 +111,28 @@ class ShoppingCart extends Component {
                                             </View>
                                         </View>
 
-                                        <View style={innerStyles.horizontalView}>
+                                        <View style={[innerStyles.horizontalView]}>
                                             <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5 }]}>
-                                                <View style={{ flexDirection: 'row', width: '100%', justifyContent:'center', alignContent: 'center' }}>
-                                                <Text style={[innerStyles.numText,{flex:0.5}]}>{item.unknownNum}</Text>
-                                                <Text style={[innerStyles.numText,{flex:0.5}]}>{item.unknownNum}</Text>
+                                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <Text style={[innerStyles.numText]}>{item.unknownNum}</Text>
+
+                                                    <Image
+                                                        style={{
+                                                            height: '33.3%',
+                                                            width: '58.3%',
+                                                        }} resizeMode='contain' source={require("../static/arrow_down.png")}
+                                                    />
                                                 </View>
                                             </TouchableOpacity>
-                                            <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5, marginStart: 20 }]}>
-                                                <View>
-
+                                            <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5, marginStart: 40 }]}>
+                                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <View style={{width: '100%', height: '100%',borderRadius: 25, backgroundColor: item.color}}/>
+                                                    <Image
+                                                        style={{
+                                                            height: '33.3%',
+                                                            width: '58.3%',
+                                                        }} resizeMode='contain' source={require("../static/arrow_down.png")}
+                                                    />
                                                 </View>
                                             </TouchableOpacity>
                                         </View>
@@ -200,7 +212,6 @@ innerStyles = StyleSheet.create({
     horizontalView: {
         flexDirection: 'row',
         marginTop: 20,
-        backgroundColor: '#ffa2aa',
         paddingHorizontal: 10
     },
     bottomSelectors: {
@@ -216,7 +227,9 @@ innerStyles = StyleSheet.create({
         fontStyle: "normal",
         lineHeight: 24,
         letterSpacing: 0,
-        color: "#2d2d2f"
+        color: "#2d2d2f",
+        textAlign: 'left',
+        marginStart: 15
     }
 })
 export default ShoppingCart;
