@@ -53,92 +53,95 @@ class TaxID extends Component {
             height2
         }
         return (
-            <ScrollView
-                contentContainerStyle={{
-                    backgroundColor: "#fff",
-                    flexGrow: 1,
-                    justifyContent: 'space-between',
-                }}>
-                <SafeAreaView style={[styles.parentContainer,{marginBottom: 38}]}>
-                    <Header centerText={""} rightIcon="info" />
+            <SafeAreaView style={{ flex: 1 }}>
+                <Header centerText={""} rightIcon="info" />
 
-                    <View style={styles.subParentContainer}>
-                        <LogoSmall/>
+                <ScrollView
+                    contentContainerStyle={{
+                        backgroundColor: "#fff",
+                        flexGrow: 1,
+                        justifyContent: 'space-between',
+                    }}>
+                    <View style={[styles.parentContainer, { marginBottom: 38 }]}>
+
+                        <View style={styles.subParentContainer}>
+                            <LogoSmall />
 
 
-                        <Text style={[styles.customTextBold, { marginTop: 20 }]}>Use & Sale Tax Form</Text>
-                        <View style={styles.inputView}>
-                            <TextInput style={styles.input} placeholder="Name of purchaser, firm or agence" />
-                        </View>
-                        <View style={styles.inputView}>
-                            <TextInput style={styles.input} placeholder="Phone" />
-                        </View>
-                        <View style={styles.inputView}>
-                            <TextInput style={styles.input} placeholder="Address, City, State, ZIP code" />
-                        </View>
-                        <View style={styles.inputView}>
-                            <TextInput style={styles.input} placeholder="Texas sales & Use Tax Permit Num" />
-                        </View>
-                        <View style={styles.inputView}>
-                            <TextInput style={styles.input} placeholder="Out-of-state or Fedral Taxpay Num" />
-                        </View>
-                        <View style={styles.inputView}>
-                            <TextInput style={styles.input} placeholder="Mexico registration form" />
-                        </View>
+                            <Text style={[styles.customTextBold, { marginTop: 20 }]}>Use & Sale Tax Form</Text>
+                            <View style={styles.inputView}>
+                                <TextInput style={styles.input} placeholder="Name of purchaser, firm or agence" />
+                            </View>
+                            <View style={styles.inputView}>
+                                <TextInput style={styles.input} placeholder="Phone" />
+                            </View>
+                            <View style={styles.inputView}>
+                                <TextInput style={styles.input} placeholder="Address, City, State, ZIP code" />
+                            </View>
+                            <View style={styles.inputView}>
+                                <TextInput style={styles.input} placeholder="Texas sales & Use Tax Permit Num" />
+                            </View>
+                            <View style={styles.inputView}>
+                                <TextInput style={styles.input} placeholder="Out-of-state or Fedral Taxpay Num" />
+                            </View>
+                            <View style={styles.inputView}>
+                                <TextInput style={styles.input} placeholder="Mexico registration form" />
+                            </View>
 
-                        <Text style={[innerStyles.customText1]}>
-                            I, the purchaser named above, claim the right to make a non-taxable purchase (for resale of the taxable items described below or on the attached order or invoice) from:
+                            <Text style={[innerStyles.customText1]}>
+                                I, the purchaser named above, claim the right to make a non-taxable purchase (for resale of the taxable items described below or on the attached order or invoice) from:
                         </Text>
-                        <Text style={[innerStyles.customText1, { marginTop: 15 }]}><Text style={[styles.customTextBold, { fontSize: 20 }]}>L&B</Text> - 12801 N STEMMONS FWY STE 710 FARMERS BRANCH, TX 75234</Text>
-                        <View style={innerStyles.divider}></View>
-                        <Text style={[innerStyles.customTextBoldSmall, {marginTop: 15}]}>Description of the type of business activity generally engaged in or type of items normally sold by the purchaser:</Text>
+                            <Text style={[innerStyles.customText1, { marginTop: 15 }]}><Text style={[styles.customTextBold, { fontSize: 20 }]}>L&B</Text> - 12801 N STEMMONS FWY STE 710 FARMERS BRANCH, TX 75234</Text>
+                            <View style={innerStyles.divider}></View>
+                            <Text style={[innerStyles.customTextBoldSmall, { marginTop: 15 }]}>Description of the type of business activity generally engaged in or type of items normally sold by the purchaser:</Text>
 
-                        <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
-                            <TextInput
-                                placeholder="type here"
-                                onChangeText={(value1) => this.setState({ value1 })}
-                                style={[innerStyles.customInput]}
-                                editable={true}
-                                multiline={true}
-                                value={value1}
-                                onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
-                            >
+                            <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
+                                <TextInput
+                                    placeholder="type here"
+                                    onChangeText={(value1) => this.setState({ value1 })}
+                                    style={[innerStyles.customInput]}
+                                    editable={true}
+                                    multiline={true}
+                                    value={value1}
+                                    onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
+                                >
 
-                            </TextInput>
-                        </View>
-                        <Text style={[innerStyles.customTextBoldSmall, { marginTop: 15 }]}>This certificate should be furnished to the supplier. Do not send the completed certificate to the Comptroller of Public Accounts.</Text>
-                        <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
-                            <TextInput
-                                placeholder="Sign Here"
-                                onChangeText={(value2) => this.setState({ value2 })}
-                                style={[innerStyles.customInput]}
-                                editable={true}
-                                multiline={true}
-                                value={value2}
-                                onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
-                            >
+                                </TextInput>
+                            </View>
+                            <Text style={[innerStyles.customTextBoldSmall, { marginTop: 15 }]}>This certificate should be furnished to the supplier. Do not send the completed certificate to the Comptroller of Public Accounts.</Text>
+                            <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
+                                <TextInput
+                                    placeholder="Sign Here"
+                                    onChangeText={(value2) => this.setState({ value2 })}
+                                    style={[innerStyles.customInput]}
+                                    editable={true}
+                                    multiline={true}
+                                    value={value2}
+                                    onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
+                                >
 
-                            </TextInput>
-                        </View>
-                        <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
-                        <View style={styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }}>
-                            <TouchableOpacity style={[innerStyles.buttonSubmit]}>
-                                <Text
-                                    style={[
-                                        styles.buttonText,
-                                        {
-                                            color: '#ffffff',
-                                            fontSize: 20
-                                        },
-                                    ]}>
-                                    Submit
+                                </TextInput>
+                            </View>
+                            <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
+                            <View style={styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }}>
+                                <TouchableOpacity style={[innerStyles.buttonSubmit]}>
+                                    <Text
+                                        style={[
+                                            styles.buttonText,
+                                            {
+                                                color: '#ffffff',
+                                                fontSize: 20
+                                            },
+                                        ]}>
+                                        Submit
                             </Text>
-                            </TouchableOpacity>
-                        </View>
+                                </TouchableOpacity>
+                            </View>
 
+                        </View>
                     </View>
-                </SafeAreaView>
-            </ScrollView>
+                </ScrollView>
+            </SafeAreaView>
         )
     }
 }
@@ -202,7 +205,7 @@ const innerStyles = StyleSheet.create({
         height: Height * 0.009,
         width: Width,
         backgroundColor: '#f6f6f6',
-      }
+    }
 })
 
 export default TaxID;
