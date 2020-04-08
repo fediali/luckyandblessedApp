@@ -100,8 +100,10 @@ class CategoriesProduct extends Component {
                     </View>
                     {/* <CategoriesProductListSingleItem imageUrl={this.state.data[0].imageUrl} name1={this.state.data[0].name1} price1={this.state.data[0].price1} name2={this.state.data[0].name1} price2={this.state.data[0].price1}/> */}
 
+                    {/* Checking whether the Flatlist should render single item row or double item row */}
                     {this.state.singleItem ?
-
+                        // changing Key to rerender the FlatList component as chaning numColumn require rerender
+                        // Single Item row FlatList
                         <FlatList
                             key={(this.state.singleItem ? 'h' : 'v')}
                             data={this.state.data}
@@ -114,6 +116,7 @@ class CategoriesProduct extends Component {
                             ItemSeparatorComponent={this.renderSeparator}
 
                         /> :
+                        // Double Item row FlatList
                         <FlatList
                             key={(this.state.singleItem ? 'h' : 'v')}
                             data={this.state.data}
@@ -159,8 +162,8 @@ const styles = StyleSheet.create({
     multiRowStyling: {
         flex: 1,
         justifyContent: "space-between",
-        paddingHorizontal:20
-      }
+        paddingHorizontal: 20
+    }
 
 })
 
