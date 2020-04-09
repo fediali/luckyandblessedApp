@@ -23,6 +23,7 @@ import CategoriesProduct from "./components/CategoriesProduct"
 import ShoppingCart from "./components/ShoppingCart"
 import TrackOrders from "./components/TrackOrders"
 
+import Filter from "./components/Filter"
 class App extends Component {
   render() {
     const Stack = createStackNavigator();
@@ -35,6 +36,7 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
+          {/* <Stack.Screen name="Filter" component={Filter} /> */}
           {/* <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} /> */}
           {/* <Stack.Screen name="Payment" component={Payment} /> */}
           {/* <Stack.Screen name="Categories" component={Categories} /> */}
