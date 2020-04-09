@@ -37,7 +37,7 @@ class App extends Component {
             ...TransitionPresets.SlideFromRightIOS
           }}
         >
-          {/* <Stack.Screen name="Filter" component={Filter} /> */}
+          <Stack.Screen name="Filter" component={Filter} />
           {/* <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} /> */}
           {/* <Stack.Screen name="Payment" component={Payment} /> */}
           {/* <Stack.Screen name="Categories" component={Categories} /> */}
@@ -52,7 +52,7 @@ class App extends Component {
           {/* <Stack.Screen name="UserProfile" component={UserProfile} /> */}
           {/* <Stack.Screen name="CompanyProfile" component={CompanyProfile} /> */}
           {/* <Stack.Screen name="TrackOrders" component={TrackOrders} /> */}
-          <Stack.Screen name="SearchResults" component={SearchResults} />
+          {/* <Stack.Screen name="SearchResults" component={SearchResults} /> */}
 
         </Stack.Navigator>
       </NavigationContainer>

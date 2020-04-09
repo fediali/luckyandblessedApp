@@ -17,9 +17,12 @@ import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import Accordion from 'react-native-collapsible/Accordion';
 
+import Ripple from 'react-native-material-ripple';
+
 
 YellowBox.ignoreWarnings([
     'ReactNativeFiberHostComponent', // Useless Warning
+    'Failed prop type'
 ])
 class Filter extends Component {
 
@@ -155,7 +158,7 @@ class Filter extends Component {
                                     />
                                 </TouchableOpacity>
                                 :
-                                <TouchableOpacity key={key.toString()} style={styles.listItem} onPress={() => { this.setState({ selected: key }) }}>
+                                <TouchableOpacity key={key.toString()} style={styles.listItem} onPressIn={() => { this.setState({ selected: key }) }}>
                                     <Text style={[styles.listItemText, { fontFamily: "Avenir-Book" }]}>{item}</Text>
                                 </TouchableOpacity>
 
@@ -171,7 +174,7 @@ class Filter extends Component {
                             renderHeader={this._renderHeader}
                             renderContent={this._renderContent}
                             onChange={this._updateSections}
-                            touchableComponent={(props) => <TouchableOpacity {...props} />}
+                            // touchableComponent={(props) => <TouchableOpacity {...props} />}
                             expandMultiple={true}
 
                         />
