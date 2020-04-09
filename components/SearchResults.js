@@ -14,6 +14,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Icon} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
+//TODO: Check for the last row
 export default class SearchResults extends Component {
   constructor(props) {
     super(props);
