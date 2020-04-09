@@ -37,7 +37,7 @@ export default class ordersProduct extends Component {
                   <Text style={styles.itemNameText}>{item.itemName}</Text>
                   <Text
                     style={[
-                      innerStyles.itemUnitPriceText,
+                      styles.itemUnitPriceText,
                       {marginVertical: 4},
                     ]}>
                     Unit price
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
   thumbnailImage: {
     height: 100,
     width: 100,
+    borderRadius: 6
   },
 
   lightText: {
