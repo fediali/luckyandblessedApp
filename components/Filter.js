@@ -17,7 +17,7 @@ import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import Accordion from 'react-native-collapsible/Accordion';
 
-import Ripple from 'react-native-material-ripple';
+// import Ripple from 'react-native-material-ripple';
 
 
 YellowBox.ignoreWarnings([
