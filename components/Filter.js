@@ -10,16 +10,19 @@ import {
     Dimensions,
     SafeAreaView,
     YellowBox,
+    Picker
 
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import Accordion from 'react-native-collapsible/Accordion';
+import RNPickerSelect from 'react-native-picker-select';
 
 
 YellowBox.ignoreWarnings([
     'ReactNativeFiberHostComponent', // Useless Warning
+    'Failed prop type' // Useless Warning
 ])
 class Filter extends Component {
 
@@ -51,7 +54,7 @@ class Filter extends Component {
                 {
                     id: 4,
                     title: 'Color',
-                    content: ["#0f0","#0ff"],
+                    content: ["#0f0", "#0ff"],
                 },
                 {
                     id: 5,
@@ -69,40 +72,40 @@ class Filter extends Component {
     }
 
 
-    _renderSectionTitle = section => {
-        return (
-            <View style={styles.content}>
-                <Text>{section.content}</Text>
-            </View>
-        );
-    };
+    // _renderSectionTitle = section => {
+    //     return (
+    //         <View style={styles.content}>
+    //             <Text>{section.content}</Text>
+    //         </View>
+    //     );
+    // };
 
 
     _renderHeader = section => {
         console.log(section)
-        let colors=[]
+        let colors = []
 
-        if(section.title=="Color"){
+        if (section.title == "Color") {
             // console.log(section.content)
-            for(let i=0;i<section.content.length;i++){
+            for (let i = 0; i < section.content.length; i++) {
                 console.log(section.content[i])
                 colors.push(
-                    <View key={i} style={{width:20,height:20,backgroundColor:section.content[i],borderRadius:10,marginRight:5}}></View>
+                    <View key={i} style={{ width: 20, height: 20, backgroundColor: section.content[i], borderRadius: 10, marginRight: 5 }}></View>
                 )
             }
         }
-        console.log("<<",colors)
-        
+        console.log("<<", colors)
+
         return (
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 13 }}>
-                <Text style={{ fontSize: 18, fontFamily: "Montserrat-SemiBold", lineHeight: 22,color:"#2d2d2f" }}>{section.title}</Text>
+                <Text style={{ fontSize: 18, fontFamily: "Montserrat-SemiBold", lineHeight: 22, color: "#2d2d2f" }}>{section.title}</Text>
                 {
                     !this.state.activeSections.includes(section.id) ?//Checking whether open or collapsed and showing right view based on that
                         <View style={{ flexDirection: "row", alignItems: "center" }}>
                             {
                                 section.title != "Color" ?//Color has different View than others
-                                    <Text style={{ paddingRight: 12,fontSize:18,fontFamily:"Avenir-Book",lineHeight:24,color:"#2d2d2f" }}>{section.content}</Text> :
-                                    <View style={{marginRight: 12,flexDirection:"row" }}>
+                                    <Text style={{ paddingRight: 12, fontSize: 18, fontFamily: "Avenir-Book", lineHeight: 24, color: "#2d2d2f" }}>{section.content}</Text> :
+                                    <View style={{ marginRight: 12, flexDirection: "row" }}>
                                         {/* Circles of hex colour */}
                                         {colors}
                                     </View>
@@ -112,7 +115,7 @@ class Filter extends Component {
                                 name='ios-arrow-forward'
                                 type='ionicon'
                             />
-                        </View>:
+                        </View> :
                         <View></View>//Empty view just for the sake of else condition
                 }
 
@@ -121,11 +124,83 @@ class Filter extends Component {
     };
 
     _renderContent = section => {
-        return (
-            <View style={{ backgroundColor: "#fff", height: 50 }}>
-                <Text>{section.content}</Text>
-            </View>
-        );
+        if (section.title == "Gender") {
+            return (
+                <View style={{ marginVertical: 15 }}>
+
+                    <RNPickerSelect
+                        placeholder={{
+                        }}
+                        Icon={() => {
+                            return < Icon
+                                size={26}
+                                name='ios-arrow-down'
+                                type='ionicon'
+                                color='#2d2d2f'
+                            />;
+                        }}
+                        useNativeAndroidPickerStyle={false}
+                        style={{
+                            inputAndroid: { backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
+                            iconContainer: {
+                                top: 9,
+                                right: 15,
+                            },
+                            inputIOS: {
+                                inputAndroid: { backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
+                            }
+                        }}
+                        onValueChange={(value) => console.log(value)}
+                        items={[
+                            { label: 'Women', value: 'Women' },
+                            { label: 'Men', value: 'Men' },
+                        ]}
+                    />
+                </View>
+            )
+        }
+        else if (section.title == "Category") {
+            return (
+                <View style={{  marginVertical: 15 }}>
+                    <RNPickerSelect
+                        placeholder={{
+                        }}
+                        Icon={() => {
+                            return < Icon
+                                size={26}
+                                name='ios-arrow-down'
+                                type='ionicon'
+                                color='#2d2d2f'
+                            />;
+                        }}
+                        useNativeAndroidPickerStyle={false}
+                        style={{
+                            inputAndroid: { backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
+                            iconContainer: {
+                                top: 9,
+                                right: 15,
+                            },
+                            inputIOS: {
+                                inputAndroid: { backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
+                            }
+                        }}
+                        onValueChange={(value) => console.log(value)}
+                        items={[
+                            { label: 'Sneaker', value: 'Sneaker' },
+                            { label: 'Jackets', value: 'Jackets' },
+                        ]}
+                    />
+
+                </View>
+
+            )
+        } else {
+            return (
+                <View style={{ backgroundColor: "#fff", height: 50 }}>
+                    <Text>{section.content}</Text>
+                </View>
+            )
+        }
     };
 
     _updateSections = activeSections => {
@@ -155,7 +230,7 @@ class Filter extends Component {
                                     />
                                 </TouchableOpacity>
                                 :
-                                <TouchableOpacity key={key.toString()} style={styles.listItem} onPress={() => { this.setState({ selected: key }) }}>
+                                <TouchableOpacity key={key.toString()} style={styles.listItem} onPressIn={() => { this.setState({ selected: key }) }}>
                                     <Text style={[styles.listItemText, { fontFamily: "Avenir-Book" }]}>{item}</Text>
                                 </TouchableOpacity>
 
@@ -171,14 +246,14 @@ class Filter extends Component {
                             renderHeader={this._renderHeader}
                             renderContent={this._renderContent}
                             onChange={this._updateSections}
-                            touchableComponent={(props) => <TouchableOpacity {...props} />}
+                            // touchableComponent={(props) => <TouchableOpacity {...props} />}
                             expandMultiple={true}
 
                         />
                     </View>
-                    <View style={{backgroundColor:"#f6f6f6",marginBottom:50,paddingTop:20,alignItems:"center",paddingBottom:20}}>
-                        <TouchableOpacity style={{backgroundColor:"#2967ff",alignItems:"center",width:"90%",borderRadius:6}}>
-                            <Text style={{color:"#fff",paddingVertical:11}}>
+                    <View style={{ backgroundColor: "#f6f6f6", marginBottom: 50, paddingTop: 20, alignItems: "center", paddingBottom: 20 }}>
+                        <TouchableOpacity style={{ backgroundColor: "#2967ff", alignItems: "center", width: "90%", borderRadius: 6 }}>
+                            <Text style={{ color: "#fff", paddingVertical: 11 }}>
                                 View All Items
                             </Text>
                         </TouchableOpacity>
@@ -218,5 +293,29 @@ const styles = StyleSheet.create({
         backgroundColor: '#f6f6f6',
     },
 })
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+});
+
 
 export default Filter;
