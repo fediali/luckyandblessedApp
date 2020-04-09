@@ -22,6 +22,7 @@ import CompanyProfile from "./components/CompanyProfile"
 import CategoriesProduct from "./components/CategoriesProduct"
 import ShoppingCart from "./components/ShoppingCart"
 import TrackOrders from "./components/TrackOrders"
+import SearchResults from "./components/SearchResults"
 
 import Filter from "./components/Filter"
 class App extends Component {
@@ -50,7 +51,8 @@ class App extends Component {
           {/* <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} /> */}
           {/* <Stack.Screen name="UserProfile" component={UserProfile} /> */}
           {/* <Stack.Screen name="CompanyProfile" component={CompanyProfile} /> */}
-          <Stack.Screen name="TrackOrders" component={TrackOrders} />
+          {/* <Stack.Screen name="TrackOrders" component={TrackOrders} /> */}
+          <Stack.Screen name="SearchResults" component={SearchResults} />
 
         </Stack.Navigator>
       </NavigationContainer>

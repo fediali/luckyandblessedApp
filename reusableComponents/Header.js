@@ -54,6 +54,14 @@ class Header extends PureComponent {
                 color='#000'
             />
         }
+        else if (this.props.rightIcon == "filter") {
+            return (
+                <Image style={{height: 22, width: 20}} 
+                source={require("../static/filter-header.png")}>
+
+                </Image>
+            )
+        }
         else if (this.props.rightIcon == "clear") {
             return (
                 <TouchableOpacity onPress={()=>{this.props.rightIconClickHandler()}}>
