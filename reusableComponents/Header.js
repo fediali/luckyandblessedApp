@@ -57,7 +57,7 @@ class Header extends PureComponent {
         else if (this.props.rightIcon == "filter") {
             return (
                 <Image style={{height: 22, width: 20}} 
-                source={require("../static/filter-header.png")}>
+                source={require("../static/Filter.png")}>
 
                 </Image>
             )
