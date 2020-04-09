@@ -17,8 +17,7 @@ import { Icon } from 'react-native-elements'
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import Accordion from 'react-native-collapsible/Accordion';
-import RNPickerSelect from 'react-native-picker-select';
-
+import ColorPicker from "../reusableComponents/ColorPicker"
 
 YellowBox.ignoreWarnings([
     'ReactNativeFiberHostComponent', // Useless Warning
@@ -127,27 +126,33 @@ class Filter extends Component {
         if (section.title == "Gender") {
             return (
                 <View style={{ marginVertical: 15 }}>
+                   
+                    {/* <RNPickerSelect
+                        useNativeAndroidPickerStyle={false}
 
-                    <RNPickerSelect
                         placeholder={{
+                            label: 'Select Gender',
+                            value: 'Both',
+                            color: "#C7C7CD"
+
                         }}
                         Icon={() => {
                             return < Icon
-                                size={26}
+                                size={20}
                                 name='ios-arrow-down'
                                 type='ionicon'
                                 color='#2d2d2f'
                             />;
                         }}
-                        useNativeAndroidPickerStyle={false}
                         style={{
-                            inputAndroid: { backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
+                            headlessAndroidPicker: {},
+                            inputAndroid: { borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
                             iconContainer: {
                                 top: 9,
                                 right: 15,
                             },
                             inputIOS: {
-                                inputAndroid: { backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
+                                backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24,
                             }
                         }}
                         onValueChange={(value) => console.log(value)}
@@ -155,14 +160,14 @@ class Filter extends Component {
                             { label: 'Women', value: 'Women' },
                             { label: 'Men', value: 'Men' },
                         ]}
-                    />
+                    /> */}
                 </View>
             )
         }
         else if (section.title == "Category") {
             return (
-                <View style={{  marginVertical: 15 }}>
-                    <RNPickerSelect
+                <View style={{ marginVertical: 15 }}>
+                    {/* <RNPickerSelect
                         placeholder={{
                         }}
                         Icon={() => {
@@ -189,12 +194,24 @@ class Filter extends Component {
                             { label: 'Sneaker', value: 'Sneaker' },
                             { label: 'Jackets', value: 'Jackets' },
                         ]}
-                    />
+                    /> */}
 
                 </View>
 
             )
-        } else {
+        }
+        else if (section.title == "Color") {
+            return (
+                <ColorPicker />
+            )
+            // <View style={{flex:1}}>
+            // <Text>aadjksa</Text>
+            // <ColorPicker colorPickerList={null}/>
+
+            // </View>
+        }
+
+        else {
             return (
                 <View style={{ backgroundColor: "#fff", height: 50 }}>
                     <Text>{section.content}</Text>
