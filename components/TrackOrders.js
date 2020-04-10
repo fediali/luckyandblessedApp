@@ -19,15 +19,18 @@ export default class TrackOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeSections: [],
+
       data: [
         {
+          id: 0,
           orderId: '48392004',
           date: 'June 4, 2020',
           trackingNumber: '1Z04563340987283920',
           products: [
             {
               itemNum: '0',
-              itemName: '3-Stripes Shirt',
+              itemName: '3-Stripes Shirt-1',
               totalPrice: '$48.99',
               unitPrice: '$19.40',
               size: '2(S), 2(M), 2(L)',
@@ -39,7 +42,7 @@ export default class TrackOrders extends Component {
             {
               itemNum: '1',
 
-              itemName: '3-Stripes Shirt',
+              itemName: '3-Stripes Shirt-1',
               totalPrice: '$48.99',
               unitPrice: '$19.40',
               size: '2(S), 2(M), 2(L)',
@@ -51,6 +54,8 @@ export default class TrackOrders extends Component {
           ],
         },
         {
+          id: 1,
+
           orderId: '78309897',
           date: 'June 5, 2020',
           trackingNumber: '1Z04563340987283920',
@@ -58,18 +63,18 @@ export default class TrackOrders extends Component {
             {
               itemNum: '0',
 
-              itemName: '3-Stripes Shirt',
+              itemName: '3-Stripes Shirt-2',
               totalPrice: '$48.99',
               unitPrice: '$19.40',
               size: '2(S), 2(M), 2(L)',
               color: 'Turquoise',
-              quantity: 14,
+              quantity: 6,
               imageURL: 'http://dev.landbw.co/images/detailed/39/26.jpg',
             },
             {
               itemNum: '1',
 
-              itemName: '3-Stripes Shirt',
+              itemName: '3-Stripes Shirt-2',
               totalPrice: '$48.99',
               unitPrice: '$19.40',
               size: '2(S), 2(M), 2(L)',
@@ -81,6 +86,8 @@ export default class TrackOrders extends Component {
           ],
         },
         {
+          id: 2,
+
           orderId: '78309898',
           date: 'June 5, 2020',
           trackingNumber: '1Z04563340987283920',
@@ -97,12 +104,52 @@ export default class TrackOrders extends Component {
               quantity: 14,
               imageURL: 'http://dev.landbw.co/images/detailed/39/26.jpg',
             },
-            
           ],
         },
       ],
     };
   }
+
+  _renderHeader = (section) => {
+    console.log(section);
+
+    return (
+      <TouchableOpacity style={[styles.order, {marginHorizontal: 20}]}>
+        <Text style={[styles.orderIdText, {marginTop: 13}]}>
+          {'#' + section.orderId}
+        </Text>
+
+        <View style={{flexDirection: 'row'}}>
+          <View style={{marginRight: 29}}>
+            <Text style={styles.orderDateText}>{section.date}</Text>
+            <Text style={styles.subText}>Tap for details</Text>
+          </View>
+
+          <View style={{marginTop: 26}}>
+            {
+                !this.state.activeSections.includes(section.id) ?
+                <Icon size={20} name="right" type="antdesign" />:
+                <Icon size={20} name="down" type="antdesign" />
+            }
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  _updateSections = (activeSections) => {
+    console.log(activeSections);
+    this.setState({activeSections});
+  };
+
+  _renderContent = (section) => {
+    return (
+      <OrderProducts
+        trackingNumber={section.trackingNumber}
+        productList={section.products}
+      />
+    );
+  };
 
   //TODO: How to get colour?
   renderSeparator = (item) => {
@@ -123,34 +170,19 @@ export default class TrackOrders extends Component {
         <Header centerText="Your orders" rightIcon="search" />
         <View style={{backgroundColor: '#f6f6f6', paddingTop: 1}}></View>
 
-        <FlatList
-          style={{paddingTop: 10}}
-          data={this.state.data}
-          keyExtractor={(item, index) => item.orderId}
-          renderItem={({item}) => (
-            <View>
-              <TouchableOpacity style={[styles.order, {marginHorizontal: 20}]}>
-                <Text style={[styles.orderIdText, {marginTop: 13}]}>
-                  {'#' + item.orderId}
-                </Text>
-
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{marginRight: 29}}>
-                    <Text style={styles.orderDateText}>{item.date}</Text>
-                    <Text style={styles.subText}>Tap for details</Text>
-                  </View>
-                  <View style={{marginTop: 26}}>
-                    <Icon size={20} name="right" type="antdesign" />
-                  </View>
-                </View>
-              </TouchableOpacity>
-
-              <OrderProducts trackingNumber={item.trackingNumber} productList={item.products} />
-            </View>
-          )}
-          ItemSeparatorComponent={this.renderSeparator}
-
-        />
+        <View style={{paddingTop: 10}}>
+          <Accordion
+            style={{marginBottom: 0, paddingBottom: 0}}
+            underlayColor="#fff"
+            sections={this.state.data}
+            activeSections={this.state.activeSections}
+            renderHeader={this._renderHeader}
+            renderContent={this._renderContent}
+            onChange={this._updateSections}
+            // touchableComponent={(props) => <TouchableOpacity {...props} />}
+            expandMultiple={true}
+          />
+        </View>
 
         <View style={{paddingBottom: 59, backgroundColor: '#ffffff'}}></View>
 
@@ -195,6 +227,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18,
     color: '#8d8d8e',
-    marginBottom: 7
+    marginBottom: 7,
   },
 });
