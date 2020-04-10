@@ -158,7 +158,7 @@ class ShoppingCart extends Component {
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Header />
+                <Header  />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{

@@ -64,14 +64,14 @@ export default class SearchResults extends Component {
             'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg',
         },
         {
-            itemNum: '5',
-  
-            itemName: '3-Stripes Shirt',
-            totalPrice: '$48.99',
-            category: 'Hoodies',
-            imageURL:
-              'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg',
-          },
+          itemNum: '5',
+
+          itemName: '3-Stripes Shirt',
+          totalPrice: '$48.99',
+          category: 'Hoodies',
+          imageURL:
+            'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg',
+        },
       ],
     };
   }
@@ -126,8 +126,8 @@ export default class SearchResults extends Component {
             )}
             ItemSeparatorComponent={this.renderSeparator}
           />
+          <View style={{marginBottom: 60}}></View>
         </View>
-
         <Footer />
       </SafeAreaView>
     );
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   thumbnailImage: {
     height: 110,
     width: 110,
-    borderRadius: 6
+    borderRadius: 6,
   },
   itemNameText: {
     fontFamily: 'Montserrat-Medium',

@@ -74,7 +74,7 @@ class Header extends PureComponent {
     }
     render() {
         return (
-            <View style={{ height: 50, flexDirection: "row", alignItems: "center",backgroundColor:"#fff" }}>
+            <View style={{ height: 50, flexDirection: "row", alignItems: "center" , backgroundColor: '#ffffff'}}>
 
                 <View style={{ flex: 1, justifyContent: "space-between", flexDirection: "row", paddingHorizontal: 12, alignItems: "center" }}>
 
