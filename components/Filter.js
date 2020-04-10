@@ -19,6 +19,7 @@ import Footer from "../reusableComponents/Footer"
 import Accordion from 'react-native-collapsible/Accordion';
 import ColorPicker from "../reusableComponents/ColorPicker"
 
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 YellowBox.ignoreWarnings([
     'ReactNativeFiberHostComponent', // Useless Warning
     'Failed prop type' // Useless Warning
@@ -29,6 +30,7 @@ class Filter extends Component {
         super(props)
         this.state = {
             selected: 1,
+            multislideVal: [0, 1000],
             sections: [
                 {
                     id: 0,
@@ -81,19 +83,19 @@ class Filter extends Component {
 
 
     _renderHeader = section => {
-        console.log(section)
+        // console.log(section)
         let colors = []
 
         if (section.title == "Color") {
             // console.log(section.content)
             for (let i = 0; i < section.content.length; i++) {
-                console.log(section.content[i])
+                // console.log(section.content[i])
                 colors.push(
                     <View key={i} style={{ width: 20, height: 20, backgroundColor: section.content[i], borderRadius: 10, marginRight: 5 }}></View>
                 )
             }
         }
-        console.log("<<", colors)
+        // console.log("<<", colors)
 
         return (
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 13 }}>
@@ -123,10 +125,11 @@ class Filter extends Component {
     };
 
     _renderContent = section => {
+        let Width = Dimensions.get("window").width
         if (section.title == "Gender") {
             return (
                 <View style={{ marginVertical: 15 }}>
-                   
+
                     {/* <RNPickerSelect
                         useNativeAndroidPickerStyle={false}
 
@@ -210,6 +213,23 @@ class Filter extends Component {
 
             // </View>
         }
+        else if (section.title == "Price") {
+            return (
+                <View style={{ alignItems: "center",marginTop:10 }}>
+                  
+                    <MultiSlider
+                        values={[this.state.multislideVal[0], this.state.multislideVal[1]]}
+                        onValuesChange={(values => { this.setState({ multislideVal: values }) })}
+                        min={0}
+                        max={999}
+                        step={10}
+                        allowOverlap={false}
+                        snapped
+                        sliderLength={Width * 0.75}
+                    />
+                </View>
+            )
+        }
 
         else {
             return (
@@ -221,7 +241,7 @@ class Filter extends Component {
     };
 
     _updateSections = activeSections => {
-        console.log(activeSections)
+        // console.log(activeSections)
         this.setState({ activeSections });
     };
     render() {
@@ -308,6 +328,10 @@ const styles = StyleSheet.create({
         height: 10,
         width: Width,
         backgroundColor: '#f6f6f6',
+    },
+    text: {
+        alignSelf: 'center',
+        paddingVertical: 20,
     },
 })
 
