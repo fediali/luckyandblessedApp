@@ -105,19 +105,21 @@ class FlatListItem extends Component {
 
                                     <Image
                                         style={{
-                                            height: '33.3%',
-                                            width: '58.3%',
+                                            height: 10,
+                                            width: 10,
+                                            paddingRight:50
                                         }} resizeMode='contain' source={require("../static/arrow_down.png")}
                                     />
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5, marginStart: 40 }]}>
                                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <View style={{ width: 25, height: 25, marginStart: 15, borderRadius: 25, backgroundColor: this.props.item.hexColor }} />
+                                    <View style={{ width: 25, height: 25, marginStart: 15, borderRadius: 25, backgroundColor: this.props.item.hexColor,alignSelf:"center" }} />
                                     <Image
                                         style={{
-                                            height: '33.3%',
-                                            width: '58.3%',
+                                            height: 10,
+                                            width: 10,
+                                            paddingRight:50
                                         }} resizeMode='contain' source={require("../static/arrow_down.png")}
                                     />
                                 </View>
@@ -275,6 +277,7 @@ const innerStyles = StyleSheet.create({
     itemImage: {
         width: Width * 0.2,
         height: Height * 0.15,
+        alignSelf:"center",
     },
     rowStyling: {
         backgroundColor: "#ffffff",
