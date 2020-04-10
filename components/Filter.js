@@ -20,6 +20,8 @@ import Accordion from 'react-native-collapsible/Accordion';
 import ColorPicker from "../reusableComponents/ColorPicker"
 
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+// import console = require('console');
+import ModalDropdown from 'react-native-modal-dropdown';
 YellowBox.ignoreWarnings([
     'ReactNativeFiberHostComponent', // Useless Warning
     'Failed prop type' // Useless Warning
@@ -67,19 +69,19 @@ class Filter extends Component {
             activeSections: [],
         }
     }
+
+    //This function Receives the state from colour component when item is changed 
+    parentCallBackColor(colorListData) {
+        // console.log(colorListData)
+        // console.log(this.state)
+        this.setState({ colorList: colorListData })
+    }
+
     //clear All click Handler
     rightIconClickHandler() {
         alert("hellow")
+        console.log(this.state)
     }
-
-
-    // _renderSectionTitle = section => {
-    //     return (
-    //         <View style={styles.content}>
-    //             <Text>{section.content}</Text>
-    //         </View>
-    //     );
-    // };
 
 
     _renderHeader = section => {
@@ -129,6 +131,16 @@ class Filter extends Component {
         if (section.title == "Gender") {
             return (
                 <View style={{ marginVertical: 15 }}>
+                    <ModalDropdown options={['option 1', 'option 2']}
+                        style={{ padding: 10, backgroundColor:"#f6f6f6",borderRadius:6 }}
+                        dropdownStyle={{ width: "80%" }}
+                        textStyle={{fontFamily:"Avenir-Book",fontSize:18,lineHeight:24,color:"#2d2d2f"}}
+                        renderRow={(option, index, isSelected) => {
+                            return (
+                                <Text style={{ fontSize: 20, paddingLeft: 20, paddingVertical: 10 }}>Hello</Text>
+                            )
+                        }}
+                    />
 
                     {/* <RNPickerSelect
                         useNativeAndroidPickerStyle={false}
@@ -205,18 +217,13 @@ class Filter extends Component {
         }
         else if (section.title == "Color") {
             return (
-                <ColorPicker />
+                <ColorPicker callbackFunction={(colorListData) => { this.parentCallBackColor(colorListData) }} />
             )
-            // <View style={{flex:1}}>
-            // <Text>aadjksa</Text>
-            // <ColorPicker colorPickerList={null}/>
-
-            // </View>
         }
         else if (section.title == "Price") {
             return (
-                <View style={{ alignItems: "center",marginTop:10 }}>
-                  
+                <View style={{ alignItems: "center", marginTop: 10 }}>
+
                     <MultiSlider
                         values={[this.state.multislideVal[0], this.state.multislideVal[1]]}
                         onValuesChange={(values => { this.setState({ multislideVal: values }) })}
@@ -250,7 +257,7 @@ class Filter extends Component {
         let filterListItemsText = ["Most popular", "New items", "Price: High - Low", "Price: Low - High"]
         return (
             <SafeAreaView style={styles.mainContainer}>
-                <Header centerText="Filter" rightIcon="clear" rightIconClickHandler={this.rightIconClickHandler} />
+                <Header centerText="Filter" rightIcon="clear" rightIconClickHandler={() => { this.rightIconClickHandler() }} />
                 {/*add justifyContent: 'space-between' */}
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{ padding: 20 }}>
