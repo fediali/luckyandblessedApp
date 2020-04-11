@@ -22,7 +22,6 @@ import itemList from '../data/ShoppingCartData';
 import Swipeout from 'react-native-swipeout';
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
-import ColorPicker from '../reusableComponents/ColorPicker'
 import styles from './Styles/Style'
 
 YellowBox.ignoreWarnings([

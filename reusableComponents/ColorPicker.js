@@ -54,8 +54,6 @@ class ColorPicker extends PureComponent {
         this.setState({ 
             isChange: !this.state.isChange
         })
-        console.log(this.state.isChange);
-        
         this.state.colorList[item.id].isCheck = !this.state.colorList[item.id].isCheck
     }
     
