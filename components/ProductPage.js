@@ -17,7 +17,6 @@ export default class ProductPage extends Component {
     super(props);
     this.state = {
       activeSections: [],
-
       data: {
         category: 'Jeans',
         itemName1: 'RED MINT AZTEC BELL',
@@ -28,9 +27,9 @@ export default class ProductPage extends Component {
         minQuantity: 6,
         Quanitities: [6, 12, 18],
         imageURL: [
-          {img1: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg'},
-          {img2: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg'},
-          {img3: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg'},
+          {img1: "require('../static/demoimg1-walkthrough.png')"},
+          {img2: "require('../static/demoimg2-walkthrough.png')"},
+          {img3: "require('../static/item_cart3.png')"},
         ],
         description: {
           details:
@@ -42,10 +41,13 @@ export default class ProductPage extends Component {
           code: 'EC142690002',
         },
       },
+      // mainImage: {require('../static/demoimg1-walkthrough.png'},
+
     };
   }
 
   render() {
+    console.log(this.state.mainImage)
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText={this.state.data.category} rightIcon="share" />
@@ -61,7 +63,7 @@ export default class ProductPage extends Component {
               </Text>
             </View>
             <View>
-              <Text style={[styles.itemNameText, {alignSelf: "flex-end"}]}>
+              <Text style={[styles.itemNameText, {alignSelf: 'flex-end'}]}>
                 {this.state.data.unitPrice}
               </Text>
               <Text style={styles.subText}>
@@ -69,13 +71,30 @@ export default class ProductPage extends Component {
               </Text>
             </View>
           </View>
-          <Image style={styles.mainPicture} source={require('../static/demoimg1-walkthrough.png')}></Image>
-          <View style={{flexDirection: "row", justifyContent: "space-between", marginTop: 15}}>
-            <Image style={styles.thumbnail} source={require('../static/demoimg2-walkthrough.png')}></Image>
-            <Image style={styles.thumbnail} source={require('../static/demoimg2-walkthrough.png')}></Image>
-            <Image style={styles.thumbnail} source={require('../static/demoimg2-walkthrough.png')}></Image>
-
-
+          <Image
+            style={styles.mainPicture}
+            source={this.state.mainImage}></Image>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 15,
+            }}>
+            <TouchableOpacity>
+              <Image
+                style={styles.thumbnail}
+                source={require('../static/demoimg2-walkthrough.png')}></Image>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image
+                style={styles.thumbnail}
+                source={require('../static/demoimg2-walkthrough.png')}></Image>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image
+                style={styles.thumbnail}
+                source={require('../static/demoimg2-walkthrough.png')}></Image>
+            </TouchableOpacity>
           </View>
         </View>
         <Footer />
@@ -96,7 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 20,
     marginTop: 14,
-    marginBottom: 20
+    marginBottom: 20,
   },
   itemNameText: {
     fontFamily: 'Montserrat-Medium',
@@ -109,8 +128,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18,
     color: '#8d8d8e',
-    marginVertical: 8
-  }, 
+    marginVertical: 8,
+  },
   mainPicture: {width: Width * 0.893, height: Width * 0.893, borderRadius: 6},
-  thumbnail: {width: Width * 0.28, height: Width * 0.28, borderRadius: 6}
+  thumbnail: {width: Width * 0.28, height: Width * 0.28, borderRadius: 6},
 });
