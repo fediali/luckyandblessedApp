@@ -7,18 +7,21 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ScrollView
+  ScrollView,
+  FlatList
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import Accordion from 'react-native-collapsible/Accordion';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Icon } from 'react-native-elements'
+import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 
 export default class ProductPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      recentProducts: _history,
       activeSections: [],
       sections: [
         {
@@ -80,25 +83,69 @@ export default class ProductPage extends Component {
               name='ios-arrow-down'
               type='ionicon'
               color='#2d2d2f'
-            /> 
+            />
         }
 
       </View>
     )
   }
   _renderContent = section => {
-    return (
-      <View>
-        <Text>sectiion</Text>
-      </View>
-    )
+    console.log(section)
+    if (section.name == "Description") {
+      return (
+        <View style={{ paddingHorizontal: 20 }}>
+          <Text style={[styles.descriptionText, { paddingBottom: 20 }]}>{this.state.data.description.details}</Text>
+          <View style={{ flexDirection: "row" }}>
+            <View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
+                <Text style={styles.descriptionText}>Composition  </Text>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
+                <Text style={styles.descriptionText}>Sizes  </Text>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
+                <Text style={styles.descriptionText}>Gender  </Text>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
+                <Text style={styles.descriptionText}>Country  </Text>
+              </View>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
+                <Text style={styles.descriptionText}>Code  </Text>
+              </View>
+            </View>
+            <View>
+              <Text style={styles.descriptionText}>{this.state.data.description.composition}</Text>
+              <Text style={styles.descriptionText}>{this.state.data.description.sizes}</Text>
+              <Text style={styles.descriptionText}>{this.state.data.description.gender}</Text>
+              <Text style={styles.descriptionText}>{this.state.data.description.country}</Text>
+              <Text style={styles.descriptionText}>{this.state.data.description.code}</Text>
+
+            </View>
+          </View>
+
+        </View>
+      )
+    }
+    else {
+      return (
+        <View style={{ paddingHorizontal: 20, alignItems: "center" }}>
+          <Image style={{ width: "100%", height: 400 }} resizeMode={"contain"} source={require("../static/sizeGuide.png")} />
+        </View>
+      )
+    }
+
   }
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText={this.state.data.category} rightIcon="share" />
         <ScrollView>
-          <View style={{ marginBottom: 160 }}>
+          <View style={{ marginBottom: 10 }}>
             <View style={[styles.subContainer,]}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View>
@@ -183,7 +230,29 @@ export default class ProductPage extends Component {
               onChange={this._updateSections}
               // touchableComponent={(props) => <TouchableOpacity {...props} />}
               expandMultiple={true}
-
+            />
+            {/* history header*/}
+            <View style={[styles.headerView,{marginTop:20,marginBottom:10}]}>
+              <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left' }]}>Similar Products</Text>
+              <TouchableOpacity style={{ flex: 0.5, textAlign: 'right' }}>
+                <Text style={[styles.showAllText]}>Show All</Text>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              keyExtractor={(item) => item.id.toString()}
+              data={this.state.recentProducts}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item, index }) => (
+                <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
+                  <Image
+                    style={styles.gridImage}
+                    source={item.imageUrl}
+                  />
+                  <Text style={styles.gridItemNameAndPriceText}>{item.name}</Text>
+                  <Text style={[styles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{item.type}</Text>
+                </TouchableOpacity>
+              )}
             />
           </View>
         </ScrollView>
@@ -197,6 +266,14 @@ let Height = Dimensions.get('window').height;
 let Width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
+  buttonText: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 18,
+    fontStyle: 'normal',
+    lineHeight: 22,
+    letterSpacing: 0,
+    textAlign: 'center',
+  },
   mainContainer: {
     flex: 1,
     backgroundColor: '#ffffff',
@@ -221,5 +298,39 @@ const styles = StyleSheet.create({
     marginVertical: 8
   },
   mainPicture: { width: Width * 0.893, height: Width * 0.893, borderRadius: 6 },
-  thumbnail: { width: Width * 0.28, height: Width * 0.28, borderRadius: 6, marginRight: 15 }
+  thumbnail: { width: Width * 0.28, height: Width * 0.28, borderRadius: 6, marginRight: 15 },
+  descriptionText: { fontSize: 16, fontFamily: "Avenir-Book", lineHeight: 22, color: "#2d2d2f" },
+  headerView: {
+    width: Width,
+    height: Height * 0.06,
+    // backgroundColor: '#344565',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    marginTop: 5,
+  },
+  showAllText: {
+    fontFamily: "Avenir-Book",
+    fontSize: 18,
+    fontStyle: "normal",
+    lineHeight: 24,
+    letterSpacing: 0,
+    textAlign: "right",
+    color: '#2967ff'
+  },
+  gridItemNameAndPriceText: {
+    fontFamily: "Montserrat-Medium",
+    fontSize: 16,
+    fontStyle: "normal",
+    lineHeight: 20,
+    letterSpacing: 0,
+    textAlign: "left",
+    color: '#2d2d2f'
+  },
+  gridImage: {
+    width: Width * 0.427,
+    height: Height * 0.28,
+    borderRadius: 6,
+  },
+ 
 });
