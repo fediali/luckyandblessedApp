@@ -186,12 +186,12 @@ class MainPage extends Component {
                         />
                         <View style={{ width: '100%', height: Height * 0.4, backgroundColor: '#f6f6f6', marginVertical: 15 }}>
                             <View style={{width: '100%',flexDirection: 'row'}}>
-                                <Text style={[styles.buttonText, { width: '100%', textAlign: 'left', marginStart: 10, marginVertical: 10 }]}>Newsletter</Text>
-                                {/* <Image
-                                        style={{width:50,height:50, alignContent: 'flex-end'}}
+                                <Text style={[styles.buttonText, { flex:0.5, textAlign: 'left', marginStart: 10, marginVertical: 10 }]}>Newsletter</Text>
+                                <Image
+                                        style={{flex: 0.5,width:10,height:10, alignContent: 'flex-end'}}
                                         resizeMode='contain'
                                         source={require('../static/icon_close.png')}
-                                    /> */}
+                                    />
                             </View>
                             <View style={[styles.inputView, { paddingHorizontal: 10 }]}>
                                 <TextInput style={[styles.input, { backgroundColor: '#ffffff' }]} placeholder="Email" />
