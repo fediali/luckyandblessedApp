@@ -50,36 +50,42 @@ var _trending = [
         id: 0,
         name: "VFA Boost",
         type: "Backpacks",
-        price: 53.00
+        price: 53.00,
+        imageUrl: require("../static/trending1.png")
     },
     {
         id: 1,
         name: "Wangbody Run",
         type: "Sneakers",
-        price: 220.50
+        price: 220.50,
+        imageUrl: require("../static/trending2.png")
     },
     {
         id: 2,
         name: "Falcon Zip",
         type: "Sneakers",
-        price: 119.99
+        price: 119.99,
+        imageUrl: require("../static/trending3.png")
     },
     {
         id: 3,
         name: "Wangbody Run",
         type: "Sneakers",
-        price: 220.50
+        price: 220.50,
+        imageUrl: require("../static/trending1.png")
     },
     {
         id: 4,
         name: "Falcon Zip",
         type: "Sneakers",
-        price: 119.99
+        price: 119.99,
+        imageUrl: require("../static/trending2.png")
     }, {
         id: 5,
         name: "VFA Boost",
         type: "Backpacks",
-        price: 53.00
+        price: 53.00,
+        imageUrl: require("../static/trending3.png")
     },
 ]
 

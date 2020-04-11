@@ -24,6 +24,7 @@ class MainPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            showNewsletter: true,
             selectedCategory: 0,
             categoryList: _categoryList,
             collections: _collections,
@@ -63,16 +64,17 @@ class MainPage extends Component {
                             renderItem={({ item, index }) => (
                                 <View style={{ height: '2.8%', marginVertical: 10 }}>
                                     {this.state.selectedCategory == index ?
-                                        < TouchableOpacity onPress={() => { () => this.onCategorySelect(index) }}>
+                                        < TouchableOpacity onPress={() => { this.onCategorySelect(index) }}>
                                             <Text style={[styles.buttonText, { marginHorizontal: 10, color: "#2967ff" }]}>{item.name}</Text>
                                         </TouchableOpacity>
                                         :
-                                        < TouchableOpacity onPress={() => { () => this.onCategorySelect(index) }}>
+                                        < TouchableOpacity onPress={() => { this.onCategorySelect(index) }}>
                                             <Text style={[styles.buttonText, { marginHorizontal: 10 }]}>{item.name}</Text>
                                         </TouchableOpacity>
                                     }
                                 </View>
                             )}
+
                         />
                         <FlatList
                             keyExtractor={(item) => item.id.toString()}
@@ -104,7 +106,7 @@ class MainPage extends Component {
                                 <TouchableOpacity style={{ flexDirection: 'column', marginEnd: 5 }}>
                                     <Image
                                         style={innerStyles.gridImage}
-                                        resizeMode='center'
+                                        resizeMode='contain'
                                         source={this.state.newArrivals[0].imageUrl}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].name}</Text>
@@ -115,7 +117,7 @@ class MainPage extends Component {
                                 <TouchableOpacity style={{ flexDirection: 'column', marginStart: 5 }}>
                                     <Image
                                         style={innerStyles.gridImage}
-                                        resizeMode='center'
+                                        resizeMode='contain'
                                         source={this.state.newArrivals[1].imageUrl}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].name}</Text>
@@ -127,7 +129,7 @@ class MainPage extends Component {
                                 <TouchableOpacity style={{ flexDirection: 'column', marginEnd: 5 }}>
                                     <Image
                                         style={innerStyles.gridImage}
-                                        resizeMode='center'
+                                        resizeMode='contain'
                                         source={this.state.newArrivals[2].imageUrl}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].name}</Text>
@@ -138,7 +140,7 @@ class MainPage extends Component {
                                 <TouchableOpacity style={{ flexDirection: 'column', marginStart: 5 }}>
                                     <Image
                                         style={innerStyles.gridImage}
-                                        resizeMode='center'
+                                        resizeMode='contain'
                                         source={this.state.newArrivals[3].imageUrl}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].name}</Text>
@@ -156,8 +158,62 @@ class MainPage extends Component {
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
                         </View>
-                        <Text>Mein nhi btaunga kyo k mujhe nhi ata ye bnana</Text>
 
+                        <FlatList
+                            keyExtractor={(item) => item.id.toString()}
+                            data={this.state.trending}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item, index }) => (
+                                <View style={{ alignItems: 'center', justifyContent:'center',flexDirection: 'column'}}>
+                                    <TouchableOpacity style={innerStyles.trendingView}>
+                                        <Image
+                                            style={innerStyles.trendingImage}
+                                            source={item.imageUrl}
+                                            resizeMode='contain'
+                                        />
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
+                                            <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                        </View>
+                                        <View style={{width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center',justifyContent:'center' }}>
+                                            <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={innerStyles.trendingView}>
+                                        <Image
+                                            style={innerStyles.trendingImage}
+                                            source={item.imageUrl}
+                                            resizeMode='contain'
+                                        />
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
+                                            <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                        </View>
+                                        <View style={{width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center',justifyContent:'center' }}>
+                                            <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={innerStyles.trendingView}>
+                                        <Image
+                                            style={innerStyles.trendingImage}
+                                            source={item.imageUrl}
+                                            resizeMode='contain'
+                                        />
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
+                                            <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                        </View>
+                                        <View style={{width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center',justifyContent:'center' }}>
+                                            <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    
+
+                                </View>
+
+                            )}
+                        />
 
                         {/* history header*/}
                         <View style={innerStyles.headerView}>
@@ -175,7 +231,7 @@ class MainPage extends Component {
                                 <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
                                     <Image
                                         style={innerStyles.gridImage}
-                                        resizeMode='center'
+                                        resizeMode='contain'
                                         source={item.imageUrl}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
@@ -184,38 +240,44 @@ class MainPage extends Component {
                                 </TouchableOpacity>
                             )}
                         />
-                        <View style={{ width: '100%', height: Height * 0.4, backgroundColor: '#f6f6f6', marginVertical: 15 }}>
-                            <View style={{width: '100%',flexDirection: 'row'}}>
-                                <Text style={[styles.buttonText, { flex:0.5, textAlign: 'left', marginStart: 10, marginVertical: 10 }]}>Newsletter</Text>
-                                <Image
-                                        style={{flex: 0.5,width:10,height:10, alignContent: 'flex-end'}}
-                                        resizeMode='contain'
-                                        source={require('../static/icon_close.png')}
-                                    />
-                            </View>
-                            <View style={[styles.inputView, { paddingHorizontal: 10 }]}>
-                                <TextInput style={[styles.input, { backgroundColor: '#ffffff' }]} placeholder="Email" />
-                            </View>
-                            <View style={styles.buttonContainer, { paddingHorizontal: 10, width: '100%', alignItems: 'center' }}>
-                                <TouchableOpacity style={[innerStyles.buttonSubmit]}>
-                                    <Text
-                                        style={[
-                                            styles.buttonText,
-                                            {
-                                                color: '#ffffff',
-                                                fontSize: 20
-                                            },
-                                        ]}>
-                                        Subscribe
+                        {this.state.showNewsletter == true ?
+                            <View style={{ width: '100%', height: Height * 0.4, backgroundColor: '#f6f6f6', marginVertical: 15 }}>
+                                <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left', marginStart: 10, marginVertical: 10 }]}>Newsletter</Text>
+                                    <TouchableOpacity onPress={() => { this.setState({ showNewsletter: false }) }}>
+                                        <Image
+                                            style={{ flex: 0.5, width: 17, height: 17, alignContent: 'flex-end', marginEnd: 10 }}
+                                            resizeMode='contain'
+
+                                            source={require('../static/icon_close.png')}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={[styles.inputView, { paddingHorizontal: 10 }]}>
+                                    <TextInput style={[styles.input, { backgroundColor: '#ffffff' }]} placeholder="Email" />
+                                </View>
+                                <View style={styles.buttonContainer, { paddingHorizontal: 10, width: '100%', alignItems: 'center' }}>
+                                    <TouchableOpacity style={[innerStyles.buttonSubmit]}>
+                                        <Text
+                                            style={[
+                                                styles.buttonText,
+                                                {
+                                                    color: '#ffffff',
+                                                    fontSize: 20
+                                                },
+                                            ]}>
+                                            Subscribe
                                     </Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{ width: '100%', alignItems: 'center' }}>
-                                <Text style={innerStyles.lightText}>
-                                    By clicking on Subscribe button you agree to accept Privacy Policy
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ width: '100%', alignItems: 'center' }}>
+                                    <Text style={innerStyles.lightText}>
+                                        By clicking on Subscribe button you agree to accept Privacy Policy
                                 </Text>
-                            </View>
-                        </View>
+                                </View>
+                            </View> :
+                            <View></View>
+                        }
                     </View>
 
                 </ScrollView>
@@ -322,6 +384,27 @@ const innerStyles = StyleSheet.create({
         textAlign: 'center',
         margin: 30
     },
+    trendingView: {
+        width: Width * 0.88,
+        height: Height * 0.1,
+        flexDirection: 'row',
+        paddingHorizontal: 10,
+        alignItems: 'center',
+    },
+    trendingImage: {
+        width: '25%',
+        height: '65%',
+        borderRadius: 6,
+    },
+    trendingPriceText: {
+        fontFamily: "Montserrat-Medium",
+        fontSize: 14,
+        fontStyle: "normal",
+        lineHeight: 18,
+        letterSpacing: 0,
+        textAlign: "center",
+        color: "#ffffff"
+    }
 })
 
 export default MainPage;
