@@ -56,7 +56,7 @@ class App extends Component {
           {/* <Stack.Screen name="CompanyProfile" component={CompanyProfile} /> */}
           {/* <Stack.Screen name="TrackOrders" component={TrackOrders} /> */}
           {/* <Stack.Screen name="SearchResults" component={SearchResults} /> */}
-          <Stack.Screen name="ProductPage" component={ProductPage} />
+          {/* <Stack.Screen name="ProductPage" component={ProductPage} /> */}
 
         </Stack.Navigator>
       </NavigationContainer>
