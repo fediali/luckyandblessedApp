@@ -18,13 +18,14 @@ import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import Accordion from 'react-native-collapsible/Accordion';
 import ColorPicker from "../reusableComponents/ColorPicker"
-
+import SizePicker from "../reusableComponents/SizePicker"
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 // import console = require('console');
 import ModalDropdown from 'react-native-modal-dropdown';
 YellowBox.ignoreWarnings([
     'ReactNativeFiberHostComponent', // Useless Warning
-    'Failed prop type' // Useless Warning
+    'Failed prop type', // Useless Warning
+    'componentWillReceiveProps'
 ])
 class Filter extends Component {
 
@@ -77,6 +78,11 @@ class Filter extends Component {
         this.setState({ colorList: colorListData })
     }
 
+    //This function Receives the state from size component when item is changed 
+    parentCallBackSize(sizeListData){
+        this.setState({ sizeList: sizeListData })
+
+    }
     //clear All click Handler
     rightIconClickHandler() {
         alert("hellow")
@@ -131,13 +137,13 @@ class Filter extends Component {
         if (section.title == "Gender") {
             return (
                 <View style={{ marginVertical: 15 }}>
-                    <ModalDropdown options={['option 1', 'option 2']}
-                        style={{ padding: 10, backgroundColor:"#f6f6f6",borderRadius:6 }}
-                        dropdownStyle={{ width: "80%" }}
-                        textStyle={{fontFamily:"Avenir-Book",fontSize:18,lineHeight:24,color:"#2d2d2f"}}
+                    <ModalDropdown options={["Male", 'Female', "All"]}
+                        style={{ padding: 10, backgroundColor: "#f6f6f6", borderRadius: 6 }}
+                        dropdownStyle={{ width: "80%", height: 134 }}
+                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
                         renderRow={(option, index, isSelected) => {
                             return (
-                                <Text style={{ fontSize: 20, paddingLeft: 20, paddingVertical: 10 }}>Hello</Text>
+                                <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
                             )
                         }}
                     />
@@ -182,6 +188,16 @@ class Filter extends Component {
         else if (section.title == "Category") {
             return (
                 <View style={{ marginVertical: 15 }}>
+                    <ModalDropdown options={["Sneakers", 'Jacket', "All"]}
+                        style={{ padding: 10, backgroundColor: "#f6f6f6", borderRadius: 6 }}
+                        dropdownStyle={{ width: "80%", height: 134 }}
+                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                        renderRow={(option, index, isSelected) => {
+                            return (
+                                <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
+                            )
+                        }}
+                    />
                     {/* <RNPickerSelect
                         placeholder={{
                         }}
@@ -235,6 +251,11 @@ class Filter extends Component {
                         sliderLength={Width * 0.75}
                     />
                 </View>
+            )
+        }
+        else if (section.title == "Size") {
+            return (
+                <SizePicker callbackFunction={(sizeListData) => { this.parentCallBackSize(sizeListData) }}  />
             )
         }
 
@@ -297,7 +318,7 @@ class Filter extends Component {
                     </View>
                     <View style={{ backgroundColor: "#f6f6f6", marginBottom: 50, paddingTop: 20, alignItems: "center", paddingBottom: 20 }}>
                         <TouchableOpacity style={{ backgroundColor: "#2967ff", alignItems: "center", width: "90%", borderRadius: 6 }}>
-                            <Text style={{ color: "#fff", paddingVertical: 11 }}>
+                            <Text style={{ color: "#fff", paddingVertical: 11,fontSize:18,lineHeight:22,fontFamily:"Montserrat-SemiBold" }}>
                                 View All Items
                             </Text>
                         </TouchableOpacity>
