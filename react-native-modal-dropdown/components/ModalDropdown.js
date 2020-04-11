@@ -164,7 +164,7 @@ export default class ModalDropdown extends Component {
   }
 
   _renderButton() {
-    const { disabled, accessible, children, textStyle } = this.props;
+    const { disabled, accessible, children, textStyle,hexCode } = this.props;
     const { buttonText } = this.state;
 
     return (
@@ -176,12 +176,18 @@ export default class ModalDropdown extends Component {
         {
           children ||
           (
-            <View style={[styles.button,{flexDirection:"row",justifyContent:"space-between",paddingHorizontal:15}]}>
-              <Text style={[styles.buttonText, textStyle]}
-                numberOfLines={1}
-              >
-                {buttonText}
-              </Text>
+            <View style={[styles.button, { flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15,alignItems:"center" }]}>
+              <View style={{flexDirection:"row",alignItems:"center"}}>
+                {
+                  hexCode?<View style={{backgroundColor:hexCode,height:20,width:20,borderRadius:10,marginRight:10}}></View>:<View></View>
+                }
+                <Text style={[styles.buttonText, textStyle]}
+                  numberOfLines={1}
+                >
+                  {buttonText}
+                </Text>
+              </View>
+
               < Icon
                 size={20}
                 name='ios-arrow-down'
