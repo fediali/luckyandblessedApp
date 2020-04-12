@@ -62,10 +62,10 @@ export default class WalkThrough extends Component {
           </View>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.buttonRegisterNow}>
+            <TouchableOpacity style={styles.buttonRegisterNow} onPress={()=>{this.props.navigation.navigate("SignUp")}}>
               <Text style={styles.registerButtonText}>Register now</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonLogIn}>
+            <TouchableOpacity style={styles.buttonLogIn} onPress={()=>{this.props.navigation.navigate("SignIn")}}>
               <Text style={styles.loginButtonText}>Log-in</Text>
             </TouchableOpacity>
           </View>

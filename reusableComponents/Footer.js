@@ -51,7 +51,7 @@ class Footer extends PureComponent {
                     alignItems: "center"
                 }}>
 
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Home" }) }}>
+                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("MainPage") }}>
                         {this.state.selected == "Home" ?
                             <Icon
                                 size={32}
@@ -67,7 +67,7 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Shop" }) }}>
+                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("ShoppingCart") }}>
                         {this.state.selected == "Shop" ?
                             <Image style={{width:30,height:30}} source={require('../static/cartSelected.png')}></Image>
                             :
@@ -75,7 +75,7 @@ class Footer extends PureComponent {
                         }
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Van" }) }}>
+                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("TrackOrders") }}>
                         {this.state.selected == "Van" ?
                             <Icon
                                 size={35}
@@ -91,7 +91,7 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Person" }) }}>
+                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("UserProfile") }}>
                         {this.state.selected == "Person" ?
                             <Icon
                                 size={35}
@@ -107,7 +107,7 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => { this.setState({ selected: "Info" }) }}>
+                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("CompanyProfile") }}>
                         {this.state.selected == "Info" ?
                             <Icon
                                 size={35}

@@ -54,7 +54,7 @@ class TaxID extends Component {
         }
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Header centerText={""} rightIcon="info" />
+                <Header  navigation={this.props.navigation} centerText={""} rightIcon="info" />
 
                 <ScrollView
                     contentContainerStyle={{
@@ -123,7 +123,7 @@ class TaxID extends Component {
                                 </TextInput>
                             </View>
                             <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
-                            <View style={styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }}>
+                            <View style={[styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }]}>
                                 <TouchableOpacity style={[innerStyles.buttonSubmit]}>
                                     <Text
                                         style={[

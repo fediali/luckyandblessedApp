@@ -59,7 +59,7 @@ class SignUp extends Component {
           justifyContent: 'space-between',
         }}>
         <SafeAreaView style={styles.parentContainer}>
-        <Header centerText={""} rightIcon= "info"/>
+        <Header navigation={this.props.navigation} centerText={""} rightIcon= "info"/>
 
           <View style={styles.subParentContainer}>
             <LogoSmall/>

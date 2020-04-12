@@ -145,7 +145,7 @@ export default class ProductPage extends Component {
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText={this.state.data.category} rightIcon="share" />
+        <Header centerText={this.state.data.category} rightIcon="share"  navigation={this.props.navigation}/>
         <ScrollView>
           <View style={{ marginBottom: 10 }}>
             <View style={[styles.subContainer,]}>
@@ -258,7 +258,7 @@ export default class ProductPage extends Component {
             />
           </View>
         </ScrollView>
-        <Footer />
+        <Footer  navigation={this.props.navigation}/>
       </SafeAreaView>
     );
   }

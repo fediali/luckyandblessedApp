@@ -153,7 +153,7 @@ export default class CompanyProfile extends Component {
     let Width = Dimensions.get('window').width;
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Help & Info" />
+        <Header centerText="Help & Info"  navigation={this.props.navigation}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -213,7 +213,7 @@ export default class CompanyProfile extends Component {
           <View style={{paddingBottom: 60, backgroundColor: '#ffffff'}}></View>
         </ScrollView>
 
-        <Footer selected="Info" />
+        <Footer selected="Info"  navigation={this.props.navigation}/>
       </SafeAreaView>
     );
   }

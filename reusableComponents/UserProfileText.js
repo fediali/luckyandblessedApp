@@ -42,7 +42,17 @@ class ProfileText extends PureComponent {
         {/*If contains right arrow then it shouldn't be editable
         but it should either be navigated or accordian*/}
         {this.props.containIcon ? (
-          <TouchableOpacity style={styles.userDetails}>
+          <TouchableOpacity style={styles.userDetails} onPress={()=>{
+            if(this.props.keyText=="TAX ID"){
+              this.props.navigation.navigate("TaxID")
+            }
+            else if(this.props.keyText=="Referral Link"){
+              this.props.navigation.navigate("TaxID")
+            }
+            else if(this.props.keyText=="TAX ID"){
+              this.props.navigation.navigate("TrackOrders")
+            }
+          }}>
             <View style={{paddingVertical: 19}}>
               <Text style={styles.keyText}>{this.props.keyText}</Text>
             </View>

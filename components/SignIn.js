@@ -24,10 +24,10 @@ class SignIn extends Component {
                         </View>
                         <View style={styles.buttonContainer}>
                             {/* TODO: Check whether to apply the touchable opacity or ripple */}
-                            <TouchableOpacity style={styles.buttonSignUp}>
+                            <TouchableOpacity style={styles.buttonSignUp} onPress={()=>{this.props.navigation.navigate("SignUp")}} >
                                 <Text style={styles.buttonText}>Sign up</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.buttonSignIn} onPress={()=>{this.props.navigation.navigate("UserProfile")}}>
+                            <TouchableOpacity style={styles.buttonSignIn} onPress={()=>{this.props.navigation.navigate("MainPage")}}>
                                 <Text style={styles.buttonText}>Sign in</Text>
                             </TouchableOpacity>
                         </View>

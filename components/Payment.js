@@ -20,7 +20,7 @@ class Payment extends Component {
         let height = Dimensions.get('window').height;
         return (
             <SafeAreaView style={styles.mainContainer}>
-                <Header />
+                <Header  navigation={this.props.navigation}/>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}>
                     <View style={{ marginBottom: 50 }}>
                         <View style={styles.subContainer}>
@@ -105,7 +105,7 @@ class Payment extends Component {
                     </View>
                 </ScrollView>
 
-                <Footer />
+                <Footer  navigation={this.props.navigation} />
             </SafeAreaView>
         )
     }

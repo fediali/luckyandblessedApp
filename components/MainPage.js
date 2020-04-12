@@ -10,6 +10,8 @@ import {
     Dimensions,
     FlatList,
     ImageBackground,
+    ActivityIndicator,
+    InteractionManager
 } from 'react-native'
 
 import styles from './Styles/Style'
@@ -30,10 +32,17 @@ class MainPage extends Component {
             collections: _collections,
             newArrivals: _newArrivals,
             trending: _trending,
-            history: _history
+            history: _history,
+            isReady: false
         }
     }
-
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({
+                isReady: true
+            })
+        })
+    }
     onCategorySelect = (index) => {
         this.setState({ selectedCategory: index })
     }
@@ -42,10 +51,12 @@ class MainPage extends Component {
     render() {
         const Width = Dimensions.get('window').width;
         const Height = Dimensions.get('window').height;
-
+        if (!this.state.isReady) {
+            return <ActivityIndicator />
+        }
         return (
             <View style={[styles.parentContainer]}>
-                <Header />
+                <Header navigation={this.props.navigation} />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
@@ -262,7 +273,7 @@ class MainPage extends Component {
                                 <View style={[styles.inputView, { paddingHorizontal: 10 }]}>
                                     <TextInput style={[styles.input, { backgroundColor: '#ffffff' }]} placeholder="Email" />
                                 </View>
-                                <View style={styles.buttonContainer, { paddingHorizontal: 10, width: '100%', alignItems: 'center' }}>
+                                <View style={[styles.buttonContainer, { paddingHorizontal: 10, width: '100%', alignItems: 'center' }]}>
                                     <TouchableOpacity style={[innerStyles.buttonSubmit]}>
                                         <Text
                                             style={[
@@ -287,7 +298,7 @@ class MainPage extends Component {
                     </View>
 
                 </ScrollView>
-                <Footer />
+                <Footer selected="Home" navigation={this.props.navigation} />
             </View>
         )
     }

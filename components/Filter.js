@@ -285,7 +285,7 @@ class Filter extends Component {
         console.log(this.state)
         return (
             <SafeAreaView style={styles.mainContainer}>
-                <Header centerText="Filter" rightIcon="clear" rightIconClickHandler={() => { this.rightIconClickHandler() }} />
+                <Header  navigation={this.props.navigation} centerText="Filter" rightIcon="clear" rightIconClickHandler={() => { this.rightIconClickHandler() }} />
                 {/*add justifyContent: 'space-between' */}
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{ padding: 20 }}>
@@ -334,7 +334,7 @@ class Filter extends Component {
 
                 </ScrollView>
 
-                <Footer />
+                <Footer  navigation={this.props.navigation}/>
             </SafeAreaView>
         )
     }

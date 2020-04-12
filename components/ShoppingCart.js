@@ -181,7 +181,7 @@ class ShoppingCart extends Component {
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Header />
+                <Header  navigation={this.props.navigation}/>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
@@ -244,11 +244,11 @@ class ShoppingCart extends Component {
                                 <Text style={[innerStyles.lightText, { flex: 1, lineHeight: 30, textAlign: 'right' }]}>-$55.02</Text>
                             </View>
                         </View>
-                        <View style={styles.buttonContainer, {
+                        <View style={[styles.buttonContainer, {
                             paddingHorizontal: 30, width: '100%',
                             backgroundColor: '#f6f6f6',
                             paddingBottom: 20
-                        }}>
+                        }]}>
                             <TouchableOpacity style={[innerStyles.buttonPaymentMethod]}>
                                 <Text
                                     style={[
@@ -265,7 +265,7 @@ class ShoppingCart extends Component {
                         </View>
                     </View>
                 </ScrollView>
-                <Footer />
+                <Footer selected="Shop" navigation={this.props.navigation}/>
             </SafeAreaView>
         )
     }

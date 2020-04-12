@@ -56,15 +56,15 @@ class Header extends PureComponent {
         }
         else if (this.props.rightIcon == "filter") {
             return (
-                <Image style={{height: 22, width: 20}} 
-                source={require("../static/Filter.png")}>
+                <Image style={{ height: 22, width: 20 }}
+                    source={require("../static/Filter.png")}>
 
                 </Image>
             )
         }
         else if (this.props.rightIcon == "clear") {
             return (
-                <TouchableOpacity onPress={()=>{this.props.rightIconClickHandler()}}>
+                <TouchableOpacity onPress={() => { this.props.rightIconClickHandler() }}>
                     <Text style={{ fontSize: 18, lineHeight: 24, color: "#2d2d2f", fontFamily: "Avenir-Medium" }}>
                         Clear All
                     </Text>
@@ -74,16 +74,19 @@ class Header extends PureComponent {
     }
     render() {
         return (
-            <View style={{ height: 50, flexDirection: "row", alignItems: "center" , backgroundColor: '#ffffff'}}>
+            <View style={{ height: 50, flexDirection: "row", alignItems: "center", backgroundColor: '#ffffff' }}>
 
                 <View style={{ flex: 1, justifyContent: "space-between", flexDirection: "row", paddingHorizontal: 12, alignItems: "center" }}>
 
                     <View>
-                        <Icon
-                            size={30}
-                            name='arrow-left'
-                            type='feather'
-                        />
+                        <TouchableOpacity onPress={()=>{this.props.navigation.goBack()}}>
+                            <Icon
+                                size={30}
+                                name='arrow-left'
+                                type='feather'
+                            />
+                        </TouchableOpacity>
+
                     </View>
                     <View>
                         <Text style={{ fontFamily: "Montserrat-SemiBold", fontSize: 18, lineHeight: 22 }}>{this.props.centerText}</Text>

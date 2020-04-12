@@ -31,7 +31,7 @@ class Categories extends Component {
             <SafeAreaView style={{
                 flex: 1, backgroundColor: "#fff",
             }}>
-                <Header centerText="Women" rightIcon="search" />
+                <Header  navigation={this.props.navigation} centerText="Women" rightIcon="search" />
                 <View>
                     <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 10 }}>
                         {textItems.map((item, key) => (
@@ -60,7 +60,7 @@ class Categories extends Component {
                     />
 
                 </View>
-                <Footer />
+                <Footer  navigation={this.props.navigation}/>
             </SafeAreaView >
         )
     }

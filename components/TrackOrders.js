@@ -167,7 +167,7 @@ export default class TrackOrders extends Component {
     let Width = Dimensions.get('window').width;
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Your orders" rightIcon="search" />
+        <Header centerText="Your orders" rightIcon="search"  navigation={this.props.navigation} />
         <View style={{backgroundColor: '#f6f6f6', paddingTop: 1}}></View>
 
         <View style={{paddingTop: 10}}>
@@ -186,7 +186,7 @@ export default class TrackOrders extends Component {
 
         <View style={{paddingBottom: 59, backgroundColor: '#ffffff'}}></View>
 
-        <Footer selected="Van" />
+        <Footer selected="Van"  navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }

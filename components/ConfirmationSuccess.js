@@ -41,7 +41,7 @@ export default class ConfirmationSuccess extends Component {
           <Text style={styles.orderText}>Order number: 4839200012</Text>
         </View>
 
-        <Footer />
+        <Footer  navigation={this.props.navigation}/>
       </SafeAreaView>
     );
   }

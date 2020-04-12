@@ -24,7 +24,7 @@ class Delivery extends Component {
         let height = Dimensions.get('window').height;
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Header />
+                <Header  navigation={this.props.navigation}/>
                 <ScrollView contentContainerStyle={
                     {
                         backgroundColor: "#fff",
@@ -108,11 +108,11 @@ class Delivery extends Component {
                                 <Text style={[innerStyles.lightText, { flex: 1, lineHeight: 30, textAlign: 'right' }]}>-$55.02</Text>
                             </View>
                         </View>
-                        <View style={styles.buttonContainer, {
+                        <View style={[styles.buttonContainer, {
                             paddingHorizontal: 30, width: '100%',
                             backgroundColor: '#f6f6f6',
                             paddingBottom: 20
-                        }}>
+                        }]}>
                             <TouchableOpacity style={[innerStyles.buttonPaymentMethod]}>
                                 <Text
                                     style={[
@@ -130,7 +130,7 @@ class Delivery extends Component {
                     </View>
 
                 </ScrollView>
-                <Footer />
+                <Footer  navigation={this.props.navigation}/>
             </SafeAreaView>
         )
     }

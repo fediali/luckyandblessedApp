@@ -36,7 +36,7 @@ class CategoriesProduct extends Component {
             <SafeAreaView style={{
                 flex: 1, backgroundColor: "#fff",
             }}>
-                <Header rightIcon="search" />
+                <Header  navigation={this.props.navigation} rightIcon="search" />
                 <View style={styles.mainContainer}>
                     <View style={{ paddingHorizontal: 20 }}>
                         <Text style={{ fontSize: 30, lineHeight: 36, fontFamily: "Montserrat-Bold", color: "#2d2d2f" }}>Jeans</Text>
@@ -137,7 +137,7 @@ class CategoriesProduct extends Component {
 
                 </View>
 
-                <Footer />
+                <Footer  navigation={this.props.navigation}/>
             </SafeAreaView >
         )
     }
