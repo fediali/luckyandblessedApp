@@ -36,7 +36,7 @@ class App extends Component {
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
-            ...TransitionPresets.SlideFromRightIOS
+            // ...TransitionPresets.SlideFromRightIOS
           }}
         >
           <Stack.Screen name="WalkThrough" component={WalkThrough} />
