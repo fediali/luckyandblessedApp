@@ -20,7 +20,6 @@ export default class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {
         fullName: 'Monika Willems',
         email: 'blackcherry@gmail.com',
         longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
@@ -29,7 +28,6 @@ export default class UserProfile extends Component {
         wishList: 5,
         myBag: 3,
         myOrders: '1 in transit',
-      },
     };
   }
 
@@ -39,7 +37,7 @@ export default class UserProfile extends Component {
     var key = Object.keys(stateVal)[0];
     console.log("KEY",key)
     console.log("VAL", stateVal[key])
-    this.setState({[this.state.data[key]]:stateVal[key]}) 
+    this.setState({[key]:stateVal[key]}) 
 }
 
   render() {
@@ -69,16 +67,16 @@ export default class UserProfile extends Component {
 
           <ProfileText
             keyText="Full Name"
-            valueText={this.state.data.fullName} stateKey="fullName" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
+            valueText={this.state.fullName} stateKey="fullName" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
           <ProfileText
             keyText="Email"
-            valueText={this.state.data.email} stateKey="email" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
+            valueText={this.state.email} stateKey="email" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
           <ProfileText
             keyText="Address"
-            valueText={this.state.data.longAddress} stateKey="address" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
+            valueText={this.state.longAddress} stateKey="address" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
           <ProfileText
             keyText="Payment"
-            valueText={this.state.data.payment}
+            valueText={this.state.payment}
             containIcon={true}></ProfileText>
           <View style={styles.divider}></View>
 
