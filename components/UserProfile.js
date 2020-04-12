@@ -11,10 +11,11 @@ import {
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import {ScrollView} from 'react-native-gesture-handler';
-import ProfileText from '../reusableComponents/ProfileText';
+import ProfileText from '../reusableComponents/UserProfileText';
+import CompanyProfileText from '../reusableComponents/UserProfileText';
+
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 //TODO: Data on pressing the arrow
-//TODO: What is the use of edit icon?
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);
@@ -32,12 +33,23 @@ export default class UserProfile extends Component {
     };
   }
 
+  //FIXME: Fix the update
+  customSetState(stateVal){
+    console.log("AAA",stateVal)
+    var key = Object.keys(stateVal)[0];
+    console.log("KEY",key)
+    console.log("VAL", stateVal[key])
+    this.setState({[this.state.data[key]]:stateVal[key]}) 
+}
+
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
+    console.log("VAL Render", this.state)
+
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Account" rightIcon="edit" />
+        <Header centerText="Account"/>
         <ScrollView showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             backgroundColor: '#fff',
@@ -57,13 +69,13 @@ export default class UserProfile extends Component {
 
           <ProfileText
             keyText="Full Name"
-            valueText={this.state.data.fullName}></ProfileText>
+            valueText={this.state.data.fullName} stateKey="fullName" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
           <ProfileText
             keyText="Email"
-            valueText={this.state.data.email}></ProfileText>
+            valueText={this.state.data.email} stateKey="email" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
           <ProfileText
             keyText="Address"
-            valueText={this.state.data.shortAddress}></ProfileText>
+            valueText={this.state.data.longAddress} stateKey="address" customSetState={(stateVal)=>{this.customSetState(stateVal)}}></ProfileText>
           <ProfileText
             keyText="Payment"
             valueText={this.state.data.payment}

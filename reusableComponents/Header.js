@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 
-
+//TODO: Fix the centerText position in case there is no right icon
 /* How to use Custom Header
 
 Props:

@@ -10,20 +10,65 @@ import {
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import {ScrollView} from 'react-native-gesture-handler';
-import ProfileText from '../reusableComponents/ProfileText';
+import ProfileText from '../reusableComponents/CompanyProfileText';
+import Accordion from 'react-native-collapsible/Accordion';
+import {Icon} from 'react-native-elements';
 
-//TODO: Data on pressing the arrow
-//TODO: What is the use of edit icon?
 export default class CompanyProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeSection1: [],
+      activeSection2: [],
+
+      section1: [
+        {
+          id: 0,
+          title: 'Company',
+          content:
+            'Howdy! L&B is a Texan based lifestyle brand with a dash of sass. Keen on a sense of style, we are always looking for the next trend in western, boho, contemporary fashion while always providing the basic needs for our clients. At L&B, we are inclusive to all ages, shapes, and sizes. We strive to provide excellent customer service and convenience to all. Our background provides the best fit and flare, glitz and glamour to the most successful boutiques in the nation. Not to mention, we also do business with thousands of retailers all across the world. As a company, we own, operate, and manage all areas of the supply chain. This includes textile, design, manufacturing, distribution, and sales. Come on down and take a look around. We are L&B. We are Lucky & Blessed. Experience the sense of style that holds the name of L&B. High-graded premium denim, bold custom vintage prints with aesthetic traditional lace, and rich striking solid-hued elegant attire. A western background with a crossover to the young contemporary knowledge that makes the perfect overall collection. Leading the industry with the most trending apparel in the market. Hitting all main components from quality to precise designing, we keep our customers satisfied with every purchase.',
+        },
+        {
+          id: 1,
+          title: 'Locations',
+          content: 'Jackets',
+        },
+        {
+          id: 2,
+          title: 'Wholesale Info',
+          content: 'Addidas,Puma,Reebok',
+        },
+        {
+          id: 3,
+          title: 'Use and Sales TX ID form',
+          content: 'M,L',
+        },
+      ],
+
+      section2: [
+        {
+          id: 0,
+          title: 'Return Policy',
+          content: 'ALL',
+        },
+        {
+          id: 1,
+          title: 'FAQs',
+          content: 'Jackets',
+        },
+        {
+          id: 2,
+          title: 'Upcoming Tradeshows',
+          content: 'Addidas,Puma,Reebok',
+        },
+      ],
+
       data: {
-        fullName: 'Monika Willems',
-        email: 'blackcherry@gmail.com',
+        fullName: '972-243-7860',
+        email: 'support@landbapparel.com',
         longAddress1: '455 Larkspur Dr. California',
         longAddress2: 'Springs, CA 92926, USA',
-        shortAddress: '455 Larkspur Dr. Califo...',
+        shortAddress: '468.907.5567',
         payment: 'Visa **** **** **** 6280',
         wishList: 5,
         myBag: 3,
@@ -32,13 +77,85 @@ export default class CompanyProfile extends Component {
     };
   }
 
+  _updateSection1 = (activeSection1) => {
+    this.setState({activeSection1});
+  };
+
+  _updateSection2 = (activeSection2) => {
+    this.setState({activeSection2});
+  };
+
+  _renderContent = (section) => {
+    return (
+      <View style={{justifyContent: 'center'}}>
+        {/* TODO: Justify Text to center */}
+        <Text style={[styles.descriptionText, {marginHorizontal: 20}]}>
+          {section.content}
+        </Text>
+      </View>
+    );
+  };
+
+  _renderHeader1 = (section) => {
+    return (
+      <View>
+        <View style={styles.userDetails}>
+          <View style={{paddingVertical: 19}}>
+            <Text style={styles.keyText}>{section.title}</Text>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <View
+              style={{
+                marginVertical: 18,
+                marginRight: 6,
+                marginLeft: 19.5,
+              }}>
+              {!this.state.activeSection1.includes(section.id) ? (
+                <Icon size={20} name="right" type="antdesign" />
+              ) : (
+                <Icon size={20} name="down" type="antdesign" />
+              )}
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  _renderHeader2 = (section) => {
+    return (
+      <View>
+        <View style={styles.userDetails}>
+          <View style={{paddingVertical: 19}}>
+            <Text style={styles.keyText}>{section.title}</Text>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <View
+              style={{
+                marginVertical: 18,
+                marginRight: 6,
+                marginLeft: 19.5,
+              }}>
+              {!this.state.activeSection2.includes(section.id) ? (
+                <Icon size={20} name="right" type="antdesign" />
+              ) : (
+                <Icon size={20} name="down" type="antdesign" />
+              )}
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Help & Info" rightIcon="edit" />
-        <ScrollView showsVerticalScrollIndicator={false}
+        <Header centerText="Help & Info" />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             backgroundColor: '#fff',
             flexGrow: 1,
@@ -71,23 +188,29 @@ export default class CompanyProfile extends Component {
 
           <View style={styles.divider}></View>
 
-          <ProfileText keyText="Company" containIcon={true}></ProfileText>
-          <ProfileText keyText="Locations" containIcon={true}></ProfileText>
-          <ProfileText
-            keyText="Wholesale Info"
-            containIcon={true}></ProfileText>
-          <ProfileText
-            keyText="Use and Sales TX ID form"
-            containIcon={true}></ProfileText>
-          <ProfileText keyText="Settings" containIcon={true}></ProfileText>
+          <Accordion
+            underlayColor="#fff"
+            sections={this.state.section1}
+            activeSections={this.state.activeSection1}
+            renderHeader={this._renderHeader1}
+            renderContent={this._renderContent}
+            onChange={this._updateSection1}
+            expandMultiple={true}
+          />
+
           <View style={styles.divider}></View>
-          <ProfileText keyText="Return Policy" containIcon={true}></ProfileText>
-          <ProfileText keyText="FAQs" containIcon={true}></ProfileText>
-          <ProfileText
-            keyText="Upcoming Tradeshows"
-            containIcon={true}></ProfileText>
-            {/* Below view is useless */}
-          <View style={{paddingBottom: 60, backgroundColor: '#ffffff'}}></View> 
+          <Accordion
+            underlayColor="#fff"
+            sections={this.state.section2}
+            activeSections={this.state.activeSection2}
+            renderHeader={this._renderHeader2}
+            renderContent={this._renderContent}
+            onChange={this._updateSection2}
+            expandMultiple={true}
+          />
+
+          {/* Below view is useless */}
+          <View style={{paddingBottom: 60, backgroundColor: '#ffffff'}}></View>
         </ScrollView>
 
         <Footer selected="Info" />
@@ -138,5 +261,23 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     paddingVertical: 11,
     paddingHorizontal: 131.5,
+  },
+  decriptionText: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 14,
+    color: '#2d2d2f',
+    textAlign: 'justify',
+  },
+  userDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    height: 60,
+  },
+  keyText: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 18,
+    lineHeight: 22,
+    color: '#2d2d2f',
   },
 });
