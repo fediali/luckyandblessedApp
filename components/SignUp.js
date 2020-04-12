@@ -99,15 +99,15 @@ class SignUp extends Component {
               <Image
                 style={{ width: 70, height: 50 }}
                 resizeMode="contain"
-                source={require('../static/logo-signIn.png')}
+                source={require('../static/uploadFile-signUp.png')}
               />
             </View>
             <Text style={styles.customTextBold}>OR</Text>
             <View style={[styles.line, { marginTop: 10 }]} />
 
             <View style={[styles.buttonContainer, { paddingHorizontal: 15 }]}>
-              <TouchableOpacity>
-                <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity style={{alignItems: 'center', justifyContent: 'space-between'}}>
+                <View style={{ width:'100%',flexDirection: 'row' }}>
                   <Text
                     style={[
                       innerStyles.customTextNormal,
@@ -118,9 +118,9 @@ class SignUp extends Component {
                   {/*TODO: replace this image with right arrow*/}
 
                   <Image
-                    style={{ width: 70, height: 50 }}
+                    style={{ width: 10, height: 17, alignSelf:'center'}}
                     resizeMode="contain"
-                    source={require('../static/logo-signIn.png')}
+                    source={require('../static/arrow_right.png')}
                   />
                 </View>
               </TouchableOpacity>
