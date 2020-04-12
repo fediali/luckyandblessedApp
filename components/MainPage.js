@@ -38,6 +38,7 @@ class MainPage extends Component {
         this.setState({ selectedCategory: index })
     }
 
+
     render() {
         const Width = Dimensions.get('window').width;
         const Height = Dimensions.get('window').height;
@@ -165,50 +166,55 @@ class MainPage extends Component {
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
-                                <View style={{ alignItems: 'center', justifyContent:'center',flexDirection: 'column'}}>
+                                <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                                     <TouchableOpacity style={innerStyles.trendingView}>
-                                        <Image
-                                            style={innerStyles.trendingImage}
-                                            source={item.imageUrl}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={{ flexDirection: 'column' }}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
-                                            <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                        <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
+                                            <Image
+                                                style={innerStyles.trendingImage}
+                                                source={item.imageUrl}
+                                                resizeMode='contain'
+                                            />
+                                            <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
+                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
+                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                            </View>
                                         </View>
-                                        <View style={{width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center',justifyContent:'center' }}>
+                                        <View style={{ width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center', justifyContent: 'center' }}>
                                             <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
                                         </View>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={innerStyles.trendingView}>
-                                        <Image
-                                            style={innerStyles.trendingImage}
-                                            source={item.imageUrl}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={{ flexDirection: 'column' }}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
-                                            <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                        <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
+                                            <Image
+                                                style={innerStyles.trendingImage}
+                                                source={item.imageUrl}
+                                                resizeMode='contain'
+                                            />
+                                            <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
+                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
+                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                            </View>
                                         </View>
-                                        <View style={{width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center',justifyContent:'center' }}>
+                                        <View style={{ width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center', justifyContent: 'center' }}>
                                             <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
                                         </View>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={innerStyles.trendingView}>
-                                        <Image
-                                            style={innerStyles.trendingImage}
-                                            source={item.imageUrl}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={{ flexDirection: 'column' }}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
-                                            <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                        <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
+                                            <Image
+                                                style={innerStyles.trendingImage}
+                                                source={item.imageUrl}
+                                                resizeMode='contain'
+                                            />
+                                            <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
+                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
+                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                            </View>
                                         </View>
-                                        <View style={{width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center',justifyContent:'center' }}>
+                                        <View style={{ width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center', justifyContent: 'center' }}>
                                             <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
                                         </View>
                                     </TouchableOpacity>
-                                    
 
                                 </View>
 
@@ -389,11 +395,12 @@ const innerStyles = StyleSheet.create({
         height: Height * 0.1,
         flexDirection: 'row',
         paddingHorizontal: 10,
+        marginEnd: 15,
         alignItems: 'center',
     },
     trendingImage: {
         width: '25%',
-        height: '65%',
+        height: '100%',
         borderRadius: 6,
     },
     trendingPriceText: {

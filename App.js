@@ -48,8 +48,8 @@ class App extends Component {
           {/* <Stack.Screen name="TaxID" component={TaxID} /> */}
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} /> */}
           {/* <Stack.Screen name="Delivery" component={Delivery} /> */}
-          {/* <Stack.Screen name="ShoppingCart" component={ShoppingCart} /> */}
-          <Stack.Screen name="MainPage" component={MainPage} />
+          <Stack.Screen name="ShoppingCart" component={ShoppingCart} />
+          {/* <Stack.Screen name="MainPage" component={MainPage} /> */}
           {/* <Stack.Screen name="ColorPicker" component={ColorPicker} /> */}
           {/* <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} /> */}
           {/* <Stack.Screen name="UserProfile" component={UserProfile} /> */}

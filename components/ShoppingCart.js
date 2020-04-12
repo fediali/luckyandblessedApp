@@ -18,7 +18,7 @@ import {
 
 import itemList from '../data/ShoppingCartData';
 
-
+import ModalDropdown from 'react-native-modal-dropdown';
 import Swipeout from 'react-native-swipeout';
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
@@ -33,7 +33,8 @@ class FlatListItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeRowKey: null
+            activeRowKey: null,
+            currentSelectedColor: this.props.item.hexColor
         };
     }
     render() {
@@ -76,7 +77,7 @@ class FlatListItem extends Component {
         };
         return (
             <Swipeout {...swipeSettings}>
-                <View style={[innerStyles.itemView,{backgroundColor: '#ffffff'}]}>
+                <View style={[innerStyles.itemView, { backgroundColor: '#ffffff' }]}>
                     <View style={{ flexDirection: 'column', padding: 15 }}>
                         <View style={{ flexDirection: 'row' }}>
                             <Image style={[innerStyles.itemImage]}
@@ -100,26 +101,49 @@ class FlatListItem extends Component {
                         <View style={[innerStyles.horizontalView]}>
                             <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5 }]}>
                                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Text style={[innerStyles.numText]}>{this.props.item.unknownNum}</Text>
 
-                                    <Image
-                                        style={{
-                                            height: 10,
-                                            width: 10,
-                                            paddingRight:50
-                                        }} resizeMode='contain' source={require("../static/arrow_down.png")}
+                                    <ModalDropdown
+                                        onSelect={(index) => { console.log(index) }}
+                                        options={this.props.item.availableSizes}
+                                        defaultValue={this.props.item.unknownNum}
+                                        style={{ flex: 1, padding: 5, borderRadius: 6 }}
+                                        dropdownStyle={{ width: "30%", height: 110 }}
+                                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                                        renderRow={(option, index, isSelected) => {
+                                            return (
+                                                <Text style={[innerStyles.numText]}>{option}</Text>
+                                            )
+                                        }}
                                     />
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5, marginStart: 40 }]}>
                                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <View style={{ width: 25, height: 25, marginStart: 15, borderRadius: 25, backgroundColor: this.props.item.hexColor,alignSelf:"center" }} />
+                                    {/* <View style={{ width: 25, height: 25, marginStart: 15, borderRadius: 25, backgroundColor: this.props.item.hexColor, alignSelf: "center" }} />
                                     <Image
                                         style={{
                                             height: 10,
                                             width: 10,
-                                            paddingRight:50
+                                            paddingRight: 50
                                         }} resizeMode='contain' source={require("../static/arrow_down.png")}
+                                    /> */}
+
+                                    <ModalDropdown
+                                        hexCode={this.state.currentSelectedColor}
+                                        onSelect={(index) => { this.setState({currentSelectedColor: this.props.item.availableColors[index]}) }}
+                                        options={this.props.item.availableColors}
+                                        defaultValue={this.props.item.selectedColor}
+                                        style={{ flex: 1, padding: 5, borderRadius: 6 }}
+                                        dropdownStyle={{ width: "30%", height: 110 }}
+                                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 0, lineHeight: 24, color: "#2d2d2f" }}
+                                        renderRow={(option, index, isSelected) => {
+                                            return (
+                                                <View>
+                                                    <View style={{ width: 25, height: 25, marginStart: 15, borderRadius: 25, backgroundColor: option, alignSelf: "center" }} />
+                                                </View>
+                                            )
+
+                                        }}
                                     />
                                 </View>
                             </TouchableOpacity>
@@ -157,7 +181,7 @@ class ShoppingCart extends Component {
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Header  />
+                <Header />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
@@ -276,7 +300,7 @@ const innerStyles = StyleSheet.create({
     itemImage: {
         width: Width * 0.2,
         height: Height * 0.15,
-        alignSelf:"center",
+        alignSelf: "center",
     },
     rowStyling: {
         backgroundColor: "#ffffff",
