@@ -78,7 +78,7 @@ class MainPage extends Component {
             return <ActivityIndicator />
         }
         return (
-            <View style={[styles.parentContainer]}>
+            <SafeAreaView style={[styles.parentContainer]}>
                 <Header navigation={this.props.navigation} centerText="Welcome" rightIcon="search" />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -322,7 +322,7 @@ class MainPage extends Component {
 
                 </ScrollView>
                 <Footer selected="Home" navigation={this.props.navigation} />
-            </View>
+            </SafeAreaView>
         )
     }
 }
