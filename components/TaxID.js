@@ -13,6 +13,8 @@ import {
 
 import styles from './Styles/Style'
 import Header from "../reusableComponents/Header"
+import SignatureCapture from 'react-native-signature-capture';
+
 import {
     SafeAreaView
 } from 'react-native-safe-area-context'
@@ -42,6 +44,26 @@ class TaxID extends Component {
             height
         });
     }
+
+    //this will save the signature as an image in internal storage of user
+    saveSign() {
+        this.refs["sign"].saveImage();
+    }
+
+    resetSign() {
+        this.refs["sign"].resetImage();
+    }
+
+    _onSaveEvent(result) {
+        //result.encoded - for the base64 encoded png
+        //result.pathName - for the file path name
+        console.log(result);
+    }
+    _onDragEvent() {
+         // This callback will be called when the user enters signature
+        console.log("dragged");
+    }
+
     render() {
         const { value1, _, height1, __ } = this.state;
         const { ___, value2, ____, height2 } = this.state;
@@ -54,7 +76,7 @@ class TaxID extends Component {
         }
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Header  navigation={this.props.navigation} centerText={""} rightIcon="info" />
+                <Header navigation={this.props.navigation} centerText={""} rightIcon="info" />
 
                 <ScrollView
                     contentContainerStyle={{
@@ -110,38 +132,37 @@ class TaxID extends Component {
                             </View>
                             <Text style={[innerStyles.customTextBoldSmall, { marginTop: 15 }]}>This certificate should be furnished to the supplier. Do not send the completed certificate to the Comptroller of Public Accounts.</Text>
                             <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
-                                <TextInput
-                                    placeholder="Sign Here"
-                                    onChangeText={(value2) => this.setState({ value2 })}
-                                    style={[innerStyles.customInput]}
-                                    editable={true}
-                                    multiline={true}
-                                    value={value2}
-                                    onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
-                                >
-
-                                </TextInput>
-                            </View>
-                            <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
-                            <View style={[styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }]}>
-                                <TouchableOpacity style={[innerStyles.buttonSubmit]}>
-                                    <Text
-                                        style={[
-                                            styles.buttonText,
-                                            {
-                                                color: '#ffffff',
-                                                fontSize: 20
-                                            },
-                                        ]}>
-                                        Submit
-                            </Text>
-                                </TouchableOpacity>
-                            </View>
-
+                                <SignatureCapture
+                                    style={[{borderRadius: 6, borderColor: '#000',flex: 1 }]}
+                                    ref="sign"
+                                    contentSize="10"
+                                    onSaveEvent={this._onSaveEvent}
+                                    onDragEvent={this._onDragEvent}
+                                    saveImageFileInExtStorage={false}
+                                    showNativeButtons={false}
+                                    showTitleLabel={false}
+                                    viewMode={"portrait"} />
                         </View>
+                        <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
+                        <View style={[styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }]}>
+                            <TouchableOpacity style={[innerStyles.buttonSubmit]}>
+                                <Text
+                                    style={[
+                                        styles.buttonText,
+                                        {
+                                            color: '#ffffff',
+                                            fontSize: 20
+                                        },
+                                    ]}>
+                                    Submit
+                            </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
                     </View>
                 </ScrollView>
-            </SafeAreaView>
+            </SafeAreaView >
         )
     }
 }

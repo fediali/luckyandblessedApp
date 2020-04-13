@@ -42,14 +42,49 @@ class MainPage extends Component {
         }
 
         
-        // this.getData('http://dev.landbw.co/api/mobile', "collections", "home.logged.sliders");
-        this.getData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33', "categoryList", "categories");
+        this.getData('http://dev.landbw.co/api/mobile', "collections", "home.logged.sliders"); //This isn't working because nested object
+        /* The response that I'm trying to parse is:
+        {
+        "home": {
+            "not_logged": {
+                "sliders": [
+                    "http://dev.landbw.co/images/mobile_app/homepage-slider-1.png",
+                    "http://dev.landbw.co/images/mobile_app/homepage-slider-2.png",
+                    "http://dev.landbw.co/images/mobile_app/homepage-slider-3.png"
+                ]
+            },
+            "logged": {
+                "sliders": [
+                    {
+                        "text": "New collection",
+                        "background": {
+                            "color": "#ccc",
+                            "image": "http://dev.landbw.co/images/mobile_app/innerpage-slider-1.png",
+                            "link": ""
+                        }
+                    },
+                    {
+                        "text": "Summer sale",
+                        "background": {
+                            "color": "#ccc",
+                            "image": "http://dev.landbw.co/images/mobile_app/innerpage-slider-2.png",
+                            "link": ""
+                        }
+                    }
+                ],
+                "new_arrivals": []
+            }
+        },
+        "last_update": 1586764989
+        }
+        */
+        this.getData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33', "categoryList", "categories"); //This is working because only one obj
 
 
     }
 
     //FIXME: Make the responseDataPath dynamic
-    // Params: URL, Key of state to save the response, Path that will be received in response
+    // Params: URL, Key of state to save the response int state, Path that will be received in response
     getData(url, stateKey, responseDataPath) {
         let h = new Headers();
         h.append(
@@ -67,8 +102,9 @@ class MainPage extends Component {
           .then((response) => response.json())
           .then((data) => {
               var resPath = responseDataPath
-            // console.log(data)
-            // console.log(data.categories)
+            console.log(data.home.logged.sliders) //This works
+            console.log(data[home.logged.sliders]) //This doesn't works
+            console.log(data[responseDataPath]) // Works for categories but not for {home.logged.sliders}
             this.setState({
                 [stateKey]: data[responseDataPath],
               loaded: true,
