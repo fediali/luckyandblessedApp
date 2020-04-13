@@ -39,14 +39,15 @@ class App extends Component {
             // ...TransitionPresets.SlideFromRightIOS
           }}
         >
-                    {/* <Stack.Screen name="MainPage" component={MainPage} /> */}
-                    <Stack.Screen name="Categories" component={Categories} />
+          <Stack.Screen name="TaxID" component={TaxID} />
+          <Stack.Screen name="MainPage" component={MainPage} />
+          <Stack.Screen name="Categories" component={Categories} />
 
 
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} />
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="MainPage" component={MainPage} />
+           <Stack.Screen name="MainPage" component={MainPage} />
           <Stack.Screen name="CompanyProfile" component={CompanyProfile} />
           <Stack.Screen name="UserProfile" component={UserProfile} />
           <Stack.Screen name="Delivery" component={Delivery} />
