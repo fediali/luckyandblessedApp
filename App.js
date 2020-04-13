@@ -39,16 +39,9 @@ class App extends Component {
             // ...TransitionPresets.SlideFromRightIOS
           }}
         >
-<<<<<<< HEAD
-                  <Stack.Screen name="SignIn" component={SignIn} />
-
-                    <Stack.Screen name="MainPage" component={MainPage} />
-                    <Stack.Screen name="Categories" component={Categories} />
-=======
-          <Stack.Screen name="TaxID" component={TaxID} />
-          {/* <Stack.Screen name="MainPage" component={MainPage} />
-          <Stack.Screen name="Categories" component={Categories} /> */}
->>>>>>> 1a4a2773426b02df7078318b7fb580a8abc92f84
+          {/* <Stack.Screen name="TaxID" component={TaxID} /> */}
+          <Stack.Screen name="MainPage" component={MainPage} />
+          {/* <Stack.Screen name="Categories" component={Categories} /> */}
 
 
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} />

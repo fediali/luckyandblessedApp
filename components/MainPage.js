@@ -21,10 +21,11 @@ import Header from '../reusableComponents/Header'
 import Footer from '../reusableComponents/Footer'
 
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
+import GetData from "../reusableComponents/API/GetData"
 
 YellowBox.ignoreWarnings([
     'Require cycle:'
-  ])
+])
 //FIXME: Headers selection too slow
 class MainPage extends Component {
 
@@ -41,8 +42,8 @@ class MainPage extends Component {
             isReady: false
         }
 
-        
-        this.getData('http://dev.landbw.co/api/mobile', "collections", "home.logged.sliders"); //This isn't working because nested object
+
+        // this.getData('http://dev.landbw.co/api/mobile', "collections", "home.logged.sliders"); //This isn't working because nested object
         /* The response that I'm trying to parse is:
         {
         "home": {
@@ -78,53 +79,64 @@ class MainPage extends Component {
         "last_update": 1586764989
         }
         */
-        this.getData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33', "categoryList", "categories"); //This is working because only one obj
+        // this.getData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33', "categoryList", "categories"); //This is working because only one obj
 
 
     }
 
     //FIXME: Make the responseDataPath dynamic
     // Params: URL, Key of state to save the response int state, Path that will be received in response
-    getData(url, stateKey, responseDataPath) {
-        let h = new Headers();
-        h.append(
-          'Authorization',
-          'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
-        );
-        h.append('Accept', 'application/json');
-    
-        let req = new Request(url, {
-          headers: h,
-          method: 'GET',
-        });
-    
-        fetch(req)
-          .then((response) => response.json())
-          .then((data) => {
-              var resPath = responseDataPath
-            console.log(data.home.logged.sliders) //This works
-            console.log(data[home.logged.sliders]) //This doesn't works
-            console.log(data[responseDataPath]) // Works for categories but not for {home.logged.sliders}
-            this.setState({
-                [stateKey]: data[responseDataPath],
-              loaded: true,
-            });
-          })
-          .catch(this.badStuff);
-      }
-    
-      badStuff = (err) => {
-          console.log("Error")
-          console.log(err.message)
+    // getData(url, stateKey, responseDataPath) {
+    //     let h = new Headers();
+    //     h.append(
+    //         'Authorization',
+    //         'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
+    //     );
+    //     h.append('Accept', 'application/json');
 
-        this.setState({loaded: true, data: null, error: err.message});
-      };
-    
+    //     let req = new Request(url, {
+    //         headers: h,
+    //         method: 'GET',
+    //     });
+
+    //     return fetch(req)
+    //         // .then((response) => response.json())
+    //         // .then((data) => {
+    //         //     var resPath = responseDataPath
+    //         //     console.log(data.home.logged.sliders) //This works
+    //         //     console.log(data[home.logged.sliders]) //This doesn't works
+    //         //     console.log(data[responseDataPath]) // Works for categories but not for {home.logged.sliders}
+    //         //     this.setState({
+    //         //         [stateKey]: data[responseDataPath],
+    //         //         loaded: true,
+    //         //     });
+    //         // })
+    //         // .catch(this.badStuff);
+    // }
+
+    // badStuff = (err) => {
+    //     console.log("Error")
+    //     console.log(err.message)
+
+    //     this.setState({ loaded: true, data: null, error: err.message });
+    // };
+
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.setState({
-                isReady: true
-            })
+            promises = []
+            promises.push(GetData('http://dev.landbw.co/api/mobile'))
+            promises.push(GetData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33'))
+            Promise.all(promises).then((promiseResponses) => {
+                Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+                    console.log(responses[0])
+                    console.log("\n\n\n")
+                    console.log(responses[1])
+                    this.setState({
+                        isReady: true
+                    })
+                }).catch(ex=>{console.log("Inner Promise",ex)})
+            }).catch(ex=>{console.log("Outer Promise",ex)})
+            
         })
     }
     onCategorySelect = (index) => {
@@ -181,7 +193,7 @@ class MainPage extends Component {
                                 <TouchableOpacity style={{ borderRadius: 6 }}>
                                     <ImageBackground
                                         style={innerStyles.collectionImages}
-                                        source={{uri: item.background.image}}
+                                        source={{ uri: item.background.image }}
                                         resizeMode='stretch'
                                     >
                                         <Text style={innerStyles.semiBoldText}>{item.text}</Text>

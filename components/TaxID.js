@@ -141,7 +141,9 @@ class TaxID extends Component {
                                     saveImageFileInExtStorage={false}
                                     showNativeButtons={false}
                                     showTitleLabel={false}
-                                    viewMode={"portrait"} />
+                                    viewMode={"portrait"}
+                                    maxStrokeWidth={10}
+                                    maxStrokeWidth={5} />
                         </View>
                         <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
                         <View style={[styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }]}>
