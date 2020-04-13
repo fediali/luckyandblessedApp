@@ -32,12 +32,16 @@ class Header extends PureComponent {
             />
         }
         else if (this.props.rightIcon == "search") {
-            return < Icon
-                size={30}
-                name='ios-search'
-                type='ionicon'
-                color='#000'
-            />
+            return(
+                <TouchableOpacity onPress={()=>{this.props.navigation.navigate("SearchResults")}}>
+                    < Icon
+                        size={30}
+                        name='ios-search'
+                        type='ionicon'
+                        color='#000'
+                    />
+                </TouchableOpacity>
+            ) 
         }
         else if (this.props.rightIcon == "share") {
             return < Icon

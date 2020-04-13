@@ -43,83 +43,7 @@ class MainPage extends Component {
         }
 
 
-        // this.getData('http://dev.landbw.co/api/mobile', "collections", "home.logged.sliders"); //This isn't working because nested object
-        /* The response that I'm trying to parse is:
-        {
-        "home": {
-            "not_logged": {
-                "sliders": [
-                    "http://dev.landbw.co/images/mobile_app/homepage-slider-1.png",
-                    "http://dev.landbw.co/images/mobile_app/homepage-slider-2.png",
-                    "http://dev.landbw.co/images/mobile_app/homepage-slider-3.png"
-                ]
-            },
-            "logged": {
-                "sliders": [
-                    {
-                        "text": "New collection",
-                        "background": {
-                            "color": "#ccc",
-                            "image": "http://dev.landbw.co/images/mobile_app/innerpage-slider-1.png",
-                            "link": ""
-                        }
-                    },
-                    {
-                        "text": "Summer sale",
-                        "background": {
-                            "color": "#ccc",
-                            "image": "http://dev.landbw.co/images/mobile_app/innerpage-slider-2.png",
-                            "link": ""
-                        }
-                    }
-                ],
-                "new_arrivals": []
-            }
-        },
-        "last_update": 1586764989
-        }
-        */
-        // this.getData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33', "categoryList", "categories"); //This is working because only one obj
-
-
     }
-
-    //FIXME: Make the responseDataPath dynamic
-    // Params: URL, Key of state to save the response int state, Path that will be received in response
-    // getData(url, stateKey, responseDataPath) {
-    //     let h = new Headers();
-    //     h.append(
-    //         'Authorization',
-    //         'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
-    //     );
-    //     h.append('Accept', 'application/json');
-
-    //     let req = new Request(url, {
-    //         headers: h,
-    //         method: 'GET',
-    //     });
-
-    //     return fetch(req)
-    //         // .then((response) => response.json())
-    //         // .then((data) => {
-    //         //     var resPath = responseDataPath
-    //         //     console.log(data.home.logged.sliders) //This works
-    //         //     console.log(data[home.logged.sliders]) //This doesn't works
-    //         //     console.log(data[responseDataPath]) // Works for categories but not for {home.logged.sliders}
-    //         //     this.setState({
-    //         //         [stateKey]: data[responseDataPath],
-    //         //         loaded: true,
-    //         //     });
-    //         // })
-    //         // .catch(this.badStuff);
-    // }
-
-    // badStuff = (err) => {
-    //     console.log("Error")
-    //     console.log(err.message)
-
-    //     this.setState({ loaded: true, data: null, error: err.message });
-    // };
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
@@ -128,11 +52,14 @@ class MainPage extends Component {
             promises.push(GetData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33'))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-                    console.log(responses[0])
-                    console.log("\n\n\n")
-                    console.log(responses[1])
+                    // console.log(responses[0])
+                    
+                    // console.log("\n\n\n")
+                    // console.log(responses[1])
                     this.setState({
-                        isReady: true
+                        isReady: true,
+                        collections: responses[0].home.logged.sliders,
+                        categoryList: responses[1].categories
                     })
                 }).catch(ex=>{console.log("Inner Promise",ex)})
             }).catch(ex=>{console.log("Outer Promise",ex)})
@@ -152,7 +79,7 @@ class MainPage extends Component {
         }
         return (
             <View style={[styles.parentContainer]}>
-                <Header navigation={this.props.navigation} />
+                <Header navigation={this.props.navigation} centerText="Welcome" rightIcon="search" />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{

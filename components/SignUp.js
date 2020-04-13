@@ -106,7 +106,7 @@ class SignUp extends Component {
             <View style={[styles.line, { marginTop: 10 }]} />
 
             <View style={[styles.buttonContainer, { paddingHorizontal: 15 }]}>
-              <TouchableOpacity style={{alignItems: 'center', justifyContent: 'space-between'}}>
+              <TouchableOpacity style={{alignItems: 'center', justifyContent: 'space-between'}} onPress={()=>{this.props.navigation.navigate("TaxID")}}>
                 <View style={{ width:'100%',flexDirection: 'row' }}>
                   <Text
                     style={[
@@ -136,7 +136,7 @@ class SignUp extends Component {
                   Create an account
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[innerStyles.buttonAlreadyHaveAccount]}>
+              <TouchableOpacity style={[innerStyles.buttonAlreadyHaveAccount]} onPress={()=>{this.props.navigation.navigate("SignIn")}}>
                 <Text
                   style={[
                     styles.buttonText,
