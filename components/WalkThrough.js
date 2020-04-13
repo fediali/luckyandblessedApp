@@ -7,30 +7,64 @@ import {
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
+  ScrollView,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 
+//FIXME: Don't know why warning is there.
+//TODO: Check how to make GET DATA generalised.
+//TODO: Error handling from Bad Stuff
 export default class WalkThrough extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      loaded: false,
+      images: [],
+      error: null
+    };
+    this.getData('http://dev.landbw.co/api/mobile');
   }
 
+  getData(url) {
+    let h = new Headers();
+    h.append(
+      'Authorization',
+      'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
+    );
+    h.append('Accept', 'application/json');
+
+    let req = new Request(url, {
+      headers: h,
+      method: 'GET',
+    });
+
+    fetch(req)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          images: data.home.not_logged.sliders,
+          loaded: true,
+        });
+      })
+      .catch(this.badStuff);
+  }
+
+  badStuff = (err) => {
+    this.setState({loaded: true, data: null, error: err.message});
+  };
+
   render() {
-    var featuredImagesList = [
-      require('../static/demoimg1-walkthrough.png'),
-      require('../static/demoimg2-walkthrough.png'),
-    ];
+    // console.log(this.state.images)
+
     var featuredImages = [];
 
-    featuredImagesList.forEach((img, index) => {
-      //   console.log(img.toString());
+    this.state.images.forEach((img, index) => {
+      console.log(img);
       featuredImages.push(
         <Image
           style={styles.images}
           key={index}
           resizeMode="contain"
-          source={img}
+          source={{uri: img}}
         />,
       );
     });
@@ -43,13 +77,19 @@ export default class WalkThrough extends Component {
             resizeMode="contain"
             source={require('../static/logo-walkthrough.png')}
           />
-          <View style={styles.imageContainer}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {featuredImages}
-            </ScrollView>
-          </View>
+          {(this.state.loaded && !this.state.error) ? (
+            <View style={styles.imageContainer}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {featuredImages}
+              </ScrollView>
+            </View>
+          ) : (
+            <Text>Loading</Text>
+            // {/*TODO: Add Lazy loader*/}
+          )}
+
           <View style={styles.texts}>
             <Text style={styles.newCollection}>New Collection</Text>
             <View style={styles.youAreRegistering}>
@@ -62,16 +102,22 @@ export default class WalkThrough extends Component {
           </View>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.buttonRegisterNow} onPress={()=>{this.props.navigation.navigate("SignUp")}}>
+            <TouchableOpacity
+              style={styles.buttonRegisterNow}
+              onPress={() => {
+                this.props.navigation.navigate('SignUp');
+              }}>
               <Text style={styles.registerButtonText}>Register now</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonLogIn} onPress={()=>{this.props.navigation.navigate("SignIn")}}>
+            <TouchableOpacity
+              style={styles.buttonLogIn}
+              onPress={() => {
+                this.props.navigation.navigate('SignIn');
+              }}>
               <Text style={styles.loginButtonText}>Log-in</Text>
             </TouchableOpacity>
           </View>
-
         </View>
-
       </SafeAreaView>
     );
   }
@@ -203,6 +249,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#1b1b1d',
     marginBottom: 8,
     alignSelf: 'flex-end',
-    
   },
 });

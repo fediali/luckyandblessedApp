@@ -13,6 +13,41 @@ class Categories extends Component {
             data: [{ imageUrl: { key: "1", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, quantity: "5,287 items", name: "Jeans" }, { key: "2", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/27.jpg" }, quantity: "2,509 items", name: "Top" }, { key: "3", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/28_jp1x-s7.jpg" }, quantity: "1,335 items", name: "Dresses" }, { key: "3", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg" }, quantity: "932 items", name: "Pants" }]
         }
     }
+
+    getData(url, stateKey, responseDataPath) {
+        let h = new Headers();
+        h.append(
+          'Authorization',
+          'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
+        );
+        h.append('Accept', 'application/json');
+    
+        let req = new Request(url, {
+          headers: h,
+          method: 'GET',
+        });
+    
+        fetch(req)
+          .then((response) => response.json())
+          .then((data) => {
+              var resPath = responseDataPath
+            // console.log(data)
+            // console.log(data.categories)
+            this.setState({
+                [stateKey]: data[responseDataPath],
+              loaded: true,
+            });
+          })
+          .catch(this.badStuff);
+      }
+    
+      badStuff = (err) => {
+          console.log("Error")
+          console.log(err.message)
+
+        this.setState({loaded: true, data: null, error: err.message});
+      };
+      
     changeTextColor(item) {
         this.setState({ selected: item })
     }

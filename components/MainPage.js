@@ -21,6 +21,7 @@ import Footer from '../reusableComponents/Footer'
 
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 
+//FIXME: Headers selection too slow
 class MainPage extends Component {
 
     constructor(props) {
@@ -28,14 +29,57 @@ class MainPage extends Component {
         this.state = {
             showNewsletter: true,
             selectedCategory: 0,
-            categoryList: _categoryList,
-            collections: _collections,
+            categoryList: null,
+            collections: null,
             newArrivals: _newArrivals,
             trending: _trending,
             history: _history,
             isReady: false
         }
+
+        
+        // this.getData('http://dev.landbw.co/api/mobile', "collections", "home.logged.sliders");
+        this.getData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33', "categoryList", "categories");
+
+
     }
+
+    //FIXME: Make the responseDataPath dynamic
+    // Params: URL, Key of state to save the response, Path that will be received in response
+    getData(url, stateKey, responseDataPath) {
+        let h = new Headers();
+        h.append(
+          'Authorization',
+          'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
+        );
+        h.append('Accept', 'application/json');
+    
+        let req = new Request(url, {
+          headers: h,
+          method: 'GET',
+        });
+    
+        fetch(req)
+          .then((response) => response.json())
+          .then((data) => {
+              var resPath = responseDataPath
+            // console.log(data)
+            // console.log(data.categories)
+            this.setState({
+                [stateKey]: data[responseDataPath],
+              loaded: true,
+            });
+          })
+          .catch(this.badStuff);
+      }
+    
+      badStuff = (err) => {
+          console.log("Error")
+          console.log(err.message)
+
+        this.setState({loaded: true, data: null, error: err.message});
+      };
+    
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this.setState({
@@ -68,7 +112,7 @@ class MainPage extends Component {
                 >
                     <View style={styles.subParentContainer}>
                         <FlatList
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item.category_id}
                             data={this.state.categoryList}
                             horizontal={true}
                             extraData={this.selectedCategory}
@@ -77,11 +121,11 @@ class MainPage extends Component {
                                 <View style={{ height: '2.8%', marginVertical: 10 }}>
                                     {this.state.selectedCategory == index ?
                                         < TouchableOpacity onPress={() => { this.onCategorySelect(index) }}>
-                                            <Text style={[styles.buttonText, { marginHorizontal: 10, color: "#2967ff" }]}>{item.name}</Text>
+                                            <Text style={[styles.buttonText, { marginHorizontal: 10, color: "#2967ff" }]}>{item.category}</Text>
                                         </TouchableOpacity>
                                         :
                                         < TouchableOpacity onPress={() => { this.onCategorySelect(index) }}>
-                                            <Text style={[styles.buttonText, { marginHorizontal: 10 }]}>{item.name}</Text>
+                                            <Text style={[styles.buttonText, { marginHorizontal: 10 }]}>{item.category}</Text>
                                         </TouchableOpacity>
                                     }
                                 </View>
@@ -89,7 +133,7 @@ class MainPage extends Component {
 
                         />
                         <FlatList
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item.background.image}
                             data={this.state.collections}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
@@ -97,10 +141,10 @@ class MainPage extends Component {
                                 <TouchableOpacity style={{ borderRadius: 6 }}>
                                     <ImageBackground
                                         style={innerStyles.collectionImages}
-                                        source={item.imageUrl}
+                                        source={{uri: item.background.image}}
                                         resizeMode='stretch'
                                     >
-                                        <Text style={innerStyles.semiBoldText}>{item.name}</Text>
+                                        <Text style={innerStyles.semiBoldText}>{item.text}</Text>
                                     </ImageBackground>
                                 </TouchableOpacity>
                             )}
