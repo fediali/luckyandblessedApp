@@ -58,6 +58,8 @@ target 'LBShoppingApp' do
 
   pod 'react-native-signature-capture', :path => '../node_modules/react-native-signature-capture'
 
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker'
+
   target 'LBShoppingAppTests' do
     inherit! :complete
     # Pods for testing

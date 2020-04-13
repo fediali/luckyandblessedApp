@@ -39,6 +39,8 @@ class App extends Component {
             // ...TransitionPresets.SlideFromRightIOS
           }}
         >
+          <Stack.Screen name="SignUp" component={SignUp} />
+
           <Stack.Screen name="TaxID" component={TaxID} />
           <Stack.Screen name="MainPage" component={MainPage} />
           <Stack.Screen name="Categories" component={Categories} />
