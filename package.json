@@ -15,6 +15,7 @@
     "@react-navigation/native": "^5.1.4",
     "@react-navigation/stack": "^5.2.9",
     "react": "16.11.0",
+    "react-clone-referenced-element": "^1.1.0",
     "react-native": "0.62.0",
     "react-native-collapsible": "^1.5.2",
     "react-native-document-picker": "^3.3.3",

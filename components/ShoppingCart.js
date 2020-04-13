@@ -249,7 +249,7 @@ class ShoppingCart extends Component {
                             backgroundColor: '#f6f6f6',
                             paddingBottom: 20
                         }]}>
-                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]}>
+                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={()=>{this.props.navigation.navigate("Payment")}}>
                                 <Text
                                     style={[
                                         styles.buttonText,

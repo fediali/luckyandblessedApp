@@ -12,7 +12,8 @@ import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import { ScrollView } from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/UserProfileText';
-import CompanyProfileText from '../reusableComponents/UserProfileText';
+import Accordion from 'react-native-collapsible/Accordion';
+import {Icon} from 'react-native-elements';
 
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 //TODO: Data on pressing the arrow
@@ -20,6 +21,15 @@ export default class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeSection1: [],
+
+      section1: [
+        {
+          id: 0,
+          title: 'Referral Link',
+          content: 'thisisdemo.referallink.com',
+        },
+      ],
       fullName: 'Monika Willems',
       email: 'blackcherry@gmail.com',
       longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
@@ -30,6 +40,48 @@ export default class UserProfile extends Component {
       myOrders: '1 in transit',
     };
   }
+
+  _updateSection1 = (activeSection1) => {
+    this.setState({activeSection1});
+  };
+
+  _renderContent = (section) => {
+    return (
+      <View style={{justifyContent: 'center'}}>
+        {/* TODO: Justify Text to center */}
+        <Text style={[styles.descriptionText, {marginHorizontal: 20}]}>
+          {section.content}
+        </Text>
+      </View>
+    );
+  };
+
+  _renderHeader1 = (section) => {
+    return (
+      <View>
+        <View style={styles.userDetails}>
+          <View style={{paddingVertical: 19}}>
+            <Text style={styles.keyText}>{section.title}</Text>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <View
+              style={{
+                marginVertical: 18,
+                marginRight: 6,
+                marginLeft: 19.5,
+              }}>
+              {!this.state.activeSection1.includes(section.id) ? (
+                <Icon size={20} name="right" type="antdesign" />
+              ) : (
+                <Icon size={20} name="down" type="antdesign" />
+              )}
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
 
   //FIXME: Fix the update
   customSetState(stateVal) {
@@ -75,15 +127,21 @@ export default class UserProfile extends Component {
             keyText="Address"
             valueText={this.state.longAddress} stateKey="address" customSetState={(stateVal) => { this.customSetState(stateVal) }}></ProfileText>
           <ProfileText
+            navigation={this.props.navigation}
             keyText="Payment"
             valueText={this.state.payment}
             containIcon={true}></ProfileText>
           <View style={styles.divider}></View>
 
-          <ProfileText
-            navigation={this.props.navigation}
-            keyText="Referral Link"
-            containIcon={true}></ProfileText>
+          <Accordion
+            underlayColor="#fff"
+            sections={this.state.section1}
+            activeSections={this.state.activeSection1}
+            renderHeader={this._renderHeader1}
+            renderContent={this._renderContent}
+            onChange={this._updateSection1}
+            expandMultiple={true}
+          />
           <ProfileText
             navigation={this.props.navigation}
             keyText="TAX ID"
@@ -93,8 +151,8 @@ export default class UserProfile extends Component {
             keyText="My orders"
             containIcon={true}></ProfileText>
           <View style={styles.divider}></View>
-          <ProfileText keyText="Return Request" containIcon={true}></ProfileText>
-          <ProfileText keyText="Settings" containIcon={true}></ProfileText>
+          {/* <ProfileText keyText="Return Request" containIcon={true}></ProfileText>
+          <ProfileText keyText="Settings" containIcon={true}></ProfileText> */}
           <View style={{ paddingBottom: 80, backgroundColor: '#f6f6f6' }}>
             <View
               style={{
@@ -163,5 +221,23 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     paddingVertical: 11,
     width: Width * 0.8,
+  },
+  decriptionText: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 14,
+    color: '#2d2d2f',
+    textAlign: 'justify',
+  },
+  userDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    height: 60,
+  },
+  keyText: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 18,
+    lineHeight: 22,
+    color: '#2d2d2f',
   },
 });

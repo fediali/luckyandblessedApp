@@ -83,7 +83,7 @@ export default class SearchResults extends Component {
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Search" rightIcon="filter"  navigation={this.props.navigation}/>
+        <Header centerText="Search" navigation={this.props.navigation}/>
         <View style={{marginHorizontal: 20}}>
           <View style={styles.inputView}>
             <View
