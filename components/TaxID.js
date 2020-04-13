@@ -8,7 +8,8 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Dimensions
+    Dimensions,
+    Button
 } from 'react-native';
 
 import styles from './Styles/Style'
@@ -60,7 +61,7 @@ class TaxID extends Component {
         console.log(result);
     }
     _onDragEvent() {
-         // This callback will be called when the user enters signature
+        // This callback will be called when the user enters signature
         console.log("dragged");
     }
 
@@ -131,37 +132,56 @@ class TaxID extends Component {
                                 </TextInput>
                             </View>
                             <Text style={[innerStyles.customTextBoldSmall, { marginTop: 15 }]}>This certificate should be furnished to the supplier. Do not send the completed certificate to the Comptroller of Public Accounts.</Text>
-                            <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
+                            <View style={[innerStyles.customInputView, { height:240,paddingHorizontal: 30 }]}>
+                                <Text style={innerStyles.customTextBoldSmall}>Sign Below:</Text>
                                 <SignatureCapture
-                                    style={[{borderRadius: 6, borderColor: '#000',flex: 1 }]}
+                                    style={[{ borderRadius: 6, borderColor: '#000', flex: 1 }]}
                                     ref="sign"
+                                    showBorder={true}
+                                    backgroundColor={'#f6f6f6'}
                                     contentSize="10"
                                     onSaveEvent={this._onSaveEvent}
                                     onDragEvent={this._onDragEvent}
                                     saveImageFileInExtStorage={false}
                                     showNativeButtons={false}
-                                    showTitleLabel={false}
+                                    showTitleLabel={true}
                                     viewMode={"portrait"}
-                                    maxStrokeWidth={10}
-                                    maxStrokeWidth={5} />
-                        </View>
-                        <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
-                        <View style={[styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }]}>
-                            <TouchableOpacity style={[innerStyles.buttonSubmit]}>
-                                <Text
-                                    style={[
-                                        styles.buttonText,
-                                        {
-                                            color: '#ffffff',
-                                            fontSize: 20
-                                        },
-                                    ]}>
-                                    Submit
-                            </Text>
-                            </TouchableOpacity>
-                        </View>
+                                    maxStrokeWidth={8}
+                                    minStrokeWidth={7} />
+                                <TouchableOpacity style={{ width: '60%', height: '25%', backgroundColor: '#22242a', alignSelf:'flex-end',justifyContent:'center', borderRadius:6 , marginTop:10}}
+                                    onPress={this.resetSign.bind(this)}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.buttonText,
+                                            {
+                                                color: '#ffffff',
+                                                fontSize: 20
+                                            },
+                                        ]}>
+                                        
+                                        Reset Sign
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
 
-                    </View>
+                            <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
+                            <View style={[styles.buttonContainer, { paddingHorizontal: 30, marginTop: 20, width: '100%' }]}>
+                                <TouchableOpacity style={[innerStyles.buttonSubmit]}>
+                                    <Text
+                                        style={[
+                                            styles.buttonText,
+                                            {
+                                                color: '#ffffff',
+                                                fontSize: 20
+                                            },
+                                        ]}>
+                                        Submit
+                            </Text>
+                                </TouchableOpacity>
+                            </View>
+
+                        </View>
                     </View>
                 </ScrollView>
             </SafeAreaView >
