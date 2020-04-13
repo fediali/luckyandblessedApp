@@ -40,8 +40,8 @@ class App extends Component {
           }}
         >
           <Stack.Screen name="TaxID" component={TaxID} />
-          <Stack.Screen name="MainPage" component={MainPage} />
-          <Stack.Screen name="Categories" component={Categories} />
+          {/* <Stack.Screen name="MainPage" component={MainPage} />
+          <Stack.Screen name="Categories" component={Categories} /> */}
 
 
           {/* <Stack.Screen name="WalkThrough" component={WalkThrough} />
