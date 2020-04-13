@@ -21,6 +21,7 @@ rightIcon: "search" provide icon name ,supported icon names { info,search,share,
 */
 class Header extends PureComponent {
 
+    lockSubmit=false
     getRightIcon() {
         if (this.props.rightIcon == "info") {
             return < Icon
@@ -79,7 +80,11 @@ class Header extends PureComponent {
                 <View style={{ flex: 1, justifyContent: "space-between", flexDirection: "row", paddingHorizontal: 12, alignItems: "center" }}>
 
                     <View>
-                        <TouchableOpacity onPress={()=>{this.props.navigation.goBack()}}>
+                        <TouchableOpacity onPress={()=>{
+                            if(this.lockSubmit) return;
+                            this.lockSubmit=true
+                            this.props.navigation.goBack()}
+                            }>
                             <Icon
                                 size={30}
                                 name='arrow-left'

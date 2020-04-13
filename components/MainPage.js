@@ -11,7 +11,8 @@ import {
     FlatList,
     ImageBackground,
     ActivityIndicator,
-    InteractionManager
+    InteractionManager,
+    YellowBox
 } from 'react-native'
 
 import styles from './Styles/Style'
@@ -21,6 +22,9 @@ import Footer from '../reusableComponents/Footer'
 
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 
+YellowBox.ignoreWarnings([
+    'Require cycle:'
+  ])
 //FIXME: Headers selection too slow
 class MainPage extends Component {
 

@@ -39,7 +39,9 @@ class App extends Component {
             // ...TransitionPresets.SlideFromRightIOS
           }}
         >
-                    {/* <Stack.Screen name="MainPage" component={MainPage} /> */}
+                  <Stack.Screen name="SignIn" component={SignIn} />
+
+                    <Stack.Screen name="MainPage" component={MainPage} />
                     <Stack.Screen name="Categories" component={Categories} />
 
 
