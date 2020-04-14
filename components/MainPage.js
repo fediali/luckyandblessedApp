@@ -12,11 +12,11 @@ import {
     ImageBackground,
     ActivityIndicator,
     InteractionManager,
-    YellowBox
+    YellowBox,
+    SafeAreaView
 } from 'react-native'
 
 import styles from './Styles/Style'
-import SafeAreaView from 'react-native-safe-area-context'
 import Header from '../reusableComponents/Header'
 import Footer from '../reusableComponents/Footer'
 
