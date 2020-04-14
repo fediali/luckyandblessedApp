@@ -8,57 +8,45 @@ import {
   Dimensions,
   SafeAreaView,
   ScrollView,
+  InteractionManager
 } from 'react-native';
+import Shimmer from 'react-native-shimmer';
 
-//FIXME: Don't know why warning is there.
-//TODO: Check how to make GET DATA generalised.
-//TODO: Error handling from Bad Stuff
+
 export default class WalkThrough extends Component {
   constructor() {
     super();
     this.state = {
       loaded: false,
       images: [],
-      error: null
+      error: null,
+      isReady: false
+
     };
-    this.getData('http://dev.landbw.co/api/mobile');
   }
 
-  getData(url) {
-    let h = new Headers();
-    h.append(
-      'Authorization',
-      'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
-    );
-    h.append('Accept', 'application/json');
-
-    let req = new Request(url, {
-      headers: h,
-      method: 'GET',
-    });
-
-    fetch(req)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          images: data.home.not_logged.sliders,
-          loaded: true,
-        });
-      })
-      .catch(this.badStuff);
-  }
-
-  badStuff = (err) => {
-    this.setState({loaded: true, data: null, error: err.message});
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      var promises = []
+      promises.push(GetData('http://dev.landbw.co/api/mobile'))
+      Promise.all(promises).then((promiseResponses) => {
+          Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+            
+              this.setState({
+                  isReady: true,
+                  images: responses[0].home.not_logged.sliders,
+              })
+          }).catch(ex => { console.log("Inner Promise", ex) })
+      }).catch(ex => { console.log("Outer Promise", ex) })
+    })
   };
 
+
   render() {
-    // console.log(this.state.images)
 
     var featuredImages = [];
 
     this.state.images.forEach((img, index) => {
-      console.log(img);
       featuredImages.push(
         <Image
           style={styles.images}
@@ -69,7 +57,19 @@ export default class WalkThrough extends Component {
       );
     });
 
+    if (!this.state.isReady) {
+      return (
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+              <Shimmer>
+                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+              </Shimmer>
+          </View>
+      )
+
+  }
+
     return (
+      
       <SafeAreaView style={styles.mainContainer}>
         <View style={styles.subContainer}>
           <Image
@@ -77,7 +77,6 @@ export default class WalkThrough extends Component {
             resizeMode="contain"
             source={require('../static/logo-walkthrough.png')}
           />
-          {(this.state.loaded && !this.state.error) ? (
             <View style={styles.imageContainer}>
               <ScrollView
                 horizontal={true}
@@ -85,10 +84,7 @@ export default class WalkThrough extends Component {
                 {featuredImages}
               </ScrollView>
             </View>
-          ) : (
-            <Text>Loading</Text>
-            // {/*TODO: Add Lazy loader*/}
-          )}
+            
 
           <View style={styles.texts}>
             <Text style={styles.newCollection}>New Collection</Text>

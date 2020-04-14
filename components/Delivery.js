@@ -7,7 +7,8 @@ import {
     StyleSheet,
     Dimensions,
     Image,
-    ImageBackground
+    ImageBackground,
+    InteractionManager
 } from 'react-native'
 
 import LogoMedium from './Styles/LogoMedium'
@@ -16,12 +17,39 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../reusableComponents/Header'
 import Footer from '../reusableComponents/Footer'
 import { TextInput } from 'react-native-gesture-handler';
+import Shimmer from 'react-native-shimmer';
 
 class Delivery extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isReady: false
+        }
+    }
+
+
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({isReady: true})
+        })
+      };
 
     render() {
         let width = Dimensions.get('window').width;
         let height = Dimensions.get('window').height;
+
+        if (!this.state.isReady) {
+            return (
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                    <Shimmer>
+                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                    </Shimmer>
+                </View>
+            )
+      
+        }
+        
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <Header  navigation={this.props.navigation}/>
@@ -113,7 +141,7 @@ class Delivery extends Component {
                             backgroundColor: '#f6f6f6',
                             paddingBottom: 20
                         }]}>
-                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]}>
+                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={()=>{this.props.navigation.navigate("Payment")}}>
                                 <Text
                                     style={[
                                         styles.buttonText,

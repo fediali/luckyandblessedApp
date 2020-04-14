@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, FlatList } from "react-native"
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, FlatList, InteractionManager } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,6 +7,7 @@ import CategoriesListItem from "../reusableComponents/CategoriesListItem"
 import { Icon } from 'react-native-elements'
 import CategoriesProductListSingleItem from "../reusableComponents/CategoriesProductListSingleItem"
 import CategoriesProductListDoubleItem from "../reusableComponents/CategoriesProductListDoubleItem"
+import Shimmer from 'react-native-shimmer';
 
 class CategoriesProduct extends Component {
 
@@ -15,9 +16,17 @@ class CategoriesProduct extends Component {
         this.state = {
             selected: 0, //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
             data: [{ imageUrl: { key: "1", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$80.00", name1: "Track Jacket Eggplant" }, { key: "2", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/27.jpg" }, price1: "$108.50", name1: "Athletics Pack W.N.D." }, { imageUrl: { key: "2", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$81.00", name1: "Track Jacket" }],
-            singleItem: true
+            singleItem: true,
+            isReady: false
         }
     }
+
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({isReady: true})
+        })
+    }
+
     changeTextColor(item) {
         this.setState({ selected: item })
     }
@@ -32,6 +41,16 @@ class CategoriesProduct extends Component {
     };
     render() {
         const textItems = ["New Arrivals", "Lookbook", "Kids", "Sale"]
+        if (!this.state.isReady) {
+            return (
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                    <Shimmer>
+                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                    </Shimmer>
+                </View>
+            )
+
+        }
         return (
             <SafeAreaView style={{
                 flex: 1, backgroundColor: "#fff",
@@ -110,7 +129,7 @@ class CategoriesProduct extends Component {
                             contentContainerStyle={styles.container}
                             keyExtractor={(item, index) => item.name1}
                             renderItem={({ item }) => (
-                                <CategoriesProductListSingleItem key={item.name1}
+                                <CategoriesProductListSingleItem key={item.name1} navigation={this.props.navigation}
                                     imageUrl={item.imageUrl} name1={item.name1} price1={item.price1} name2={item.name1} price2={item.price1} />
                             )}
                             ItemSeparatorComponent={this.renderSeparator}

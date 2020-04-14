@@ -59,7 +59,7 @@ class MainPage extends Component {
                     // console.log("\n\n\n")
                     // console.log(responses[1])
                     this.setState({
-                        // isReady: true,
+                        isReady: true,
                         collections: responses[0].home.logged.sliders,
                         categoryList: responses[1].categories
                     })
@@ -70,6 +70,8 @@ class MainPage extends Component {
     }
     onCategorySelect = (index) => {
         this.setState({ selectedCategory: index })
+        {this.props.navigation.navigate("Categories")}
+
     }
 
 

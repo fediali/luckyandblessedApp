@@ -10,34 +10,38 @@ import {
     ScrollView,
     YellowBox,
     Dimensions,
-    Alert
+    Alert,
+    InteractionManager
 } from "react-native"
 import {
     SafeAreaView
 } from 'react-native-safe-area-context'
 
 import itemList from '../data/ShoppingCartData';
-
+import Shimmer from 'react-native-shimmer';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Swipeout from 'react-native-swipeout';
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import styles from './Styles/Style'
 
-YellowBox.ignoreWarnings([
-    'VirtualizedLists should never be nested', // Useless Warning(according to github/SOF)
-])
+// YellowBox.ignoreWarnings([
+//     'VirtualizedLists should never be nested', // Useless Warning(according to github/SOF)
+// ])
 
-
+//TODO: Too long file. FlatListItem should be separated
 class FlatListItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
             activeRowKey: null,
-            currentSelectedColor: this.props.item.hexColor
+            currentSelectedColor: this.props.item.hexColor,
         };
     }
+
     render() {
+
+        
         const swipeSettings = {
             autoClose: true,
             onClose: (secId, rowId, direction) => {
@@ -75,6 +79,8 @@ class FlatListItem extends Component {
             rowId: this.props.index,
             sectionId: 1
         };
+
+       
         return (
             <Swipeout {...swipeSettings}>
                 <View style={[innerStyles.itemView, { backgroundColor: '#ffffff' }]}>
@@ -139,7 +145,7 @@ class FlatListItem extends Component {
                                         renderRow={(option, index, isSelected) => {
                                             return (
                                                 <View>
-                                                    <View style={{ width: 25, height: 25, marginStart: 15, borderRadius: 25, backgroundColor: option, alignSelf: "center" }} />
+                                                    <View style={{ width: 25, height: 25, alignSelf: "center", marginVertical: 10, borderRadius: 25, backgroundColor: option, alignSelf: "center" }} />
                                                 </View>
                                             )
 
@@ -163,9 +169,16 @@ class ShoppingCart extends Component {
         super(props);
         this.state = {
             deletedRowKey: null,
-            itemList: itemList
+            itemList: itemList,
+            isReady: false
         }
     }
+
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({isReady: true})
+        })
+      };
     refreshFlatList = (deletedKey) => {
         this.setState((prevState) => {
             return {
@@ -177,6 +190,17 @@ class ShoppingCart extends Component {
     render() {
 
         const Width = Dimensions.get('window').width;
+
+        if (!this.state.isReady) {
+            return (
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                    <Shimmer>
+                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                    </Shimmer>
+                </View>
+            )
+      
+        }
         const Height = Dimensions.get('window').height;
 
         return (
@@ -249,7 +273,7 @@ class ShoppingCart extends Component {
                             backgroundColor: '#f6f6f6',
                             paddingBottom: 20
                         }]}>
-                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={()=>{this.props.navigation.navigate("Payment")}}>
+                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={()=>{this.props.navigation.navigate("Delivery")}}>
                                 <Text
                                     style={[
                                         styles.buttonText,
@@ -348,7 +372,8 @@ const innerStyles = StyleSheet.create({
         letterSpacing: 0,
         color: "#2d2d2f",
         textAlign: 'left',
-        marginStart: 15
+        marginStart: 15,
+        marginVertical: 10
     },
     promoView: {
         height: Height * 0.073,

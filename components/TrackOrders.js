@@ -6,6 +6,8 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
+  InteractionManager,
+  Image
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -14,12 +16,16 @@ import {Icon} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import OrderProducts from '../reusableComponents/OrdersProduct';
 import Accordion from 'react-native-collapsible/Accordion';
+import Shimmer from 'react-native-shimmer';
 
+
+//FIXME: Accordian ScrollView
 export default class TrackOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeSections: [],
+      isReady: false,
 
       data: [
         {
@@ -110,6 +116,13 @@ export default class TrackOrders extends Component {
     };
   }
 
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+        this.setState({isReady: true})
+    })
+  };
+
+
   _renderHeader = (section) => {
     console.log(section);
 
@@ -151,7 +164,6 @@ export default class TrackOrders extends Component {
     );
   };
 
-  //TODO: How to get colour?
   renderSeparator = (item) => {
     return (
       <View>
@@ -165,6 +177,17 @@ export default class TrackOrders extends Component {
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
+
+    if (!this.state.isReady) {
+      return (
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+              <Shimmer>
+                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+              </Shimmer>
+          </View>
+      )
+
+  }
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Your orders" rightIcon="search"  navigation={this.props.navigation} />

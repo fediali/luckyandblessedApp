@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Image,
   Dimensions,
+  InteractionManager
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -13,6 +14,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/CompanyProfileText';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Icon} from 'react-native-elements';
+import Shimmer from 'react-native-shimmer';
 
 export default class CompanyProfile extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ export default class CompanyProfile extends Component {
     this.state = {
       activeSection1: [],
       activeSection2: [],
+      isReady: false,
 
       section1: [
         {
@@ -76,6 +79,12 @@ export default class CompanyProfile extends Component {
       },
     };
   }
+
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+        this.setState({isReady: true})
+    })
+}
 
   _updateSection1 = (activeSection1) => {
     this.setState({activeSection1});
@@ -151,6 +160,16 @@ export default class CompanyProfile extends Component {
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
+    if (!this.state.isReady) {
+      return (
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+              <Shimmer>
+                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+              </Shimmer>
+          </View>
+      )
+
+  }
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Help & Info"  navigation={this.props.navigation}/>

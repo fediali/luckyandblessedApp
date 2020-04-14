@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-  FlatList
+  FlatList,
+  InteractionManager
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -16,6 +17,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Icon } from 'react-native-elements'
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
+import Shimmer from 'react-native-shimmer';
 
 export default class ProductPage extends Component {
   constructor(props) {
@@ -23,6 +25,7 @@ export default class ProductPage extends Component {
     this.state = {
       recentProducts: _history,
       activeSections: [],
+      isReady: false,
       sections: [
         {
           id: 0,
@@ -62,6 +65,13 @@ export default class ProductPage extends Component {
 
     };
   }
+
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+        this.setState({isReady: true})
+    })
+  };
+
   _updateSections = activeSections => {
     // console.log(activeSections)
     this.setState({ activeSections });
@@ -143,6 +153,16 @@ export default class ProductPage extends Component {
 
   }
   render() {
+    if (!this.state.isReady) {
+      return (
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+              <Shimmer>
+                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+              </Shimmer>
+          </View>
+      )
+
+  }
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText={this.state.data.category} rightIcon="share"  navigation={this.props.navigation}/>

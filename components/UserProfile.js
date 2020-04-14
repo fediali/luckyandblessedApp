@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  InteractionManager
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -14,6 +15,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/UserProfileText';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Icon} from 'react-native-elements';
+import Shimmer from 'react-native-shimmer';
 
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 //TODO: Data on pressing the arrow
@@ -22,7 +24,7 @@ export default class UserProfile extends Component {
     super(props);
     this.state = {
       activeSection1: [],
-
+      isReady: false,
       section1: [
         {
           id: 0,
@@ -41,6 +43,11 @@ export default class UserProfile extends Component {
     };
   }
 
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+        this.setState({isReady: true})
+    })
+}
   _updateSection1 = (activeSection1) => {
     this.setState({activeSection1});
   };
@@ -96,8 +103,19 @@ export default class UserProfile extends Component {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
     console.log("VAL Render", this.state)
+    if (!this.state.isReady) {
+      return (
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+              <Shimmer>
+                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+              </Shimmer>
+          </View>
+      )
+
+  }
 
     return (
+      
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Account" navigation={this.props.navigation} />
         <ScrollView showsVerticalScrollIndicator={false}

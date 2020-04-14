@@ -9,15 +9,44 @@ import {
     ScrollView,
     Dimensions,
     SafeAreaView,
+    InteractionManager
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import LogoSmall from "./Styles/LogoSmall"
+import Shimmer from 'react-native-shimmer';
+
 class Payment extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+             isReady: false
+        }
+    }
+    
+
+    componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({isReady: true})
+        })
+      };
+
     render() {
         let width = Dimensions.get('window').width;
         let height = Dimensions.get('window').height;
+
+        if (!this.state.isReady) {
+            return (
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                    <Shimmer>
+                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                    </Shimmer>
+                </View>
+            )
+      
+        }
         return (
             <SafeAreaView style={styles.mainContainer}>
                 <Header  navigation={this.props.navigation}/>

@@ -120,7 +120,7 @@ class TaxID extends Component {
 
                             <View style={[innerStyles.customInputView, { paddingHorizontal: 30 }]}>
                                 <TextInput
-                                    placeholder="type here"
+                                    placeholder="Type here"
                                     onChangeText={(value1) => this.setState({ value1 })}
                                     style={[innerStyles.customInput]}
                                     editable={true}
@@ -132,8 +132,20 @@ class TaxID extends Component {
                                 </TextInput>
                             </View>
                             <Text style={[innerStyles.customTextBoldSmall, { marginTop: 15 }]}>This certificate should be furnished to the supplier. Do not send the completed certificate to the Comptroller of Public Accounts.</Text>
-                            <View style={[innerStyles.customInputView, { height:240,paddingHorizontal: 30 }]}>
-                                <Text style={innerStyles.customTextBoldSmall}>Sign Below:</Text>
+                            <View style={[innerStyles.customInputView, { height:240,paddingHorizontal: 30, }]}>
+                                <View style={{flexDirection: "row", justifyContent: "space-between",}}>
+                                    <Text style={{ fontFamily: "Avenir-Heavy",
+                                                    fontSize: 16,
+                                                    fontStyle: "normal",
+                                                    lineHeight: 22,
+                                                    letterSpacing: 0,
+                                                    color: "#2d2d2f",
+                                                    marginTop: 5}}>
+                                    Sign Below:</Text>
+                                    <TouchableOpacity onPress={this.resetSign.bind(this)}>
+                                        <Text style={innerStyles.resetSignature}>Reset</Text>
+                                    </TouchableOpacity>                                    
+                                </View>
                                 <SignatureCapture
                                     style={[{ borderRadius: 6, borderColor: '#000', flex: 1 }]}
                                     ref="sign"
@@ -148,21 +160,6 @@ class TaxID extends Component {
                                     viewMode={"portrait"}
                                     maxStrokeWidth={8}
                                     minStrokeWidth={7} />
-                                <TouchableOpacity style={{ width: '60%', height: '25%', backgroundColor: '#22242a', alignSelf:'flex-end',justifyContent:'center', borderRadius:6 , marginTop:10}}
-                                    onPress={this.resetSign.bind(this)}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.buttonText,
-                                            {
-                                                color: '#ffffff',
-                                                fontSize: 20
-                                            },
-                                        ]}>
-                                        
-                                        Reset Sign
-                                    </Text>
-                                </TouchableOpacity>
                             </View>
 
                             <Text style={[innerStyles.customTextBoldSmall, { width: '100%', textAlign: 'left' }]}>Date: 03 - 04 - 2020</Text>
@@ -210,7 +207,6 @@ const innerStyles = StyleSheet.create({
         fontStyle: "normal",
         lineHeight: 22,
         letterSpacing: 0,
-        textAlign: "center",
         color: "#2d2d2f",
         paddingHorizontal: 30,
         marginTop: 5
@@ -248,6 +244,12 @@ const innerStyles = StyleSheet.create({
         height: Height * 0.009,
         width: Width,
         backgroundColor: '#f6f6f6',
+    },
+    resetSignature: {
+        fontFamily: "Avenir-Book",
+        fontSize: 12,
+        lineHeight: 24,
+        color: "#2967FF",
     }
 })
 
