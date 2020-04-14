@@ -104,6 +104,7 @@ export default class SearchResults extends Component {
           </View>
 
           <FlatList
+          showsHorizontalScrollIndicator={false}
             style={{marginTop: 32}}
             data={this.state.data}
             keyExtractor={(item, index) => item.itemNum}

@@ -22,6 +22,8 @@ import Footer from '../reusableComponents/Footer'
 
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 import GetData from "../reusableComponents/API/GetData"
+import ShimmerLogo from "../reusableComponents/ShimmerLogo"
+import Shimmer from 'react-native-shimmer';
 
 YellowBox.ignoreWarnings([
     'Require cycle:'
@@ -47,23 +49,23 @@ class MainPage extends Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            promises = []
+            var promises = []
             promises.push(GetData('http://dev.landbw.co/api/mobile'))
             promises.push(GetData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33'))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
                     // console.log(responses[0])
-                    
+
                     // console.log("\n\n\n")
                     // console.log(responses[1])
                     this.setState({
-                        isReady: true,
+                        // isReady: true,
                         collections: responses[0].home.logged.sliders,
                         categoryList: responses[1].categories
                     })
-                }).catch(ex=>{console.log("Inner Promise",ex)})
-            }).catch(ex=>{console.log("Outer Promise",ex)})
-            
+                }).catch(ex => { console.log("Inner Promise", ex) })
+            }).catch(ex => { console.log("Outer Promise", ex) })
+
         })
     }
     onCategorySelect = (index) => {
@@ -75,7 +77,14 @@ class MainPage extends Component {
         const Width = Dimensions.get('window').width;
         const Height = Dimensions.get('window').height;
         if (!this.state.isReady) {
-            return <ActivityIndicator />
+            return (
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                    <Shimmer>
+                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                    </Shimmer>
+                </View>
+            )
+
         }
         return (
             <SafeAreaView style={[styles.parentContainer]}>
