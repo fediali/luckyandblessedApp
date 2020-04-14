@@ -51,7 +51,7 @@ class MainPage extends Component {
         InteractionManager.runAfterInteractions(() => {
             var promises = []
             promises.push(GetData('http://dev.landbw.co/api/mobile'))
-            promises.push(GetData('http://dev.landbw.co/api/categories?max_nesting_level=2&category_id=33'))
+            promises.push(GetData('http://dev.landbw.co/api/categories?active=1&visible=1&sort_order=position&sort_by=asc&status=A&category_id=33'))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
                     // console.log(responses[0])
