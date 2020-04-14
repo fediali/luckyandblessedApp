@@ -7,10 +7,11 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
+    Share
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 
-//TODO: Fix the centerText position in case there is no right icon
+//TODO: Fix the centerText position in case there is no right icon --- Check i have done some tweaks it would be fixed
 /* How to use Custom Header
 
 Props:
@@ -20,8 +21,28 @@ rightIcon: "search" provide icon name ,supported icon names { info,search,share,
 
 */
 class Header extends PureComponent {
+    lockSubmit = false
 
-    lockSubmit=false
+    onShare = async () => {
+        try {
+          const result = await Share.share({
+            message:
+              'Check amazing products at LUCKY & BLESSED',
+          });
+    
+          if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+              // shared with activity type of result.activityType
+            } else {
+              // shared
+            }
+          } else if (result.action === Share.dismissedAction) {
+            // dismissed
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      };
     getRightIcon() {
         if (this.props.rightIcon == "info") {
             return < Icon
@@ -32,8 +53,8 @@ class Header extends PureComponent {
             />
         }
         else if (this.props.rightIcon == "search") {
-            return(
-                <TouchableOpacity onPress={()=>{this.props.navigation.navigate("SearchResults")}}>
+            return (
+                <TouchableOpacity onPress={() => { this.props.navigation.navigate("SearchResults") }}>
                     < Icon
                         size={30}
                         name='ios-search'
@@ -41,15 +62,20 @@ class Header extends PureComponent {
                         color='#000'
                     />
                 </TouchableOpacity>
-            ) 
+            )
         }
         else if (this.props.rightIcon == "share") {
-            return < Icon
-                size={26}
-                name='upload'
-                type='feather'
-                color='#000'
-            />
+            return (
+                <TouchableOpacity onPress={this.onShare}>
+                    < Icon
+                        size={26}
+                        name='upload'
+                        type='feather'
+                        color='#000'
+                    />
+                </TouchableOpacity>
+            )
+
         }
         else if (this.props.rightIcon == "edit") {
             return < Icon
@@ -75,6 +101,10 @@ class Header extends PureComponent {
                     </Text>
                 </TouchableOpacity>
             )
+        }else{
+            return(
+                <View></View>
+            )
         }
     }
     render() {
@@ -84,11 +114,12 @@ class Header extends PureComponent {
                 <View style={{ flex: 1, justifyContent: "space-between", flexDirection: "row", paddingHorizontal: 12, alignItems: "center" }}>
 
                     <View>
-                        <TouchableOpacity onPress={()=>{
-                            if(this.lockSubmit) return;
-                            this.lockSubmit=true
-                            this.props.navigation.goBack()}
-                            }>
+                        <TouchableOpacity onPress={() => {
+                            if (this.lockSubmit) return;
+                            this.lockSubmit = true
+                            this.props.navigation.goBack()
+                        }
+                        }>
                             <Icon
                                 size={30}
                                 name='arrow-left'
