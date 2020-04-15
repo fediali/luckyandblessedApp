@@ -47,10 +47,30 @@ class CategoriesProduct extends Component {
                 //Adding "All" to categories response
                 console.log("*****************************\n")
                 // console.log(responses[0].products)
-                this.setState({
-                    isReady: true,
-                    products: [...this.state.products, ...responses[0].products]
+                async function parseProducts() {
+                    const tempProducts = []
+                    for (let i=0;i< responses[0].products.length; i++) {
+                        if (responses[0].products[i].main_pair == null) continue;
+                        console.log(responses[0].products[i].main_pair.detailed.image_path)
+                        await tempProducts.push({
+                            product: responses[0].products[i].product,
+                            product_id: responses[0].products[i].product_id,
+                            price: responses[0].products[i].price,
+                            base_price: responses[0].products[i].base_price,
+                            imageUrl: responses[0].products[i].main_pair.detailed.image_path
+                        })
+
+                    }
+                    
+                    return tempProducts
+                }
+                parseProducts().then((prod) => {
+                    this.setState({
+                        isReady: true,
+                        products: [...this.state.products, ...prod],
+                    })
                 })
+
             }).catch(ex => { console.log("Exception: Inner Promise", ex) })
         }).catch(ex => { console.log("Exception: Outer Promise", ex) })
     }
@@ -64,7 +84,6 @@ class CategoriesProduct extends Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.setState({ isReady: true })
             this.loadData()
         })
     }
@@ -90,7 +109,8 @@ class CategoriesProduct extends Component {
         products.main_pair.detailed.image_path
     */
     render() {
-        // console.log(this.state.products[0].main_pair)
+        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+        console.log(this.state.products[0])
         const textItems = ["New Arrivals", "Lookbook", "Kids", "Sale"]
         // if (!this.state.isReady) {
         //     return (
@@ -183,12 +203,12 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListSingleItem key={item.product_id} navigation={this.props.navigation}
-                                        imageUrl={"item.main_pair.detailed.image_path"} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
+                                        imageUrl={{uri: item.imageUrl}} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 onEndReached={this.handleLoadMore}
                                 onEndReachedThreshold={5}
-                                
+
 
                             /> :
                             /*
@@ -207,7 +227,7 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListDoubleItem key={item.product}
-                                        imageUrl={"item.main_pair.detailed.image_path"} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
+                                        imageUrl={{uri: item.imageUrl}} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 columnWrapperStyle={styles.multiRowStyling}
