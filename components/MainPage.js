@@ -28,6 +28,9 @@ import Shimmer from 'react-native-shimmer';
 YellowBox.ignoreWarnings([
     'Require cycle:'
 ])
+
+const baseUrl = "http://dev.landbw.co/";
+
 //FIXME: Headers selection too slow
 class MainPage extends Component {
 
@@ -49,7 +52,6 @@ class MainPage extends Component {
 
 
     componentDidMount() {
-        var baseUrl = "http://dev.landbw.co/";
 
         InteractionManager.runAfterInteractions(() => {
             var promises = []
@@ -59,8 +61,8 @@ class MainPage extends Component {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
                     
                     //Adding "All" to categories response
-                    responses[1].categories.unshift({category_id: "1", category: "All"})
-                    console.log(responses[1])
+                    responses[1].categories.unshift({category_id: "-1", category: "All"})
+                    // console.log(responses[1])
                     this.setState({
                         isReady: true,
                         collections: responses[0].home.logged.sliders,
@@ -71,10 +73,17 @@ class MainPage extends Component {
 
         })
     }
-    onCategorySelect = (index) => {
-        this.setState({ selectedCategory: index })
-        {this.props.navigation.navigate("Categories")}
-
+    onCategorySelect = (c_id, c_name) => {
+        // this.setState({ selectedCategory: index })
+        console.log(c_id)
+        this.setState({ isReady: false })
+        var res = GetData(baseUrl + `api/categories?visible=1&category_id=${c_id}`)
+        console.log(res)
+        console.log(baseUrl + `api/categories?visible=1&category_id=${c_id}`)
+        if (res.categories.length > 0)
+            this.props.navigation.navigate("Categories", {c_id, c_name})
+        else 
+            this.props.navigation.navigate("CategoriesProduct", {c_id, c_name})
     }
 
 
@@ -113,11 +122,12 @@ class MainPage extends Component {
                             renderItem={({ item, index }) => (
                                 <View style={{ height: '2.8%', marginVertical: 10 }}>
                                     {this.state.selectedCategory == index ?
-                                        < TouchableOpacity onPress={() => { this.onCategorySelect(index) }}>
+                                        < TouchableOpacity onPress={() => {                             
+                                            this.onCategorySelect(item.category_id, item.category) }}>
                                             <Text style={[styles.buttonText, { marginHorizontal: 10, color: "#2967ff" }]}>{item.category}</Text>
                                         </TouchableOpacity>
                                         :
-                                        < TouchableOpacity onPress={() => { this.onCategorySelect(index) }}>
+                                        < TouchableOpacity onPress={() => { this.onCategorySelect(item.category_id, item.category)  }}>
                                             <Text style={[styles.buttonText, { marginHorizontal: 10 }]}>{item.category}</Text>
                                         </TouchableOpacity>
                                     }
