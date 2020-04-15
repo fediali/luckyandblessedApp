@@ -157,6 +157,7 @@ export default class ProductPage extends Component {
       return (
         <View style={{ paddingHorizontal: 20 }}>
         <HTML html={this.state.data.full_description} imagesMaxWidth={Dimensions.get('window').width} />
+        <HTML html={this.state.data.composition} imagesMaxWidth={Dimensions.get('window').width} />
 
           {/* <Text style={[styles.descriptionText, { paddingBottom: 20 }]}>{this.state.data.description}</Text>
           <View style={{ flexDirection: "row" }}>
@@ -205,6 +206,8 @@ export default class ProductPage extends Component {
 
   }
   render() {
+
+    console.log(this.state.data.composition)
     var quantityOptionsArray = []
     if (Number(this.state.data.min_qty) > 1) {
       for (let i = this.state.data.qty_step; i <= this.state.data.max_qty; i += this.state.data.qty_step) {
