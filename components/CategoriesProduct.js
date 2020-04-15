@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, FlatList, InteractionManager } from "react-native"
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, FlatList, InteractionManager,ActivityIndicator } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import { ScrollView } from 'react-native-gesture-handler';
@@ -41,21 +41,23 @@ class CategoriesProduct extends Component {
     };
     render() {
         const textItems = ["New Arrivals", "Lookbook", "Kids", "Sale"]
-        if (!this.state.isReady) {
-            return (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
-                    <Shimmer>
-                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
-                    </Shimmer>
-                </View>
-            )
+        // if (!this.state.isReady) {
+        //     return (
+        //         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+        //             <Shimmer>
+        //                 <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+        //             </Shimmer>
+        //         </View>
+        //     )
 
-        }
+        // }
         return (
             <SafeAreaView style={{
                 flex: 1, backgroundColor: "#fff",
             }}>
                 <Header  navigation={this.props.navigation} rightIcon="search" />
+                {  !this.state.isReady?<View style={{flex:1,alignItems:"center",justifyContent:"center"}}><ActivityIndicator size="large"/></View>:
+
                 <View style={styles.mainContainer}>
                     <View style={{ paddingHorizontal: 20 }}>
                         <Text style={{ fontSize: 30, lineHeight: 36, fontFamily: "Montserrat-Bold", color: "#2d2d2f" }}>Jeans</Text>
@@ -155,7 +157,7 @@ class CategoriesProduct extends Component {
                     }
 
                 </View>
-
+                }
                 <Footer  navigation={this.props.navigation}/>
             </SafeAreaView >
         )

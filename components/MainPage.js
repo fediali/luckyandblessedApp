@@ -59,9 +59,9 @@ class MainPage extends Component {
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-                    
+
                     //Adding "All" to categories response
-                    responses[1].categories.unshift({category_id: "-1", category: "All"})
+                    responses[1].categories.unshift({ category_id: "-1", category: "All" })
                     // console.log(responses[1])
                     this.setState({
                         isReady: true,
@@ -77,13 +77,19 @@ class MainPage extends Component {
         // this.setState({ selectedCategory: index })
         console.log(c_id)
         this.setState({ isReady: false })
-        var res = GetData(baseUrl + `api/categories?visible=1&category_id=${c_id}`)
-        console.log(res)
-        console.log(baseUrl + `api/categories?visible=1&category_id=${c_id}`)
-        if (res.categories.length > 0)
-            this.props.navigation.navigate("Categories", {c_id, c_name})
-        else 
-            this.props.navigation.navigate("CategoriesProduct", {c_id, c_name})
+        GetData(baseUrl + `api/categories?visible=1&category_id=${c_id}`).then(res => res.json()).then(
+            (responses) => {
+                console.log(responses)
+                console.log(baseUrl + `api/categories?visible=1&category_id=${c_id}`)
+                if (responses.categories.length > 0)
+                    this.props.navigation.navigate("Categories", { c_id, c_name })
+                else
+                    this.props.navigation.navigate("CategoriesProduct", { c_id, c_name })
+                setTimeout(() => { this.setState({ isReady: true }) }, 1000)
+
+            }
+        )
+
     }
 
 
@@ -122,12 +128,13 @@ class MainPage extends Component {
                             renderItem={({ item, index }) => (
                                 <View style={{ height: '2.8%', marginVertical: 10 }}>
                                     {this.state.selectedCategory == index ?
-                                        < TouchableOpacity onPress={() => {                             
-                                            this.onCategorySelect(item.category_id, item.category) }}>
+                                        < TouchableOpacity onPress={() => {
+                                            this.onCategorySelect(item.category_id, item.category)
+                                        }}>
                                             <Text style={[styles.buttonText, { marginHorizontal: 10, color: "#2967ff" }]}>{item.category}</Text>
                                         </TouchableOpacity>
                                         :
-                                        < TouchableOpacity onPress={() => { this.onCategorySelect(item.category_id, item.category)  }}>
+                                        < TouchableOpacity onPress={() => { this.onCategorySelect(item.category_id, item.category) }}>
                                             <Text style={[styles.buttonText, { marginHorizontal: 10 }]}>{item.category}</Text>
                                         </TouchableOpacity>
                                     }
