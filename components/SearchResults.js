@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Icon} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Icon } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //TODO: Check for the last row
 export default class SearchResults extends Component {
@@ -77,14 +77,14 @@ export default class SearchResults extends Component {
   }
 
   renderSeparator = (item) => {
-    return <View style={{paddingBottom: 20}} />;
+    return <View style={{ paddingBottom: 20 }} />;
   };
 
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Search" navigation={this.props.navigation}/>
-        <View style={{marginHorizontal: 20}}>
+        <Header centerText="Search" navigation={this.props.navigation} />
+        <View style={{ marginHorizontal: 20 }}>
           <View style={styles.inputView}>
             <View
               style={{
@@ -104,20 +104,20 @@ export default class SearchResults extends Component {
           </View>
 
           <FlatList
-          showsHorizontalScrollIndicator={false}
-            style={{marginTop: 32}}
+            showsVerticalScrollIndicator={false}
+            style={{ marginTop: 15 }}
             data={this.state.data}
             keyExtractor={(item, index) => item.itemNum}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <TouchableOpacity
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row'}}>
+                style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row' }}>
                   <Image
                     style={[styles.thumbnailImage]}
                     resizeMode="contain"
                     source={require('../static/item_cart1.png')}
                   />
-                  <View style={{flexDirection: 'column', marginLeft: 20}}>
+                  <View style={{ flexDirection: 'column', marginLeft: 20 }}>
                     <Text style={styles.itemNameText}>{item.itemName}</Text>
                     <Text style={[styles.categoriesText]}>{item.category}</Text>
                     <Text style={[styles.priceText]}>{item.totalPrice}</Text>
@@ -127,9 +127,9 @@ export default class SearchResults extends Component {
             )}
             ItemSeparatorComponent={this.renderSeparator}
           />
-          <View style={{marginBottom: 60}}></View>
+          <View style={{ marginBottom: 60 }}></View>
         </View>
-        <Footer  navigation={this.props.navigation}/>
+        <Footer navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }

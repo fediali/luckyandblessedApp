@@ -25,9 +25,13 @@ import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import styles from './Styles/Style'
 
-// YellowBox.ignoreWarnings([
-//     'VirtualizedLists should never be nested', // Useless Warning(according to github/SOF)
-// ])
+
+YellowBox.ignoreWarnings([
+    'Warning: componentWillMount is deprecated',
+    'Warning: componentWillMount has been renamed',
+    'Warning: componentWillReceiveProps is deprecated',
+    'Warning: componentWillUpdate is deprecated',
+    ]);
 
 //TODO: Too long file. FlatListItem should be separated
 class FlatListItem extends Component {
@@ -41,7 +45,7 @@ class FlatListItem extends Component {
 
     render() {
 
-        
+
         const swipeSettings = {
             autoClose: true,
             onClose: (secId, rowId, direction) => {
@@ -80,7 +84,7 @@ class FlatListItem extends Component {
             sectionId: 1
         };
 
-       
+
         return (
             <Swipeout {...swipeSettings}>
                 <View style={[innerStyles.itemView, { backgroundColor: '#ffffff' }]}>
@@ -136,7 +140,7 @@ class FlatListItem extends Component {
 
                                     <ModalDropdown
                                         hexCode={this.state.currentSelectedColor}
-                                        onSelect={(index) => { this.setState({currentSelectedColor: this.props.item.availableColors[index]}) }}
+                                        onSelect={(index) => { this.setState({ currentSelectedColor: this.props.item.availableColors[index] }) }}
                                         options={this.props.item.availableColors}
                                         defaultValue={this.props.item.selectedColor}
                                         style={{ flex: 1, padding: 5, borderRadius: 6 }}
@@ -176,15 +180,91 @@ class ShoppingCart extends Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.setState({isReady: true})
+            this.setState({ isReady: true })
         })
-      };
+    };
     refreshFlatList = (deletedKey) => {
         this.setState((prevState) => {
             return {
                 deletedRowKey: deletedKey
             };
         });
+    }
+
+
+    renderFlatListHeader = () => {
+        var listHeader = (
+            <View>
+                <View style={{ paddingHorizontal: 20 }}>
+                    <Text style={innerStyles.mainTextBold}>Your bag</Text>
+                    <Text style={innerStyles.lightText}>You have 3 items in your bag</Text>
+                </View>
+                <View style={[styles.line, { marginTop: 10 }]} />
+            </View>
+        );
+        return listHeader;
+    }
+
+    renderFlatListFooter = () => {
+        var listFooter = (
+            <View style={{ paddingBottom: 60 }}>
+                <View style={innerStyles.promoView}>
+                    <View style={styles.inputView}>
+                        <TextInput style={[styles.input]} placeholder="Gift Or Promo code" />
+                        <TouchableOpacity style={[innerStyles.giftButton]}>
+                            <Text
+                                style={[
+                                    styles.buttonText,
+                                    {
+                                        color: '#ffffff',
+                                        fontSize: 18,
+                                        lineHeight: 22,
+                                    },
+                                ]}>
+                                Add
+                                        </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={[styles.line, { marginTop: 20 }]} />
+                <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
+
+
+
+                <View style={innerStyles.showOrderView}>
+                    <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+                        <Text style={[styles.buttonText, { fontSize: 18, lineHeight: 30 }]}>Order amount: </Text>
+                        <Text style={[styles.buttonText, { flex: 1, fontSize: 18, lineHeight: 30, textAlign: 'right' }]}>$103.88</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
+                        <Text style={[innerStyles.lightText, { lineHeight: 30 }]}>Gift card / Promo applied:</Text>
+                        <Text style={[innerStyles.lightText, { flex: 1, lineHeight: 30, textAlign: 'right' }]}>-$55.02</Text>
+                    </View>
+                </View>
+                <View style={[styles.buttonContainer, {
+                    paddingHorizontal: 30, width: '100%',
+                    backgroundColor: '#f6f6f6',
+                    paddingBottom: 20
+                }]}>
+                    <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={() => { this.props.navigation.navigate("Delivery") }}>
+                        <Text
+                            style={[
+                                styles.buttonText,
+                                {
+                                    color: '#ffffff',
+                                    fontSize: 18,
+                                    lineHeight: 22
+                                },
+                            ]}>
+                            Checkout
+                                </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+
+        return listFooter;
     }
 
     render() {
@@ -199,97 +279,30 @@ class ShoppingCart extends Component {
                     </Shimmer>
                 </View>
             )
-      
+
         }
         const Height = Dimensions.get('window').height;
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Header  navigation={this.props.navigation}/>
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{
-                        backgroundColor: "#fff",
-                        flexGrow: 1,
-                        justifyContent: 'space-between',
-                        paddingBottom: 60
-                    }}>
-                    <View style={styles.parentContainer}>
-                        <View style={{ paddingHorizontal: 20 }}>
-                            <Text style={innerStyles.mainTextBold}>Your bag</Text>
-                            <Text style={innerStyles.lightText}>You have 3 items in your bag</Text>
-                        </View>
-                        <View style={[styles.line, { marginTop: 10 }]} />
-                        <FlatList
-                            keyExtractor={(item) => item.itemNum.toString()}
-                            data={this.state.itemList}
-                            numColumns={1}
-                            renderItem={({ item, index }) => {
-                                return (
-                                    <FlatListItem item={item} index={index} parentFlatList={this}>
+                <Header navigation={this.props.navigation} />
+                <View style={styles.parentContainer}>
+                    <FlatList
+                        keyExtractor={(item) => item.itemNum.toString()}
+                        data={this.state.itemList}
+                        numColumns={1}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <FlatListItem item={item} index={index} parentFlatList={this}>
 
-                                    </FlatListItem>
-                                )
-                            }}
-
-                        />
-
-                        <View style={innerStyles.promoView}>
-                            <View style={styles.inputView}>
-                                <TextInput style={[styles.input]} placeholder="Gift Or Promo code" />
-                                <TouchableOpacity style={[innerStyles.giftButton]}>
-                                    <Text
-                                        style={[
-                                            styles.buttonText,
-                                            {
-                                                color: '#ffffff',
-                                                fontSize: 18,
-                                                lineHeight: 22,
-                                            },
-                                        ]}>
-                                        Add
-                                        </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                        <View style={[styles.line, { marginTop: 20 }]} />
-                        <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
-
-
-
-                        <View style={innerStyles.showOrderView}>
-                            <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
-                                <Text style={[styles.buttonText, { fontSize: 18, lineHeight: 30 }]}>Order amount: </Text>
-                                <Text style={[styles.buttonText, { flex: 1, fontSize: 18, lineHeight: 30, textAlign: 'right' }]}>$103.88</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
-                                <Text style={[innerStyles.lightText, { lineHeight: 30 }]}>Gift card / Promo applied:</Text>
-                                <Text style={[innerStyles.lightText, { flex: 1, lineHeight: 30, textAlign: 'right' }]}>-$55.02</Text>
-                            </View>
-                        </View>
-                        <View style={[styles.buttonContainer, {
-                            paddingHorizontal: 30, width: '100%',
-                            backgroundColor: '#f6f6f6',
-                            paddingBottom: 20
-                        }]}>
-                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={()=>{this.props.navigation.navigate("Delivery")}}>
-                                <Text
-                                    style={[
-                                        styles.buttonText,
-                                        {
-                                            color: '#ffffff',
-                                            fontSize: 18,
-                                            lineHeight: 22
-                                        },
-                                    ]}>
-                                    Checkout
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </ScrollView>
-                <Footer selected="Shop" navigation={this.props.navigation}/>
+                                </FlatListItem>
+                            )
+                        }}
+                        ListHeaderComponent={this.renderFlatListHeader}
+                        ListFooterComponent={this.renderFlatListFooter}
+                    />
+                </View>
+                <Footer selected="Shop" navigation={this.props.navigation} />
             </SafeAreaView>
         )
     }
