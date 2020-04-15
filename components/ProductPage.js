@@ -9,7 +9,8 @@ import {
   Dimensions,
   ScrollView,
   FlatList,
-  InteractionManager
+  InteractionManager,
+  TextInput
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -18,6 +19,10 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import { Icon } from 'react-native-elements'
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 import Shimmer from 'react-native-shimmer';
+import GetData from "../reusableComponents/API/GetData"
+import HTML from 'react-native-render-html';
+
+const baseUrl = "http://dev.landbw.co/";
 
 export default class ProductPage extends Component {
   constructor(props) {
@@ -36,31 +41,43 @@ export default class ProductPage extends Component {
           name: "Size guide"
         }
       ],
+      selectedQuantity: 0,
       data: {
-        category: 'Jeans',
-        itemName1: 'RED MINT AZTEC BELL',
-        itemName2: 'SLEEVE BLAZER',
-        totalPrice: '$48.99',
-        unitPrice: '$19.40',
-        color: ['Turquoise', 'Green Snake'],
-        minQuantity: 6,
-        Quanitities: [6, 12, 18],
-        imageURL: [
-          { img1: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-          { img2: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-          { img3: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-        ],
+        productName: "",
+        price: 0,
+        mainImage: "",
+        secondaryImages: [""],
+        min_qty: 0,
+        max_qty: 0,
+        qty_step: 0,
+        full_description: "",
+        composition: "",
+      }
+      // data: {
+      //   category: 'Jeans',
+      //   itemName1: 'RED MINT AZTEC BELL',
+      //   itemName2: 'SLEEVE BLAZER',
+      //   totalPrice: '$48.99',
+      //   unitPrice: '$19.40',
+      //   color: ['Turquoise', 'Green Snake'],
+      //   minQuantity: 6,
+      //   Quanitities: [6, 12, 18],
+      //   imageURL: [
+      //     { img1: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
+      //     { img2: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
+      //     { img3: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
+      //   ],
 
-        description: {
-          details:
-            "This women's tank top is designed to help you stay cool. It's made of stretchy and breathable fabric that moves heat away from your skin",
-          composition: '84% nylon, 16% elastane',
-          sizes: '2XS, XS, S, M, L, XL',
-          gender: 'Women',
-          country: 'Indonesia',
-          code: 'EC142690002',
-        },
-      },
+      //   description: {
+      //     details:
+      //       "This women's tank top is designed to help you stay cool. It's made of stretchy and breathable fabric that moves heat away from your skin",
+      //     composition: '84% nylon, 16% elastane',
+      //     sizes: '2XS, XS, S, M, L, XL',
+      //     gender: 'Women',
+      //     country: 'Indonesia',
+      //     code: 'EC142690002',
+      //   },
+      // },
       // mainImage: {require('../static/demoimg1-walkthrough.png'},
 
     };
@@ -68,7 +85,40 @@ export default class ProductPage extends Component {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-        this.setState({isReady: true})
+      // "api/products/"+this.props.route.params.id
+      //category will also come from this.props.route.params.category
+
+      GetData(baseUrl + `api/products/54188`).then(res => res.json()).then(
+        (response) => {
+          console.log(response)
+          async function getArray() {
+            const secondaryImagesArray = []
+            for (var key in response.image_pairs) {
+              console.log(response.image_pairs[key].detailed.image_path)
+              await secondaryImagesArray.push(response.image_pairs[key].detailed.image_path)
+            }
+            return secondaryImagesArray
+          }
+          getArray().then((secondaryImagesArray) => {
+            // console.log(secondaryImagesArray)
+            this.setState({
+              isReady: true,
+              data: {
+                productName: response.product,
+                price: response.price,
+                mainImage: response.main_pair.detailed.image_path,
+                secondaryImages: secondaryImagesArray,
+                min_qty: Number(response.min_qty),
+                max_qty: 18,//TODO: Number(response.max_qty) currently 0 from api
+                qty_step: Number(response.qty_step),
+                full_description: response.full_description,
+                composition: response.composition,
+              }
+
+            })
+          })
+
+        })
     })
   };
 
@@ -106,7 +156,9 @@ export default class ProductPage extends Component {
     if (section.name == "Description") {
       return (
         <View style={{ paddingHorizontal: 20 }}>
-          <Text style={[styles.descriptionText, { paddingBottom: 20 }]}>{this.state.data.description.details}</Text>
+        <HTML html={this.state.data.full_description} imagesMaxWidth={Dimensions.get('window').width} />
+
+          {/* <Text style={[styles.descriptionText, { paddingBottom: 20 }]}>{this.state.data.description}</Text>
           <View style={{ flexDirection: "row" }}>
             <View>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -130,15 +182,15 @@ export default class ProductPage extends Component {
                 <Text style={styles.descriptionText}>Code  </Text>
               </View>
             </View>
-            <View>
-              <Text style={styles.descriptionText}>{this.state.data.description.composition}</Text>
+            <View> */}
+              {/* <Text style={styles.descriptionText}>{this.state.data.description.composition}</Text>
               <Text style={styles.descriptionText}>{this.state.data.description.sizes}</Text>
               <Text style={styles.descriptionText}>{this.state.data.description.gender}</Text>
               <Text style={styles.descriptionText}>{this.state.data.description.country}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.code}</Text>
+              <Text style={styles.descriptionText}>{this.state.data.description.code}</Text> */}
 
-            </View>
-          </View>
+            {/* </View> */}
+          {/* </View> */}
 
         </View>
       )
@@ -153,49 +205,54 @@ export default class ProductPage extends Component {
 
   }
   render() {
+    var quantityOptionsArray = []
+    if (Number(this.state.data.min_qty) > 1) {
+      for (let i = this.state.data.qty_step; i <= this.state.data.max_qty; i += this.state.data.qty_step) {
+        quantityOptionsArray.push(i.toString())
+      }
+    }
+
+    // console.log("_______"+this.state.data.mainImage)
     if (!this.state.isReady) {
       return (
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
-              <Shimmer>
-                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
-              </Shimmer>
-          </View>
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+          <Shimmer>
+            <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+          </Shimmer>
+        </View>
       )
 
-  }
+    }
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText={this.state.data.category} rightIcon="share"  navigation={this.props.navigation}/>
+        <Header centerText={this.state.data.category} rightIcon="share" navigation={this.props.navigation} />
         <ScrollView>
           <View style={{ marginBottom: 10 }}>
             <View style={[styles.subContainer,]}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View>
                   <Text style={styles.itemNameText}>
-                    {this.state.data.itemName1}
-                  </Text>
-                  <Text style={styles.itemNameText}>
-                    {this.state.data.itemName2}
+                    {this.state.data.productName}
                   </Text>
                 </View>
                 <View>
                   <Text style={[styles.itemNameText, { alignSelf: "flex-end" }]}>
-                    {this.state.data.unitPrice}
+                    ${Number(this.state.data.price).toFixed(2)}
                   </Text>
                   <Text style={styles.subText}>
-                    Prepack Price: {this.state.data.totalPrice}
+                    Prepack Price: ${Number(this.state.data.price).toFixed(2)}
                   </Text>
                 </View>
               </View>
               <View style={{}}>
 
-                <Image style={styles.mainPicture} source={require('../static/demoimg1-walkthrough.png')}></Image>
+                <Image style={styles.mainPicture} source={{ uri: this.state.data.mainImage }}></Image>
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{ marginVertical: 15, }}>
-                  <Image style={styles.thumbnail} source={require('../static/demoimg2-walkthrough.png')}></Image>
-                  <Image style={styles.thumbnail} source={require('../static/demoimg2-walkthrough.png')}></Image>
-                  <Image style={styles.thumbnail} source={require('../static/demoimg2-walkthrough.png')}></Image>
-                  <Image style={styles.thumbnail} source={require('../static/demoimg2-walkthrough.png')}></Image>
-                  <Image style={styles.thumbnail} source={require('../static/demoimg2-walkthrough.png')}></Image>
+                  {this.state.data.secondaryImages.map((val, num) => {
+                    return (
+                      <Image key={num} style={styles.thumbnail} source={{ uri: val }}></Image>
+                    )
+                  })}
                 </ScrollView>
               </View>
 
@@ -203,19 +260,30 @@ export default class ProductPage extends Component {
             <View style={{ backgroundColor: "#f6f6f6", paddingTop: 20, paddingHorizontal: 20 }}>
               <View style={{ flexDirection: "row" }}>
                 <View style={{ flex: 1 }}>
-                  <ModalDropdown
-                    onSelect={(index) => { console.log(index) }}
-                    options={["5", '5.5', "6", "6.5", '7', "8"]}
-                    defaultValue={"5"}
-                    style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
-                    dropdownStyle={{ width: "25%", height: 134 }}
-                    textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
-                    renderRow={(option, index, isSelected) => {
-                      return (
-                        <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
-                      )
-                    }}
-                  />
+                  {
+                    this.state.data.min_qty == 1 ?
+                      <TextInput
+                        style={styles.valueText}
+                        placeholder={"Quantity"}
+                        onChangeText={text => this.setState({ selectedQuantity:text})}
+
+                      />
+                      :
+                      <ModalDropdown
+                        onSelect={(index) => { this.setState({ selectedQuantity: quantityOptionsArray[index] }) }}
+                        options={quantityOptionsArray}
+                        defaultValue={this.state.data.min_qty}
+                        style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
+                        dropdownStyle={{ width: 0.25*Width, height: 134 }}
+                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                        renderRow={(option, index, isSelected) => {
+                          return (
+                            <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
+                          )
+                        }}
+                      />
+                  }
+
                 </View>
 
                 <View style={{ flex: 2, marginLeft: 20 }}>
@@ -223,7 +291,7 @@ export default class ProductPage extends Component {
                     hexCode={"#000"}
                     defaultValue={"Green"}
                     style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
-                    dropdownStyle={{ width: "50%", height: 134 }}
+                    dropdownStyle={{ width: 0.5*Width, height: 134 }}
                     textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
                     renderRow={(option, index, isSelected) => {
                       return (
@@ -234,7 +302,7 @@ export default class ProductPage extends Component {
                 </View>
               </View>
               <View style={{ alignItems: "center", marginTop: 17 }}>
-                <Text style={{ textAlign: "center", fontSize: 14, fontFamily: "Avenir-Book", lineHeight: 18, color: "#8d8d8e" }}>Minimum quantity for "RED MINT AZTEC BELL SLEEVE BLAZER" is 6.</Text>
+                <Text style={{ textAlign: "center", fontSize: 14, fontFamily: "Avenir-Book", lineHeight: 18, color: "#8d8d8e" }}>Minimum quantity for "{this.state.data.productName}" is {this.state.data.min_qty}.</Text>
                 <TouchableOpacity style={{ backgroundColor: "#2967ff", alignItems: "center", width: "100%", borderRadius: 6, marginVertical: 15 }}>
                   <Text style={{ color: "#fff", paddingVertical: 11, fontSize: 18, lineHeight: 22, fontFamily: "Montserrat-SemiBold" }}>
                     Add to cart
@@ -254,7 +322,7 @@ export default class ProductPage extends Component {
               expandMultiple={true}
             />
             {/* history header*/}
-            <View style={[styles.headerView,{marginTop:20,marginBottom:10}]}>
+            <View style={[styles.headerView, { marginTop: 20, marginBottom: 10 }]}>
               <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left' }]}>Similar Products</Text>
               <TouchableOpacity style={{ flex: 0.5, textAlign: 'right' }}>
                 <Text style={[styles.showAllText]}>Show All</Text>
@@ -278,7 +346,7 @@ export default class ProductPage extends Component {
             />
           </View>
         </ScrollView>
-        <Footer  navigation={this.props.navigation}/>
+        <Footer navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }
@@ -311,6 +379,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     color: '#2d2d2f',
+    maxWidth: 0.54 * Width
   },
   subText: {
     fontFamily: 'Avenir-Book',
@@ -354,5 +423,17 @@ const styles = StyleSheet.create({
     height: Height * 0.28,
     borderRadius: 6,
   },
- 
+  valueText: {
+    backgroundColor: "#fff",
+    padding: 10,
+    width: 0.25*Width, 
+    borderRadius: 6,
+    fontFamily: "Montserrat-Medium",
+    fontSize: 16,
+    lineHeight: 20,
+    justifyContent:"center",
+    textAlign:"center"
+
+  }
+
 });
