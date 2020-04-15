@@ -47,17 +47,20 @@ class MainPage extends Component {
 
     }
 
+
     componentDidMount() {
+        var baseUrl = "http://dev.landbw.co/";
+
         InteractionManager.runAfterInteractions(() => {
             var promises = []
-            promises.push(GetData('http://dev.landbw.co/api/mobile'))
-            promises.push(GetData('http://dev.landbw.co/api/categories?active=1&visible=1&sort_order=position&sort_by=asc&status=A&category_id=33'))
+            promises.push(GetData(baseUrl + 'api/mobile'))
+            promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-                    // console.log(responses[0])
-
-                    // console.log("\n\n\n")
-                    // console.log(responses[1])
+                    
+                    //Adding "All" to categories response
+                    responses[1].categories.unshift({category_id: "1", category: "All"})
+                    console.log(responses[1])
                     this.setState({
                         isReady: true,
                         collections: responses[0].home.logged.sliders,
