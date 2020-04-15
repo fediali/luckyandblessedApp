@@ -59,7 +59,7 @@ class App extends Component {
           <Stack.Screen name="TaxID" component={TaxID} />
           <Stack.Screen name="ConformationSuccess" component={ConfirmationSuccess} />
           <Stack.Screen name="SearchResults" component={SearchResults} />
-          <Stack.Screen name="ProductPage" component={ProductPage} />
+          {/* <Stack.Screen name="ProductPage" component={ProductPage} /> */}
 
           {/* <Stack.Screen name="Filter" component={Filter} />
           <Stack.Screen name="ColorPicker" component={ColorPicker} /> */}
