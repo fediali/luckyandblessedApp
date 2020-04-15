@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput,InteractionManager, TouchableOpacity, SafeAreaView, FlatList } from "react-native"
+import { View, Text, Image, StyleSheet, TextInput,InteractionManager, TouchableOpacity, SafeAreaView, FlatList, ActivityIndicator } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import { ScrollView } from 'react-native-gesture-handler';
@@ -37,22 +37,22 @@ class Categories extends Component {
     };
     render() {
         const textItems = ["New Arrivals", "Lookbook", "Kids", "Sale"]
-        if (!this.state.isReady) {
-            return (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
-                    <Shimmer>
-                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
-                    </Shimmer>
-                </View>
-            )
+        // if (!this.state.isReady) {
+        //     return (
+        //         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+        //             <Shimmer>
+        //                 <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+        //             </Shimmer>
+        //         </View>
+        //     )
 
-        }
+        // }
         return (
             <SafeAreaView style={{
                 flex: 1, backgroundColor: "#fff",
             }}>
                 <Header  navigation={this.props.navigation} centerText="Women" rightIcon="search" />
-                <View>
+                {/* <View>
                     <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 10 }}>
                         {textItems.map((item, key) => (
                             <TouchableOpacity style={{ paddingVertical: 7 }} key={key} onPress={() => { this.changeTextColor(key) }}>
@@ -66,7 +66,10 @@ class Categories extends Component {
                                 }
                             </TouchableOpacity>
                         ))}
-                    </View>
+                    </View> */}
+                            {  !this.state.isReady?<View style={{flex:1,alignItems:"center",justifyContent:"center"}}><ActivityIndicator size="large"/></View>:
+
+
                     <FlatList
                         style={{ paddingTop: 10, marginBottom: 150 }}
                         data={this.state.data}
@@ -78,8 +81,8 @@ class Categories extends Component {
                         ItemSeparatorComponent={this.renderSeparator}
 
                     />
-
-                </View>
+                }
+                {/* </View> */}
                 <Footer  navigation={this.props.navigation}/>
             </SafeAreaView >
         )
