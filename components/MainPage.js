@@ -72,7 +72,7 @@ class MainPage extends Component {
         })
     }
     onCategorySelect = (index) => {
-        this.setState({ selectedCategory: index })
+        // this.setState({ selectedCategory: index })
         {this.props.navigation.navigate("Categories")}
 
     }
