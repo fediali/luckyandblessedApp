@@ -1,5 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, FlatList, InteractionManager,ActivityIndicator } from "react-native"
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    SafeAreaView,
+    FlatList,
+    InteractionManager,
+    ActivityIndicator
+} from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import { ScrollView } from 'react-native-gesture-handler';
@@ -9,21 +20,52 @@ import CategoriesProductListSingleItem from "../reusableComponents/CategoriesPro
 import CategoriesProductListDoubleItem from "../reusableComponents/CategoriesProductListDoubleItem"
 import Shimmer from 'react-native-shimmer';
 
+const baseUrl = "http://dev.landbw.co/";
+
 class CategoriesProduct extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
+            iteratedPage: 1,
+            cid: 41,
             selected: 0, //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
-            data: [{ imageUrl: { key: "1", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$80.00", name1: "Track Jacket Eggplant" }, { key: "2", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/27.jpg" }, price1: "$108.50", name1: "Athletics Pack W.N.D." }, { imageUrl: { key: "2", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$81.00", name1: "Track Jacket" }],
+            // data: [{ imageUrl: { key: "1", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$80.00", name1: "Track Jacket Eggplant" }, { key: "2", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/27.jpg" }, price1: "$108.50", name1: "Athletics Pack W.N.D." }, { imageUrl: { key: "2", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$81.00", name1: "Track Jacket" }],
+            products: [],
             singleItem: true,
             isReady: false
         }
     }
 
+    loadData = () => {
+        var promises = []
+        // promises.push(GetData(baseUrl + 'api/mobile'))
+        promises.push(GetData(baseUrl + 'api/products?cid=41&page=' + this.state.iteratedPage))
+        Promise.all(promises).then((promiseResponses) => {
+            Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+
+                //Adding "All" to categories response
+                console.log("*****************************\n")
+                // console.log(responses[0].products)
+                this.setState({
+                    isReady: true,
+                    products: [...this.state.products, ...responses[0].products]
+                })
+            }).catch(ex => { console.log("Exception: Inner Promise", ex) })
+        }).catch(ex => { console.log("Exception: Outer Promise", ex) })
+    }
+
+    handleLoadMore = () => {
+        this.setState({
+            iteratedPage: this.state.iteratedPage + 1,
+        })
+        this.loadData();
+    }
+
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.setState({isReady: true})
+            this.setState({ isReady: true })
+            this.loadData()
         })
     }
 
@@ -39,7 +81,16 @@ class CategoriesProduct extends Component {
             />
         );
     };
+
+    /*
+        product,
+        product_id,
+        price,
+        base_price,
+        products.main_pair.detailed.image_path
+    */
     render() {
+        // console.log(this.state.products[0].main_pair)
         const textItems = ["New Arrivals", "Lookbook", "Kids", "Sale"]
         // if (!this.state.isReady) {
         //     return (
@@ -55,110 +106,121 @@ class CategoriesProduct extends Component {
             <SafeAreaView style={{
                 flex: 1, backgroundColor: "#fff",
             }}>
-                <Header  navigation={this.props.navigation} rightIcon="search" />
-                {  !this.state.isReady?<View style={{flex:1,alignItems:"center",justifyContent:"center"}}><ActivityIndicator size="large"/></View>:
+                <Header navigation={this.props.navigation} rightIcon="search" />
+                {!this.state.isReady ? <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}><ActivityIndicator size="large" /></View> :
 
-                <View style={styles.mainContainer}>
-                    <View style={{ paddingHorizontal: 20 }}>
-                        <Text style={{ fontSize: 30, lineHeight: 36, fontFamily: "Montserrat-Bold", color: "#2d2d2f" }}>Jeans</Text>
-                        <Text style={{ fontSize: 14, lineHeight: 18, color: "#8d8d8e", fontFamily: "Avenir-Book" }}>2,825 products</Text>
-                    </View>
-                    <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingTop: 10, paddingBottom: 5 }}>
-                        <Image style={{ width: 23, height: 23 }} source={require('../static/listIcon.png')}></Image>
+                    <View style={styles.mainContainer}>
+                        <View style={{ paddingHorizontal: 20 }}>
+                            <Text style={{ fontSize: 30, lineHeight: 36, fontFamily: "Montserrat-Bold", color: "#2d2d2f" }}>Jeans</Text>
+                            <Text style={{ fontSize: 14, lineHeight: 18, color: "#8d8d8e", fontFamily: "Avenir-Book" }}>2,825 products</Text>
+                        </View>
+                        <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingTop: 10, paddingBottom: 5 }}>
+                            <Image style={{ width: 23, height: 23 }} source={require('../static/listIcon.png')}></Image>
 
-                        <Text style={{ paddingLeft: 13, fontSize: 16, lineHeight: 20, color: "#2d2d2f", fontFamily: "Montserrat-Medium" }}>Clothing</Text>
-                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}>
-                            <TouchableOpacity style={{ paddingLeft: 10 }} onPress={() => { this.setState({ singleItem: false }) }}>
-                                {this.state.singleItem ?
-                                    <Icon
-                                        size={25}
-                                        name='grid'
-                                        type='feather'
-                                        color="#2d2d2f"
+                            <Text style={{ paddingLeft: 13, fontSize: 16, lineHeight: 20, color: "#2d2d2f", fontFamily: "Montserrat-Medium" }}>Clothing</Text>
+                            <View style={{ flex: 1, flexDirection: "row", justifyContent: "flex-end" }}>
+                                <TouchableOpacity style={{ paddingLeft: 10 }} onPress={() => { this.setState({ singleItem: false }) }}>
+                                    {this.state.singleItem ?
+                                        <Icon
+                                            size={25}
+                                            name='grid'
+                                            type='feather'
+                                            color="#2d2d2f"
 
-                                    /> :
-                                    <Icon
-                                        size={25}
-                                        name='grid'
-                                        type='feather'
-                                        color="#2967ff"
-                                    />
-                                }
+                                        /> :
+                                        <Icon
+                                            size={25}
+                                            name='grid'
+                                            type='feather'
+                                            color="#2967ff"
+                                        />
+                                    }
 
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{ paddingLeft: 10 }} onPress={() => { this.setState({ singleItem: true }) }}>
-                                {this.state.singleItem ?
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ paddingLeft: 10 }} onPress={() => { this.setState({ singleItem: true }) }}>
+                                    {this.state.singleItem ?
 
-                                    <Icon
-                                        style={{ alignSelf: "flex-end" }}
-                                        size={25}
-                                        name='square'
-                                        type='feather'
-                                        color="#2967ff"
+                                        <Icon
+                                            style={{ alignSelf: "flex-end" }}
+                                            size={25}
+                                            name='square'
+                                            type='feather'
+                                            color="#2967ff"
 
-                                    /> :
-                                    <Icon
-                                        style={{ alignSelf: "flex-end" }}
-                                        size={25}
-                                        name='square'
-                                        type='feather'
-                                        color="#2d2d2f"
+                                        /> :
+                                        <Icon
+                                            style={{ alignSelf: "flex-end" }}
+                                            size={25}
+                                            name='square'
+                                            type='feather'
+                                            color="#2d2d2f"
 
-                                    />
-                                }
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{ paddingLeft: 10 }}>
-                                {/* <Icon
+                                        />
+                                    }
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ paddingLeft: 10 }}>
+                                    {/* <Icon
                                     size={25}
                                     name='grid'
                                     type='feather'
                                     color="#2d2d2f"
 
                                 /> */}
-                                <Image style={{ height: 22, width: 22 }} source={require("../static/Filter.png")} />
-                            </TouchableOpacity>
+                                    <Image style={{ height: 22, width: 22 }} source={require("../static/Filter.png")} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
+                        {/* <CategoriesProductListSingleItem imageUrl={this.state.data[0].imageUrl} name1={this.state.data[0].name1} price1={this.state.data[0].price1} name2={this.state.data[0].name1} price2={this.state.data[0].price1}/> */}
+
+                        {/* Checking whether the Flatlist should render single item row or double item row */}
+                        {this.state.singleItem ?
+                            // changing Key to rerender the FlatList component as chaning numColumn require rerender
+                            // Single Item row FlatList
+                            <FlatList
+                                key={(this.state.singleItem ? 'h' : 'v')}
+                                data={this.state.products}
+                                contentContainerStyle={styles.container}
+                                keyExtractor={(item, index) => item.product_id}
+                                renderItem={({ item }) => (
+                                    <CategoriesProductListSingleItem key={item.product_id} navigation={this.props.navigation}
+                                        imageUrl={"item.main_pair.detailed.image_path"} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
+                                )}
+                                ItemSeparatorComponent={this.renderSeparator}
+                                onEndReached={this.handleLoadMore}
+                                onEndReachedThreshold={5}
+                                
+
+                            /> :
+                            /*
+                            product,
+            product_id,
+            price,
+            base_price,
+            products.main_pair.detailed.image_path
+                            */
+                            // Double Item row FlatList
+                            <FlatList
+                                key={(this.state.singleItem ? 'h' : 'v')}
+                                data={this.state.products}
+                                contentContainerStyle={styles.container}
+                                numColumns={2}
+                                keyExtractor={(item, index) => item.product_id}
+                                renderItem={({ item }) => (
+                                    <CategoriesProductListDoubleItem key={item.product}
+                                        imageUrl={"item.main_pair.detailed.image_path"} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
+                                )}
+                                ItemSeparatorComponent={this.renderSeparator}
+                                columnWrapperStyle={styles.multiRowStyling}
+                                onEndReached={this.handleLoadMore}
+                                onEndReachedThreshold={5}
+
+                            />
+
+                        }
+
                     </View>
-                    {/* <CategoriesProductListSingleItem imageUrl={this.state.data[0].imageUrl} name1={this.state.data[0].name1} price1={this.state.data[0].price1} name2={this.state.data[0].name1} price2={this.state.data[0].price1}/> */}
-
-                    {/* Checking whether the Flatlist should render single item row or double item row */}
-                    {this.state.singleItem ?
-                        // changing Key to rerender the FlatList component as chaning numColumn require rerender
-                        // Single Item row FlatList
-                        <FlatList
-                            key={(this.state.singleItem ? 'h' : 'v')}
-                            data={this.state.data}
-                            contentContainerStyle={styles.container}
-                            keyExtractor={(item, index) => item.name1}
-                            renderItem={({ item }) => (
-                                <CategoriesProductListSingleItem key={item.name1} navigation={this.props.navigation}
-                                    imageUrl={item.imageUrl} name1={item.name1} price1={item.price1} name2={item.name1} price2={item.price1} />
-                            )}
-                            ItemSeparatorComponent={this.renderSeparator}
-
-                        /> :
-                        // Double Item row FlatList
-                        <FlatList
-                            key={(this.state.singleItem ? 'h' : 'v')}
-                            data={this.state.data}
-                            contentContainerStyle={styles.container}
-                            numColumns={2}
-                            keyExtractor={(item, index) => item.name1}
-                            renderItem={({ item }) => (
-                                <CategoriesProductListDoubleItem key={item.name1}
-                                    imageUrl={item.imageUrl} name1={item.name1} price1={item.price1} name2={item.name1} price2={item.price1} />
-                            )}
-                            ItemSeparatorComponent={this.renderSeparator}
-                            columnWrapperStyle={styles.multiRowStyling}
-
-
-                        />
-
-                    }
-
-                </View>
                 }
-                <Footer  navigation={this.props.navigation}/>
+                <Footer navigation={this.props.navigation} />
             </SafeAreaView >
         )
     }
