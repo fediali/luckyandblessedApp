@@ -125,7 +125,7 @@ class Categories extends Component {
                         renderItem={({ item }) => (
                             // FIXME: item.main_pair.detailed.image_path not working
                             <CategoriesListItem key={item.category} navigation={this.props.navigation}
-                                imageUrl={'http://dev.landbw.co/images/detailed/39/26_8sq6-me.jpg'} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
+                                imageUrl={{uri: 'http://dev.landbw.co/images/detailed/39/26_8sq6-me.jpg'}} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
                         )}
                         ItemSeparatorComponent={this.renderSeparator}
 
