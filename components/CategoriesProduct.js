@@ -28,6 +28,7 @@ class CategoriesProduct extends Component {
         super(props)
         this.state = {
             iteratedPage: 1,
+            
             cid: this.props.route.params.cid,
             cname: this.props.route.params.cname,
             selected: 0, //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
@@ -35,46 +36,40 @@ class CategoriesProduct extends Component {
             products: [],
             singleItem: true,
             isReady: false,
-            totalProducts: 0
+            totalProducts: 0,
+            isLoadingMoreListData: false
         }
     }
 
     loadData = (cid) => {
         var promises = []
-        // promises.push(GetData(baseUrl + 'api/mobile'))
         promises.push(GetData(baseUrl + `api/products?cid=${cid}&page=` + this.state.iteratedPage))
         Promise.all(promises).then((promiseResponses) => {
             Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-
-                //Adding "All" to categories response
-                console.log("*****************************\n")
-                console.log(responses[0].params.total_items)
-
-                // console.log(responses[0].products)
+                this.setState({ totalProducts: parseFloat(responses[0].params.total_items).toFixed(0) })
                 async function parseProducts() {
                     const tempProducts = []
-                    for (let i=0;i< responses[0].products.length; i++) {
+                    for (let i = 0; i < responses[0].products.length; i++) {
                         if (responses[0].products[i].main_pair == null) continue;
-                        console.log(responses[0].products[i].main_pair.detailed.image_path)
+                        console.log(responses[0].products[i].product_id)
 
                         await tempProducts.push({
                             product: responses[0].products[i].product,
                             product_id: responses[0].products[i].product_id,
-                            price: responses[0].products[i].price,
-                            base_price: responses[0].products[i].base_price,
+                            price: parseFloat(responses[0].products[i].price).toFixed(2),
+                            base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
                             imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-                            totalProducts: responses[0].params.total_items ////FIXME: Add product length
                         })
 
                     }
-                    
+
                     return tempProducts
                 }
                 parseProducts().then((prod) => {
                     this.setState({
                         isReady: true,
                         products: [...this.state.products, ...prod],
-                        totalProducts: prod.totalProducts
+                        isLoadingMoreListData: false,
                     })
                 })
 
@@ -83,15 +78,18 @@ class CategoriesProduct extends Component {
     }
 
     handleLoadMore = () => {
-        this.setState({
-            iteratedPage: this.state.iteratedPage + 1,
-        })
-        this.loadData(this.state.cid);
+        if (this.state.iteratedPage < Math.ceil(this.state.totalProducts / 10)) {//59/10 = 5.9~6
+
+            this.setState({
+                iteratedPage: this.state.iteratedPage + 1,
+                isLoadingMoreListData: true,
+            })
+            this.loadData(this.state.cid);
+        }
     }
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            console.log(this.state.cid)
             this.loadData(this.state.cid)
         })
     }
@@ -109,17 +107,21 @@ class CategoriesProduct extends Component {
         );
     };
 
-    /*
-        product,
-        product_id,
-        price,
-        base_price,
-        products.main_pair.detailed.image_path
-    */
+
+    ListFooter = () => {
+
+        var listFooter = (
+            (this.state.isLoadingMoreListData) ?
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                    <ActivityIndicator size="large" />
+                </View>
+                :
+                null
+        )
+        return listFooter
+    }
+
     render() {
-        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        console.log(this.state.products[0])
-        const textItems = ["New Arrivals", "Lookbook", "Kids", "Sale"]
         // if (!this.state.isReady) {
         //     return (
         //         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
@@ -198,7 +200,6 @@ class CategoriesProduct extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        {/* <CategoriesProductListSingleItem imageUrl={this.state.data[0].imageUrl} name1={this.state.data[0].name1} price1={this.state.data[0].price1} name2={this.state.data[0].name1} price2={this.state.data[0].price1}/> */}
 
                         {/* Checking whether the Flatlist should render single item row or double item row */}
                         {this.state.singleItem ?
@@ -211,12 +212,12 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                                        imageUrl={{uri: item.imageUrl}} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$"+item.price} name2={item.product} price2={"$"+item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 onEndReached={this.handleLoadMore}
                                 onEndReachedThreshold={5}
-
+                                ListFooterComponent={this.ListFooter}
 
                             /> :
                             /*
@@ -235,12 +236,13 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                                        imageUrl={{uri: item.imageUrl}} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 columnWrapperStyle={styles.multiRowStyling}
                                 onEndReached={this.handleLoadMore}
                                 onEndReachedThreshold={5}
+                                ListFooterComponent={this.ListFooter}
 
                             />
 
