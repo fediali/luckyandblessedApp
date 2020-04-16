@@ -66,8 +66,8 @@ class CategoriesProduct extends Component {
                             price: parseFloat(responses[0].products[i].price).toFixed(2),
                             base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
                             imageUrl: responses[0].products[i].main_pair.detailed.image_path,
+                            product_brand: responses[0].products[i].product_features["2"].variant
                         })
-
                     }
 
                     return tempProducts
@@ -218,7 +218,7 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$"+item.price} name2={item.product} price2={"$"+item.base_price} />
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$"+item.price} name2={item.product_brand} price2={"$"+item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 onEndReached={this.handleLoadMore}
@@ -242,7 +242,7 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$"+item.price} name2={item.product} price2={"$"+item.base_price} />
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$"+item.price} name2={item.product_brand} price2={"$"+item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 columnWrapperStyle={styles.multiRowStyling}
