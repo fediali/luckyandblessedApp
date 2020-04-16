@@ -73,18 +73,22 @@ class MainPage extends Component {
 
         })
     }
-    onCategorySelect = (c_id, c_name) => {
+    onCategorySelect = (cid, cname) => {
         // this.setState({ selectedCategory: index })
-        console.log(c_id)
+        // console.log(cid)
         this.setState({ isReady: false })
-        GetData(baseUrl + `api/categories?visible=1&category_id=${c_id}`).then(res => res.json()).then(
+        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true`).then(res => res.json()).then(
             (responses) => {
-                console.log(responses)
-                console.log(baseUrl + `api/categories?visible=1&category_id=${c_id}`)
-                if (responses.categories.length > 0)
-                    this.props.navigation.navigate("Categories", { c_id, c_name })
+                // console.log(responses)
+                console.log(baseUrl + `api/categories?visible=1&category_id=${cid}`)
+                if (responses.categories.length > 0){
+                    var subCat = responses.categories;
+                    // console.log(subCat)
+                    this.props.navigation.navigate("Categories", { cid: cid, cname: cname, subCats: subCat, categoryList: this.state.categoryList}); //SubCat of the selected category and categoryList is main categories
+                }
+
                 else
-                    this.props.navigation.navigate("CategoriesProduct", { c_id, c_name })
+                    this.props.navigation.navigate("CategoriesProduct", { cid, cname })
                 setTimeout(() => { this.setState({ isReady: true }) }, 1000)
 
             }

@@ -31,6 +31,7 @@ export default class ProductPage extends Component {
       recentProducts: _history,
       activeSections: [],
       isReady: false,
+      // tagsStyles: {h3: { color:'#f00'}, ul: {margin: '5px'}} , //FIXME: Add Styling
       sections: [
         {
           id: 0,
@@ -42,6 +43,7 @@ export default class ProductPage extends Component {
         }
       ],
       selectedQuantity: 0,
+      pid: this.props.route.params.pid,
       data: {
         productName: "",
         price: 0,
@@ -88,7 +90,7 @@ export default class ProductPage extends Component {
       // "api/products/"+this.props.route.params.id
       //category will also come from this.props.route.params.category
 
-      GetData(baseUrl + `api/products/54188`).then(res => res.json()).then(
+      GetData(baseUrl + `api/products/${this.state.pid}`).then(res => res.json()).then(
         (response) => {
           console.log(response)
           async function getArray() {
@@ -157,7 +159,7 @@ export default class ProductPage extends Component {
       return (
         <View style={{ paddingHorizontal: 20 }}>
         <HTML html={this.state.data.full_description} imagesMaxWidth={Dimensions.get('window').width} />
-        <HTML html={this.state.data.composition} imagesMaxWidth={Dimensions.get('window').width} />
+        <HTML html={this.state.data.composition} tagsStyles={this.state.tagsStyles} imagesMaxWidth={Dimensions.get('window').width} />
 
           {/* <Text style={[styles.descriptionText, { paddingBottom: 20 }]}>{this.state.data.description}</Text>
           <View style={{ flexDirection: "row" }}>

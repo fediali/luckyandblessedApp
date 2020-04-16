@@ -22,42 +22,49 @@ import Shimmer from 'react-native-shimmer';
 
 const baseUrl = "http://dev.landbw.co/";
 
+//TODO: Add product length
 class CategoriesProduct extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
             iteratedPage: 1,
-            cid: 41,
+            cid: this.props.route.params.cid,
+            cname: this.props.route.params.cname,
             selected: 0, //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
             // data: [{ imageUrl: { key: "1", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$80.00", name1: "Track Jacket Eggplant" }, { key: "2", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/27.jpg" }, price1: "$108.50", name1: "Athletics Pack W.N.D." }, { imageUrl: { key: "2", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$81.00", name1: "Track Jacket" }],
             products: [],
             singleItem: true,
-            isReady: false
+            isReady: false,
+            totalProducts: 0
         }
     }
 
-    loadData = () => {
+    loadData = (cid) => {
         var promises = []
         // promises.push(GetData(baseUrl + 'api/mobile'))
-        promises.push(GetData(baseUrl + 'api/products?cid=41&page=' + this.state.iteratedPage))
+        promises.push(GetData(baseUrl + `api/products?cid=${cid}&page=` + this.state.iteratedPage))
         Promise.all(promises).then((promiseResponses) => {
             Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
 
                 //Adding "All" to categories response
                 console.log("*****************************\n")
+                console.log(responses[0].params.total_items)
+
                 // console.log(responses[0].products)
                 async function parseProducts() {
                     const tempProducts = []
                     for (let i=0;i< responses[0].products.length; i++) {
                         if (responses[0].products[i].main_pair == null) continue;
                         console.log(responses[0].products[i].main_pair.detailed.image_path)
+
                         await tempProducts.push({
                             product: responses[0].products[i].product,
                             product_id: responses[0].products[i].product_id,
                             price: responses[0].products[i].price,
                             base_price: responses[0].products[i].base_price,
-                            imageUrl: responses[0].products[i].main_pair.detailed.image_path
+                            imageUrl: responses[0].products[i].main_pair.detailed.image_path,
+                            totalProducts: responses[0].params.total_items ////FIXME: Add product length
                         })
 
                     }
@@ -68,6 +75,7 @@ class CategoriesProduct extends Component {
                     this.setState({
                         isReady: true,
                         products: [...this.state.products, ...prod],
+                        totalProducts: prod.totalProducts
                     })
                 })
 
@@ -79,12 +87,13 @@ class CategoriesProduct extends Component {
         this.setState({
             iteratedPage: this.state.iteratedPage + 1,
         })
-        this.loadData();
+        this.loadData(this.state.cid);
     }
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.loadData()
+            console.log(this.state.cid)
+            this.loadData(this.state.cid)
         })
     }
 
@@ -131,8 +140,8 @@ class CategoriesProduct extends Component {
 
                     <View style={styles.mainContainer}>
                         <View style={{ paddingHorizontal: 20 }}>
-                            <Text style={{ fontSize: 30, lineHeight: 36, fontFamily: "Montserrat-Bold", color: "#2d2d2f" }}>Jeans</Text>
-                            <Text style={{ fontSize: 14, lineHeight: 18, color: "#8d8d8e", fontFamily: "Avenir-Book" }}>2,825 products</Text>
+                            <Text style={{ fontSize: 30, lineHeight: 36, fontFamily: "Montserrat-Bold", color: "#2d2d2f" }}>{this.state.cname}</Text>
+                            <Text style={{ fontSize: 14, lineHeight: 18, color: "#8d8d8e", fontFamily: "Avenir-Book" }}>{this.state.totalProducts} products</Text>
                         </View>
                         <View style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingTop: 10, paddingBottom: 5 }}>
                             <Image style={{ width: 23, height: 23 }} source={require('../static/listIcon.png')}></Image>
@@ -202,7 +211,7 @@ class CategoriesProduct extends Component {
                                 contentContainerStyle={styles.container}
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
-                                    <CategoriesProductListSingleItem key={item.product_id} navigation={this.props.navigation}
+                                    <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
                                         imageUrl={{uri: item.imageUrl}} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
@@ -226,7 +235,7 @@ class CategoriesProduct extends Component {
                                 numColumns={2}
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
-                                    <CategoriesProductListDoubleItem key={item.product}
+                                    <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
                                         imageUrl={{uri: item.imageUrl}} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
