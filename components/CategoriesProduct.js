@@ -33,28 +33,34 @@ class CategoriesProduct extends Component {
             cid: this.props.route.params.cid,
             cname: this.props.route.params.cname,
             selected: 0, //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
-            // data: [{ imageUrl: { key: "1", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$80.00", name1: "Track Jacket Eggplant" }, { key: "2", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/27.jpg" }, price1: "$108.50", name1: "Athletics Pack W.N.D." }, { imageUrl: { key: "2", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, price1: "$81.00", name1: "Track Jacket" }],
             products: [],
             singleItem: true,
             isReady: false,
             totalProducts: 0,
+            totalItemsPerRequest: 0,
             isLoadingMoreListData: false
         }
     }
 
     loadData = (cid) => {
         var promises = []
+        console.log(cid)
         promises.push(GetData(baseUrl + `api/products?cid=${cid}&page=` + this.state.iteratedPage))
+        let itr = this.state.iteratedPage
         Promise.all(promises).then((promiseResponses) => {
             Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-                this.setState({ totalProducts: parseFloat(responses[0].params.total_items).toFixed(0) })
+                this.setState({ 
+                    totalProducts: parseFloat(responses[0].params.total_items).toFixed(0),
+                    totalItemsPerRequest: parseFloat(responses[0].params.items_per_page).toFixed(0),
+                })
                 async function parseProducts() {
                     const tempProducts = []
                     for (let i = 0; i < responses[0].products.length; i++) {
                         if (responses[0].products[i].main_pair == null) continue;
-                        console.log(responses[0].products[i].product_id)
+                        console.log("Itr=> "+itr+"   PID=> "+responses[0].products[i].product_id)
 
                         await tempProducts.push({
+                            
                             product: responses[0].products[i].product,
                             product_id: responses[0].products[i].product_id,
                             price: parseFloat(responses[0].products[i].price).toFixed(2),
@@ -79,13 +85,12 @@ class CategoriesProduct extends Component {
     }
 
     handleLoadMore = () => {
-        if (this.state.iteratedPage < Math.ceil(this.state.totalProducts / 10)) {//59/10 = 5.9~6
+        if (this.state.iteratedPage < Math.ceil(this.state.totalProducts / this.state.totalItemsPerRequest)) {//59/10 = 5.9~6
 
             this.setState({
                 iteratedPage: this.state.iteratedPage + 1,
                 isLoadingMoreListData: true,
-            })
-            this.loadData(this.state.cid);
+            },this.loadData(this.state.cid))
         }
     }
 
@@ -237,7 +242,7 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={item.price} name2={item.product} price2={item.base_price} />
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$"+item.price} name2={item.product} price2={"$"+item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 columnWrapperStyle={styles.multiRowStyling}
