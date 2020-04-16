@@ -90,7 +90,7 @@ class CategoriesProduct extends Component {
             this.setState({
                 iteratedPage: this.state.iteratedPage + 1,
                 isLoadingMoreListData: true,
-            },this.loadData(this.state.cid))
+            },()=>this.loadData(this.state.cid))
         }
     }
 
