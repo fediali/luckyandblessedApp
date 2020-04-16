@@ -158,8 +158,8 @@ export default class ProductPage extends Component {
     if (section.name == "Description") {
       return (
         <View style={{ paddingHorizontal: 20 }}>
-        <HTML html={this.state.data.full_description} imagesMaxWidth={Dimensions.get('window').width} />
-        <HTML html={this.state.data.composition} tagsStyles={this.state.tagsStyles} imagesMaxWidth={Dimensions.get('window').width} />
+          <HTML html={this.state.data.full_description} imagesMaxWidth={Dimensions.get('window').width} />
+          <HTML html={this.state.data.composition} tagsStyles={this.state.tagsStyles} imagesMaxWidth={Dimensions.get('window').width} />
 
           {/* <Text style={[styles.descriptionText, { paddingBottom: 20 }]}>{this.state.data.description}</Text>
           <View style={{ flexDirection: "row" }}>
@@ -186,13 +186,13 @@ export default class ProductPage extends Component {
               </View>
             </View>
             <View> */}
-              {/* <Text style={styles.descriptionText}>{this.state.data.description.composition}</Text>
+          {/* <Text style={styles.descriptionText}>{this.state.data.description.composition}</Text>
               <Text style={styles.descriptionText}>{this.state.data.description.sizes}</Text>
               <Text style={styles.descriptionText}>{this.state.data.description.gender}</Text>
               <Text style={styles.descriptionText}>{this.state.data.description.country}</Text>
               <Text style={styles.descriptionText}>{this.state.data.description.code}</Text> */}
 
-            {/* </View> */}
+          {/* </View> */}
           {/* </View> */}
 
         </View>
@@ -245,17 +245,23 @@ export default class ProductPage extends Component {
                     ${Number(this.state.data.price).toFixed(2)}
                   </Text>
                   <Text style={styles.subText}>
-                    Prepack Price: ${Number(this.state.data.price).toFixed(2)}
+                    Prepack Price: ${Number(this.state.data.price*this.state.data.min_qty).toFixed(2)}
                   </Text>
                 </View>
               </View>
               <View style={{}}>
 
-                <Image style={styles.mainPicture} source={{ uri: this.state.data.mainImage }}></Image>
+                <View style={[styles.mainPicture,{backgroundColor:"#f6f6f6",borderRadius:6}]}>
+                  <Image style={styles.mainPicture} source={{ uri: this.state.data.mainImage }} resizeMode="contain"></Image>
+
+                </View>
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{ marginVertical: 15, }}>
                   {this.state.data.secondaryImages.map((val, num) => {
                     return (
-                      <Image key={num} style={styles.thumbnail} source={{ uri: val }}></Image>
+                      <TouchableOpacity key={num} onPress={() => { this.setState({ data: { ...this.state.data, mainImage: val } }) }}>
+
+                        <Image style={this.state.data.mainImage == val ? [styles.thumbnail, { borderColor: "#2967ff", borderWidth: 2 }] : styles.thumbnail} source={{ uri: val }}></Image>
+                      </TouchableOpacity>
                     )
                   })}
                 </ScrollView>
@@ -270,7 +276,7 @@ export default class ProductPage extends Component {
                       <TextInput
                         style={styles.valueText}
                         placeholder={"Quantity"}
-                        onChangeText={text => this.setState({ selectedQuantity:text})}
+                        onChangeText={text => this.setState({ selectedQuantity: text })}
 
                       />
                       :
@@ -279,7 +285,7 @@ export default class ProductPage extends Component {
                         options={quantityOptionsArray}
                         defaultValue={this.state.data.min_qty}
                         style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
-                        dropdownStyle={{ width: 0.25*Width, height: 134 }}
+                        dropdownStyle={{ width: 0.25 * Width, height: 134 }}
                         textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
                         renderRow={(option, index, isSelected) => {
                           return (
@@ -296,7 +302,7 @@ export default class ProductPage extends Component {
                     hexCode={"#000"}
                     defaultValue={"Green"}
                     style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
-                    dropdownStyle={{ width: 0.5*Width, height: 134 }}
+                    dropdownStyle={{ width: 0.5 * Width, height: 134 }}
                     textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
                     renderRow={(option, index, isSelected) => {
                       return (
@@ -393,7 +399,7 @@ const styles = StyleSheet.create({
     color: '#8d8d8e',
     marginVertical: 8
   },
-  mainPicture: { width: Width * 0.893, height: Width * 0.893, borderRadius: 6 },
+  mainPicture: { width: Width * 0.893, height: Width * 0.893 },
   thumbnail: { width: Width * 0.28, height: Width * 0.28, borderRadius: 6, marginRight: 15 },
   descriptionText: { fontSize: 16, fontFamily: "Avenir-Book", lineHeight: 22, color: "#2d2d2f" },
   headerView: {
@@ -431,13 +437,13 @@ const styles = StyleSheet.create({
   valueText: {
     backgroundColor: "#fff",
     padding: 10,
-    width: 0.25*Width, 
+    width: 0.25 * Width,
     borderRadius: 6,
     fontFamily: "Montserrat-Medium",
     fontSize: 16,
     lineHeight: 20,
-    justifyContent:"center",
-    textAlign:"center"
+    justifyContent: "center",
+    textAlign: "center"
 
   }
 
