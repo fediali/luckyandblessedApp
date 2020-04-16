@@ -97,7 +97,6 @@ export default class CompanyProfile extends Component {
   _renderContent = (section) => {
     return (
       <View style={{justifyContent: 'center'}}>
-        {/* TODO: Justify Text to center */}
         <Text style={[styles.descriptionText, {marginHorizontal: 20}]}>
           {section.content}
         </Text>

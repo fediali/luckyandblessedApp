@@ -15,7 +15,6 @@ class SignIn extends Component {
                             width: "53%",
                             height: "35%",
                         }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
-                        {/* TODO: Image has to be changed with orignal one */}
                         <View style={styles.emailInputView}>
                             <TextInput style={styles.input} placeholder="Email" />
                         </View>

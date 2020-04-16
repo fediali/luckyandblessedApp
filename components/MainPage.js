@@ -31,7 +31,6 @@ YellowBox.ignoreWarnings([
 
 const baseUrl = "http://dev.landbw.co/";
 
-//FIXME: Headers selection too slow
 class MainPage extends Component {
 
     constructor(props) {

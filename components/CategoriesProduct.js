@@ -22,7 +22,6 @@ import Shimmer from 'react-native-shimmer';
 
 const baseUrl = "http://dev.landbw.co/";
 
-//TODO: Add product length
 class CategoriesProduct extends Component {
 
     constructor(props) {
