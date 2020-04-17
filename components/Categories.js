@@ -115,7 +115,7 @@ class Categories extends Component {
 
                         />
                     </View>
-                            {  (!this.state.isReady && !this.state.nextScreen) ?<View style={{flex:1,alignItems:"center",justifyContent:"center"}}><ActivityIndicator size="large"/></View>:
+                            {  (!this.state.isReady && !this.state.nextScreen) ?<View style={{}}><ActivityIndicator size="large"/></View>:
 
 
                     <FlatList
