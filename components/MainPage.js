@@ -69,7 +69,7 @@ class MainPage extends Component {
                         categoryList: responses[1].categories
                     })
                 }).catch(ex => { console.log("Inner Promise", ex) })
-            }).catch(ex => { console.log("Outer Promise", ex) })
+            }).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.props.navigation.navigate("SignIn") })
 
         })
     }
@@ -81,10 +81,10 @@ class MainPage extends Component {
             (responses) => {
                 // console.log(responses)
                 console.log(baseUrl + `api/categories?visible=1&category_id=${cid}`)
-                if (responses.categories.length > 0){
+                if (responses.categories.length > 0) {
                     var subCat = responses.categories;
                     // console.log(subCat)
-                    this.props.navigation.navigate("Categories", { cid: cid, cname: cname, subCats: subCat, categoryList: this.state.categoryList}); //SubCat of the selected category and categoryList is main categories
+                    this.props.navigation.navigate("Categories", { cid: cid, cname: cname, subCats: subCat, categoryList: this.state.categoryList }); //SubCat of the selected category and categoryList is main categories
                 }
 
                 else
@@ -92,7 +92,7 @@ class MainPage extends Component {
                 setTimeout(() => { this.setState({ isReady: true }) }, 1000)
 
             }
-        )
+        ).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
 
     }
 
