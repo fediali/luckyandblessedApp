@@ -124,8 +124,15 @@ class Categories extends Component {
                         keyExtractor={(item, index) => item.category_id}
                         renderItem={({ item }) => (
                             // FIXME: item.main_pair.detailed.image_path not working
+                            
+                            (item.main_pair.detailed.image_path) ? 
+
+                            <CategoriesListItem key={item.category} navigation={this.props.navigation}
+                            imageUrl={{uri: item.main_pair.detailed.image_path}} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
+                            :
                             <CategoriesListItem key={item.category} navigation={this.props.navigation}
                                 imageUrl={{uri: 'http://dev.landbw.co/images/detailed/39/26_8sq6-me.jpg'}} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
+                            
                         )}
                         ItemSeparatorComponent={this.renderSeparator}
 
