@@ -120,7 +120,6 @@ class SignUp extends Component {
   }
 
   signUpClick = () => {
-    console.log("sjbjsdbjdbjsdjbsdbjsdjbjb")
     if (this.isValid()) {
       //call signup API here
     }
