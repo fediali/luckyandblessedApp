@@ -62,7 +62,7 @@ class MainPage extends Component {
 
                     //Adding "All" to categories response
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
-                    // console.log(responses[1])
+                    console.log(responses[1])
                     this.setState({
                         isReady: true,
                         collections: responses[0].home.logged.sliders,
@@ -130,7 +130,7 @@ class MainPage extends Component {
                             extraData={this.selectedCategory}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
-                                <View style={{ height: '2.8%', marginVertical: 10 }}>
+                                <View style={{height: Height * 0.028 , marginVertical: 10 }}>
                                     {this.state.selectedCategory == index ?
                                         < TouchableOpacity onPress={() => {
                                             this.onCategorySelect(item.category_id, item.category)
