@@ -15,6 +15,7 @@ import LogoSmall from "./Styles/LogoSmall"
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
+import { Icon } from 'react-native-elements'
 
 const innerStyles = StyleSheet.create({
   input: {
@@ -61,15 +62,33 @@ const innerStyles = StyleSheet.create({
     marginTop: 8,
   },
 });
+
 class SignUp extends Component {
   constructor() {
     super()
     this.state = {
-      fileSelectText: ""
+      fileSelectText: "",
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      nonMatchingPasswordError: "",
+      salesTaxID: "",
+      salesTaxIdFile: null,
+      fullNameError: "",
+      emailError: "",
+      passwordError: "",
+      confirmPasswordError: "",
+      salesTaxIDError: "",
+      salesTaxIDFileError: ""
+
     }
   }
 
   async selectOneFile() {
+
+
+
     //Opening Document Picker for selection of one file
     try {
       const res = await DocumentPicker.pick({
@@ -83,7 +102,7 @@ class SignUp extends Component {
       });
       // console.log('res : ' + JSON.stringify(res));
       // console.log('URI : ' + res.uri);
-      this.setState({ fileSelectText: res.name })
+      this.setState({ fileSelectText: res.name, salesTaxIdFile: res.uri })
       // console.log('Type : ' + res.type);
       // console.log('File Name : ' + res.name);
       // console.log('File Size : ' + res.size);
@@ -99,6 +118,87 @@ class SignUp extends Component {
       }
     }
   }
+
+  signUpClick = () => {
+    console.log("sjbjsdbjdbjsdjbsdbjsdjbjb")
+    if (this.isValid()) {
+      //call signup API here
+    }
+  }
+
+  isValid() {
+    let validFlag = true;
+    if (this.state.fullName == "") {
+      this.setState({ fullNameError: "Full name is required." })
+      validFlag = false;
+    } else {
+      this.setState({ fullNameError: "" })
+    }
+
+    if (this.state.email == "") {
+      this.setState({ emailError: "Email is required." })
+      validFlag = false;
+    } else {
+      let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
+      if (emailRegex.test(this.state.email) === false) {
+        this.setState({ emailError: "Email is invalid." })
+        validFlag = false;
+      } else {
+        this.setState({ emailError: "" })
+      }
+    }
+    if ((this.state.password != this.state.confirmPassword)) {
+      this.setState({ nonMatchingPasswordError: "Passwords do not match." })
+      validFlag = false;
+    } else {
+      this.setState({ nonMatchingPasswordError: "" })
+    }
+    if (this.state.password == "") {
+      this.setState({ passwordError: "Password is required." })
+      validFlag = false;
+    } else {
+      let passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{7}$/;
+      if (passwordRegex.test(this.state.password) === false) {
+        this.setState({ passwordError: "Password must contain atleast one upper case, one lower case, one numeric charachter, and more than or equal to 7 characters long." })
+        validFlag = false
+        console.log("Test Failed");
+      } else {
+        this.setState({ passwordError: "" })
+      }
+    }
+
+    if (this.state.confirmPassword == "") {
+      this.setState({ confirmPasswordError: "Confirm password is required." })
+      validFlag = false;
+    } else {
+      this.setState({ confirmPasswordError: "" })
+    }
+
+    if (this.state.salesTaxID == "") {
+      this.setState({ salesTaxIDError: "Sales tax ID is required." })
+      validFlag = false;
+    } else {
+      this.setState({ salesTaxIDError: "" })
+    }
+
+    if (this.state.salesTaxIdFile == null) {
+      this.setState({ salesTaxIDFileError: "Sales tax file is required." })
+      validFlag = false;
+    } else {
+      this.setState({ salesTaxIDFileError: "" })
+    }
+    return validFlag
+  }
+
+  showErrorMessage(errorMessage) {
+    return (
+      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 15 }}>
+        <Icon size={30} name='md-information-circle-outline' type='ionicon' color='#FF0000' />
+        <Text style={{ paddingHorizontal: 10, color: '#FF0000',maxWidth: '93%' }}>{errorMessage}</Text>
+      </View>
+    )
+  }
+
   render() {
     return (
       <ScrollView
@@ -115,36 +215,48 @@ class SignUp extends Component {
             <Text style={styles.customTextBold}>Register Now</Text>
 
             <View style={styles.inputView}>
-              <TextInput style={styles.input} placeholder="Full Name" />
+              <TextInput style={styles.input} placeholder="Full Name" onChangeText={(text) => { this.setState({ fullName: text }) }} />
             </View>
+            {this.state.fullNameError != "" ? this.showErrorMessage(this.state.fullNameError) : <View></View>}
             <View style={styles.inputView}>
               <TextInput
                 style={styles.input}
                 textContentType={'emailAddress'}
                 placeholder="Email"
+                onChangeText={(text) => { this.setState({ email: text }) }}
               />
             </View>
+            {this.state.emailError != "" ? this.showErrorMessage(this.state.emailError) : <View></View>}
+
             <View style={styles.inputView}>
               <TextInput
                 style={styles.input}
                 secureTextEntry={true}
                 placeholder="Password"
+                onChangeText={(text) => { this.setState({ password: text }) }}
+
               />
             </View>
+            {this.state.passwordError != "" ? this.showErrorMessage(this.state.passwordError) : <View></View>}
+
             <View style={styles.inputView}>
               <TextInput
                 style={styles.input}
                 secureTextEntry={true}
                 placeholder="Confirm password"
+                onChangeText={(text) => { this.setState({ confirmPassword: text }) }}
               />
             </View>
-            {/*TODO: replace this image with right arrow*/}
+
+            {this.state.confirmPasswordError != "" ? this.showErrorMessage(this.state.confirmPasswordError) : <View></View>}
+            {this.state.nonMatchingPasswordError != "" ? this.showErrorMessage(this.state.nonMatchingPasswordError) : <View></View>}
 
             <View style={styles.inputView}>
               <View style={[innerStyles.input, { flexDirection: 'row' }]}>
                 <TextInput
                   style={innerStyles.input}
                   placeholder="Upload Sales TX ID"
+                  onChangeText={(text) => { this.setState({ salesTaxID: text }) }}
                 />
                 <TouchableOpacity
                   style={{ alignItems: 'center', justifyContent: 'center' }}
@@ -161,12 +273,16 @@ class SignUp extends Component {
               </View>
             </View>
 
+            {this.state.salesTaxIDError != "" ? this.showErrorMessage(this.state.salesTaxIDError) : <View></View>}
+            {this.state.salesTaxIDFileError != "" ? this.showErrorMessage(this.state.salesTaxIDFileError) : <View></View>}
+
+
             <Text>{this.state.fileSelectText}</Text>
             <Text style={styles.customTextBold}>OR</Text>
             <View style={[styles.line, { marginTop: 10 }]} />
 
             <View style={[styles.buttonContainer, { paddingHorizontal: 15 }]}>
-              <TouchableOpacity style={{ paddingVertical: 10, alignItems: 'center', justifyContent: 'space-between' }} onPress={()=>{this.props.navigation.navigate("TaxID")}}>
+              <TouchableOpacity style={{ paddingVertical: 10, alignItems: 'center', justifyContent: 'space-between' }} onPress={() => { this.props.navigation.navigate("TaxID") }}>
                 <View style={{ width: '100%', flexDirection: 'row' }}>
                   <Text
                     style={[
@@ -185,7 +301,7 @@ class SignUp extends Component {
                 </View>
               </TouchableOpacity>
               {/* TODO: Check whether to apply the touchable opacity or ripple */}
-              <TouchableOpacity style={innerStyles.buttonSignUp}>
+              <TouchableOpacity style={innerStyles.buttonSignUp} onPress={() => this.signUpClick()}>
                 <Text
                   style={[
                     styles.buttonText,
@@ -196,7 +312,7 @@ class SignUp extends Component {
                   Create an account
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[innerStyles.buttonAlreadyHaveAccount]} onPress={()=>{this.props.navigation.navigate("SignIn")}}>
+              <TouchableOpacity style={[innerStyles.buttonAlreadyHaveAccount]} onPress={() => { this.props.navigation.navigate("SignIn") }}>
                 <Text
                   style={[
                     styles.buttonText,
