@@ -58,7 +58,12 @@ class CategoriesProduct extends Component {
                     for (let i = 0; i < responses[0].products.length; i++) {
                         if (responses[0].products[i].main_pair == null) continue;
                         console.log("Itr=> "+itr+"   PID=> "+responses[0].products[i].product_id)
-
+                        let variant = ""
+                        try{
+                            variant = responses[0].products[i].product_features["2"].variant
+                        }catch{
+                            variant = responses[0].products[i].product
+                        }
                         await tempProducts.push({
                             
                             product: responses[0].products[i].product,
@@ -66,7 +71,7 @@ class CategoriesProduct extends Component {
                             price: parseFloat(responses[0].products[i].price).toFixed(2),
                             base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
                             imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-                            product_brand: responses[0].products[i].product_features["2"].variant
+                            product_brand: variant
                         })
                     }
 
