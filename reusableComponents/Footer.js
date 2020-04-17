@@ -7,7 +7,8 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
-    Dimensions
+    Dimensions,
+    Platform
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 
@@ -42,7 +43,8 @@ class Footer extends PureComponent {
                 bottom: 0,
                 height: 50,
                 width: "100%",
-                paddingBottom: 10
+                paddingBottom:10,
+                marginBottom: (Platform.OS === 'ios') ? 15:0 
             }}>
                 <View style={{
                     flex: 1,
