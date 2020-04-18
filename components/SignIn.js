@@ -5,6 +5,7 @@ import Footer from "../reusableComponents/Footer"
 import { Icon } from 'react-native-elements'
 import PostData from '../reusableComponents/API/PostData';
 import Toast from 'react-native-simple-toast';
+import GetData from '../reusableComponents/API/GetData';
 
 const baseUrl = "http://dev.landbw.co/";
 
@@ -26,24 +27,24 @@ class SignIn extends Component {
     signInClick = () => {
         if (this.isValid()) {
             var promises = []
-            promises.push(PostData(baseUrl + 'api/auth', {email: this.state.email}))
+            promises.push(GetData(baseUrl + `api/users?email=${this.state.email}`))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+                    console.log(responses[0].users.length)
 
-                    //TODO: A way to check for response code
-                    if (responses[0].key){
+                    if (responses[0].users.length > 0){
+                        console.log(responses[0].users[0].user_id) //TODO: Save this UID
                         Toast.show('Login Successful');
                         this.props.navigation.navigate("MainPage")
                     }
-                    else if (responses[0].status == 404){
-                        Toast.show('Username password incorrect', Toast.LONG);
-                        // throw
+                    else {
+                        Toast.show('Username or password incorrect', Toast.LONG);
                     }
                    
                 }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
         }
-        this.props.navigation.navigate("MainPage") //TODO: Remove this
+        // this.props.navigation.navigate("MainPage") //TODO: Remove this
 
     }
 
