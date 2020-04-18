@@ -35,7 +35,7 @@ class SignIn extends Component {
                         console.log(responses[0].users[0].user_id) //TODO: Save this UID
                         console.log(responses[0].users[0].firstname + " " + responses[0].users[0].lastname)
                         Toast.show('Login Successful');
-                        this.props.navigation.navigate("MainPage")
+                        this.props.navigation.navigate("MainPage", {userName: responses[0].users[0].firstname + " " + responses[0].users[0].lastname}) //Passing user Name
                     }
                     else {
                         Toast.show('Username or password incorrect', Toast.LONG);
