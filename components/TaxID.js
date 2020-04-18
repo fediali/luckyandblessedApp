@@ -69,6 +69,7 @@ class TaxID extends Component {
     }
 
     resetSign() {
+        this.setState({sign: false})
         this.refs["sign"].resetImage();
     }
 
