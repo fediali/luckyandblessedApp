@@ -108,6 +108,7 @@ class Header extends PureComponent {
         }
     }
     render() {
+        console.log("+++",this.props.person)
         return (
             <View style={{ height: 50, flexDirection: "row", alignItems: "center", backgroundColor: '#ffffff' }}>
 

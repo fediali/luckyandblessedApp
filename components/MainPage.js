@@ -100,6 +100,7 @@ class MainPage extends Component {
 
 
     render() {
+        console.log("_____",this.props.route.params.userName)
         const Width = Dimensions.get('window').width;
         const Height = Dimensions.get('window').height;
         if (!this.state.isReady) {
@@ -114,7 +115,7 @@ class MainPage extends Component {
         }
         return (
             <SafeAreaView style={[styles.parentContainer]}>
-                <Header navigation={this.props.navigation} centerText="Welcome" homepage= {true} person={this.props.navigation.params.userName} rightIcon="search" />
+                <Header navigation={this.props.navigation} centerText="Welcome" homepage= {true} person={this.props.route.params.userName} rightIcon="search" />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
