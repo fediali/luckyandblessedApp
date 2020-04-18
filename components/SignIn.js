@@ -3,6 +3,10 @@ import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaVie
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import { Icon } from 'react-native-elements'
+import PostData from '../reusableComponents/API/PostData';
+import Toast from 'react-native-simple-toast';
+
+const baseUrl = "http://dev.landbw.co/";
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // TODO: code onPress to the Buttons
@@ -21,9 +25,26 @@ class SignIn extends Component {
 
     signInClick = () => {
         if (this.isValid()) {
-            //call API for sign in
+            var promises = []
+            promises.push(PostData(baseUrl + 'api/auth', {email: this.state.email}))
+            Promise.all(promises).then((promiseResponses) => {
+                Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+
+                    //TODO: A way to check for response code
+                    if (responses[0].key){
+                        Toast.show('Login Successful');
+                        this.props.navigation.navigate("MainPage")
+                    }
+                    else if (responses[0].status == 404){
+                        Toast.show('Username password incorrect', Toast.LONG);
+                        // throw
+                    }
+                   
+                }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
+            }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
         }
-        this.props.navigation.navigate("MainPage")
+        this.props.navigation.navigate("MainPage") //TODO: Remove this
+
     }
 
     isValid() {
@@ -66,11 +87,11 @@ class SignIn extends Component {
                     }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                     {/* TODO: Image has to be changed with orignal one */}
                     <View style={styles.emailInputView}>
-                        <TextInput style={styles.input} placeholder="Email" />
+                        <TextInput style={styles.input} placeholder="Email" onChangeText={(text) => { this.setState({ email: text }) }} />
                     </View>
                     {this.state.emailError != "" ? this.showErrorMessage(this.state.emailError) : <View></View>}
                     <View style={styles.passwordInputView}>
-                        <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" />
+                        <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" onChangeText={(text) => { this.setState({ password: text }) }}/>
                     </View>
                     {this.state.passwordError != "" ? this.showErrorMessage(this.state.passwordError) : <View></View>}
 

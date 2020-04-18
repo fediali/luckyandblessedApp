@@ -40,7 +40,7 @@ class MainPage extends Component {
             selectedCategory: 0,
             categoryList: null,
             collections: null,
-            newArrivals: _newArrivals,
+            newArrivals: null,
             trending: _trending,
             history: _history,
             isReady: false
@@ -60,11 +60,14 @@ class MainPage extends Component {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
 
                     //Adding "All" to categories response
+                    console.log(responses[0].home.logged.new_arrivals)
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
                     // console.log(responses[1])
                     this.setState({
                         isReady: true,
                         collections: responses[0].home.logged.sliders,
+                        newArrivals: responses[0].home.logged.new_arrivals.products,
+                        trending: responses[0].home.logged.trending.products,
                         categoryList: responses[1].categories
                     })
                 }).catch(ex => { console.log("Inner Promise", ex) })
@@ -176,10 +179,10 @@ class MainPage extends Component {
                                     <Image
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
-                                        source={this.state.newArrivals[0].imageUrl}
+                                        source={{uri: this.state.newArrivals[0].image}}
                                     />
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].name}</Text>
-                                    <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[0].type}</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].product}</Text>
+                                    <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[0].brand}</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[0].price}</Text>
                                 </TouchableOpacity>
 
@@ -187,10 +190,10 @@ class MainPage extends Component {
                                     <Image
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
-                                        source={this.state.newArrivals[1].imageUrl}
+                                        source={{uri: this.state.newArrivals[1].image}}
                                     />
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].name}</Text>
-                                    <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[1].type}</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
+                                    <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[1].brand}</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[1].price}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -199,10 +202,10 @@ class MainPage extends Component {
                                     <Image
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
-                                        source={this.state.newArrivals[2].imageUrl}
+                                        source={{uri: this.state.newArrivals[2].image}}
                                     />
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].name}</Text>
-                                    <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[2].type}</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
+                                    <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[2].brand}</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[2].price}</Text>
                                 </TouchableOpacity>
 
@@ -210,10 +213,10 @@ class MainPage extends Component {
                                     <Image
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
-                                        source={this.state.newArrivals[3].imageUrl}
+                                        source={{uri: this.state.newArrivals[3].image}}
                                     />
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].name}</Text>
-                                    <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[3].type}</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
+                                    <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[3].brand}</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[3].price}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -229,7 +232,7 @@ class MainPage extends Component {
                         </View>
 
                         <FlatList
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item.product_id.toString()}
                             data={this.state.trending}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
@@ -239,12 +242,12 @@ class MainPage extends Component {
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
                                             <Image
                                                 style={innerStyles.trendingImage}
-                                                source={item.imageUrl}
+                                                source={{uri: item.image}}
                                                 resizeMode='contain'
                                             />
                                             <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
-                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
-                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.product}</Text>
+                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.brand}</Text>
                                             </View>
                                         </View>
                                         <View style={{ width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center', justifyContent: 'center' }}>
@@ -255,12 +258,12 @@ class MainPage extends Component {
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
                                             <Image
                                                 style={innerStyles.trendingImage}
-                                                source={item.imageUrl}
+                                                source={{uri: item.image}}
                                                 resizeMode='contain'
                                             />
                                             <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
-                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
-                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.product}</Text>
+                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.brand}</Text>
                                             </View>
                                         </View>
                                         <View style={{ width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center', justifyContent: 'center' }}>
@@ -271,19 +274,18 @@ class MainPage extends Component {
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
                                             <Image
                                                 style={innerStyles.trendingImage}
-                                                source={item.imageUrl}
+                                                source={{uri: item.image}}
                                                 resizeMode='contain'
                                             />
                                             <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
-                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
-                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.type}</Text>
+                                                <Text style={innerStyles.gridItemNameAndPriceText}>{item.product}</Text>
+                                                <Text style={[innerStyles.showAllText, { fontSize: 14, textAlign: 'left', lineHeight: 18, marginTop: 5 }]}>{item.brand}</Text>
                                             </View>
                                         </View>
                                         <View style={{ width: '30%', height: '50%', borderRadius: 6, backgroundColor: "#9775fa", alignItems: 'center', justifyContent: 'center' }}>
                                             <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
                                         </View>
                                     </TouchableOpacity>
-
                                 </View>
 
                             )}

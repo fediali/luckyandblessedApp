@@ -16,6 +16,7 @@ import LogoSmall from "./Styles/LogoSmall"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
 import { Icon } from 'react-native-elements'
+const baseUrl = "http://dev.landbw.co/";
 
 const innerStyles = StyleSheet.create({
   input: {
@@ -122,6 +123,31 @@ class SignUp extends Component {
   signUpClick = () => {
     if (this.isValid()) {
       //call signup API here
+      //Splitting name to first and last name
+      var fullName = this.state.fullName.split(' ');
+
+      var data= {
+        email: this.state.email, 
+        password: this.state.password,
+        firstname: fullName[0],
+        lastname: fullName[1],
+        company_id: 1, //TODO: Use AsyncStorage
+        is_root: "N",
+        user_type: "C",
+        status: "A",
+
+      }
+      console.log(data)
+      var promises = []
+            promises.push(PostData(baseUrl + 'api/users', data))
+            Promise.all(promises).then((promiseResponses) => {
+                Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+
+                  console.log(responses)
+                    //TODO: A way to check for response code
+                   
+                }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
+            }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
     }
   }
 
@@ -156,7 +182,7 @@ class SignUp extends Component {
       this.setState({ passwordError: "Password is required." })
       validFlag = false;
     } else {
-      let passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{7}$/;
+      let passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{7,}$/;
       if (passwordRegex.test(this.state.password) === false) {
         this.setState({ passwordError: "Password must contain atleast one upper case, one lower case, one numeric charachter, and more than or equal to 7 characters long." })
         validFlag = false
@@ -173,19 +199,13 @@ class SignUp extends Component {
       this.setState({ confirmPasswordError: "" })
     }
 
-    if (this.state.salesTaxID == "") {
-      this.setState({ salesTaxIDError: "Sales tax ID is required." })
-      validFlag = false;
-    } else {
-      this.setState({ salesTaxIDError: "" })
-    }
+    // if (this.state.salesTaxID == "" || this.state.salesTaxIdFile == null) {
+    //   this.setState({ salesTaxIDError: "Sales tax ID or tax file is required." })
+    //   validFlag = false;
+    // } else {
+    //   this.setState({ salesTaxIDError: "" })
+    // }
 
-    if (this.state.salesTaxIdFile == null) {
-      this.setState({ salesTaxIDFileError: "Sales tax file is required." })
-      validFlag = false;
-    } else {
-      this.setState({ salesTaxIDFileError: "" })
-    }
     return validFlag
   }
 
