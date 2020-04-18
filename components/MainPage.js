@@ -114,7 +114,7 @@ class MainPage extends Component {
         }
         return (
             <SafeAreaView style={[styles.parentContainer]}>
-                <Header navigation={this.props.navigation} centerText="Welcome" rightIcon="search" />
+                <Header person={"Person's Name"} homePage={true} navigation={this.props.navigation} centerText="Welcome" rightIcon="search" />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
