@@ -82,7 +82,7 @@ class MainPage extends Component {
         GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true`).then(res => res.json()).then(
             (responses) => {
                 // console.log(responses)
-                console.log(baseUrl + `api/categories?visible=1&category_id=${cid}`)
+                // console.log(baseUrl + `api/categories?visible=1&category_id=${cid}`)
                 if (responses.categories.length > 0) {
                     var subCat = responses.categories;
                     // console.log(subCat)
