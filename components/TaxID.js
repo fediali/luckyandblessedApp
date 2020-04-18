@@ -218,6 +218,7 @@ class TaxID extends Component {
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Texas sales & Use Tax Permit Num"
+                                    keyboardType={"number-pad"}
                                     onChangeText={(text) => { this.setState({ texasSales: text }) }}
                                 />
                             </View>
@@ -227,6 +228,7 @@ class TaxID extends Component {
                                 <TextInput
                                     style={styles.input}
                                     placeholder="Out-of-state or Fedral Taxpay Num"
+                                    keyboardType={"number-pad"}
                                     onChangeText={(text) => { this.setState({ outOfState: text }) }}
                                 />
                             </View>
