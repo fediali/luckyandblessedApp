@@ -82,7 +82,7 @@ class MainPage extends Component {
         GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true`).then(res => res.json()).then(
             (responses) => {
                 // console.log(responses)
-                // console.log(baseUrl + `api/categories?visible=1&category_id=${cid}`)
+                console.log(baseUrl + `api/categories?visible=1&category_id=${cid}`)
                 if (responses.categories.length > 0) {
                     var subCat = responses.categories;
                     // console.log(subCat)
@@ -114,7 +114,7 @@ class MainPage extends Component {
         }
         return (
             <SafeAreaView style={[styles.parentContainer]}>
-                <Header person={"Person's Name"} homePage={true} navigation={this.props.navigation} centerText="Welcome" rightIcon="search" />
+                <Header navigation={this.props.navigation} centerText="Welcome" rightIcon="search" />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
@@ -166,7 +166,7 @@ class MainPage extends Component {
                             )}
                         />
 
-                        {/* new arrival header*/}
+                        {/*FIXME new arrival header */ }
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left' }]}>New Arrivals</Text>
                             <TouchableOpacity style={{ flex: 0.5, textAlign: 'right' }}>

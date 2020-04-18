@@ -10,7 +10,6 @@ import GetData from '../reusableComponents/API/GetData';
 const baseUrl = "http://dev.landbw.co/";
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
-// TODO: code onPress to the Buttons
 // Naming Conventions for assets camelCase = **assetName-componentName**
 class SignIn extends Component {
 
@@ -34,6 +33,7 @@ class SignIn extends Component {
 
                     if (responses[0].users.length > 0){
                         console.log(responses[0].users[0].user_id) //TODO: Save this UID
+                        console.log(responses[0].users[0].firstname + " " + responses[0].users[0].lastname)
                         Toast.show('Login Successful');
                         this.props.navigation.navigate("MainPage")
                     }

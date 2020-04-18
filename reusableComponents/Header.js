@@ -103,7 +103,7 @@ class Header extends PureComponent {
             )
         } else {
             return (
-                <View></View>
+                <View style={{height: 22, width:22}}></View>
             )
         }
     }
@@ -132,7 +132,7 @@ class Header extends PureComponent {
                     }
 
                     {this.props.homePage ?
-                        <View >
+                        <View style={{marginTop: 5}} >
                             <Text style={{ fontFamily: "Montserrat-SemiBold", fontSize: 18, lineHeight: 22 }}>{this.props.centerText}</Text>
                             <Text style={styles.homePersonText}>{this.props.person}</Text>
                         </View>
