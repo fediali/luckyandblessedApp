@@ -2,38 +2,91 @@ import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
+import { Icon } from 'react-native-elements'
+
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // TODO: code onPress to the Buttons
 // Naming Conventions for assets camelCase = **assetName-componentName**
 class SignIn extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            email: "",
+            password: "",
+            emailError: "",
+            passwordError: ""
+        }
+    }
+
+    signInClick = () => {
+        if (this.isValid()) {
+            //call API for sign in
+        }
+        this.props.navigation.navigate("MainPage")
+    }
+
+    isValid() {
+        let validFlag = true
+
+        if (this.state.email == "") {
+            this.setState({ emailError: "Email is required." })
+            validFlag = false;
+        } else {
+            this.setState({ emailError: "" })
+        }
+
+        if (this.state.password == "") {
+            this.setState({ passwordError: "Password is required." })
+            validFlag = false;
+        } else {
+            this.setState({ passwordError: "" })
+        }
+
+        return validFlag;
+    }
+
+    showErrorMessage(errorMessage) {
+        return (
+            <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 15 }}>
+                <Icon size={30} name='md-information-circle-outline' type='ionicon' color='#FF0000' />
+                <Text style={{ paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' }}>{errorMessage}</Text>
+            </View>
+        )
+    }
+
     render() {
         return (
             // <SafeAreaView>
-                <SafeAreaView style={styles.mainContainer}>
-                    <View style={styles.subContainer}>
-                        <Image style={{
-                            width: "53%",
-                            height: "35%",
-                        }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
-                        <View style={styles.emailInputView}>
-                            <TextInput style={styles.input} placeholder="Email" />
-                        </View>
-                        <View style={styles.passwordInputView}>
-                            <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" />
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            {/* TODO: Check whether to apply the touchable opacity or ripple */}
-                            <TouchableOpacity style={styles.buttonSignUp} onPress={()=>{this.props.navigation.navigate("SignUp")}} >
-                                <Text style={styles.buttonText}>Sign up</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.buttonSignIn} onPress={()=>{this.props.navigation.navigate("MainPage")}}>
-                                <Text style={styles.buttonText}>Sign in</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity>
-                            <Text style={styles.forgotPassword}>Forgot Password?</Text>
+            <SafeAreaView style={styles.mainContainer}>
+                <View style={styles.subContainer}>
+                    <Image style={{
+                        width: "53%",
+                        height: "35%",
+                    }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
+                    {/* TODO: Image has to be changed with orignal one */}
+                    <View style={styles.emailInputView}>
+                        <TextInput style={styles.input} placeholder="Email" />
+                    </View>
+                    {this.state.emailError != "" ? this.showErrorMessage(this.state.emailError) : <View></View>}
+                    <View style={styles.passwordInputView}>
+                        <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" />
+                    </View>
+                    {this.state.passwordError != "" ? this.showErrorMessage(this.state.passwordError) : <View></View>}
+
+                    <View style={styles.buttonContainer}>
+                        {/* TODO: Check whether to apply the touchable opacity or ripple */}
+                        <TouchableOpacity style={styles.buttonSignUp} onPress={() => { this.props.navigation.navigate("SignUp") }} >
+                            <Text style={styles.buttonText}>Sign up</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.buttonSignIn} onPress={() => { this.signInClick() }}>
+                            <Text style={styles.buttonText}>Sign in</Text>
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity>
+                        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                    </TouchableOpacity>
+                </View>
 
             </SafeAreaView>
         )
@@ -60,7 +113,7 @@ const styles = StyleSheet.create({
         // lineHeight: 24,
         letterSpacing: 0,
         color: "#2d2d2f",
-        paddingVertical:11,
+        paddingVertical: 11,
 
 
     },

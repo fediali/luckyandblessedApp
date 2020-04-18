@@ -125,7 +125,7 @@ class Categories extends Component {
                         renderItem={({ item }) => (
                             // FIXME: item.main_pair.detailed.image_path not working
                             
-                            (item.main_pair.detailed.image_path) ? 
+                            (item.main_pair) ? 
 
                             <CategoriesListItem key={item.category} navigation={this.props.navigation}
                             imageUrl={{uri: item.main_pair.detailed.image_path}} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
