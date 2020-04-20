@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import {
     View,
     Text,
-    Image,
     StyleSheet,
     TextInput,
     TouchableOpacity,
@@ -10,6 +9,7 @@ import {
     Dimensions
 } from 'react-native';
 import { Icon } from 'react-native-elements'
+import FastImage from 'react-native-fast-image'
 
 
 class CategoriesProductListSingleItem extends PureComponent {
@@ -20,7 +20,7 @@ class CategoriesProductListSingleItem extends PureComponent {
         return (
             <TouchableOpacity onPress={() => { this.props.navigation.navigate("ProductPage", { pid: [this.props.pid] }) }}>
                 <View style={{borderRadius:6,backgroundColor:"#f6f6f6",width: Width * 0.88,alignSelf:"center"}}>
-                    <Image source={this.props.imageUrl} style={{ alignSelf: "center", height: Height * 0.5, width: Width * 0.88}} resizeMode="contain" />
+                    <FastImage source={this.props.imageUrl} style={{ alignSelf: "center", height: Height * 0.5, width: Width * 0.88}} resizeMode="contain" />
                 </View>
                 {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
                 <View style={{ paddingVertical: 9, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between" }}>

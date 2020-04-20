@@ -5,7 +5,6 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    Image,
     StyleSheet,
     Dimensions,
     FlatList,
@@ -15,7 +14,7 @@ import {
     YellowBox,
     SafeAreaView,
     BackHandler,
-    Alert 
+    Alert
 } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -28,15 +27,15 @@ import GetData from "../reusableComponents/API/GetData"
 import ShimmerLogo from "../reusableComponents/ShimmerLogo"
 import Shimmer from 'react-native-shimmer';
 import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalListItem"
-
+import FastImage from 'react-native-fast-image'
 YellowBox.ignoreWarnings([
     'Require cycle:'
 ])
 
 const baseUrl = "http://dev.landbw.co/";
-const SELECTED_CATEGORY_ALL=-1
+const SELECTED_CATEGORY_ALL = -1
 class MainPage extends Component {
-    
+
 
     constructor(props) {
         super(props);
@@ -56,48 +55,52 @@ class MainPage extends Component {
 
     _retrieveData = async () => {
         try {
-          const value = await AsyncStorage.getItem('user_id');
+            const value = await AsyncStorage.getItem('user_id');
 
-          if (value !== null) {
-            return(value)
-          }
+            if (value !== null) {
+                return (value)
+            }
         } catch (error) {
-          console.log(error)
+            console.log(error)
         }
-      };
-      backAction = () => {
-        Alert.alert("Hold on!", "Are you sure you want to quit?", [
-          {
-            text: "Cancel",
-            onPress: () => null,
-            style: "cancel"
-          },
-          { text: "YES", onPress: () => BackHandler.exitApp() }
+    };
+    backAction = () => {
+        console.log(this.props.navigation)
+        if(this.props.navigation.isFocused()){
+        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+            {
+                text: "Cancel",
+                onPress: () => null,
+                style: "cancel"
+            },
+            { text: "YES", onPress: () => BackHandler.exitApp() }
         ]);
         return true;
-      };
+    }
+    };
 
-      componentWillUnmount() {
+    componentWillUnmount() {
         this.backHandler.remove();
-      }
+    }
     componentDidMount() {
 
-        InteractionManager.runAfterInteractions(() => {
+        InteractionManager.runAfterInteractions(() => { 
             this.backHandler = BackHandler.addEventListener(
                 "hardwareBackPress",
                 this.backAction
-              );
+            );
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
             // Retriving the user_id
-            this._retrieveData().then(value=>{
-                console.log("THIS IS VALUE",value)
+            this._retrieveData().then(value => {
+                console.log("THIS IS VALUE", value)
             });
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
 
                     //Adding "All" to categories response
+                    console.log(responses[0].home.logged.new_arrivals)
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
                     // console.log(responses[1])
                     this.setState({
@@ -124,6 +127,8 @@ class MainPage extends Component {
                     var subCat = responses.categories;
                     // console.log(subCat)
                     this.props.navigation.navigate("Categories", { cid: cid, cname: cname, subCats: subCat, categoryList: this.state.categoryList }); //SubCat of the selected category and categoryList is main categories
+                    this.backHandler.remove();
+
                 }
 
                 else
@@ -143,7 +148,7 @@ class MainPage extends Component {
             return (
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
                     <Shimmer>
-                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                        <FastImage style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>
             )
@@ -151,7 +156,7 @@ class MainPage extends Component {
         }
         return (
             <SafeAreaView style={[styles.parentContainer]}>
-                <Header navigation={this.props.navigation} centerText="Welcome" homepage= {true} person={this.props.route.params.userName} rightIcon="search" />
+                <Header navigation={this.props.navigation} centerText="Welcome" homepage={true} person={this.props.route.params.userName} rightIcon="search" />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{
@@ -169,7 +174,7 @@ class MainPage extends Component {
                             extraData={this.selectedCategory}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
-                                <HeaderHorizontalListItem cid={this.state.selectedCategory} index={index} item={item} onCategorySelect={this.onCategorySelect}/>
+                                <HeaderHorizontalListItem cid={this.state.selectedCategory} index={index} item={item} onCategorySelect={this.onCategorySelect} />
 
                             )}
 
@@ -192,7 +197,7 @@ class MainPage extends Component {
                             )}
                         />
 
-                        {/*FIXME new arrival header */ }
+                        {/*FIXME new arrival header */}
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left' }]}>New Arrivals</Text>
                             <TouchableOpacity style={{ flex: 0.5, textAlign: 'right' }}>
@@ -202,10 +207,10 @@ class MainPage extends Component {
                         <View style={innerStyles.gridView}>
                             <View style={innerStyles.gridCell}>
                                 <TouchableOpacity style={{ flexDirection: 'column', marginEnd: 5 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
-                                        source={{uri: this.state.newArrivals[0].image}}
+                                        source={{ uri: this.state.newArrivals[0].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].product}</Text>
                                     <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[0].brand}</Text>
@@ -213,10 +218,10 @@ class MainPage extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{ flexDirection: 'column', marginStart: 5 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
-                                        source={{uri: this.state.newArrivals[1].image}}
+                                        source={{ uri: this.state.newArrivals[1].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
                                     <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[1].brand}</Text>
@@ -225,10 +230,10 @@ class MainPage extends Component {
                             </View>
                             <View style={innerStyles.gridCell}>
                                 <TouchableOpacity style={{ flexDirection: 'column', marginEnd: 5 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
-                                        source={{uri: this.state.newArrivals[2].image}}
+                                        source={{ uri: this.state.newArrivals[2].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
                                     <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[2].brand}</Text>
@@ -236,10 +241,10 @@ class MainPage extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{ flexDirection: 'column', marginStart: 5 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
-                                        source={{uri: this.state.newArrivals[3].image}}
+                                        source={{ uri: this.state.newArrivals[3].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
                                     <Text style={[innerStyles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{this.state.newArrivals[3].brand}</Text>
@@ -266,9 +271,9 @@ class MainPage extends Component {
                                 <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                                     <TouchableOpacity style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
-                                            <Image
+                                            <FastImage
                                                 style={innerStyles.trendingImage}
-                                                source={{uri: item.image}}
+                                                source={{ uri: item.image }}
                                                 resizeMode='contain'
                                             />
                                             <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
@@ -282,9 +287,9 @@ class MainPage extends Component {
                                     </TouchableOpacity>
                                     <TouchableOpacity style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
-                                            <Image
+                                            <FastImage
                                                 style={innerStyles.trendingImage}
-                                                source={{uri: item.image}}
+                                                source={{ uri: item.image }}
                                                 resizeMode='contain'
                                             />
                                             <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
@@ -298,9 +303,9 @@ class MainPage extends Component {
                                     </TouchableOpacity>
                                     <TouchableOpacity style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
-                                            <Image
+                                            <FastImage
                                                 style={innerStyles.trendingImage}
-                                                source={{uri: item.image}}
+                                                source={{ uri: item.image }}
                                                 resizeMode='contain'
                                             />
                                             <View style={{ height: '100%', flexDirection: 'column', marginStart: 10, justifyContent: 'center' }}>
@@ -331,7 +336,7 @@ class MainPage extends Component {
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
                                         source={item.imageUrl}
@@ -347,7 +352,7 @@ class MainPage extends Component {
                                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left', marginStart: 10, marginVertical: 10 }]}>Newsletter</Text>
                                     <TouchableOpacity onPress={() => { this.setState({ showNewsletter: false }) }}>
-                                        <Image
+                                        <FastImage
                                             style={{ flex: 0.5, width: 17, height: 17, alignContent: 'flex-end', marginEnd: 10 }}
                                             resizeMode='contain'
 
