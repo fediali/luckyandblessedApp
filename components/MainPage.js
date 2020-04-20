@@ -66,7 +66,7 @@ class MainPage extends Component {
         }
       };
       backAction = () => {
-        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        Alert.alert("Hold on!", "Are you sure you want to quit?", [
           {
             text: "Cancel",
             onPress: () => null,
