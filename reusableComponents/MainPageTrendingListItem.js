@@ -13,57 +13,77 @@ export default class MainPageHistoryListItem extends PureComponent {
         console.log(("-------------------------------------------------------"))
         console.log(this.props.listItem)
         return (
-            
             <View style={innerStyles.mainItemView}>
-                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                    <View style={innerStyles.innerTrendingView}>
-                        <FastImage
-                            style={innerStyles.trendingImage}
-                            source={{ uri: this.props.listItem[0].image }}
-                            resizeMode='contain'
-                        />
-                        <View style={innerStyles.innerInnerTrendingView}>
-                            <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[0].product}</Text>
-                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[0].brand}</Text>
+
+                {this.props.listItem.map((val,num) => (
+                    <TouchableOpacity key={num.toString()} activeOpacity={0.9} style={innerStyles.trendingView}>
+                        <View style={innerStyles.innerTrendingView}>
+                            <FastImage
+                                style={innerStyles.trendingImage}
+                                source={{ uri: val.image }}
+                                resizeMode='contain'
+                            />
+                            <View style={innerStyles.innerInnerTrendingView}>
+                                <Text style={innerStyles.gridItemNameAndPriceText}>{val.product}</Text>
+                                <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{val.brand}</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View style={innerStyles.trendingViewPriceView}>
-                        <Text style={innerStyles.trendingPriceText}>${this.props.listItem[0].price}</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                    <View style={innerStyles.innerTrendingView}>
-                        <FastImage
-                            style={innerStyles.trendingImage}
-                            source={{ uri: this.props.listItem[1].image }}
-                            resizeMode='contain'
-                        />
-                        <View style={innerStyles.innerInnerTrendingView}>
-                            <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[1].product}</Text>
-                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[1].brand}</Text>
+                        <View style={innerStyles.trendingViewPriceView}>
+                            <Text style={innerStyles.trendingPriceText}>${val.price}</Text>
                         </View>
-                    </View>
-                    <View style={innerStyles.trendingViewPriceView}>
-                        <Text style={innerStyles.trendingPriceText}>${this.props.listItem[1].price}</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                    <View style={innerStyles.innerTrendingView}>
-                        <FastImage
-                            style={innerStyles.trendingImage}
-                            source={{ uri: this.props.listItem[2].image }}
-                            resizeMode='contain'
-                        />
-                        <View style={innerStyles.innerInnerTrendingView}>
-                            <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[2].product}</Text>
-                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[2].brand}</Text>
-                        </View>
-                    </View>
-                    <View style={innerStyles.trendingViewPriceView}>
-                        <Text style={innerStyles.trendingPriceText}>${this.props.listItem[2].price}</Text>
-                    </View>
-                </TouchableOpacity> 
+                    </TouchableOpacity>
+                ))}
             </View>
+            // <View style={innerStyles.mainItemView}>
+            //      <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
+            //         <View style={innerStyles.innerTrendingView}>
+            //             <FastImage
+            //                 style={innerStyles.trendingImage}
+            //                 source={{ uri: this.props.listItem[0].image }}
+            //                 resizeMode='contain'
+            //             />
+            //             <View style={innerStyles.innerInnerTrendingView}>
+            //                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[0].product}</Text>
+            //                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[0].brand}</Text>
+            //             </View>
+            //         </View>
+            //         <View style={innerStyles.trendingViewPriceView}>
+            //             <Text style={innerStyles.trendingPriceText}>${this.props.listItem[0].price}</Text>
+            //         </View>
+            //     </TouchableOpacity>
+            //     <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
+            //         <View style={innerStyles.innerTrendingView}>
+            //             <FastImage
+            //                 style={innerStyles.trendingImage}
+            //                 source={{ uri: this.props.listItem[1].image }}
+            //                 resizeMode='contain'
+            //             />
+            //             <View style={innerStyles.innerInnerTrendingView}>
+            //                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[1].product}</Text>
+            //                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[1].brand}</Text>
+            //             </View>
+            //         </View>
+            //         <View style={innerStyles.trendingViewPriceView}>
+            //             <Text style={innerStyles.trendingPriceText}>${this.props.listItem[1].price}</Text>
+            //         </View>
+            //     </TouchableOpacity>
+            //     <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
+            //         <View style={innerStyles.innerTrendingView}>
+            //             <FastImage
+            //                 style={innerStyles.trendingImage}
+            //                 source={{ uri: this.props.listItem[2].image }}
+            //                 resizeMode='contain'
+            //             />
+            //             <View style={innerStyles.innerInnerTrendingView}>
+            //                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[2].product}</Text>
+            //                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[2].brand}</Text>
+            //             </View>
+            //         </View>
+            //         <View style={innerStyles.trendingViewPriceView}>
+            //             <Text style={innerStyles.trendingPriceText}>${this.props.listItem[2].price}</Text>
+            //         </View>
+            //     </TouchableOpacity> 
+            // </View>
         )
     }
 }
@@ -72,10 +92,10 @@ const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
-    mainItemView:{
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'column' 
+    mainItemView: {
+        alignItems: 'center',
+        // justifyContent: 'center',
+        flexDirection: 'column'
     },
     trendingView: {
         width: Width * 0.88,

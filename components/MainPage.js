@@ -150,6 +150,9 @@ class MainPage extends Component {
     }
 
     mapTrendingList(tList, sliceValue) {
+        tList.shift();
+        console.log("AAAAAA",tList)
+
         let tempList = []
         console.log("CCCCCCaaaallleeddddddd")
 

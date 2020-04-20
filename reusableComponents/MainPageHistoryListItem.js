@@ -13,7 +13,8 @@ export default class MainPageHistoryListItem extends PureComponent {
             <TouchableOpacity activeOpacity={0.9} style={innerStyles.historyTouchable}>
                 <FastImage
                     style={innerStyles.gridImage}
-                    resizeMode='contain'
+                    // resizeMode='contain'
+                    resizeMode="cover"
                     source={this.props.imageUrl}
                 />
                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.name}</Text>
