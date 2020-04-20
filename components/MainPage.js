@@ -78,7 +78,6 @@ class MainPage extends Component {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
 
                     //Adding "All" to categories response
-                    console.log(responses[0].home.logged.new_arrivals)
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
                     // console.log(responses[1])
                     this.setState({

@@ -15,7 +15,6 @@ class Categories extends Component {
         super(props)
         this.state = {
             selected: 0, //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
-            // data: [{ imageUrl: { key: "1", uri: "http://dev.landbw.co/images/detailed/39/26.jpg" }, quantity: "5,287 items", name: "Jeans" }, { key: "2", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/27.jpg" }, quantity: "2,509 items", name: "Top" }, { key: "3", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/28_jp1x-s7.jpg" }, quantity: "1,335 items", name: "Dresses" }, { key: "3", imageUrl: { uri: "http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg" }, quantity: "932 items", name: "Pants" }],
             data: this.props.route.params.subCats,
             cid: this.props.route.params.cid,
             cname: this.props.route.params.cname,
@@ -50,11 +49,11 @@ class Categories extends Component {
                         this.setState({ cid, cname, data: subCat, isReady: true }); //SubCat of the selected category and categoryList is main categories
                     }
                     else {
-                        // this.setState({isReady: true, nextScreen: true}) //FIXME: For shimmer
 
                         this.props.navigation.navigate("CategoriesProduct", { cid, cname })
+                        setTimeout(() => { this.setState({ isReady: true }) }, 1000)
+
                     }
-                    // setTimeout(() => { this.setState({ isReady: true }) }, 1000)
 
                 }
             )
@@ -69,17 +68,6 @@ class Categories extends Component {
         );
     };
     render() {
-
-        if (this.state.nextScreen && this.state.isReady) {
-            return (
-                <View style={styles.loader}>
-                    <Shimmer>
-                        <Image style={styles.loaderImage} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
-                    </Shimmer>
-                </View>
-            )
-
-        }
         return (
             <SafeAreaView style={styles.mainContainer}>
                 <Header navigation={this.props.navigation} centerText={this.state.cname} rightIcon="search" />
@@ -106,10 +94,8 @@ class Categories extends Component {
                             data={this.state.data}
                             keyExtractor={(item, index) => item.category_id}
                             renderItem={({ item }) => (
-                                // FIXME: item.main_pair.detailed.image_path not working
 
                                 (item.main_pair) ?
-
                                     <CategoriesListItem key={item.category} navigation={this.props.navigation}
                                         imageUrl={{ uri: item.main_pair.detailed.image_path }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
                                     :
