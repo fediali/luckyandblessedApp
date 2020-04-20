@@ -31,9 +31,9 @@ class Delivery extends Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.setState({isReady: true})
+            this.setState({ isReady: true })
         })
-      };
+    };
 
     render() {
         let width = Dimensions.get('window').width;
@@ -41,63 +41,43 @@ class Delivery extends Component {
 
         if (!this.state.isReady) {
             return (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                <View style={innerStyles.loader}>
                     <Shimmer>
-                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                        <Image style={innerStyles.loaderImage} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>
             )
-      
+
         }
-        
+
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <Header  navigation={this.props.navigation}/>
+            <SafeAreaView style={innerStyles.maincontainer}>
+                <Header navigation={this.props.navigation} />
                 <ScrollView contentContainerStyle={
-                    {
-                        backgroundColor: "#fff",
-                        flexGrow: 1,
-                        justifyContent: 'space-between',
-                        paddingBottom: 60
-                    }
+                    innerStyles.scrollView
                 }>
 
-                    <View styles={styles.parentContainer}>
-                        <View style={{ paddingHorizontal: 20 }}>
+                    <View styles={innerStyles.parentContainer}>
+                        <View style={innerStyles.paddingHorizontal}>
                             <Text style={innerStyles.mainTextBold}>Delivery</Text>
-                            <Text style={[innerStyles.lightText, { textAlign: "left" }]}>Order number is 4839200012</Text>
+                            <Text style={[innerStyles.lightText, innerStyles.textAlignLeft]}>Order number is 4839200012</Text>
 
-                            <TouchableOpacity style={[styles.buttonContainer, { marginTop: 20, width: '100%' }]}>
+                            <TouchableOpacity style={[styles.buttonContainer, styles.buttonContainerAdd]}>
                                 <Text style={innerStyles.buttonTextContainer}>Shipping will be added later </Text>
                             </TouchableOpacity>
 
                             <View style={innerStyles.horizontalView}>
-                                <TouchableOpacity style={[innerStyles.squareBoxButtons, { flex: 0.5 }]}>
-                                    <Image style={{
-                                        width: width * 0.12,
-                                        height: height * 0.12,
-                                    }} resizeMode="contain" source={require("../static/icon_done.png")} />
-                                    <Text style={[innerStyles.lightText, { textAlign: 'center' }]}>Billing and delivery info are the same</Text>
+                                <TouchableOpacity style={innerStyles.squareBoxButtons}>
+                                    <Image style={innerStyles.iconDoneStyle} resizeMode="contain" source={require("../static/icon_done.png")} />
+                                    <Text style={[innerStyles.lightText, innerStyles.textAlignCenter]}>Billing and delivery info are the same</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[innerStyles.squareBoxButtons, { flex: 0.5, marginStart: 20 }]}>
-                                    <ImageBackground style={{
-                                        width: width * 0.12,
-                                        height: height * 0.12,
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }} resizeMode="contain" source={require("../static/icon_empty_round.png")} >
-                                        <View style={{
-                                            alignItems: 'center',
-                                            
-
-                                        }}>
-                                            <Image style={{
-                                                width: width * 0.08,
-                                                height: height * 0.08,
-                                            }} resizeMode="contain" source={require("../static/icon_plus.png")} />
+                                <TouchableOpacity style={[innerStyles.squareBoxButtons, innerStyles.marginStart]}>
+                                    <ImageBackground style={innerStyles.iconDoneStyle} resizeMode="contain" source={require("../static/icon_empty_round.png")} >
+                                        <View style={innerStyles.alignCenter}>
+                                            <Image style={innerStyles.plusIconStyle} resizeMode="contain" source={require("../static/icon_plus.png")} />
                                         </View>
                                     </ImageBackground>
-                                    <Text style={[innerStyles.lightText, { textAlign: 'center' }]}>Create a new profile</Text>
+                                    <Text style={[innerStyles.lightText, innerStyles.textAlignCenter]}>Create a new profile</Text>
                                 </TouchableOpacity>
                             </View>
 
@@ -115,7 +95,7 @@ class Delivery extends Component {
 
                             <View style={styles.inputView}>
                                 <TextInput style={styles.input} placeholder="State" />
-                                <TextInput style={[styles.input, {marginStart: 20}]} placeholder="Zip code" />
+                                <TextInput style={[styles.input, innerStyles.marginStart]} placeholder="Zip code" />
                             </View>
 
                             <View style={styles.inputView}>
@@ -127,29 +107,21 @@ class Delivery extends Component {
                             </View>
                         </View>
                         <View style={innerStyles.showOrderView}>
-                            <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
-                                <Text style={[styles.buttonText, { fontSize: 18, lineHeight: 30 }]}>Order amount: </Text>
-                                <Text style={[styles.buttonText, { flex: 1, fontSize: 18, lineHeight: 30, textAlign: 'right' }]}>$103.88</Text>
+                            <View style={innerStyles.orderViewNested}>
+                                <Text style={[styles.buttonText, innerStyles.textBold]}>Order amount: </Text>
+                                <Text style={[styles.buttonText, innerStyles.textBold, innerStyles.alignRight]}>$103.88</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
-                                <Text style={[innerStyles.lightText, { lineHeight: 30 }]}>Your total amount of discount:</Text>
-                                <Text style={[innerStyles.lightText, { flex: 1, lineHeight: 30, textAlign: 'right' }]}>-$55.02</Text>
+                            <View style={innerStyles.orderViewNested}>
+                                <Text style={innerStyles.lightText}>Your total amount of discount:</Text>
+                                <Text style={[innerStyles.lightText, innerStyles.priceText]}>-$55.02</Text>
                             </View>
                         </View>
-                        <View style={[styles.buttonContainer, {
-                            paddingHorizontal: 30, width: '100%',
-                            backgroundColor: '#f6f6f6',
-                            paddingBottom: 20
-                        }]}>
-                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={()=>{this.props.navigation.navigate("Payment")}}>
+                        <View style={[styles.buttonContainer, innerStyles.buttonStyles]}>
+                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={() => { this.props.navigation.navigate("Payment") }}>
                                 <Text
                                     style={[
                                         styles.buttonText,
-                                        {
-                                            color: '#ffffff',
-                                            fontSize: 18,
-                                            lineHeight: 22
-                                        },
+                                        innerStyles.paymentText,
                                     ]}>
                                     Payment method
                                         </Text>
@@ -158,13 +130,49 @@ class Delivery extends Component {
                     </View>
 
                 </ScrollView>
-                <Footer  navigation={this.props.navigation}/>
+                <Footer navigation={this.props.navigation} />
             </SafeAreaView>
         )
     }
 }
+let width = Dimensions.get('window').width;
+let height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
+    paymentText: {
+        color: '#ffffff',
+        fontSize: 18,
+        lineHeight: 22
+    },
+    buttonStyles: {
+        paddingHorizontal: 30, width: '100%',
+        backgroundColor: '#f6f6f6',
+        paddingBottom: 20
+    },
+    priceText: { flex: 1, lineHeight: 30, textAlign: 'right' },
+    marginStart: { marginStart: 20 },
+    alignRight: { flex: 1, textAlign: 'right' },
+    textBold: { fontSize: 18, lineHeight: 30 },
+    orderViewNested: { flexDirection: 'row', paddingHorizontal: 20 },
+    plusIconStyle: {
+        width: width * 0.08,
+        height: height * 0.08,
+    },
+    paddingHorizontal: { paddingHorizontal: 20 },
+    iconDoneStyle: {
+        width: width * 0.12,
+        height: height * 0.12,
+        justifyContent: "center"
+    },
+    marginStart: { marginStart: 20 },
+    buttonContainerAdd: { marginTop: 20, width: '100%' },
+    maincontainer: { flex: 1, backgroundColor: "#fff" },
+    scrollView: {
+        backgroundColor: "#fff",
+        flexGrow: 1,
+        justifyContent: 'space-between',
+        paddingBottom: 60
+    },
     mainTextBold: {
         fontFamily: "Montserrat-Bold",
         fontSize: 30,
@@ -183,6 +191,7 @@ const innerStyles = StyleSheet.create({
         lineHeight: 18,
         letterSpacing: 1,
         color: '#8d8d8e',
+        lineHeight: 30
     },
     buttonTextContainer: {
         width: '100%',
@@ -208,6 +217,7 @@ const innerStyles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#e6e6e7",
         alignItems: 'center',
+        flex: 0.5
     },
     showOrderView: {
         paddingTop: 15,
@@ -225,6 +235,13 @@ const innerStyles = StyleSheet.create({
         paddingHorizontal: 30,
         marginTop: 15,
     },
+    loader: { flex: 1, alignItems: "center", justifyContent: "center", },
+    loaderImage: { height: 200, width: 200 },
+    textAlignLeft: { textAlign: "left" },
+    textAlignCenter: { textAlign: 'center' },
+    alignCenter:{
+        alignItems: 'center',
+    }
 })
 
 export default Delivery;

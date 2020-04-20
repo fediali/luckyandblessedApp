@@ -113,7 +113,7 @@ class Header extends PureComponent {
 
                 <View style={{ flex: 1, justifyContent: "space-between", flexDirection: "row", paddingHorizontal: 12, alignItems: "center" }}>
                     {this.props.homepage ?
-                        <View></View> :
+                        <View style={{height:30,width:30}}></View> :
                         <View>
                             <TouchableOpacity onPress={() => {
                                 if (this.lockSubmit) return;
