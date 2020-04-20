@@ -43,8 +43,8 @@ class Footer extends PureComponent {
                 bottom: 0,
                 height: 50,
                 width: "100%",
-                paddingBottom:10,
-                marginBottom: (Platform.OS === 'ios') ? 15:0 
+                // paddingBottom:10,
+                marginBottom: (Platform.OS === 'ios') ? 25:0 
             }}>
                 <View style={{
                     flex: 1,

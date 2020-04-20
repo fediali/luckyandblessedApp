@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 
+import FastImage from 'react-native-fast-image'
 
 class CategoriesListItem extends PureComponent {
     render() {
@@ -18,8 +19,8 @@ class CategoriesListItem extends PureComponent {
         let Width = Dimensions.get("window").width
         let Height = Dimensions.get("window").height
         return (
-            <TouchableOpacity style={{ flexDirection: "row", paddingHorizontal: 20,alignItems:"center" }} onPress={()=>{this.props.navigation.navigate("CategoriesProduct", { cid: [this.props.cid], cname: [this.props.name]})}}>
-                <Image source={this.props.imageUrl} resizeMode="contain" style={{ height: Height * 0.20, width: Width * 0.24,borderRadius:6 }} />
+            <TouchableOpacity activeOpacity={0.9} style={{ flexDirection: "row", paddingHorizontal: 20,alignItems:"center" }} onPress={()=>{this.props.navigation.navigate("CategoriesProduct", { cid: [this.props.cid], cname: [this.props.name]})}}>
+                <FastImage source={this.props.imageUrl} resizeMode="contain" style={{ height: Height * 0.20, width: Width * 0.24,borderRadius:6 }} />
                 {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
                 <View style={{paddingLeft:20}}>
                     <Text style={{fontFamily:"Montserrat-SemiBold",fontSize:24,lineHeight:28}}>{this.props.name}</Text>

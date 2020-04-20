@@ -109,7 +109,7 @@ export default class SearchResults extends Component {
             data={this.state.data}
             keyExtractor={(item, index) => item.itemNum}
             renderItem={({ item }) => (
-              <TouchableOpacity
+              <TouchableOpacity  activeOpacity={0.8}
                 style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'row' }}>
                   <Image

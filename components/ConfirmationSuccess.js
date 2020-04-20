@@ -7,21 +7,11 @@ export default class ConfirmationSuccess extends Component {
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={styles.subView}>
           <View
-            style={{
-              flex: 1,
-              justifyContent: 'space-between',
-              flexDirection: 'row',
-              paddingHorizontal: 21,
-              marginTop: 26,
-            }}>
+            style={styles.nestedSubView}>
             <Text
-              style={{
-                fontFamily: 'Montserrat-Bold',
-                fontSize: 30,
-                color: "#2d2d2f"
-              }}>
+              style={styles.successText}>
               Success
             </Text>
             <Icon size={30} name="cross" type="entypo" color="#2d2d2f" />
@@ -29,15 +19,15 @@ export default class ConfirmationSuccess extends Component {
         </View>
         <View style={styles.subContainer}>
           <Image
-            style={{height: 48, width: 48}}
+            style={styles.successImage}
             source={require('../static/smile-confirmationSuccess.png')}></Image>
-          <View style={{marginTop: 31}}></View>
+          <View style={styles.marginTopView1}></View>
           <Text style={styles.congratulationsText}>Congratulations!</Text>
           <Text style={styles.congratulationsText}>Your order is accepted</Text>
-          <View style={{marginTop: 29}}></View>
+          <View style={styles.marginTopView2}></View>
           <Text style={styles.yourItemsText}>Your items are on the way and</Text>
           <Text style={styles.yourItemsText}>should arrive shortly</Text>
-          <View style={{marginTop: 25}}></View>
+          <View style={styles.marginTopView3}></View>
           <Text style={styles.orderText}>Order number: 4839200012</Text>
         </View>
 
@@ -73,5 +63,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Heavy',
     fontSize: 20,
     color: '#000000',
-  }
+  },
+  subView:{flexDirection: 'row', alignItems: 'center'},
+  nestedSubView:{
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    paddingHorizontal: 21,
+    marginTop: 26,
+  },
+  successText:{
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 30,
+    color: "#2d2d2f"
+  },
+  successImage:{height: 48, width: 48},
+  marginTopView1:{marginTop: 31},
+  marginTopView2:{marginTop: 29},
+  marginTopView3:{marginTop: 25}
 });

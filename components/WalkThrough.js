@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
 import {
   Text,
-  Image,
   StyleSheet,
   View,
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
   ScrollView,
-  InteractionManager
+  InteractionManager,
 } from 'react-native';
 import Shimmer from 'react-native-shimmer';
+import AsyncStorage from '@react-native-community/async-storage';
+import GlobalStyles from './Styles/Style';
+import FastImage from 'react-native-fast-image'
 
 
 export default class WalkThrough extends Component {
@@ -20,35 +22,54 @@ export default class WalkThrough extends Component {
       loaded: false,
       images: [],
       error: null,
-      isReady: false
-
+      isReady: false,
     };
+    this._retrieveData().then((value) => {
+      if (value != null) {
+        console.log('{{{{{{{{{', value);
+        this.props.navigation.navigate('MainPage', {
+          userName: JSON.parse(value).name,
+        }); //Passing user Name
+      }
+    });
   }
-
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('user');
+      return value;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      var promises = []
-      promises.push(GetData('http://dev.landbw.co/api/mobile'))
-      Promise.all(promises).then((promiseResponses) => {
-          Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-            
+      var promises = [];
+      promises.push(GetData('http://dev.landbw.co/api/mobile'));
+      Promise.all(promises)
+        .then((promiseResponses) => {
+          Promise.all(promiseResponses.map((res) => res.json()))
+            .then((responses) => {
               this.setState({
-                  isReady: true,
-                  images: responses[0].home.not_logged.sliders,
-              })
-          }).catch(ex => { console.log("Inner Promise", ex) })
-      }).catch(ex => { console.log("Outer Promise", ex) })
-    })
-  };
-
+                isReady: true,
+                images: responses[0].home.not_logged.sliders,
+              });
+            })
+            .catch((ex) => {
+              console.log('Inner Promise', ex);
+            });
+        })
+        .catch((ex) => {
+          console.log('Outer Promise', ex);
+        });
+    });
+  }
 
   render() {
-
     var featuredImages = [];
 
     this.state.images.forEach((img, index) => {
       featuredImages.push(
-        <Image
+        <FastImage
           style={styles.images}
           key={index}
           resizeMode="contain"
@@ -59,38 +80,39 @@ export default class WalkThrough extends Component {
 
     if (!this.state.isReady) {
       return (
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
-              <Shimmer>
-                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
-              </Shimmer>
-          </View>
-      )
-
-  }
+        <View style={GlobalStyles.loader}>
+          <Shimmer>
+            <FastImage
+              style={GlobalStyles.logoImageLoader}
+              resizeMode={'contain'}
+              source={require('../static/logo-signIn.png')}
+            />
+          </Shimmer>
+        </View>
+      );
+    }
 
     return (
-      
-      <SafeAreaView style={styles.mainContainer}>
+      <SafeAreaView style={GlobalStyles.parentContainer}>
         <View style={styles.subContainer}>
-          <Image
+          <FastImage
             style={styles.logo}
             resizeMode="contain"
             source={require('../static/logo-walkthrough.png')}
           />
-            <View style={styles.imageContainer}>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}>
-                {featuredImages}
-              </ScrollView>
-            </View>
-            
+          <View style={styles.imageContainer}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              {featuredImages}
+            </ScrollView>
+          </View>
 
           <View style={styles.texts}>
             <Text style={styles.newCollection}>New Collection</Text>
             <View style={styles.youAreRegistering}>
               <Text style={styles.text1}>You are registering for a</Text>
-              <View style={{flexDirection: 'row'}}>
+              <View style={styles.wholeSaleAccountTV}>
                 <Text style={styles.text2}>{' WHOLESALE'}</Text>
                 <Text style={styles.text1}>{' account.'}</Text>
               </View>
@@ -122,10 +144,6 @@ export default class WalkThrough extends Component {
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
   subContainer: {
     flex: 1,
     alignItems: 'center',
@@ -192,6 +210,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#2d2d2f',
   },
+  wholeSaleAccountTV:{flexDirection: 'row'},
   buttonContainer: {
     flexDirection: 'row',
     marginTop: 23,

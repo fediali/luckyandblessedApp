@@ -60,14 +60,14 @@ class Payment extends Component {
                                 </View>
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 25 }}>
-                                <TouchableOpacity>
+                                <TouchableOpacity activeOpacity={0.5}>
                                     <View style={{ flexDirection: "row", alignItems: "center" }}>
 
                                         <Image style={{ height: 25, width: 25, marginRight: 5 }} source={require("../static/icon_done.png")} />
                                         <Image style={{ height: 24, width: 149 }} source={require("../static/visaLogo.png")} />
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
+                                <TouchableOpacity activeOpacity={0.5}>
 
                                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                                         <Image style={{ height: 25, width: 25, marginRight: 5 }} source={require("../static/icon_done.png")} />

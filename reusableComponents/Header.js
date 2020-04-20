@@ -17,7 +17,7 @@ import { Icon } from 'react-native-elements'
 Props:
 centerText: "provide the text to show in center"
 rightIcon: "search" provide icon name ,supported icon names { info,search,share,edit } and "clear" Clear all text
-
+homepage:true or false
 
 */
 class Header extends PureComponent {
@@ -103,7 +103,7 @@ class Header extends PureComponent {
             )
         } else {
             return (
-                <View></View>
+                <View style={{height: 22, width:22}}></View>
             )
         }
     }
@@ -112,8 +112,8 @@ class Header extends PureComponent {
             <View style={{ height: 50, flexDirection: "row", alignItems: "center", backgroundColor: '#ffffff' }}>
 
                 <View style={{ flex: 1, justifyContent: "space-between", flexDirection: "row", paddingHorizontal: 12, alignItems: "center" }}>
-                    {this.props.homePage ?
-                        <View></View> :
+                    {this.props.homepage ?
+                        <View style={{height:30,width:30}}></View> :
                         <View>
                             <TouchableOpacity onPress={() => {
                                 if (this.lockSubmit) return;
@@ -131,8 +131,8 @@ class Header extends PureComponent {
                         </View>
                     }
 
-                    {this.props.homePage ?
-                        <View >
+                    {this.props.homepage ?
+                        <View style={{marginTop: 5}} >
                             <Text style={{ fontFamily: "Montserrat-SemiBold", fontSize: 18, lineHeight: 22 }}>{this.props.centerText}</Text>
                             <Text style={styles.homePersonText}>{this.props.person}</Text>
                         </View>

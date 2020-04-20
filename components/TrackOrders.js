@@ -7,7 +7,7 @@ import {
   Dimensions,
   ScrollView,
   InteractionManager,
-  Image
+  Image,
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -17,7 +17,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import OrderProducts from '../reusableComponents/OrdersProduct';
 import Accordion from 'react-native-collapsible/Accordion';
 import Shimmer from 'react-native-shimmer';
-
+import GlobalStyles from './Styles/Style';
 
 //FIXME: Accordian ScrollView
 export default class TrackOrders extends Component {
@@ -29,7 +29,6 @@ export default class TrackOrders extends Component {
 
       data: [
         {
-          id: 0,
           orderId: '48392004',
           date: 'June 4, 2020',
           trackingNumber: '1Z04563340987283920',
@@ -60,7 +59,6 @@ export default class TrackOrders extends Component {
           ],
         },
         {
-          id: 1,
 
           orderId: '78309897',
           date: 'June 5, 2020',
@@ -92,7 +90,6 @@ export default class TrackOrders extends Component {
           ],
         },
         {
-          id: 2,
 
           orderId: '78309898',
           date: 'June 5, 2020',
@@ -118,39 +115,41 @@ export default class TrackOrders extends Component {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-        this.setState({isReady: true})
-    })
-  };
+      this.setState({isReady: true});
+    });
+  }
 
-
-  _renderHeader = (section) => {
-    console.log(section);
+  _renderHeader = (section, index) => {
+    //console.log(section);
 
     return (
-      <TouchableOpacity style={[styles.order, {marginHorizontal: 20}]}>
-        <Text style={[styles.orderIdText, {marginTop: 13}]}>
-          {'#' + section.orderId}
-        </Text>
+      <View>
+        <View style={styles.seperator}></View>
 
-        <View style={{flexDirection: 'row'}}>
-          <View style={{marginRight: 29}}>
-            <Text style={styles.orderDateText}>{section.date}</Text>
-            <Text style={styles.subText}>Tap for details</Text>
-          </View>
+        <TouchableOpacity  activeOpacity={0.6} style={styles.order}>
+          <Text style={styles.orderIdText}>{'#' + section.orderId}</Text>
 
-          <View style={{marginTop: 26}}>
-            {
-                !this.state.activeSections.includes(section.id) ?
-                <Icon size={20} name="right" type="antdesign" />:
+          <View style={styles.details}>
+            <View style={styles.marginIcon}>
+              <Text style={styles.orderDateText}>{section.date}</Text>
+              <Text style={styles.subText}>Tap for details</Text>
+            </View>
+
+            <View style={styles.iconView}>
+              {!this.state.activeSections.includes(index) ? (
+                <Icon size={20} name="right" type="antdesign" />
+              ) : (
                 <Icon size={20} name="down" type="antdesign" />
-            }
+              )}
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   };
 
   _updateSections = (activeSections) => {
+    console.log("Update sec")
     console.log(activeSections);
     this.setState({activeSections});
   };
@@ -164,52 +163,46 @@ export default class TrackOrders extends Component {
     );
   };
 
-  renderSeparator = (item) => {
-    return (
-      <View>
-        {/* <View style={{paddingTop: 13}}></View> */}
-
-        <View style={{backgroundColor: '#f6f6f6', paddingTop: 1}}></View>
-      </View>
-    );
-  };
-
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
 
     if (!this.state.isReady) {
       return (
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
-              <Shimmer>
-                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
-              </Shimmer>
-          </View>
-      )
-
-  }
+        <View style={GlobalStyles.loader}>
+          <Shimmer>
+            <Image
+              style={GlobalStyles.logoImageLoader}
+              resizeMode={'contain'}
+              source={require('../static/logo-signIn.png')}
+            />
+          </Shimmer>
+        </View>
+      );
+    }
     return (
-      <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Your orders" rightIcon="search"  navigation={this.props.navigation} />
-        <View style={{backgroundColor: '#f6f6f6', paddingTop: 1}}></View>
+      <SafeAreaView style={GlobalStyles.parentContainer}>
+        <Header
+          centerText="Your orders"
+          rightIcon="search"
+          navigation={this.props.navigation}
+        />
 
-        <View style={{paddingTop: 10}}>
+        <View style={styles.accordionStart}>
           <Accordion
-            style={{marginBottom: 0, paddingBottom: 0}}
             underlayColor="#fff"
             sections={this.state.data}
             activeSections={this.state.activeSections}
             renderHeader={this._renderHeader}
             renderContent={this._renderContent}
             onChange={this._updateSections}
-            // touchableComponent={(props) => <TouchableOpacity {...props} />}
             expandMultiple={true}
           />
         </View>
 
-        <View style={{paddingBottom: 59, backgroundColor: '#ffffff'}}></View>
+        <View style={styles.bottomContainer}></View>
 
-        <Footer selected="Van"  navigation={this.props.navigation} />
+        <Footer selected="Van" navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }
@@ -218,24 +211,24 @@ export default class TrackOrders extends Component {
 let Height = Dimensions.get('window').height;
 let Width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
-  subContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
   order: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginHorizontal: 20,
   },
   orderIdText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
     lineHeight: 22,
     color: '#2d2d2f',
+    marginTop: 13,
   },
+  details: {flexDirection: 'row'},
+  marginIcon: {marginRight: 29},
+  iconView: {marginTop: 26},
+  seperator: {backgroundColor: '#f6f6f6', paddingTop: 1},
+  accordionStart: {paddingTop: 10},
+  bottomContainer: {paddingBottom: 59, backgroundColor: '#ffffff'},
   orderDateText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
