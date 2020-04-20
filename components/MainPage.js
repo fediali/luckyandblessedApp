@@ -92,9 +92,9 @@ class MainPage extends Component {
             promises.push(GetData(baseUrl + 'api/mobile'))
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
             // Retriving the user_id
-            this._retrieveData('user_id').then(value => {
-                console.log("THIS IS VALUE", value)
-            });
+            // this._retrieveData('user_id').then(value => {
+            //     console.log("THIS IS VALUE", value)
+            // });
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
 
