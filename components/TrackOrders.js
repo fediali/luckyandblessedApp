@@ -119,14 +119,8 @@ export default class TrackOrders extends Component {
     });
   }
 
-<<<<<<< HEAD
-  _renderHeader = (section,index) => {
-    // console.log(section);
-    // console.log(index);
-=======
   _renderHeader = (section, index) => {
     //console.log(section);
->>>>>>> cef558a6c4d59a768719593748bd9427ea967d8f
 
     return (
       <View>
@@ -144,10 +138,6 @@ export default class TrackOrders extends Component {
             <View style={styles.iconView}>
               {!this.state.activeSections.includes(index) ? (
                 <Icon size={20} name="right" type="antdesign" />
-<<<<<<< HEAD
-                //console.log(section.orderId)
-=======
->>>>>>> cef558a6c4d59a768719593748bd9427ea967d8f
               ) : (
                 <Icon size={20} name="down" type="antdesign" />
               )}
@@ -159,12 +149,8 @@ export default class TrackOrders extends Component {
   };
 
   _updateSections = (activeSections) => {
-<<<<<<< HEAD
-    //console.log(activeSections);
-=======
     console.log("Update sec")
     console.log(activeSections);
->>>>>>> cef558a6c4d59a768719593748bd9427ea967d8f
     this.setState({activeSections});
   };
 
