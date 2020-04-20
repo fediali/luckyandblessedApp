@@ -283,7 +283,7 @@ class MainPage extends Component {
                         </View>
 
                         <FlatList
-                            //keyExtractor={(item) => item[0].product_id.toString()}
+                            keyExtractor={(item) => item[0].product_id.toString()}
                             data={this.state.trending}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
