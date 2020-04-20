@@ -11,6 +11,7 @@ import {
   InteractionManager
 } from 'react-native';
 import Shimmer from 'react-native-shimmer';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 export default class WalkThrough extends Component {
@@ -23,8 +24,21 @@ export default class WalkThrough extends Component {
       isReady: false
 
     };
+    this._retrieveData().then((value)=>{
+      if(value!=null){
+          console.log("{{{{{{{{{",value)
+          this.props.navigation.navigate("MainPage", { userName: JSON.parse(value).name }) //Passing user Name
+      }
+  })
   }
-
+  _retrieveData = async () => {
+    try {
+        const value = await AsyncStorage.getItem('user');
+        return (value)
+    } catch (error) {
+        console.log(error)
+    }
+};
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       var promises = []

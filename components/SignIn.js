@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from "react-native"
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView,ScrollView, ActivityIndicator } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import { Icon } from 'react-native-elements'
 import PostData from '../reusableComponents/API/PostData';
 import Toast from 'react-native-simple-toast';
 import GetData from '../reusableComponents/API/GetData';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const baseUrl = "http://dev.landbw.co/";
 
@@ -19,34 +20,54 @@ class SignIn extends Component {
             email: "",
             password: "",
             emailError: "",
-            passwordError: ""
+            passwordError: "",
+            requested:false
         }
+
     }
+
+    _storeData = async (user) => {
+        try {
+            console.log("vaing ", user)
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+        } catch (error) {
+            // Error saving data
+            console.log(error)
+        }
+    };
 
     signInClick = () => {
         if (this.isValid()) {
             var promises = []
+            this.setState({requested:true})
             promises.push(GetData(baseUrl + `api/users?email=${this.state.email}`))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
                     console.log(responses[0].users.length)
                     // this.props.navigation.navigate("MainPage", {userName:"asdasd"}) //Passing user Name
 
-                    if (responses[0].users.length > 0){
+                    if (responses[0].users.length > 0) {
                         console.log(responses[0].users[0].user_id) //TODO: Save this UID
                         console.log(responses[0].users[0].firstname + " " + responses[0].users[0].lastname)
                         Toast.show('Login Successful');
                         console.log(responses[0].users[0].firstname + " " + responses[0].users[0].lastname)
-                        this.props.navigation.navigate("MainPage", {userName: responses[0].users[0].firstname + " " + responses[0].users[0].lastname}) //Passing user Name
+                        var user={
+                            user_id: responses[0].users[0].user_id,
+                            name: responses[0].users[0].firstname + " " + responses[0].users[0].lastname
+                        }
+                        this._storeData(user)
+                        //TODO: uncomment this
+                        this.props.navigation.navigate("MainPage", { userName: responses[0].users[0].firstname + " " + responses[0].users[0].lastname }) //Passing user Name
                     }
                     else {
                         Toast.show('Username or password incorrect', Toast.LONG);
+                        this.setState({requested:false})
                     }
-                   
+
                 }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
         }
-        this.props.navigation.navigate("MainPage",{userName: "Test Name"}) //TODO: Remove this
+        // this.props.navigation.navigate("MainPage",{userName: "Test Name"}) //TODO: Remove this
 
     }
 
@@ -81,12 +102,14 @@ class SignIn extends Component {
 
     render() {
         return (
-            // <SafeAreaView>
             <SafeAreaView style={styles.mainContainer}>
+            
                 <View style={styles.subContainer}>
                     <Image style={{
                         width: "53%",
                         height: "35%",
+                        marginBottom:20
+                    
                     }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                     {/* TODO: Image has to be changed with orignal one */}
                     <View style={styles.emailInputView}>
@@ -94,7 +117,7 @@ class SignIn extends Component {
                     </View>
                     {this.state.emailError != "" ? this.showErrorMessage(this.state.emailError) : <View></View>}
                     <View style={styles.passwordInputView}>
-                        <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" onChangeText={(text) => { this.setState({ password: text }) }}/>
+                        <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" onChangeText={(text) => { this.setState({ password: text }) }} />
                     </View>
                     {this.state.passwordError != "" ? this.showErrorMessage(this.state.passwordError) : <View></View>}
 
@@ -110,6 +133,10 @@ class SignIn extends Component {
                     <TouchableOpacity>
                         <Text style={styles.forgotPassword}>Forgot Password?</Text>
                     </TouchableOpacity>
+                    {
+                        this.state.requested?<ActivityIndicator style={{marginTop:30}}size="large" color="#2967ff"/>
+                        :null
+                    }
                 </View>
 
             </SafeAreaView>

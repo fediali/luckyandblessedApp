@@ -16,6 +16,7 @@ import ProfileText from '../reusableComponents/UserProfileText';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Icon} from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
+import AsyncStorage from '@react-native-community/async-storage';
 
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 //TODO: Data on pressing the arrow
@@ -183,6 +184,7 @@ export default class UserProfile extends Component {
               <TouchableOpacity
                 style={styles.buttonSignIn}
                 onPress={() => {
+                  AsyncStorage.removeItem("user");
                   this.props.navigation.navigate('SignIn');
                 }}>
                 <Text style={styles.buttonText}>Logout</Text>

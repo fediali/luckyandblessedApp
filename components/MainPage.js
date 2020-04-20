@@ -13,8 +13,10 @@ import {
     ActivityIndicator,
     InteractionManager,
     YellowBox,
-    SafeAreaView
+    SafeAreaView,
+    
 } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage';
 
 import styles from './Styles/Style'
 import Header from '../reusableComponents/Header'
@@ -24,20 +26,22 @@ import { _categoryList, _collections, _newArrivals, _trending, _history } from '
 import GetData from "../reusableComponents/API/GetData"
 import ShimmerLogo from "../reusableComponents/ShimmerLogo"
 import Shimmer from 'react-native-shimmer';
+import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalListItem"
 
 YellowBox.ignoreWarnings([
     'Require cycle:'
 ])
 
 const baseUrl = "http://dev.landbw.co/";
-
+const SELECTED_CATEGORY_ALL=-1
 class MainPage extends Component {
+    
 
     constructor(props) {
         super(props);
         this.state = {
             showNewsletter: true,
-            selectedCategory: 0,
+            selectedCategory: SELECTED_CATEGORY_ALL,
             categoryList: null,
             collections: null,
             newArrivals: null,
@@ -49,13 +53,27 @@ class MainPage extends Component {
 
     }
 
+    _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem('user_id');
 
+          if (value !== null) {
+            return(value)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      };
     componentDidMount() {
 
         InteractionManager.runAfterInteractions(() => {
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
+            // Retriving the user_id
+            this._retrieveData().then(value=>{
+                console.log("THIS IS VALUE",value)
+            });
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
 
@@ -100,7 +118,6 @@ class MainPage extends Component {
 
 
     render() {
-        console.log("_____",this.props.route.params.userName)
         const Width = Dimensions.get('window').width;
         const Height = Dimensions.get('window').height;
         if (!this.state.isReady) {
@@ -133,19 +150,8 @@ class MainPage extends Component {
                             extraData={this.selectedCategory}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
-                                <View style={{ height: '2.8%', marginVertical: 10 }}>
-                                    {this.state.selectedCategory == index ?
-                                        < TouchableOpacity onPress={() => {
-                                            this.onCategorySelect(item.category_id, item.category)
-                                        }}>
-                                            <Text style={[styles.buttonText, { marginHorizontal: 10, color: "#2967ff" }]}>{item.category}</Text>
-                                        </TouchableOpacity>
-                                        :
-                                        < TouchableOpacity onPress={() => { this.onCategorySelect(item.category_id, item.category) }}>
-                                            <Text style={[styles.buttonText, { marginHorizontal: 10 }]}>{item.category}</Text>
-                                        </TouchableOpacity>
-                                    }
-                                </View>
+                                <HeaderHorizontalListItem cid={this.state.selectedCategory} index={index} item={item} onCategorySelect={this.onCategorySelect}/>
+
                             )}
 
                         />
