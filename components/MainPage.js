@@ -110,12 +110,11 @@ class MainPage extends Component {
                         console.log("THIS IS VALUE", value)
                     });
                     this.setState({
-                        isReady: true,
                         collections: responses[0].home.logged.sliders,
                         newArrivals: responses[0].home.logged.new_arrivals.products,
                         trending: responses[0].home.logged.trending.products,
                         categoryList: responses[1].categories
-                    },() => { this.mapTrendingList(this.state.trending, 3) })
+                    }, () => { this.mapTrendingList(this.state.trending, 3) })
 
                 }).catch(ex => { console.log("Inner Promise", ex) })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.props.navigation.navigate("SignIn") })
@@ -157,8 +156,8 @@ class MainPage extends Component {
         for (var i = 0; i < tList.length / sliceValue; i++) {
             tempList.push(tList.slice(i * sliceValue, i * sliceValue + sliceValue));
         }
-        console.log(tList)
-        this.setState({ trending: tempList })
+        console.log("zzzzzzzzzzzzz", tempList)
+        this.setState({ trending: tempList, isReady: true, })
     }
 
     render() {
@@ -293,7 +292,7 @@ class MainPage extends Component {
 
                                 console.log(item)
                                 return (
-                                    
+                                    // <View></View>
                                     <MainPageTrendingListItem
                                         listItem={item}
                                     />
