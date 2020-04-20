@@ -52,9 +52,9 @@ class MainPage extends Component {
 
     }
 
-    _retrieveData = async () => {
+    _retrieveData = async (key) => {
         try {
-            const value = await AsyncStorage.getItem('user_id');
+            const value = await AsyncStorage.getItem(key);
 
             if (value !== null) {
                 return (value)
@@ -92,7 +92,7 @@ class MainPage extends Component {
             promises.push(GetData(baseUrl + 'api/mobile'))
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
             // Retriving the user_id
-            this._retrieveData().then(value => {
+            this._retrieveData('user_id').then(value => {
                 console.log("THIS IS VALUE", value)
             });
             Promise.all(promises).then((promiseResponses) => {
@@ -102,6 +102,9 @@ class MainPage extends Component {
                     console.log(responses[0].home.logged.new_arrivals)
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
                     // console.log(responses[1])
+                    this._retrieveData("productHistoryList").then(value => {
+                        console.log("THIS IS VALUE", value)
+                    });
                     this.setState({
                         isReady: true,
                         collections: responses[0].home.logged.sliders,

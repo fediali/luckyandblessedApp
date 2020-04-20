@@ -22,6 +22,7 @@ import Shimmer from 'react-native-shimmer';
 import GetData from "../reusableComponents/API/GetData"
 import HTML from 'react-native-render-html';
 import FastImage from 'react-native-fast-image'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const baseUrl = "http://dev.landbw.co/";
 
@@ -85,7 +86,24 @@ export default class ProductPage extends Component {
 
     };
   }
-
+  
+  _storeData = async (user) => {
+    try {
+        console.log("vaing ", user)
+        await AsyncStorage.setItem('productHistoryList', JSON.stringify(user));
+    } catch (error) {
+        // Error saving data
+        console.log(error)
+    }
+};
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('productHistoryList');
+      return JSON.parse(value);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       // "api/products/"+this.props.route.params.id
@@ -104,6 +122,21 @@ export default class ProductPage extends Component {
           }
           getArray().then((secondaryImagesArray) => {
             // console.log(secondaryImagesArray)
+
+            //Stroing History of objects
+            this._retrieveData().then((value)=>{
+              if(value==null)value=[]
+              historyObj={
+                productName: response.product,
+                price: response.price,
+                mainImage: response.main_pair.detailed.image_path,
+                pid:this.state.pid
+              }
+              value.push(historyObj)
+              if(value.length>=10)value.shift()
+              this._storeData(value)
+
+            })
             this.setState({
               isReady: true,
               data: {
@@ -246,26 +279,27 @@ export default class ProductPage extends Component {
                     ${Number(this.state.data.price).toFixed(2)}
                   </Text>
                   <Text style={styles.subText}>
-                    Prepack Price: ${Number(this.state.data.price*this.state.data.min_qty).toFixed(2)}
+                    Prepack Price: ${Number(this.state.data.price * this.state.data.min_qty).toFixed(2)}
                   </Text>
                 </View>
               </View>
               <View style={{}}>
 
-                <View style={[styles.mainPicture,{backgroundColor:"#f6f6f6",borderRadius:6}]}>
+                <View style={[styles.mainPicture, { backgroundColor: "#f6f6f6", borderRadius: 6 }]}>
                   <FastImage style={styles.mainPicture} source={{ uri: this.state.data.mainImage }} resizeMode="contain"></FastImage>
 
                 </View>
-                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{ marginVertical: 15, }}>
-                  {this.state.data.secondaryImages.map((val, num) => {
-                    return (
-                      <TouchableOpacity key={num} onPress={() => { this.setState({ data: { ...this.state.data, mainImage: val } }) }}>
+                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{ marginVertical: 15,alignItems:"center",justifyContent:"center",flex:1 }}>
+                    {this.state.data.secondaryImages.map((val, num) => {
+                      return (
+                        <TouchableOpacity key={num} onPress={() => { this.setState({ data: { ...this.state.data, mainImage: val } }) }}>
 
-                        <FastImage style={this.state.data.mainImage == val ? [styles.thumbnail, { borderColor: "#2967ff", borderWidth: 2 }] : styles.thumbnail} source={{ uri: val }}></FastImage>
-                      </TouchableOpacity>
-                    )
-                  })}
+                          <FastImage style={this.state.data.mainImage == val ? [styles.thumbnail, { borderColor: "#2967ff", borderWidth: 2 }] : styles.thumbnail} source={{ uri: val }}></FastImage>
+                        </TouchableOpacity>
+                      )
+                    })}
                 </ScrollView>
+
               </View>
 
             </View>
