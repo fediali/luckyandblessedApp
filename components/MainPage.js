@@ -24,7 +24,6 @@ import Footer from '../reusableComponents/Footer'
 
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 import GetData from "../reusableComponents/API/GetData"
-import ShimmerLogo from "../reusableComponents/ShimmerLogo"
 import Shimmer from 'react-native-shimmer';
 import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalListItem"
 import FastImage from 'react-native-fast-image'
@@ -185,7 +184,7 @@ class MainPage extends Component {
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
-                                <TouchableOpacity style={{ borderRadius: 6 }}>
+                                <TouchableOpacity  activeOpacity={0.9} style={{ borderRadius: 6 }}>
                                     <ImageBackground
                                         style={innerStyles.collectionImages}
                                         source={{ uri: item.background.image }}
@@ -206,7 +205,7 @@ class MainPage extends Component {
                         </View>
                         <View style={innerStyles.gridView}>
                             <View style={innerStyles.gridCell}>
-                                <TouchableOpacity style={{ flexDirection: 'column', marginEnd: 5 }}>
+                                <TouchableOpacity  activeOpacity={0.9} style={{ flexDirection: 'column', marginEnd: 5 }}>
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -217,7 +216,7 @@ class MainPage extends Component {
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[0].price}</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ flexDirection: 'column', marginStart: 5 }}>
+                                <TouchableOpacity  activeOpacity={0.9} style={{ flexDirection: 'column', marginStart: 5 }}>
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -229,7 +228,7 @@ class MainPage extends Component {
                                 </TouchableOpacity>
                             </View>
                             <View style={innerStyles.gridCell}>
-                                <TouchableOpacity style={{ flexDirection: 'column', marginEnd: 5 }}>
+                                <TouchableOpacity  activeOpacity={0.9} style={{ flexDirection: 'column', marginEnd: 5 }}>
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -240,7 +239,7 @@ class MainPage extends Component {
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[2].price}</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={{ flexDirection: 'column', marginStart: 5 }}>
+                                <TouchableOpacity  activeOpacity={0.9} style={{ flexDirection: 'column', marginStart: 5 }}>
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -269,7 +268,7 @@ class MainPage extends Component {
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
                                 <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                                    <TouchableOpacity style={innerStyles.trendingView}>
+                                    <TouchableOpacity  activeOpacity={0.9} style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
                                             <FastImage
                                                 style={innerStyles.trendingImage}
@@ -285,7 +284,7 @@ class MainPage extends Component {
                                             <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
                                         </View>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={innerStyles.trendingView}>
+                                    <TouchableOpacity  activeOpacity={0.9} style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
                                             <FastImage
                                                 style={innerStyles.trendingImage}
@@ -301,7 +300,7 @@ class MainPage extends Component {
                                             <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
                                         </View>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={innerStyles.trendingView}>
+                                    <TouchableOpacity  activeOpacity={0.9} style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
                                             <FastImage
                                                 style={innerStyles.trendingImage}
@@ -335,7 +334,7 @@ class MainPage extends Component {
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
-                                <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
+                                <TouchableOpacity  activeOpacity={0.9} style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -364,7 +363,7 @@ class MainPage extends Component {
                                     <TextInput style={[styles.input, { backgroundColor: '#ffffff' }]} placeholder="Email" />
                                 </View>
                                 <View style={[styles.buttonContainer, { paddingHorizontal: 10, width: '100%', alignItems: 'center' }]}>
-                                    <TouchableOpacity style={[innerStyles.buttonSubmit]}>
+                                    <TouchableOpacity  activeOpacity={0.5} style={[innerStyles.buttonSubmit]}>
                                         <Text
                                             style={[
                                                 styles.buttonText,

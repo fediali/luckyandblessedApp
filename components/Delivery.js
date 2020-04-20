@@ -62,16 +62,16 @@ class Delivery extends Component {
                             <Text style={innerStyles.mainTextBold}>Delivery</Text>
                             <Text style={[innerStyles.lightText, innerStyles.textAlignLeft]}>Order number is 4839200012</Text>
 
-                            <TouchableOpacity style={[styles.buttonContainer, styles.buttonContainerAdd]}>
+                            <TouchableOpacity activeOpacity={0.5} style={[styles.buttonContainer, styles.buttonContainerAdd]}>
                                 <Text style={innerStyles.buttonTextContainer}>Shipping will be added later </Text>
                             </TouchableOpacity>
 
                             <View style={innerStyles.horizontalView}>
-                                <TouchableOpacity style={innerStyles.squareBoxButtons}>
+                                <TouchableOpacity activeOpacity={0.5} style={innerStyles.squareBoxButtons}>
                                     <Image style={innerStyles.iconDoneStyle} resizeMode="contain" source={require("../static/icon_done.png")} />
                                     <Text style={[innerStyles.lightText, innerStyles.textAlignCenter]}>Billing and delivery info are the same</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={[innerStyles.squareBoxButtons, innerStyles.marginStart]}>
+                                <TouchableOpacity activeOpacity={0.5} style={[innerStyles.squareBoxButtons, innerStyles.marginStart]}>
                                     <ImageBackground style={innerStyles.iconDoneStyle} resizeMode="contain" source={require("../static/icon_empty_round.png")} >
                                         <View style={innerStyles.alignCenter}>
                                             <Image style={innerStyles.plusIconStyle} resizeMode="contain" source={require("../static/icon_plus.png")} />
@@ -117,7 +117,7 @@ class Delivery extends Component {
                             </View>
                         </View>
                         <View style={[styles.buttonContainer, innerStyles.buttonStyles]}>
-                            <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={() => { this.props.navigation.navigate("Payment") }}>
+                            <TouchableOpacity activeOpacity={0.5} style={[innerStyles.buttonPaymentMethod]} onPress={() => { this.props.navigation.navigate("Payment") }}>
                                 <Text
                                     style={[
                                         styles.buttonText,

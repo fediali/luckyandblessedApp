@@ -126,7 +126,7 @@ export default class TrackOrders extends Component {
       <View>
         <View style={styles.seperator}></View>
 
-        <TouchableOpacity style={styles.order}>
+        <TouchableOpacity  activeOpacity={0.6} style={styles.order}>
           <Text style={styles.orderIdText}>{'#' + section.orderId}</Text>
 
           <View style={styles.details}>
