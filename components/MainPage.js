@@ -14,7 +14,8 @@ import {
     InteractionManager,
     YellowBox,
     SafeAreaView,
-    
+    BackHandler,
+    Alert 
 } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -64,9 +65,28 @@ class MainPage extends Component {
           console.log(error)
         }
       };
+      backAction = () => {
+        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel"
+          },
+          { text: "YES", onPress: () => BackHandler.exitApp() }
+        ]);
+        return true;
+      };
+
+      componentWillUnmount() {
+        this.backHandler.remove();
+      }
     componentDidMount() {
 
         InteractionManager.runAfterInteractions(() => {
+            this.backHandler = BackHandler.addEventListener(
+                "hardwareBackPress",
+                this.backAction
+              );
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
