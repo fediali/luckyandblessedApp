@@ -119,9 +119,14 @@ export default class TrackOrders extends Component {
     });
   }
 
+<<<<<<< HEAD
   _renderHeader = (section,index) => {
     // console.log(section);
     // console.log(index);
+=======
+  _renderHeader = (section, index) => {
+    //console.log(section);
+>>>>>>> cef558a6c4d59a768719593748bd9427ea967d8f
 
     return (
       <View>
@@ -139,7 +144,10 @@ export default class TrackOrders extends Component {
             <View style={styles.iconView}>
               {!this.state.activeSections.includes(index) ? (
                 <Icon size={20} name="right" type="antdesign" />
+<<<<<<< HEAD
                 //console.log(section.orderId)
+=======
+>>>>>>> cef558a6c4d59a768719593748bd9427ea967d8f
               ) : (
                 <Icon size={20} name="down" type="antdesign" />
               )}
@@ -151,7 +159,12 @@ export default class TrackOrders extends Component {
   };
 
   _updateSections = (activeSections) => {
+<<<<<<< HEAD
     //console.log(activeSections);
+=======
+    console.log("Update sec")
+    console.log(activeSections);
+>>>>>>> cef558a6c4d59a768719593748bd9427ea967d8f
     this.setState({activeSections});
   };
 
@@ -201,7 +214,7 @@ export default class TrackOrders extends Component {
           />
         </View>
 
-        <View style={{paddingBottom: 59, backgroundColor: '#ffffff'}}></View>
+        <View style={styles.bottomContainer}></View>
 
         <Footer selected="Van" navigation={this.props.navigation} />
       </SafeAreaView>
@@ -229,6 +242,7 @@ const styles = StyleSheet.create({
   iconView: {marginTop: 26},
   seperator: {backgroundColor: '#f6f6f6', paddingTop: 1},
   accordionStart: {paddingTop: 10},
+  bottomContainer: {paddingBottom: 59, backgroundColor: '#ffffff'},
   orderDateText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,

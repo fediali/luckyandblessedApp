@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
-  Image,
   TouchableOpacity,
   Dimensions,
   InteractionManager,
@@ -18,6 +17,7 @@ import {Icon} from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
+import FastImage from 'react-native-fast-image'
 
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 //TODO: Data on pressing the arrow
@@ -96,7 +96,7 @@ export default class UserProfile extends Component {
       return (
         <View style={GlobalStyles.loader}>
           <Shimmer>
-            <Image
+            <FastImage
               style={GlobalStyles.logoImageLoader}
               resizeMode={'contain'}
               source={require('../static/logo-signIn.png')}
@@ -113,9 +113,9 @@ export default class UserProfile extends Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollViewStyles}>
           <View style={styles.subContainer}>
-            <Image
+            <FastImage
               style={styles.displayPicture}
-              source={require('../static/dp-userProfile.png')}></Image>
+              source={require('../static/dp-userProfile.png')}></FastImage>
             <Text style={styles.userNameText}>Monika Willems</Text>
             <Text style={styles.userAddress}>455 Larkspur Dr. California</Text>
             <Text style={styles.userAddress}>Springs, CA 92926, USA</Text>
