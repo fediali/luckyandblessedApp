@@ -150,6 +150,9 @@ class MainPage extends Component {
     }
 
     mapTrendingList(tList, sliceValue) {
+        tList.shift();
+        console.log("AAAAAA",tList)
+
         let tempList = []
         console.log("CCCCCCaaaallleeddddddd")
 
@@ -283,7 +286,7 @@ class MainPage extends Component {
                         </View>
 
                         <FlatList
-                            //keyExtractor={(item) => item[0].product_id.toString()}
+                            keyExtractor={(item) => item[0].product_id.toString()}
                             data={this.state.trending}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
