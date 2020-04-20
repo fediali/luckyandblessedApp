@@ -63,7 +63,7 @@ class ColorPicker extends PureComponent {
     render() {
         //TODO: this I want to call only once, but it is getting called on every click
         return (
-            <View style={{ paddingBottom: 10}}>
+            <View style={innerStyles.paddingBottom}>
                 <FlatList
                     keyExtractor={(item) => item.id}
                     data={this.state.colorList}
@@ -77,10 +77,7 @@ class ColorPicker extends PureComponent {
                             <View style={[innerStyles.colorView, { backgroundColor: item.color }]}>
                                 {item.isCheck ?
                                     <Image
-                                        style={{
-                                            width: '31%',
-                                            height: '31%',
-                                        }}
+                                        style={innerStyles.image}
                                         resizeMode="contain" source={require("../static/icon_select.png")}
 
                                     /> : <View></View>
@@ -113,6 +110,11 @@ const innerStyles = StyleSheet.create({
     },
     multiRowStyling: {
         marginTop: 15,
+    },
+    paddingBottom:{ paddingBottom: 10},
+    image:{
+        width: '31%',
+        height: '31%',
     }
 })
 
