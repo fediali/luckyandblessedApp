@@ -151,15 +151,12 @@ class MainPage extends Component {
 
     mapTrendingList(tList, sliceValue) {
         tList.shift();
-        console.log("AAAAAA",tList)
 
         let tempList = []
-        console.log("CCCCCCaaaallleeddddddd")
 
         for (var i = 0; i < tList.length / sliceValue; i++) {
             tempList.push(tList.slice(i * sliceValue, i * sliceValue + sliceValue));
         }
-        console.log("zzzzzzzzzzzzz", tempList)
         this.setState({ trending: tempList, isReady: true, })
     }
 
@@ -177,8 +174,6 @@ class MainPage extends Component {
             )
 
         }
-        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-        console.log(this.state.trending)
         return (
             <SafeAreaView style={[styles.parentContainer]}>
                 <Header navigation={this.props.navigation} centerText="Welcome" homepage={true} person={this.props.route.params.userName} rightIcon="search" />
@@ -208,15 +203,6 @@ class MainPage extends Component {
                                 <MainPageCollection
                                     imageUrl={item.background.image} text={item.text}
                                 />
-                                // <TouchableOpacity activeOpacity={0.9} style={innerStyles.borderRadiusSix}>
-                                //     <ImageBackground
-                                //         style={innerStyles.collectionImages}
-                                //         source={{ uri: item.background.image }}
-                                //         resizeMode='stretch'
-                                //     >
-                                //         <Text style={innerStyles.semiBoldText}>{item.text}</Text>
-                                //     </ImageBackground>
-                                // </TouchableOpacity>
                             )}
                         />
 
@@ -291,14 +277,8 @@ class MainPage extends Component {
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => {
-                                console.log("=======================================")
-
-                                console.log(item)
                                 return (
-                                    // <View></View>
-                                    <MainPageTrendingListItem
-                                        listItem={item}
-                                    />
+                                    <MainPageTrendingListItem listItem={item} />
                                 )
                             }
                                 // <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
