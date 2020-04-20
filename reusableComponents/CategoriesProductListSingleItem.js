@@ -18,7 +18,7 @@ class CategoriesProductListSingleItem extends PureComponent {
         let Width = Dimensions.get("window").width
         let Height = Dimensions.get("window").height
         return (
-            <TouchableOpacity onPress={() => { this.props.navigation.navigate("ProductPage", { pid: [this.props.pid] }) }}>
+            <TouchableOpacity activeOpacity={0.9} onPress={() => { this.props.navigation.navigate("ProductPage", { pid: [this.props.pid] }) }}>
                 <View style={{borderRadius:6,backgroundColor:"#f6f6f6",width: Width * 0.88,alignSelf:"center"}}>
                     <FastImage source={this.props.imageUrl} style={{ alignSelf: "center", height: Height * 0.5, width: Width * 0.88}} resizeMode="contain" />
                 </View>

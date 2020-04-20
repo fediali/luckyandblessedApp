@@ -18,7 +18,7 @@ class CategoriesProductListDoubleItem extends PureComponent {
         let Width = Dimensions.get("window").width
         let Height = Dimensions.get("window").height
         return (
-            <TouchableOpacity style={{ maxWidth: Width / 2}} onPress={()=>{this.props.navigation.navigate("ProductPage", { pid: [this.props.pid]})}}>
+            <TouchableOpacity activeOpacity={0.9} style={{ maxWidth: Width / 2}} onPress={()=>{this.props.navigation.navigate("ProductPage", { pid: [this.props.pid]})}}>
                 <FastImage source={this.props.imageUrl} style={{ height: Height * 0.3, width: Width * 0.43,justifyContent:"center",borderRadius:6}} />
                 {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
                 <Text style={{ marginTop:9, maxWidth:Width * 0.43,fontFamily: "Montserrat-Medium", fontSize: 16, lineHeight: 20, color: "#2d2d2f"}}>{this.props.name1}</Text>

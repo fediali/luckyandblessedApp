@@ -174,6 +174,7 @@ export default class UserProfile extends Component {
           <View style={styles.bottomContainer}>
             <View style={styles.logOutButton}>
               <TouchableOpacity
+              activeOpacity={0.5}
                 style={styles.buttonSignIn}
                 onPress={() => {
                   AsyncStorage.removeItem('user');

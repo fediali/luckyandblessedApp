@@ -211,7 +211,7 @@ class ShoppingCart extends Component {
                 <View style={innerStyles.promoView}>
                     <View style={styles.inputView}>
                         <TextInput style={[styles.input]} placeholder="Gift Or Promo code" />
-                        <TouchableOpacity style={[innerStyles.giftButton]}>
+                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]}>
                             <Text
                                 style={[
                                     styles.buttonText,
@@ -247,7 +247,7 @@ class ShoppingCart extends Component {
                     backgroundColor: '#f6f6f6',
                     paddingBottom: 20
                 }]}>
-                    <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={() => { this.props.navigation.navigate("Delivery") }}>
+                    <TouchableOpacity activeOpacity={0.5} style={[innerStyles.buttonPaymentMethod]} onPress={() => { this.props.navigation.navigate("Delivery") }}>
                         <Text
                             style={[
                                 styles.buttonText,

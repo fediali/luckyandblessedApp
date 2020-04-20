@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    Image,
     StyleSheet,
     TextInput,
     TouchableOpacity,
@@ -19,6 +18,7 @@ import { Icon } from 'react-native-elements'
 import CategoriesProductListSingleItem from "../reusableComponents/CategoriesProductListSingleItem"
 import CategoriesProductListDoubleItem from "../reusableComponents/CategoriesProductListDoubleItem"
 import Shimmer from 'react-native-shimmer';
+import FastImage from 'react-native-fast-image'
 
 const baseUrl = "http://dev.landbw.co/";
 
@@ -151,7 +151,7 @@ class CategoriesProduct extends Component {
                             <Text style={styles.numCategoryText}>{this.state.totalProducts} products</Text>
                         </View>
                         <View style={styles.horizontalImagesView}>
-                            <Image style={styles.imageList} source={require('../static/listIcon.png')}></Image>
+                            <FastImage style={styles.imageList} source={require('../static/listIcon.png')}/>
 
                             <Text style={styles.sortingText}>Sorting</Text>
                             <View style={styles.rightImages}>
@@ -195,7 +195,7 @@ class CategoriesProduct extends Component {
                                     }
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.paddingLeftView}>
-                                    <Image style={styles.filterImage} source={require("../static/Filter.png")} />
+                                    <FastImage style={styles.filterImage} source={require("../static/Filter.png")} />
                                 </TouchableOpacity>
                             </View>
                         </View>
