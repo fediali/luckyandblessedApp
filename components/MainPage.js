@@ -5,7 +5,6 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    Image,
     StyleSheet,
     Dimensions,
     FlatList,
@@ -28,7 +27,7 @@ import GetData from "../reusableComponents/API/GetData"
 import ShimmerLogo from "../reusableComponents/ShimmerLogo"
 import Shimmer from 'react-native-shimmer';
 import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalListItem"
-
+import FastImage from 'react-native-fast-image'
 YellowBox.ignoreWarnings([
     'Require cycle:'
 ])
@@ -149,7 +148,7 @@ class MainPage extends Component {
             return (
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
                     <Shimmer>
-                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                        <FastImage style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>
             )
@@ -208,7 +207,7 @@ class MainPage extends Component {
                         <View style={innerStyles.gridView}>
                             <View style={innerStyles.gridCell}>
                                 <TouchableOpacity style={{ flexDirection: 'column', marginEnd: 5 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[0].image }}
@@ -219,7 +218,7 @@ class MainPage extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{ flexDirection: 'column', marginStart: 5 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[1].image }}
@@ -231,7 +230,7 @@ class MainPage extends Component {
                             </View>
                             <View style={innerStyles.gridCell}>
                                 <TouchableOpacity style={{ flexDirection: 'column', marginEnd: 5 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[2].image }}
@@ -242,7 +241,7 @@ class MainPage extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{ flexDirection: 'column', marginStart: 5 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[3].image }}
@@ -272,7 +271,7 @@ class MainPage extends Component {
                                 <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                                     <TouchableOpacity style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
-                                            <Image
+                                            <FastImage
                                                 style={innerStyles.trendingImage}
                                                 source={{ uri: item.image }}
                                                 resizeMode='contain'
@@ -288,7 +287,7 @@ class MainPage extends Component {
                                     </TouchableOpacity>
                                     <TouchableOpacity style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
-                                            <Image
+                                            <FastImage
                                                 style={innerStyles.trendingImage}
                                                 source={{ uri: item.image }}
                                                 resizeMode='contain'
@@ -304,7 +303,7 @@ class MainPage extends Component {
                                     </TouchableOpacity>
                                     <TouchableOpacity style={innerStyles.trendingView}>
                                         <View style={{ width: '70%', height: '80%', flexDirection: 'row', alignItems: 'flex-start', marginStart: 10 }}>
-                                            <Image
+                                            <FastImage
                                                 style={innerStyles.trendingImage}
                                                 source={{ uri: item.image }}
                                                 resizeMode='contain'
@@ -337,7 +336,7 @@ class MainPage extends Component {
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
-                                    <Image
+                                    <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
                                         source={item.imageUrl}
@@ -353,7 +352,7 @@ class MainPage extends Component {
                                 <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left', marginStart: 10, marginVertical: 10 }]}>Newsletter</Text>
                                     <TouchableOpacity onPress={() => { this.setState({ showNewsletter: false }) }}>
-                                        <Image
+                                        <FastImage
                                             style={{ flex: 0.5, width: 17, height: 17, alignContent: 'flex-end', marginEnd: 10 }}
                                             resizeMode='contain'
 

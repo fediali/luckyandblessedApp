@@ -21,6 +21,7 @@ import { _categoryList, _collections, _newArrivals, _trending, _history } from '
 import Shimmer from 'react-native-shimmer';
 import GetData from "../reusableComponents/API/GetData"
 import HTML from 'react-native-render-html';
+import FastImage from 'react-native-fast-image'
 
 const baseUrl = "http://dev.landbw.co/";
 
@@ -201,7 +202,7 @@ export default class ProductPage extends Component {
     else {
       return (
         <View style={{ paddingHorizontal: 20, alignItems: "center" }}>
-          <Image style={{ width: "100%", height: 400 }} resizeMode={"contain"} source={require("../static/sizeGuide.png")} />
+          <FastImage style={{ width: "100%", height: 400 }} resizeMode={"contain"} source={require("../static/sizeGuide.png")} />
         </View>
       )
     }
@@ -222,7 +223,7 @@ export default class ProductPage extends Component {
       return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
           <Shimmer>
-            <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+            <FastImage style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
           </Shimmer>
         </View>
       )
@@ -252,7 +253,7 @@ export default class ProductPage extends Component {
               <View style={{}}>
 
                 <View style={[styles.mainPicture,{backgroundColor:"#f6f6f6",borderRadius:6}]}>
-                  <Image style={styles.mainPicture} source={{ uri: this.state.data.mainImage }} resizeMode="contain"></Image>
+                  <FastImage style={styles.mainPicture} source={{ uri: this.state.data.mainImage }} resizeMode="contain"></FastImage>
 
                 </View>
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{ marginVertical: 15, }}>
@@ -260,7 +261,7 @@ export default class ProductPage extends Component {
                     return (
                       <TouchableOpacity key={num} onPress={() => { this.setState({ data: { ...this.state.data, mainImage: val } }) }}>
 
-                        <Image style={this.state.data.mainImage == val ? [styles.thumbnail, { borderColor: "#2967ff", borderWidth: 2 }] : styles.thumbnail} source={{ uri: val }}></Image>
+                        <FastImage style={this.state.data.mainImage == val ? [styles.thumbnail, { borderColor: "#2967ff", borderWidth: 2 }] : styles.thumbnail} source={{ uri: val }}></FastImage>
                       </TouchableOpacity>
                     )
                   })}
@@ -346,7 +347,7 @@ export default class ProductPage extends Component {
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
                 <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
-                  <Image
+                  <FastImage
                     style={styles.gridImage}
                     source={item.imageUrl}
                   />

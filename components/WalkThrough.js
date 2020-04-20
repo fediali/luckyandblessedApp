@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Shimmer from 'react-native-shimmer';
 import AsyncStorage from '@react-native-community/async-storage';
+import FastImage from 'react-native-fast-image'
 
 
 export default class WalkThrough extends Component {
@@ -62,7 +63,7 @@ export default class WalkThrough extends Component {
 
     this.state.images.forEach((img, index) => {
       featuredImages.push(
-        <Image
+        <FastImage
           style={styles.images}
           key={index}
           resizeMode="contain"
@@ -75,7 +76,7 @@ export default class WalkThrough extends Component {
       return (
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
               <Shimmer>
-                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                  <FastImage style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
               </Shimmer>
           </View>
       )
@@ -86,7 +87,7 @@ export default class WalkThrough extends Component {
       
       <SafeAreaView style={styles.mainContainer}>
         <View style={styles.subContainer}>
-          <Image
+          <FastImage
             style={styles.logo}
             resizeMode="contain"
             source={require('../static/logo-walkthrough.png')}
