@@ -364,9 +364,6 @@ const innerStyles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingBottom: 60
     },
-    borderRadiusSix: {
-        borderRadius: 6
-    },
     halfFlex: {
         flex: 0.5
     },
@@ -376,31 +373,9 @@ const innerStyles = StyleSheet.create({
     textAlignRight: {
         textAlign: 'right'
     },
-    collectionImages: {
-        width: Width * 0.85,
-        height: Height * 0.3,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 5,
-        marginHorizontal: 10,
-        borderRadius: 6
-    },
-    semiBoldText: {
-        width: '60%',
-        height: '50%',
-        fontFamily: "Montserrat-Bold",
-        fontSize: 36,
-        fontWeight: "bold",
-        fontStyle: "normal",
-        lineHeight: 44,
-        letterSpacing: 0,
-        textAlign: "center",
-        color: "#ffffff"
-    },
     headerView: {
         width: Width,
         height: Height * 0.06,
-        // backgroundColor: '#344565',
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 15,
@@ -420,13 +395,6 @@ const innerStyles = StyleSheet.create({
         lineHeight: 18,
         textAlign: "left",
         marginTop: 5
-    },
-    innerTrendingView: {
-        width: '70%',
-        height: '80%',
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        marginStart: 10
     },
     newsLetterMainView: {
         width: '100%',
@@ -469,20 +437,6 @@ const innerStyles = StyleSheet.create({
         width: '100%',
         alignItems: 'center'
     },
-    innerInnerTrendingView: {
-        height: '100%',
-        flexDirection: 'column',
-        marginStart: 10,
-        justifyContent: 'center'
-    },
-    trendingViewPriceView: {
-        width: '30%',
-        height: '50%',
-        borderRadius: 6,
-        backgroundColor: "#9775fa",
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     newArrivalGridTouch: {
         flexDirection: 'column',
         marginEnd: 5,
@@ -496,7 +450,6 @@ const innerStyles = StyleSheet.create({
         width: Width,
         height: Height * 0.4,
         flexDirection: 'row',
-        // backgroundColor: '#324385',
         paddingHorizontal: 10,
         justifyContent: 'space-around'
     },
@@ -513,16 +466,6 @@ const innerStyles = StyleSheet.create({
         letterSpacing: 0,
         textAlign: "left",
         color: '#2d2d2f'
-    },
-    // trendingImage: {
-    //     borderRadius: 6,
-    //     width: '25%',
-    //     height: '64.7&',
-    // },
-    historyTouchable: {
-        flexDirection: 'column',
-        paddingHorizontal: 10,
-        marginBottom: 50
     },
     buttonSubmit: {
         width: '100%',
@@ -545,28 +488,6 @@ const innerStyles = StyleSheet.create({
         textAlign: 'center',
         margin: 30
     },
-    trendingView: {
-        width: Width * 0.88,
-        height: Height * 0.1,
-        flexDirection: 'row',
-        paddingHorizontal: 10,
-        marginEnd: 15,
-        alignItems: 'center',
-    },
-    trendingImage: {
-        width: '25%',
-        height: '100%',
-        borderRadius: 6,
-    },
-    trendingPriceText: {
-        fontFamily: "Montserrat-Medium",
-        fontSize: 14,
-        fontStyle: "normal",
-        lineHeight: 18,
-        letterSpacing: 0,
-        textAlign: "center",
-        color: "#ffffff"
-    }
 })
 
 export default MainPage;
