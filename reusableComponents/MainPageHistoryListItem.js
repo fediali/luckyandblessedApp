@@ -15,7 +15,7 @@ export default class MainPageHistoryListItem extends PureComponent {
                     style={innerStyles.gridImage}
                     // resizeMode='contain'
                     resizeMode="cover"
-                    source={this.props.imageUrl}
+                    source={{uri: this.props.imageUrl}}
                 />
                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.name}</Text>
                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.type}</Text>
@@ -47,7 +47,8 @@ const innerStyles = StyleSheet.create({
         lineHeight: 20,
         letterSpacing: 0,
         textAlign: "left",
-        color: '#2d2d2f'
+        color: '#2d2d2f',
+        width: Width * 0.427
     },
     showAllText: {
         fontFamily: "Avenir-Book",

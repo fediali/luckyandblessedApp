@@ -21,7 +21,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import styles from './Styles/Style'
 import Header from '../reusableComponents/Header'
 import Footer from '../reusableComponents/Footer'
-
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 import GetData from "../reusableComponents/API/GetData"
 import Shimmer from 'react-native-shimmer';
@@ -38,6 +37,8 @@ YellowBox.ignoreWarnings([
 
 const baseUrl = "http://dev.landbw.co/";
 const SELECTED_CATEGORY_ALL = -1
+const STORAGE_PRODUCT_HISTORY_CATEGORY="productHistoryList"
+const STORAGE_DEFAULTS="defaults"
 class MainPage extends Component {
 
 
@@ -57,17 +58,6 @@ class MainPage extends Component {
 
     }
 
-    _retrieveData = async (key) => {
-        try {
-            const value = await AsyncStorage.getItem(key);
-
-            if (value !== null) {
-                return (value)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    };
     backAction = () => {
         console.log(this.props.navigation)
         if (this.props.navigation.isFocused()) {
@@ -106,23 +96,22 @@ class MainPage extends Component {
 
                     //Adding "All" to categories response
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
-                    // console.log(responses[1])
-                    this._retrieveData("productHistoryList").then(value => {
-                        // prodHistory = value;
-                        // console.log("Product History: ", prodHistory)
-                        this.setState({history: value})
+                    RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then(value => {
+                        console.log("Product History: ", value)
+                        this.setState({
+                            collections: responses[0].home.logged.sliders,
+                            newArrivals: responses[0].home.logged.new_arrivals.products,
+                            trending: responses[0].home.logged.trending.products,
+                            defaults: responses[0].defaults,
+                            categoryList: responses[1].categories,
+                            history: JSON.parse(value)
+                        }, () => { this.mapTrendingList(this.state.trending, 3) })
                     });
                     //Storing defaults obtained through API
-                    StoreDataAsync("defaults", responses[0].defaults).then(
+                    StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
                         console.log("Defaults saved in storage")
                     )
-                    this.setState({
-                        collections: responses[0].home.logged.sliders,
-                        newArrivals: responses[0].home.logged.new_arrivals.products,
-                        trending: responses[0].home.logged.trending.products,
-                        defaults: responses[0].defaults,
-                        categoryList: responses[1].categories,
-                    }, () => { this.mapTrendingList(this.state.trending, 3) })
+                   
 
                 }).catch(ex => { console.log("Inner Promise", ex) })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.props.navigation.navigate("SignIn") })
@@ -158,7 +147,6 @@ class MainPage extends Component {
     }
 
     mapTrendingList(tList, sliceValue) {
-        tList.shift();
 
         let tempList = []
 
@@ -175,9 +163,9 @@ class MainPage extends Component {
         const Height = Dimensions.get('window').height;
         if (!this.state.isReady) {
             return (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                <View style={styles.loader}>
                     <Shimmer>
-                        <FastImage style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                        <FastImage style={styles.logoImageLoader} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>
             )
@@ -289,57 +277,6 @@ class MainPage extends Component {
                                     <MainPageTrendingListItem listItem={item} />
                                 )
                             }
-                                // <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                                /* <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                                    <View style={innerStyles.innerTrendingView}>
-                                        <FastImage
-                                            style={innerStyles.trendingImage}
-                                            source={{ uri: item[0].image }}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={innerStyles.innerInnerTrendingView}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item[0].product}</Text>
-                                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{item[0].brand}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={innerStyles.trendingViewPriceView}>
-                                        <Text style={innerStyles.trendingPriceText}>${item[0].price}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                                    <View style={innerStyles.innerTrendingView}>
-                                        <FastImage
-                                            style={innerStyles.trendingImage}
-                                            source={{ uri: item.image }}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={innerStyles.innerInnerTrendingView}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.product}</Text>
-                                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{item.brand}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={innerStyles.trendingViewPriceView}>
-                                        <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                                    <View style={innerStyles.innerTrendingView}>
-                                        <FastImage
-                                            style={innerStyles.trendingImage}
-                                            source={{ uri: item.image }}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={innerStyles.innerInnerTrendingView}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.product}</Text>
-                                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{item.brand}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={innerStyles.trendingViewPriceView}>
-                                        <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View> */
-
                             }
                         />
 
@@ -351,27 +288,25 @@ class MainPage extends Component {
                             </TouchableOpacity>
                         </View>
                         <FlatList
-                            keyExtractor={(item) => item.id}
+                            keyExtractor={(item) => item.pid[0]}
                             data={this.state.history}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => ( //FIXME: Items not returning
-                            //     (!item.brand ? 
-                            //         <MainPageHistoryListItem
-                            //         imageUrl={item.mainImage}
-                            //         name={item.productName}
-                            //         type={this.state.defaults.brand}
-                            //         price={item.price}
-                            //     /> : 
+                                (!item.brand ? 
+                                    <MainPageHistoryListItem
+                                    imageUrl={item.mainImage}
+                                    name={item.productName}
+                                    type={this.state.defaults.brand}
+                                    price={Number(item.price).toFixed(2)}
+                                /> : 
 
-                            //     <MainPageHistoryListItem
-                            //     imageUrl={item.mainImage}
-                            //     name={item.productName}
-                            //     type={item.brand}
-                            //     price={item.price}
-                            // />)
-                            console.log(item)
-                                
+                                <MainPageHistoryListItem
+                                imageUrl={item.mainImage}
+                                name={item.productName}
+                                type={item.brand}
+                                price={Number(item.price).toFixed(2)}
+                            />)
                             )}
                         />
                         {this.state.showNewsletter == true ?

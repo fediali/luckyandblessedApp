@@ -44,7 +44,6 @@ class App extends Component {
           {/* <Stack.Screen name="Categories" component={Categories} /> */}
           {/* <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} /> */}
           {/* <Stack.Screen name="Filter" component={Filter} /> */}
-          {/* <Stack.Screen name="Payment" component={Payment} /> */}
 
           <Stack.Screen name="WalkThrough" component={WalkThrough} />
           <Stack.Screen name="SignIn" component={SignIn} />
@@ -63,6 +62,7 @@ class App extends Component {
           <Stack.Screen name="ConfirmationSuccess" component={ConfirmationSuccess} />
           <Stack.Screen name="SearchResults" component={SearchResults} />
           {/* <Stack.Screen name="ProductPage" component={ProductPage} /> */}
+          {/* <Stack.Screen name="Payment" component={Payment} /> */}
 
           {/* <Stack.Screen name="Filter" component={Filter} />
           <Stack.Screen name="ColorPicker" component={ColorPicker} /> */}
