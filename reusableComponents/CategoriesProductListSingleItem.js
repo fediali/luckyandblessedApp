@@ -15,7 +15,7 @@ import FastImage from 'react-native-fast-image'
 class CategoriesProductListSingleItem extends PureComponent {
 
     navigateToProductPage=()=>{
-        this.props.navigation.navigate("ProductPage", { pid: [this.props.pid] }) 
+        this.props.navigation.navigate("ProductPage", { pid: [this.props.pid], cname:[this.props.cname] }) 
     }
     
     render() {

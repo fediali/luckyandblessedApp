@@ -210,8 +210,8 @@ class CategoriesProduct extends Component {
                                 contentContainerStyle={styles.container}
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
-                                    <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
+                                    <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} cname={this.state.cname} navigation={this.props.navigation}
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={"CHANGE IT"} price2={"$" + item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 onEndReached={this.handleLoadMore}
@@ -234,8 +234,8 @@ class CategoriesProduct extends Component {
                                 numColumns={2}
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
-                                    <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
+                                    <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} cname={this.state.cname} navigation={this.props.navigation}
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={"CHANGE IT"} price2={"$" + item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 columnWrapperStyle={styles.multiRowStyling}
