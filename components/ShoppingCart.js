@@ -43,39 +43,54 @@ class FlatListItem extends Component {
         };
     }
 
+    onDeleteClose = () => {
+        if (this.state.activeRowKey != null) {
+            this.setState({ activeRowKey: null });
+        }
+    }
+    onDeleteOpen = () => {
+        this.setState({ activeRowKey: this.props.item.itemNum });
+    }
+
+    onDeletePress = () => {
+        const deletingRow = this.state.activeRowKey;
+        Alert.alert(
+            'Alert',
+            'Are you sure you want to delete ?',
+            [
+                { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                {
+                    text: 'Yes', onPress: () => {
+                        itemList.splice(this.props.index, 1);
+                        //Refresh FlatList ! 
+                        this.props.parentFlatList.refreshFlatList(deletingRow);
+                    }
+                },
+            ],
+            { cancelable: true }
+        );
+    }
+
+    onColorModalSelect=(index)=>{
+        this.setState({ currentSelectedColor: this.props.item.availableColors[index] })
+    }
+
     render() {
 
 
         const swipeSettings = {
             autoClose: true,
             onClose: (secId, rowId, direction) => {
-                if (this.state.activeRowKey != null) {
-                    this.setState({ activeRowKey: null });
-                }
+                this.onDeleteClose()
             },
             onOpen: (secId, rowId, direction) => {
-                this.setState({ activeRowKey: this.props.item.itemNum });
+                this.onDeleteOpen()
             },
             right: [
                 {
                     autoClose: true,
                     onPress: () => {
-                        const deletingRow = this.state.activeRowKey;
-                        Alert.alert(
-                            'Alert',
-                            'Are you sure you want to delete ?',
-                            [
-                                { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                {
-                                    text: 'Yes', onPress: () => {
-                                        itemList.splice(this.props.index, 1);
-                                        //Refresh FlatList ! 
-                                        this.props.parentFlatList.refreshFlatList(deletingRow);
-                                    }
-                                },
-                            ],
-                            { cancelable: true }
-                        );
+                        this.onDeletePress()
                     },
                     text: 'Delete', type: 'delete',
                 }
@@ -83,6 +98,7 @@ class FlatListItem extends Component {
             rowId: this.props.index,
             sectionId: 1
         };
+
 
 
         return (
@@ -113,7 +129,7 @@ class FlatListItem extends Component {
                                 <View style={innerStyles.modalView}>
 
                                     <ModalDropdown
-                                        onSelect={(index) => { console.log(index) }}
+                                        // onSelect={(index) => { console.log(index) }}
                                         options={this.props.item.availableSizes}
                                         defaultValue={this.props.item.unknownNum}
                                         style={innerStyles.modalStyle}
@@ -140,7 +156,7 @@ class FlatListItem extends Component {
 
                                     <ModalDropdown
                                         hexCode={this.state.currentSelectedColor}
-                                        onSelect={(index) => { this.setState({ currentSelectedColor: this.props.item.availableColors[index] }) }}
+                                        onSelect={(index) => {this.onColorModalSelect(index) }}
                                         options={this.props.item.availableColors}
                                         defaultValue={this.props.item.selectedColor}
                                         style={innerStyles.modalStyle}
@@ -319,7 +335,7 @@ const innerStyles = StyleSheet.create({
         color: '#8d8d8e',
     },
     itemView: {
-        flex:1
+        flex: 1
     },
     itemImage: {
         width: Width * 0.2,
