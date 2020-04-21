@@ -110,13 +110,17 @@ export default class ProductPage extends Component {
             RetrieveDataAsync("productHistoryList").then((value)=>{
               if(value==null)value=[]
               else value=JSON.parse(value)
-              historyObj={
+              let historyObj={
                 productName: response.product,
                 price: response.price,
                 mainImage: response.main_pair.detailed.image_path,
                 pid:this.state.pid
               }
-              if(value.filter(obj => obj.pid ===historyObj.pid ).length==0){
+              if(value.filter(obj => obj.pid[0] ===historyObj.pid[0] ).length==0){
+                console.log("ppppp",value.filter(obj => obj.pid[0] ===historyObj.pid[0] ))
+                console.log(value)
+                console.log(historyObj)
+
                 value.unshift(historyObj)
                 if(value.length>=10)value.pop()
                 StoreDataAsync("productHistoryList",value)
