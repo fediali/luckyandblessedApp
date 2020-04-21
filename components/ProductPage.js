@@ -155,8 +155,8 @@ export default class ProductPage extends Component {
   };
   _renderHeader = section => {
     return (
-      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 10 }}>
-        <Text style={{ fontSize: 18, fontFamily: "Montserrat-SemiBold", lineHeight: 22, color: "#2d2d2f" }}>
+      <View style={styles.headerMainView}>
+        <Text style={styles.headerMainText}>
           {section.name}
         </Text>
         {
@@ -232,6 +232,20 @@ export default class ProductPage extends Component {
     }
 
   }
+
+  appendImageToData=(val)=>{
+    this.setState({ data: { ...this.state.data, mainImage: val } })
+  }
+
+  onQuantityTextChange=(text)=>{
+    this.setState({ selectedQuantity: text })
+  }
+
+  onQuantityModalChange=(quantityOptionsArray,index)=>{
+    this.setState({ selectedQuantity: quantityOptionsArray[index] })
+  }
+
+
   render() {
 
     console.log(this.state.data.composition)
@@ -283,7 +297,7 @@ export default class ProductPage extends Component {
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={styles.verticalMarginStyle}>
                   {this.state.data.secondaryImages.map((val, num) => {
                     return (
-                      <TouchableOpacity key={num} onPress={() => { this.setState({ data: { ...this.state.data, mainImage: val } }) }}>
+                      <TouchableOpacity key={num} onPress={() => { this.appendImageToData(val) }}>
 
                         <FastImage style={this.state.data.mainImage == val ? [styles.thumbnail, styles.customThumbnailImage] : styles.thumbnail} source={{ uri: val }}></FastImage>
                       </TouchableOpacity>
@@ -301,12 +315,12 @@ export default class ProductPage extends Component {
                       <TextInput
                         style={styles.valueText}
                         placeholder={"Quantity"}
-                        onChangeText={text => this.setState({ selectedQuantity: text })}
+                        onChangeText={(text) => {this.onQuantityTextChange(text)}}
 
                       />
                       :
                       <ModalDropdown
-                        onSelect={(index) => { this.setState({ selectedQuantity: quantityOptionsArray[index] }) }}
+                        onSelect={(index) => { this.onQuantityModalChange(quantityOptionsArray,index) }}
                         options={quantityOptionsArray}
                         defaultValue={this.state.data.min_qty}
                         style={styles.quantityModalStyle}
@@ -472,6 +486,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     justifyContent: "center",
     textAlign: "center"
+  },
+  headerMainView:{
+    flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 10 
+  },
+  headerMainText:{
+    fontSize: 18, fontFamily: "Montserrat-SemiBold", lineHeight: 22, color: "#2d2d2f" 
   },
   bottomMarginStyle: {
     marginBottom: 10

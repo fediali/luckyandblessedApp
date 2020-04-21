@@ -271,7 +271,7 @@ class ShoppingCart extends Component {
         const Height = Dimensions.get('window').height;
 
         return (
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={innerStyles.itemView}>
                 <Header navigation={this.props.navigation} />
                 <View style={styles.parentContainer}>
                     <FlatList
@@ -319,7 +319,7 @@ const innerStyles = StyleSheet.create({
         color: '#8d8d8e',
     },
     itemView: {
-        // flex:1
+        flex:1
     },
     itemImage: {
         width: Width * 0.2,
