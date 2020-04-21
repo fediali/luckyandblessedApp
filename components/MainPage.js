@@ -62,7 +62,7 @@ class MainPage extends Component {
             const value = await AsyncStorage.getItem(key);
 
             if (value !== null) {
-                return (value)
+                return (JSON.parse(value))
             }
         } catch (error) {
             console.log(error)
@@ -110,19 +110,20 @@ class MainPage extends Component {
                     this._retrieveData("productHistoryList").then(value => {
                         // prodHistory = value;
                         // console.log("Product History: ", prodHistory)
-                        this.setState({history: value})
+                        this.setState({
+                            collections: responses[0].home.logged.sliders,
+                            newArrivals: responses[0].home.logged.new_arrivals.products,
+                            trending: responses[0].home.logged.trending.products,
+                            defaults: responses[0].defaults,
+                            categoryList: responses[1].categories,
+                            history: value
+                        }, () => { this.mapTrendingList(this.state.trending, 3) })
                     });
                     //Storing defaults obtained through API
                     StoreDataAsync("defaults", responses[0].defaults).then(
                         console.log("Defaults saved in storage")
                     )
-                    this.setState({
-                        collections: responses[0].home.logged.sliders,
-                        newArrivals: responses[0].home.logged.new_arrivals.products,
-                        trending: responses[0].home.logged.trending.products,
-                        defaults: responses[0].defaults,
-                        categoryList: responses[1].categories,
-                    }, () => { this.mapTrendingList(this.state.trending, 3) })
+                   
 
                 }).catch(ex => { console.log("Inner Promise", ex) })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.props.navigation.navigate("SignIn") })
@@ -158,7 +159,6 @@ class MainPage extends Component {
     }
 
     mapTrendingList(tList, sliceValue) {
-        tList.shift();
 
         let tempList = []
 
@@ -289,57 +289,6 @@ class MainPage extends Component {
                                     <MainPageTrendingListItem listItem={item} />
                                 )
                             }
-                                // <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                                /* <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                                    <View style={innerStyles.innerTrendingView}>
-                                        <FastImage
-                                            style={innerStyles.trendingImage}
-                                            source={{ uri: item[0].image }}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={innerStyles.innerInnerTrendingView}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item[0].product}</Text>
-                                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{item[0].brand}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={innerStyles.trendingViewPriceView}>
-                                        <Text style={innerStyles.trendingPriceText}>${item[0].price}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                                    <View style={innerStyles.innerTrendingView}>
-                                        <FastImage
-                                            style={innerStyles.trendingImage}
-                                            source={{ uri: item.image }}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={innerStyles.innerInnerTrendingView}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.product}</Text>
-                                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{item.brand}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={innerStyles.trendingViewPriceView}>
-                                        <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-                                    <View style={innerStyles.innerTrendingView}>
-                                        <FastImage
-                                            style={innerStyles.trendingImage}
-                                            source={{ uri: item.image }}
-                                            resizeMode='contain'
-                                        />
-                                        <View style={innerStyles.innerInnerTrendingView}>
-                                            <Text style={innerStyles.gridItemNameAndPriceText}>{item.product}</Text>
-                                            <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{item.brand}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={innerStyles.trendingViewPriceView}>
-                                        <Text style={innerStyles.trendingPriceText}>${item.price}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View> */
-
                             }
                         />
 
@@ -351,27 +300,25 @@ class MainPage extends Component {
                             </TouchableOpacity>
                         </View>
                         <FlatList
-                            keyExtractor={(item) => item.id}
+                            keyExtractor={(item) => item.pid}
                             data={this.state.history}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => ( //FIXME: Items not returning
-                            //     (!item.brand ? 
-                            //         <MainPageHistoryListItem
-                            //         imageUrl={item.mainImage}
-                            //         name={item.productName}
-                            //         type={this.state.defaults.brand}
-                            //         price={item.price}
-                            //     /> : 
+                                (!item.brand ? 
+                                    <MainPageHistoryListItem
+                                    imageUrl={item.mainImage}
+                                    name={item.productName}
+                                    type={this.state.defaults.brand}
+                                    price={Number(item.price).toFixed(2)}
+                                /> : 
 
-                            //     <MainPageHistoryListItem
-                            //     imageUrl={item.mainImage}
-                            //     name={item.productName}
-                            //     type={item.brand}
-                            //     price={item.price}
-                            // />)
-                            console.log(item)
-                                
+                                <MainPageHistoryListItem
+                                imageUrl={item.mainImage}
+                                name={item.productName}
+                                type={item.brand}
+                                price={Number(item.price).toFixed(2)}
+                            />)
                             )}
                         />
                         {this.state.showNewsletter == true ?
