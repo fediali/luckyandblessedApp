@@ -62,6 +62,7 @@ class SignIn extends Component {
                 }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
         }
+        this.props.navigation.navigate("MainPage",{userName: "Test Name"}) //TODO: Remove this
 
     }
 
