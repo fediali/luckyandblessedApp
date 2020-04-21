@@ -21,7 +21,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import styles from './Styles/Style'
 import Header from '../reusableComponents/Header'
 import Footer from '../reusableComponents/Footer'
-
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 import GetData from "../reusableComponents/API/GetData"
 import Shimmer from 'react-native-shimmer';
@@ -175,9 +174,9 @@ class MainPage extends Component {
         const Height = Dimensions.get('window').height;
         if (!this.state.isReady) {
             return (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                <View style={styles.loader}>
                     <Shimmer>
-                        <FastImage style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                        <FastImage style={styles.logoImageLoader} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>
             )
