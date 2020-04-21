@@ -17,12 +17,12 @@ class HeaderHorizontalListItem extends Component {
         cid: -1
     }
     onCategorySelect = () => {
-        this.props.onCategorySelect(this.props.item.category_id, this.props.item.category);
+        this.props.onCategorySelect(this.props.item.category_id, this.props.item.category); 
     }
     render() {
         const { item,cid,index } = this.props;
         return (
-            <View style={{ marginVertical: 10, color: "#000" }}>
+            <View style={styles.TopLevelView}>
                 {cid == item.category_id || cid==index-1?
                     < TouchableOpacity onPress={
                         this.onCategorySelect
@@ -51,7 +51,8 @@ styles = StyleSheet.create(
         },
         selected:{
             color: "#2967ff"
-        }
+        },
+        TopLevelView: { marginVertical: 10, color: "#000" }
     }
 )
 export default HeaderHorizontalListItem;

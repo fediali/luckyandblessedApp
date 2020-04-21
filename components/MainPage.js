@@ -29,8 +29,8 @@ import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalList
 import MainPageCollection from "../reusableComponents/MainPageCollections"
 import MainPageHistoryListItem from "../reusableComponents/MainPageHistoryListItem"
 import MainPageTrendingListItem from "../reusableComponents/MainPageTrendingListItem"
-
-
+import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 import FastImage from 'react-native-fast-image'
 YellowBox.ignoreWarnings([
     'Require cycle:'
@@ -50,10 +50,10 @@ class MainPage extends Component {
             collections: null,
             newArrivals: null,
             trending: null,
-            history: _history,
-            isReady: false
+            history: null,
+            isReady: false,
+            default: null
         }
-
 
     }
 
@@ -89,6 +89,7 @@ class MainPage extends Component {
     componentDidMount() {
 
         InteractionManager.runAfterInteractions(() => {
+            var prodHistory;
             this.backHandler = BackHandler.addEventListener(
                 "hardwareBackPress",
                 this.backAction
@@ -107,13 +108,20 @@ class MainPage extends Component {
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
                     // console.log(responses[1])
                     this._retrieveData("productHistoryList").then(value => {
-                        console.log("THIS IS VALUE", value)
+                        // prodHistory = value;
+                        // console.log("Product History: ", prodHistory)
+                        this.setState({history: value})
                     });
+                    //Storing defaults obtained through API
+                    StoreDataAsync("defaults", responses[0].defaults).then(
+                        console.log("Defaults saved in storage")
+                    )
                     this.setState({
                         collections: responses[0].home.logged.sliders,
                         newArrivals: responses[0].home.logged.new_arrivals.products,
                         trending: responses[0].home.logged.trending.products,
-                        categoryList: responses[1].categories
+                        defaults: responses[0].defaults,
+                        categoryList: responses[1].categories,
                     }, () => { this.mapTrendingList(this.state.trending, 3) })
 
                 }).catch(ex => { console.log("Inner Promise", ex) })
@@ -161,6 +169,7 @@ class MainPage extends Component {
     }
 
     render() {
+        console.log("History", this.state.history)
         // console.log(this.state.trending.length + " ++++++++++++++++++")
         const Width = Dimensions.get('window').width;
         const Height = Dimensions.get('window').height;
@@ -206,7 +215,6 @@ class MainPage extends Component {
                             )}
                         />
 
-                        {/*FIXME new arrival header */}
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>New Arrivals</Text>
                             <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}>
@@ -263,7 +271,7 @@ class MainPage extends Component {
                         </View>
 
 
-                        {/* trending header*/}
+                        {/*FIXME: trending header*/}
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>What’s trending</Text>
                             <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}>
@@ -343,27 +351,27 @@ class MainPage extends Component {
                             </TouchableOpacity>
                         </View>
                         <FlatList
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item.id}
                             data={this.state.history}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => (
-                                // <TouchableOpacity activeOpacity={0.9} style={innerStyles.historyTouchable}>
-                                //     <FastImage
-                                //         style={innerStyles.gridImage}
-                                //         resizeMode='contain'
-                                //         source={item.imageUrl}
-                                //     />
-                                //     <Text style={innerStyles.gridItemNameAndPriceText}>{item.name}</Text>
-                                //     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{item.type}</Text>
-                                //     <Text style={innerStyles.gridItemNameAndPriceText}>${item.price}</Text>
-                                // </TouchableOpacity>
-                                <MainPageHistoryListItem
-                                    imageUrl={item.imageUrl}
-                                    name={item.name}
-                                    type={item.type}
-                                    price={item.price}
-                                />
+                            renderItem={({ item, index }) => ( //FIXME: Items not returning
+                            //     (!item.brand ? 
+                            //         <MainPageHistoryListItem
+                            //         imageUrl={item.mainImage}
+                            //         name={item.productName}
+                            //         type={this.state.defaults.brand}
+                            //         price={item.price}
+                            //     /> : 
+
+                            //     <MainPageHistoryListItem
+                            //     imageUrl={item.mainImage}
+                            //     name={item.productName}
+                            //     type={item.brand}
+                            //     price={item.price}
+                            // />)
+                            console.log(item)
+                                
                             )}
                         />
                         {this.state.showNewsletter == true ?

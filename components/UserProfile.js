@@ -85,10 +85,14 @@ export default class UserProfile extends Component {
 
   customSetState(stateVal) {
     var key = Object.keys(stateVal)[0];
+    console.log(stateVal[key])
     this.setState({[key]: stateVal[key]});
+    console.log([key], stateVal[key])
   }
 
   render() {
+    console.log("here", this.state.fullName)
+
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
     if (!this.state.isReady) {

@@ -1,7 +1,6 @@
 import React, {PureComponent} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, TextInput, Dimensions} from 'react-native';
 import {Icon} from 'react-native-elements';
-import {round} from 'react-native-reanimated';
 
 class ProfileText extends PureComponent {
   constructor(props) {
@@ -12,7 +11,8 @@ class ProfileText extends PureComponent {
   }
 
   editButtonPressed(){
-    this.setState({isEdit: true})
+    var key = this.props.stateKey; //fullName
+    this.setState({isEdit: true, [key]:this.props.valueText})
   }
 
   checkButtonPressed(){
@@ -32,8 +32,7 @@ class ProfileText extends PureComponent {
   }
 
   render() {
-    let Height = Dimensions.get('window').height;
-    let Width = Dimensions.get('window').width;
+ 
     return (
       <View>
         {/*If contains right arrow then it shouldn't be editable
@@ -54,21 +53,17 @@ class ProfileText extends PureComponent {
               this.props.navigation.navigate("Payment")
             }
           }}>
-            <View style={{paddingVertical: 19}}>
+            <View style={styles.pad19}>
               <Text style={styles.keyText}>{this.props.keyText}</Text>
             </View>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{paddingVertical: 18}}>
+            <View style={styles.flexRow}>
+              <View style={styles.pad18}>
                 <Text style={[styles.valueText] }>
                   {this.props.valueText}
                 </Text>
               </View>
               <View
-                style={{
-                  marginVertical: 18,
-                  marginRight: 6,
-                  marginLeft: 19.5,
-                }}>
+                style={styles.iconView}>
                 <Icon size={20} name="right" type="antdesign" />
               </View>
             </View>
@@ -76,19 +71,18 @@ class ProfileText extends PureComponent {
         ) : ( 
           <View style={styles.userDetails}>
             {!this.state.isEdit ? (
-              <View style={{paddingTop: 4}}>
+              <View style={styles.pad4}>
                 <Text style={styles.keyText}>{this.props.keyText}</Text>
                 <Text
-                  style={[styles.valueText, {marginTop: 4, width: Width * 0.76}]}
+                  style={[styles.valueText, styles.textView]}
                   numberOfLines={1}>
                   {this.props.valueText}
                 </Text>
               </View>
             ) : (
-              <View style={{paddingTop: 4}}>
+              <View style={styles.pad4}>
                 <TextInput
-                  name = {this.props.keyText}
-                  style={[styles.valueText, {width: Width * 0.76, borderRadius: 6}]}
+                  style={[styles.valueText, styles.textInput]}
                   multiline={true}
                   numberOfLines={4}
                   defaultValue={this.props.valueText}
@@ -98,25 +92,17 @@ class ProfileText extends PureComponent {
             )}
 
             <View style={{flexDirection: 'row'}}>
-              <View style={{paddingVertical: 18}}></View>
+              <View style={styles.pad18}></View>
               {!this.state.isEdit ? (
               <TouchableOpacity
                  onPress={() => { this.editButtonPressed() }}
-                  style={{
-                  paddingVertical: 18,
-                  paddingEnd: 6,
-                  paddingStart: 20,
-                }}>
+                  style={styles.iconView}>
                 <Icon size={20} name="edit" type="feather" />
               </TouchableOpacity>
               ) : (
                 <TouchableOpacity
                  onPress={() => { this.checkButtonPressed() }}
-                style={{
-                  paddingVertical: 18,
-                  paddingEnd: 6,
-                  paddingStart: 20,
-                }}>
+                style={styles.iconView}>
                 <Icon size={20} name="checksquare" type="antdesign" />
               </TouchableOpacity>
               )
@@ -128,6 +114,9 @@ class ProfileText extends PureComponent {
     );
   }
 }
+
+let Height = Dimensions.get('window').height;
+let Width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   userDetails: {
@@ -148,6 +137,17 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#2d2d2f',
   },
+  pad19: {paddingVertical: 19},
+  pad18: {paddingVertical: 18},
+  flexRow: {flexDirection: 'row'},
+  iconView: {
+    marginVertical: 18,
+    marginRight: 6,
+    marginLeft: 19.5,
+  },
+  pad4: {paddingTop: 4},
+  textView: {marginTop: 4, width: Width * 0.76},
+  textInput: {width: Width * 0.76, borderRadius: 6},
 });
 
 export default ProfileText;
