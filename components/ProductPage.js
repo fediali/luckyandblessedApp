@@ -22,6 +22,8 @@ import Shimmer from 'react-native-shimmer';
 import GetData from "../reusableComponents/API/GetData"
 import HTML from 'react-native-render-html';
 import FastImage from 'react-native-fast-image'
+import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 
 const baseUrl = "http://dev.landbw.co/";
 
@@ -102,6 +104,24 @@ export default class ProductPage extends Component {
             return secondaryImagesArray
           }
           getArray().then((secondaryImagesArray) => {
+
+            
+            // Stroing History of objects
+            RetrieveDataAsync("productHistoryList").then((value)=>{
+              if(value==null)value=[]
+              else value=JSON.parse(value)
+              historyObj={
+                productName: response.product,
+                price: response.price,
+                mainImage: response.main_pair.detailed.image_path,
+                pid:this.state.pid
+              }
+              if(value.filter(obj => obj.pid ===historyObj.pid ).length==0){
+                value.unshift(historyObj)
+                if(value.length>=10)value.pop()
+                StoreDataAsync("productHistoryList",value)
+              }
+            })
             // console.log(secondaryImagesArray)
             this.setState({
               isReady: true,

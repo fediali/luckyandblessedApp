@@ -37,6 +37,8 @@ YellowBox.ignoreWarnings([
 
 const baseUrl = "http://dev.landbw.co/";
 const SELECTED_CATEGORY_ALL = -1
+const STORAGE_PRODUCT_HISTORY_CATEGORY="productHistoryList"
+const STORAGE_DEFAULTS="defaults"
 class MainPage extends Component {
 
 
@@ -56,17 +58,6 @@ class MainPage extends Component {
 
     }
 
-    _retrieveData = async (key) => {
-        try {
-            const value = await AsyncStorage.getItem(key);
-
-            if (value !== null) {
-                return (JSON.parse(value))
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    };
     backAction = () => {
         console.log(this.props.navigation)
         if (this.props.navigation.isFocused()) {
@@ -105,21 +96,19 @@ class MainPage extends Component {
 
                     //Adding "All" to categories response
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
-                    // console.log(responses[1])
-                    this._retrieveData("productHistoryList").then(value => {
-                        // prodHistory = value;
-                        // console.log("Product History: ", prodHistory)
+                    RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then(value => {
+                        console.log("Product History: ", value)
                         this.setState({
                             collections: responses[0].home.logged.sliders,
                             newArrivals: responses[0].home.logged.new_arrivals.products,
                             trending: responses[0].home.logged.trending.products,
                             defaults: responses[0].defaults,
                             categoryList: responses[1].categories,
-                            history: value
+                            history: JSON.parse(value)
                         }, () => { this.mapTrendingList(this.state.trending, 3) })
                     });
                     //Storing defaults obtained through API
-                    StoreDataAsync("defaults", responses[0].defaults).then(
+                    StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
                         console.log("Defaults saved in storage")
                     )
                    
@@ -299,7 +288,7 @@ class MainPage extends Component {
                             </TouchableOpacity>
                         </View>
                         <FlatList
-                            keyExtractor={(item) => item.pid}
+                            keyExtractor={(item) => item.pid[0]}
                             data={this.state.history}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
