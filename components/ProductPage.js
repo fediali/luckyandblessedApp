@@ -22,6 +22,7 @@ import Shimmer from 'react-native-shimmer';
 import GetData from "../reusableComponents/API/GetData"
 import HTML from 'react-native-render-html';
 import FastImage from 'react-native-fast-image'
+import ProductPageSimilarListItem from "../reusableComponents/ProductPageSimilarListItem"
 
 const baseUrl = "http://dev.landbw.co/";
 
@@ -232,35 +233,35 @@ export default class ProductPage extends Component {
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText={this.props.route.params.cname} rightIcon="share" navigation={this.props.navigation} />
         <ScrollView>
-          <View style={{ marginBottom: 10 }}>
+          <View style={styles.bottomMarginStyle}>
             <View style={[styles.subContainer,]}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={styles.productView}>
                 <View>
                   <Text style={styles.itemNameText}>
                     {this.state.data.productName}
                   </Text>
                 </View>
                 <View>
-                  <Text style={[styles.itemNameText, { alignSelf: "flex-end" }]}>
+                  <Text style={[styles.itemNameText, styles.alignFlexEndStyle]}>
                     ${Number(this.state.data.price).toFixed(2)}
                   </Text>
                   <Text style={styles.subText}>
-                    Prepack Price: ${Number(this.state.data.price*this.state.data.min_qty).toFixed(2)}
+                    Prepack Price: ${Number(this.state.data.price * this.state.data.min_qty).toFixed(2)}
                   </Text>
                 </View>
               </View>
               <View style={{}}>
 
-                <View style={[styles.mainPicture,{backgroundColor:"#f6f6f6",borderRadius:6}]}>
+                <View style={[styles.mainPicture, styles.mainImageView]}>
                   <FastImage style={styles.mainPicture} source={{ uri: this.state.data.mainImage }} resizeMode="contain"></FastImage>
 
                 </View>
-                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{ marginVertical: 15, }}>
+                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={styles.verticalMarginStyle}>
                   {this.state.data.secondaryImages.map((val, num) => {
                     return (
                       <TouchableOpacity key={num} onPress={() => { this.setState({ data: { ...this.state.data, mainImage: val } }) }}>
 
-                        <FastImage style={this.state.data.mainImage == val ? [styles.thumbnail, { borderColor: "#2967ff", borderWidth: 2 }] : styles.thumbnail} source={{ uri: val }}></FastImage>
+                        <FastImage style={this.state.data.mainImage == val ? [styles.thumbnail, styles.customThumbnailImage] : styles.thumbnail} source={{ uri: val }}></FastImage>
                       </TouchableOpacity>
                     )
                   })}
@@ -268,9 +269,9 @@ export default class ProductPage extends Component {
               </View>
 
             </View>
-            <View style={{ backgroundColor: "#f6f6f6", paddingTop: 20, paddingHorizontal: 20 }}>
-              <View style={{ flexDirection: "row" }}>
-                <View style={{ flex: 1 }}>
+            <View style={styles.productOptionsView}>
+              <View style={styles.rowView}>
+                <View style={styles.flexOneView}>
                   {
                     this.state.data.min_qty == 1 ?
                       <TextInput
@@ -284,12 +285,12 @@ export default class ProductPage extends Component {
                         onSelect={(index) => { this.setState({ selectedQuantity: quantityOptionsArray[index] }) }}
                         options={quantityOptionsArray}
                         defaultValue={this.state.data.min_qty}
-                        style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
-                        dropdownStyle={{ width: 0.25 * Width, height: 134 }}
-                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                        style={styles.quantityModalStyle}
+                        dropdownStyle={styles.quantityModalDropdownStyle}
+                        textStyle={styles.quantityModalTextStyle}
                         renderRow={(option, index, isSelected) => {
                           return (
-                            <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
+                            <Text style={styles.modalActualTextstyle}>{option}</Text>
                           )
                         }}
                       />
@@ -301,21 +302,21 @@ export default class ProductPage extends Component {
                   <ModalDropdown options={["Male", 'Female', "All"]}
                     hexCode={"#000"}
                     defaultValue={"Green"}
-                    style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
-                    dropdownStyle={{ width: 0.5 * Width, height: 134 }}
-                    textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                    style={ styles.quantityModalStyle}
+                    dropdownStyle={styles.colorModalDropdownStyle}
+                    textStyle={styles.quantityModalTextStyle}
                     renderRow={(option, index, isSelected) => {
                       return (
-                        <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
+                        <Text style={styles.modalActualTextstyle}>{option}</Text>
                       )
                     }}
                   />
                 </View>
               </View>
-              <View style={{ alignItems: "center", marginTop: 17 }}>
-                <Text style={{ textAlign: "center", fontSize: 14, fontFamily: "Avenir-Book", lineHeight: 18, color: "#8d8d8e" }}>Minimum quantity for "{this.state.data.productName}" is {this.state.data.min_qty}.</Text>
-                <TouchableOpacity style={{ backgroundColor: "#2967ff", alignItems: "center", width: "100%", borderRadius: 6, marginVertical: 15 }}>
-                  <Text style={{ color: "#fff", paddingVertical: 11, fontSize: 18, lineHeight: 22, fontFamily: "Montserrat-SemiBold" }}>
+              <View style={styles.addToCartView}>
+                <Text style={styles.minQuantityText}>Minimum quantity for "{this.state.data.productName}" is {this.state.data.min_qty}.</Text>
+                <TouchableOpacity style={styles.addToCartTouch}>
+                  <Text style={styles.addToCartText}>
                     Add to cart
                   </Text>
                 </TouchableOpacity>
@@ -332,10 +333,10 @@ export default class ProductPage extends Component {
               // touchableComponent={(props) => <TouchableOpacity {...props} />}
               expandMultiple={true}
             />
-            {/* history header*/}
-            <View style={[styles.headerView, { marginTop: 20, marginBottom: 10 }]}>
-              <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left' }]}>Similar Products</Text>
-              <TouchableOpacity style={{ flex: 0.5, textAlign: 'right' }}>
+            
+            <View style={[styles.headerView, styles.historyHeaderView]}>
+              <Text style={[styles.buttonText, styles.similarProductText]}>Similar Products</Text>
+              <TouchableOpacity style={styles.similarProductTouch}>
                 <Text style={[styles.showAllText]}>Show All</Text>
               </TouchableOpacity>
             </View>
@@ -345,14 +346,17 @@ export default class ProductPage extends Component {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
-                <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
-                  <FastImage
-                    style={styles.gridImage}
-                    source={item.imageUrl}
-                  />
-                  <Text style={styles.gridItemNameAndPriceText}>{item.name}</Text>
-                  <Text style={[styles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{item.type}</Text>
-                </TouchableOpacity>
+                <ProductPageSimilarListItem
+                  imageUrl={item.imageUrl} name={item.name} type = {item.type}
+                />
+                // <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
+                //   <FastImage
+                //     style={styles.gridImage}
+                //     source={item.imageUrl}
+                //   />
+                //   <Text style={styles.gridItemNameAndPriceText}>{item.name}</Text>
+                //   <Text style={[styles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{item.type}</Text>
+                // </TouchableOpacity>
               )}
             />
           </View>
@@ -444,7 +448,69 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     justifyContent: "center",
     textAlign: "center"
-
+  },
+  bottomMarginStyle: {
+    marginBottom: 10
+  },
+  productView: {
+    flexDirection: 'row', justifyContent: 'space-between'
+  },
+  alignFlexEndStyle: {
+    alignSelf: "flex-end"
+  },
+  mainImageView: {
+    backgroundColor: "#f6f6f6", borderRadius: 6
+  },
+  verticalMarginStyle:{
+    marginVertical: 15,
+  },
+  customThumbnailImage:{
+    borderColor: "#2967ff", borderWidth: 2
+  },
+  productOptionsView:{
+    backgroundColor: "#f6f6f6", paddingTop: 20, paddingHorizontal: 20 
+  },
+  rowView:{
+    flexDirection: "row" 
+  },
+  flexOneView:{
+    flex:1
+  },
+  quantityModalStyle:{
+    padding: 10, backgroundColor: "#fff", borderRadius: 6 
+  },
+  quantityModalDropdownStyle:{
+    width: 0.25 * Width, height: 134 
+  },
+  quantityModalTextStyle:{
+    fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" 
+  },
+  colorModalDropdownStyle:{
+    width: 0.5 * Width, height: 134
+  },
+  modalActualTextstyle:{
+    fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 
+  },
+  addToCartView:{
+    alignItems: "center", marginTop: 17 
+  },
+  minQuantityText:{
+    textAlign: "center", fontSize: 14, fontFamily: "Avenir-Book", lineHeight: 18, color: "#8d8d8e" 
+  },
+  addToCartText:{
+    color: "#fff", paddingVertical: 11, fontSize: 18, lineHeight: 22, fontFamily: "Montserrat-SemiBold" 
+  },
+  addToCartTouch:{
+    backgroundColor: "#2967ff", alignItems: "center", width: "100%", borderRadius: 6, marginVertical: 15 
+  },
+  similarHeaderView:{
+    marginTop: 20, marginBottom: 10 
+  },
+  similarProductText:{
+    flex: 0.5, textAlign: 'left' 
+  },
+  similarProductTouch:{
+    flex: 0.5, textAlign: 'right' 
   }
 
 });
