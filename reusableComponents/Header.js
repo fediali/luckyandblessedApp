@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 
-//TODO: Fix the centerText position in case there is no right icon --- Check i have done some tweaks it would be fixed
 /* How to use Custom Header
 
 Props:

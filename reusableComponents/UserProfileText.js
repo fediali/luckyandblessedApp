@@ -3,8 +3,6 @@ import {Text, View, StyleSheet, TouchableOpacity, TextInput, Dimensions} from 'r
 import {Icon} from 'react-native-elements';
 import {round} from 'react-native-reanimated';
 
-//TODO: Check if PureComponent or Component
-//TODO: How to get the value of textInput in checkButtonPressed? Is setting state important?
 class ProfileText extends PureComponent {
   constructor(props) {
     super(props);
@@ -28,7 +26,6 @@ class ProfileText extends PureComponent {
     this.props.customSetState(stateVal)
 }
 
-  //FIXME: Add Callbacks
   textChanged(text){
     var key = this.props.stateKey;
     this.setState({[key]: text})

@@ -82,7 +82,7 @@ class Footer extends PureComponent {
                             <Icon
                                 size={35}
                                 name='truck'
-                                type='material-community' //TODO: Find the truck icon
+                                type='material-community' 
                                 color="#2967ff"
                             />
                             :

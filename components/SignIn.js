@@ -44,19 +44,14 @@ class SignIn extends Component {
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
                     console.log(responses[0].users.length)
-                    // this.props.navigation.navigate("MainPage", {userName:"asdasd"}) //Passing user Name
 
                     if (responses[0].users.length > 0) {
-                        console.log(responses[0].users[0].user_id) //TODO: Save this UID
-                        console.log(responses[0].users[0].firstname + " " + responses[0].users[0].lastname)
                         Toast.show('Login Successful');
-                        console.log(responses[0].users[0].firstname + " " + responses[0].users[0].lastname)
                         var user={
                             user_id: responses[0].users[0].user_id,
                             name: responses[0].users[0].firstname + " " + responses[0].users[0].lastname
                         }
                         this._storeData(user)
-                        //TODO: uncomment this
                         this.props.navigation.navigate("MainPage", { userName: responses[0].users[0].firstname + " " + responses[0].users[0].lastname }) //Passing user Name
                     }
                     else {
@@ -67,7 +62,6 @@ class SignIn extends Component {
                 }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
         }
-        // this.props.navigation.navigate("MainPage",{userName: "Test Name"}) //TODO: Remove this
 
     }
 
@@ -111,7 +105,6 @@ class SignIn extends Component {
                         marginBottom:20
                     
                     }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
-                    {/* TODO: Image has to be changed with orignal one */}
                     <View style={styles.emailInputView}>
                         <TextInput style={styles.input} placeholder="Email" onChangeText={(text) => { this.setState({ email: text }) }} />
                     </View>
@@ -122,7 +115,6 @@ class SignIn extends Component {
                     {this.state.passwordError != "" ? this.showErrorMessage(this.state.passwordError) : <View></View>}
 
                     <View style={styles.buttonContainer}>
-                        {/* TODO: Check whether to apply the touchable opacity or ripple */}
                         <TouchableOpacity style={styles.buttonSignUp} onPress={() => { this.props.navigation.navigate("SignUp") }} >
                             <Text style={styles.buttonText}>Sign up</Text>
                         </TouchableOpacity>

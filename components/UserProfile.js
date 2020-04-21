@@ -20,7 +20,6 @@ import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
 
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
-//TODO: Data on pressing the arrow
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);

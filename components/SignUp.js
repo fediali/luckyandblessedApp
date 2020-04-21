@@ -93,7 +93,6 @@ class SignUp extends Component {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
               console.log(responses);
-              //TODO: A way to check for response code
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);
@@ -323,7 +322,6 @@ class SignUp extends Component {
                   />
                 </View>
               </TouchableOpacity>
-              {/* TODO: Check whether to apply the touchable opacity or ripple */}
               <TouchableOpacity
                 style={innerStyles.buttonSignUp}
                 onPress={() => this.signUpClick()}>
