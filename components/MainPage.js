@@ -168,8 +168,7 @@ class MainPage extends Component {
     }
 
     render() {
-        console.log("History", this.state.history)
-        // console.log(this.state.trending.length + " ++++++++++++++++++")
+
         const Width = Dimensions.get('window').width;
         const Height = Dimensions.get('window').height;
         if (!this.state.isReady) {
@@ -299,7 +298,7 @@ class MainPage extends Component {
                             </TouchableOpacity>
                         </View>
                         <FlatList
-                            keyExtractor={(item) => item.pid}
+                            keyExtractor={(item) => item.pid[0]}
                             data={this.state.history}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
