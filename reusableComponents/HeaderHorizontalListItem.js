@@ -2,12 +2,8 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    Image,
     StyleSheet,
-    TextInput,
     TouchableOpacity,
-    ScrollView,
-    Dimensions
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 
