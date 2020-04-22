@@ -1,14 +1,13 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
   View,
   Text,
   Image,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   Share,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 
 /* How to use Custom Header
 
@@ -20,6 +19,16 @@ homepage:true or false
 */
 class Header extends PureComponent {
   lockSubmit = false;
+
+  navigateBack = () => {
+    if (this.lockSubmit) return;
+    this.lockSubmit = true;
+    this.props.navigation.goBack();
+  }
+
+  navigateToScreen = (screenName) => {
+    this.props.navigation.navigate(screenName)
+  }
 
   onShare = async () => {
     try {
@@ -53,9 +62,7 @@ class Header extends PureComponent {
     } else if (this.props.rightIcon == 'search') {
       return (
         <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.navigate('SearchResults');
-          }}>
+          onPress={() => { this.navigateToScreen("SearchResults"); }}>
           <Icon size={30} name="ios-search" type="ionicon" color="#000" />
         </TouchableOpacity>
       );
@@ -95,17 +102,15 @@ class Header extends PureComponent {
           {this.props.homepage ? (
             <View style={styles.backView}></View>
           ) : (
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  if (this.lockSubmit) return;
-                  this.lockSubmit = true;
-                  this.props.navigation.goBack();
-                }}>
-                <Icon size={30} name="arrow-left" type="feather" />
-              </TouchableOpacity>
-            </View>
-          )}
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.navigateBack()
+                  }}>
+                  <Icon size={30} name="arrow-left" type="feather" />
+                </TouchableOpacity>
+              </View>
+            )}
 
           {this.props.homepage ? (
             <View style={styles.marT5}>
@@ -116,13 +121,13 @@ class Header extends PureComponent {
               <Text style={styles.homePersonText}>{this.props.person}</Text>
             </View>
           ) : (
-            <View>
-              <Text
-                style={styles.centerText}>
-                {this.props.centerText}
-              </Text>
-            </View>
-          )}
+              <View>
+                <Text
+                  style={styles.centerText}>
+                  {this.props.centerText}
+                </Text>
+              </View>
+            )}
           <View>{this.getRightIcon()}</View>
         </View>
       </View>
@@ -136,7 +141,7 @@ const styles = StyleSheet.create({
     color: '#8d8d8e',
     fontFamily: 'Avenir-Book',
   },
-  iconStyle: {height: 22, width: 20},
+  iconStyle: { height: 22, width: 20 },
   clearAllText: {
     fontSize: 18,
     lineHeight: 24,
@@ -156,13 +161,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     alignItems: 'center',
   },
-  backView: {height: 30, width: 30},
+  backView: { height: 30, width: 30 },
   centerText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
     lineHeight: 22,
   },
-  marT5: {marginTop: 5},
+  marT5: { marginTop: 5 },
 
 
 });
