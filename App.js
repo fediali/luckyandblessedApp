@@ -62,6 +62,7 @@ class App extends Component {
           <Stack.Screen name="ConfirmationSuccess" component={ConfirmationSuccess} />
           <Stack.Screen name="SearchResults" component={SearchResults} />
           {/* <Stack.Screen name="ProductPage" component={ProductPage} /> */}
+          {/* <Stack.Screen name="Payment" component={Payment} /> */}
 
           {/* <Stack.Screen name="Filter" component={Filter} />
           <Stack.Screen name="ColorPicker" component={ColorPicker} /> */}

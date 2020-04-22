@@ -19,6 +19,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
 
+const STORAGE_PRODUCT_HISTORY_CATEGORY="productHistoryList"
+const STORAGE_USER='user'
+const STORAGE_DEFAULTS="defaults"
+
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 export default class UserProfile extends Component {
   constructor(props) {
@@ -180,7 +184,9 @@ export default class UserProfile extends Component {
               activeOpacity={0.5}
                 style={styles.buttonSignIn}
                 onPress={() => {
-                  AsyncStorage.removeItem('user');
+                  AsyncStorage.removeItem(STORAGE_USER);
+                  AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
+                  AsyncStorage.removeItem(STORAGE_DEFAULTS)
                   this.props.navigation.navigate('SignIn');
                 }}>
                 <Text style={styles.buttonText}>Logout</Text>
