@@ -239,7 +239,7 @@ class ShoppingCart extends Component {
                     </View>
                 </View>
 
-                <View style={[styles.line, { marginTop: 20 }]} />
+                <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
 
 
@@ -255,7 +255,7 @@ class ShoppingCart extends Component {
                     </View>
                 </View>
                 <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
-                    <TouchableOpacity activeOpacity={0.5} style={[innerStyles.buttonPaymentMethod]} onPress={() => { this.props.navigation.navigate("Delivery") }}>
+                    <TouchableOpacity activeOpacity={0.5} style={[innerStyles.buttonPaymentMethod]} onPress={() => {this.navigateToNextScreen("Delivery")}}>
                         <Text
                             style={[
                                 styles.buttonText, innerStyles.orderButtonText
@@ -270,10 +270,14 @@ class ShoppingCart extends Component {
         return listFooter;
     }
 
+    navigateToNextScreen=(screenName)=>{
+        this.props.navigation.navigate(screenName)
+    }
+
     render() {
 
         const Width = Dimensions.get('window').width;
-
+        //TODO: Did not refactor it coz it will surely be changed later with lazy loader..
         if (!this.state.isReady) {
             return (
                 <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
