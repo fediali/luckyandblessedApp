@@ -54,7 +54,6 @@ class ColorPicker extends PureComponent {
         this.setState({ 
             isChange: !this.state.isChange
         })
-        // console.log(this.state.isChange);
         this.state.colorList[item.id].isCheck = !this.state.colorList[item.id].isCheck
         this.props.callbackFunction(this.state.colorList)
     }
@@ -98,7 +97,6 @@ const Height = Dimensions.get('window').height;
 const innerStyles = StyleSheet.create({
     colorView: {
         alignSelf: 'stretch',
-        
         alignContent: 'flex-start',
         width: Width * 0.15,
         height: Height * 0.065,
@@ -106,12 +104,13 @@ const innerStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal:Width*0.014,
-
     },
     multiRowStyling: {
         marginTop: 15,
     },
-    paddingBottom:{ paddingBottom: 10},
+    paddingBottom:{ 
+        paddingBottom: 10
+    },
     image:{
         width: '31%',
         height: '31%',

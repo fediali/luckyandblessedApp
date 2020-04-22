@@ -1,7 +1,6 @@
 import React, {PureComponent} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import {Icon} from 'react-native-elements';
-import {round} from 'react-native-reanimated';
 
 
 class ProfileText extends PureComponent {
@@ -11,19 +10,15 @@ class ProfileText extends PureComponent {
         {this.props.containIcon ? (
           <View>
             <View style={styles.userDetails}>
-              <View style={{paddingVertical: 19}}>
+              <View style={styles.mainViewPad}>
                 <Text style={styles.keyText}>{this.props.keyText}</Text>
               </View>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{paddingVertical: 18}}>
+              <View style={styles.rowView}>
+                <View style={styles.mainViewPad}>
                   <Text style={styles.valueText}>{this.props.valueText}</Text>
                 </View>
                 <View
-                  style={{
-                    marginVertical: 18,
-                    marginRight: 6,
-                    marginLeft: 19.5,
-                  }}>
+                  style={styles.iconView}>
                   <Icon size={20} name="right" type="antdesign" />
                 </View>
               </View>
@@ -32,10 +27,10 @@ class ProfileText extends PureComponent {
         ) : (
           <View>
             <View style={styles.userDetails}>
-              <View style={{paddingVertical: 19}}>
+              <View style={styles.mainViewPad}>
                 <Text style={[styles.keyText]}>{this.props.keyText}</Text>
               </View>
-              <View style={{paddingVertical: 18}}>
+              <View style={styles.mainViewPad}>
                 <Text style={([styles.valueText])}>
                   {this.props.valueText}
                 </Text>
@@ -67,7 +62,17 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#2d2d2f',
   },
-  
+  mainViewPad:{
+    paddingVertical: 19
+  },
+  rowView:{
+    flexDirection: 'row'
+  },
+  iconView:{
+    marginVertical: 18,
+    marginRight: 6,
+    marginLeft: 19.5,
+  },
 });
 
 export default ProfileText;
