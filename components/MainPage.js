@@ -39,6 +39,8 @@ const baseUrl = "http://dev.landbw.co/";
 const SELECTED_CATEGORY_ALL = -1
 const STORAGE_PRODUCT_HISTORY_CATEGORY="productHistoryList"
 const STORAGE_DEFAULTS="defaults"
+const NEW_ARRIVAL_NAME = "New Arrivals"
+const TRENDING_NAME = "Trending"
 class MainPage extends Component {
 
 
@@ -50,7 +52,9 @@ class MainPage extends Component {
             categoryList: null,
             collections: null,
             newArrivals: null,
+            newArrivals_cid: null,
             trending: null,
+            trending_cid: null,
             history: null,
             isReady: false,
             default: null
@@ -101,7 +105,9 @@ class MainPage extends Component {
                         this.setState({
                             collections: responses[0].home.logged.sliders,
                             newArrivals: responses[0].home.logged.new_arrivals.products,
+                            newArrivals_cid: responses[0].home.logged.new_arrivals.category_id,
                             trending: responses[0].home.logged.trending.products,
+                            trending_cid: responses[0].home.logged.trending.category_id,
                             defaults: responses[0].defaults,
                             categoryList: responses[1].categories,
                             history: JSON.parse(value)
@@ -140,6 +146,10 @@ class MainPage extends Component {
             }
         ).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
 
+    }
+
+    onShowAllPressed(cid, cname){
+        this.props.onShowAllPressed(cid, cname);
     }
 
     enableNewsLetter(flag) {
@@ -204,7 +214,9 @@ class MainPage extends Component {
 
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>New Arrivals</Text>
-                            <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}>
+                            <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
+                                onPress={() => {this.props.navigation.navigate("CategoriesProduct", { cid: [this.state.newArrivals_cid], cname: NEW_ARRIVAL_NAME })}} >
+                            
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
                         </View>
@@ -261,7 +273,8 @@ class MainPage extends Component {
                         {/*trending header*/}
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>What’s trending</Text>
-                            <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}>
+                            <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
+                                onPress={() => {this.props.navigation.navigate("CategoriesProduct", { cid: [this.state.trending_cid], cname: TRENDING_NAME })}} >
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
                         </View>
@@ -294,17 +307,23 @@ class MainPage extends Component {
                             renderItem={({ item, index }) => ( 
                                 (!item.brand ? 
                                     <MainPageHistoryListItem
+                                    pid={item.pid[0]}
+                                    cname={item.cname}
                                     imageUrl={item.mainImage}
                                     name={item.productName}
                                     type={this.state.defaults.brand}
                                     price={Number(item.price).toFixed(2)}
+                                    navigation={this.props.navigation}
                                 /> : 
 
                                 <MainPageHistoryListItem
+                                pid={item.pid[0]}
+                                cname={item.cname}
                                 imageUrl={item.mainImage}
                                 name={item.productName}
                                 type={item.brand}
                                 price={Number(item.price).toFixed(2)}
+                                navigation={this.props.navigation}
                             />)
                             )}
                         />

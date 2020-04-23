@@ -32,7 +32,6 @@ export default class ProductPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recentProducts: _history,
       activeSections: [],
       isReady: false,
       sections: [
@@ -57,34 +56,9 @@ export default class ProductPage extends Component {
         qty_step: 0,
         full_description: "",
         composition: "",
-      }
-      // data: {
-      //   category: 'Jeans',
-      //   itemName1: 'RED MINT AZTEC BELL',
-      //   itemName2: 'SLEEVE BLAZER',
-      //   totalPrice: '$48.99',
-      //   unitPrice: '$19.40',
-      //   color: ['Turquoise', 'Green Snake'],
-      //   minQuantity: 6,
-      //   Quanitities: [6, 12, 18],
-      //   imageURL: [
-      //     { img1: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-      //     { img2: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-      //     { img3: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-      //   ],
-
-      //   description: {
-      //     details:
-      //       "This women's tank top is designed to help you stay cool. It's made of stretchy and breathable fabric that moves heat away from your skin",
-      //     composition: '84% nylon, 16% elastane',
-      //     sizes: '2XS, XS, S, M, L, XL',
-      //     gender: 'Women',
-      //     country: 'Indonesia',
-      //     code: 'EC142690002',
-      //   },
-      // },
-      // mainImage: {require('../static/demoimg1-walkthrough.png'},
-
+      },
+      similarProducts: []
+    
     };
   }
 
@@ -93,14 +67,17 @@ export default class ProductPage extends Component {
       // "api/products/"+this.props.route.params.id
       //category will also come from this.props.route.params.category
 
-      GetData(baseUrl + `api/products/${this.state.pid}`).then(res => res.json()).then(
-        (response) => {
-          console.log(response)
+      var promises = []
+      promises.push(GetData(baseUrl + `api/products/${this.state.pid}`))
+      promises.push(GetData(baseUrl + `api/similarproducts/54578`)) //TODO: Change the 54578 to ${this.state.pid} 
+      Promise.all(promises).then((promiseResponses) => {
+        Promise.all(promiseResponses.map(res => res.json())).then((response) => {
+          console.log("Similar Items", response[1])
           async function getArray() {
             const secondaryImagesArray = []
-            for (var key in response.image_pairs) {
-              console.log(response.image_pairs[key].detailed.image_path)
-              await secondaryImagesArray.push(response.image_pairs[key].detailed.image_path)
+            for (var key in response[0].image_pairs) {
+              console.log(response[0].image_pairs[key].detailed.image_path)
+              await secondaryImagesArray.push(response[0].image_pairs[key].detailed.image_path)
             }
             return secondaryImagesArray
           }
@@ -112,10 +89,11 @@ export default class ProductPage extends Component {
               if(value==null)value=[]
               else value=JSON.parse(value)
               let historyObj={
-                productName: response.product,
-                price: response.price,
-                mainImage: response.main_pair.detailed.image_path,
-                pid:this.state.pid
+                productName: response[0].product,
+                price: response[0].price,
+                mainImage: response[0].main_pair.detailed.image_path,
+                pid:this.state.pid,
+                cname:this.props.route.params.cname
               }
               if(value.filter(obj => obj.pid[0] ===historyObj.pid[0] ).length==0){
                 console.log("ppppp",value.filter(obj => obj.pid[0] ===historyObj.pid[0] ))
@@ -131,21 +109,22 @@ export default class ProductPage extends Component {
             this.setState({
               isReady: true,
               data: {
-                productName: response.product,
-                price: response.price,
-                mainImage: response.main_pair.detailed.image_path,
+                productName: response[0].product,
+                price: response[0].price,
+                mainImage: response[0].main_pair.detailed.image_path,
                 secondaryImages: secondaryImagesArray,
-                min_qty: Number(response.min_qty),
-                max_qty: 18,//TODO: Number(response.max_qty) currently 0 from api
-                qty_step: Number(response.qty_step),
-                full_description: response.full_description,
-                composition: response.composition,
-              }
-
+                min_qty: Number(response[0].min_qty),
+                max_qty: 18,//TODO: Number(response[0].max_qty) currently 0 from api
+                qty_step: Number(response[0].qty_step),
+                full_description: response[0].full_description,
+                composition: response[0].composition,
+              },
+              similarProducts: response[1].products
             })
           })
 
         })
+      })
     })
   };
 
@@ -185,41 +164,6 @@ export default class ProductPage extends Component {
         <View style={{ paddingHorizontal: 20 }}>
           <HTML html={this.state.data.full_description} imagesMaxWidth={Dimensions.get('window').width} />
           <HTML html={this.state.data.composition} tagsStyles={this.state.tagsStyles} imagesMaxWidth={Dimensions.get('window').width} />
-
-          {/* <Text style={[styles.descriptionText, { paddingBottom: 20 }]}>{this.state.data.description}</Text>
-          <View style={{ flexDirection: "row" }}>
-            <View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Composition  </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Sizes  </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Gender  </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Country  </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Code  </Text>
-              </View>
-            </View>
-            <View> */}
-          {/* <Text style={styles.descriptionText}>{this.state.data.description.composition}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.sizes}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.gender}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.country}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.code}</Text> */}
-
-          {/* </View> */}
-          {/* </View> */}
-
         </View>
       )
     }
@@ -379,22 +323,20 @@ export default class ProductPage extends Component {
               </TouchableOpacity>
             </View>
             <FlatList
-              keyExtractor={(item) => item.id.toString()}
-              data={this.state.recentProducts}
+              keyExtractor={(item) => item.product_id}
+              data={this.state.similarProducts}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
+                (item.main_pair)?
                 <ProductPageSimilarListItem
-                  imageUrl={item.imageUrl} name={item.name} type = {item.type}
+                  pid={item.product_id} imageUrl={item.main_pair.detailed.image_path} name={item.product} type = "CHANGE IT"
                 />
-                // <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
-                //   <FastImage
-                //     style={styles.gridImage}
-                //     source={item.imageUrl}
-                //   />
-                //   <Text style={styles.gridItemNameAndPriceText}>{item.name}</Text>
-                //   <Text style={[styles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{item.type}</Text>
-                // </TouchableOpacity>
+                :
+                //If No product image
+                <ProductPageSimilarListItem
+                  pid={item.product_id} imageUrl={"http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg"} name={item.product} type = "CHANGE IT"
+                />
               )}
             />
           </View>

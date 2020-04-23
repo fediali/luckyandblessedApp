@@ -15,7 +15,7 @@ export default class ProductPageSimilarListItem extends PureComponent {
                     style={innerStyles.gridImage}
                     // resizeMode='contain'
                     resizeMode="cover"
-                    source={this.props.imageUrl}
+                    source={{uri: this.props.imageUrl}}
                 />
                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.name}</Text>
                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.type}</Text>

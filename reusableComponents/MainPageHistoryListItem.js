@@ -8,9 +8,16 @@ import {
 import FastImage from 'react-native-fast-image'
 
 export default class MainPageHistoryListItem extends PureComponent {
+
+    navigateToProductPage=()=>{
+        this.props.navigation.navigate("ProductPage", { pid: [this.props.pid], cname: [this.props.cname] }) 
+    }
+
     render() {
         return (
-            <TouchableOpacity activeOpacity={0.9} style={innerStyles.historyTouchable}>
+            <TouchableOpacity activeOpacity={0.9} style={innerStyles.historyTouchable}
+                onPress={this.navigateToProductPage}
+            >
                 <FastImage
                     style={innerStyles.gridImage}
                     // resizeMode='contain'
