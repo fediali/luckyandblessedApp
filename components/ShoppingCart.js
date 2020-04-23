@@ -280,9 +280,9 @@ class ShoppingCart extends Component {
         //TODO: Did not refactor it coz it will surely be changed later with lazy loader..
         if (!this.state.isReady) {
             return (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                <View style={styles.loader}>
                     <Shimmer>
-                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                        <Image style={styles.logoImageLoader} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>
             )

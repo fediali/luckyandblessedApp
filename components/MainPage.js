@@ -258,7 +258,7 @@ class MainPage extends Component {
                         </View>
 
 
-                        {/*FIXME: trending header*/}
+                        {/*trending header*/}
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>What’s trending</Text>
                             <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}>
@@ -291,7 +291,7 @@ class MainPage extends Component {
                             data={this.state.history}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => ( //FIXME: Items not returning
+                            renderItem={({ item, index }) => ( 
                                 (!item.brand ? 
                                     <MainPageHistoryListItem
                                     imageUrl={item.mainImage}
