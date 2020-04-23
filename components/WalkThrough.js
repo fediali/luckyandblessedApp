@@ -21,6 +21,7 @@ export default class WalkThrough extends Component {
     this.state = {
       loaded: false,
       images: [],
+      headerText: null,
       error: null,
       isReady: false,
     };
@@ -52,6 +53,7 @@ export default class WalkThrough extends Component {
               this.setState({
                 isReady: true,
                 images: responses[0].home.not_logged.sliders,
+                headerText: responses[0].home.not_logged.header
               });
             })
             .catch((ex) => {
@@ -109,7 +111,7 @@ export default class WalkThrough extends Component {
           </View>
 
           <View style={styles.texts}>
-            <Text style={styles.newCollection}>New Collection</Text>
+            <Text style={styles.newCollection}>{this.state.headerText}</Text>
             <View style={styles.youAreRegistering}>
               <Text style={styles.text1}>You are registering for a</Text>
               <View style={styles.wholeSaleAccountTV}>

@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: '#8d8d8e',
     fontFamily: 'Avenir-Book',
+    textAlign: "center"
   },
   iconStyle: { height: 22, width: 20 },
   clearAllText: {

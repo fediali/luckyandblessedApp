@@ -21,7 +21,7 @@ class CategoriesListItem extends PureComponent {
     
     render() {
         return (
-            <TouchableOpacity activeOpacity={0.9} style={styles.button} onPress={this.navigateToProductPage}>
+            <TouchableOpacity activeOpacity={0.9} style={styles.button}  onPress={this.navigateToProductPage}>
                 <FastImage source={this.props.imageUrl} resizeMode="contain" style={styles.image} />
                 {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
                 <View style={styles.paddingLeft}>
@@ -44,7 +44,7 @@ let Width = Dimensions.get("window").width
 let Height = Dimensions.get("window").height
 const styles = StyleSheet.create({
     button: { flexDirection: "row", paddingHorizontal: 20, alignItems: "center" },
-    image: { height: Height * 0.20, width: Width * 0.24, borderRadius: 6 },
+    image: { height: Height * 0.20, width: Width * 0.24, borderRadius: 6, backgroundColor: '#f6f6f6' },
     mainText: { fontFamily: "Montserrat-SemiBold", fontSize: 24, lineHeight: 28 },
     subText: { fontSize: 14, lineHeight: 18, color: "#2967ff" },
     paddingLeft: { paddingLeft: 20 }

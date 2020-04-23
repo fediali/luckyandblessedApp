@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
@@ -21,7 +22,7 @@ class SignUp extends Component {
   constructor() {
     super();
     this.state = {
-      fileSelectText: '',
+      fileSelectText: 'Upload Sales TX ID',
       fullName: '',
       email: '',
       password: '',
@@ -69,7 +70,7 @@ class SignUp extends Component {
     }
   }
 
-  signUpClick () {
+  signUpClick() {
     if (this.isValid()) {
       //call signup API here
       //Splitting name to first and last name
@@ -85,14 +86,20 @@ class SignUp extends Component {
         user_type: 'C',
         status: 'A',
       };
-      console.log(data);
       var promises = [];
       promises.push(PostData(baseUrl + 'api/users', data));
       Promise.all(promises)
         .then((promiseResponses) => {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
-              console.log(responses);
+              console.log(responses[0])
+              if (responses[0].user_id){
+                Toast.show('Registered Successfully');
+                this.props.navigation.navigate("SignIn") //Passing user Name
+              }
+              else{
+                this.setState({emailError: 'The username or email you have chosen already exists', email: "", password: "", confirmPassword: ""});
+              }
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);
@@ -104,7 +111,7 @@ class SignUp extends Component {
           alert(ex);
         });
     }
-  };
+  }
 
   isValid() {
     let validFlag = true;
@@ -265,24 +272,22 @@ class SignUp extends Component {
             )}
 
             <View style={styles.inputView}>
-              <View style={[innerStyles.input, innerStyles.uploadFileView]}>
+              <TouchableOpacity
+                style={[innerStyles.input, innerStyles.uploadFileView]}
+                onPress={this.selectOneFile.bind(this)}>
                 <TextInput
                   style={innerStyles.input}
-                  placeholder="Upload Sales TX ID"
-                  onChangeText={(text) => {
-                    this.setState({salesTaxID: text});
-                  }}
+                  editable={false}
+                  placeholder={this.state.fileSelectText}
                 />
-                <TouchableOpacity
-                  style={innerStyles.uploadFile}
-                  onPress={this.selectOneFile.bind(this)}>
+                <View style={innerStyles.uploadFile}>
                   <FastImage
                     style={innerStyles.uploadFileImage}
                     resizeMode="contain"
                     source={require('../static/uploadFile-signUp.png')}
                   />
-                </TouchableOpacity>
-              </View>
+                </View>
+              </TouchableOpacity>
             </View>
 
             {this.state.salesTaxIDError != '' ? (
@@ -296,7 +301,6 @@ class SignUp extends Component {
               <View></View>
             )}
 
-            <Text>{this.state.fileSelectText}</Text>
             <Text style={styles.customTextBold}>OR</Text>
             <View style={[styles.line, innerStyles.marginView]} />
 
@@ -325,11 +329,7 @@ class SignUp extends Component {
               <TouchableOpacity
                 style={innerStyles.buttonSignUp}
                 onPress={() => this.signUpClick()}>
-                <Text
-                  style={[
-                    styles.buttonText,
-                   innerStyles.accText
-                  ]}>
+                <Text style={[styles.buttonText, innerStyles.accText]}>
                   Create an account
                 </Text>
               </TouchableOpacity>
@@ -338,11 +338,7 @@ class SignUp extends Component {
                 onPress={() => {
                   this.props.navigation.navigate('SignIn');
                 }}>
-                <Text
-                  style={[
-                    styles.buttonText,
-                    innerStyles.buttonText
-                  ]}>
+                <Text style={[styles.buttonText, innerStyles.buttonText]}>
                   I have an account
                 </Text>
               </TouchableOpacity>
@@ -391,7 +387,7 @@ const innerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 15,
   },
-  accText:  {
+  accText: {
     color: '#ffffff',
   },
   buttonText: {
@@ -418,7 +414,7 @@ const innerStyles = StyleSheet.create({
     paddingVertical: 11,
     paddingHorizontal: 38,
     marginRight: 15,
-    marginTop: 15,
+    marginTop: 23,
   },
   buttonAlreadyHaveAccount: {
     width: '100%',
@@ -427,7 +423,8 @@ const innerStyles = StyleSheet.create({
     paddingVertical: 11,
     paddingHorizontal: 38,
     marginRight: 15,
-    marginTop: 8,
+    marginTop: 18,
+    marginBottom: 20,
   },
 });
 

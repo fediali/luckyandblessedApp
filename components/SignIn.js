@@ -40,19 +40,22 @@ class SignIn extends Component {
         if (this.isValid()) {
             var promises = []
             this.setState({requested:true})
+            promises.push(PostData(baseUrl + 'api/usertoken', {email: this.state.email, password: this.state.password}))
             promises.push(GetData(baseUrl + `api/users?email=${this.state.email}`))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-                    console.log(responses[0].users.length)
+                    console.log(responses[0].token)
+                    console.log(responses[1].users[0])
 
-                    if (responses[0].users.length > 0) {
+                    if (responses[0].token) {
                         Toast.show('Login Successful');
+                        var fullName = responses[1].users[0].firstname + " " + responses[1].users[0].lastname;
                         var user={
-                            user_id: responses[0].users[0].user_id,
-                            name: responses[0].users[0].firstname + " " + responses[0].users[0].lastname
+                            user_id: responses[1].users[0].user_id,
+                            name: fullName
                         }
                         this._storeData(user)
-                        this.props.navigation.navigate("MainPage", { userName: responses[0].users[0].firstname + " " + responses[0].users[0].lastname }) //Passing user Name
+                        this.props.navigation.navigate("MainPage", { userName: fullName }) //Passing user Name
                     }
                     else {
                         Toast.show('Username or password incorrect', Toast.LONG);
@@ -62,7 +65,7 @@ class SignIn extends Component {
                 }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
         }
-        this.props.navigation.navigate("MainPage",{userName: "Test Name"}) //TODO: Remove this
+        // this.props.navigation.navigate("MainPage",{userName: "Test Name"}) //TODO: Remove this
 
     }
 

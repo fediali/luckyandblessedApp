@@ -33,7 +33,7 @@ const innerStyles = StyleSheet.create({
     historyTouchable: {
         flexDirection: 'column',
         paddingHorizontal: 10,
-        marginBottom: 50
+        marginBottom: 21
     },
     gridImage: {
         width: Width * 0.427,
