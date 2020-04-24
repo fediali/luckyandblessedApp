@@ -319,26 +319,15 @@ class MainPage extends Component {
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => ( 
-                                (!item.brand ? 
                                     <MainPageHistoryListItem
                                     pid={item.pid[0]}
                                     cname={item.cname}
                                     imageUrl={item.mainImage}
                                     name={item.productName}
-                                    type={this.state.defaults.brand}
+                                    type= { item.brand ? item.brand : this.state.defaults.brand}
                                     price={Number(item.price).toFixed(2)}
                                     navigation={this.props.navigation}
-                                /> : 
-
-                                <MainPageHistoryListItem
-                                pid={item.pid[0]}
-                                cname={item.cname}
-                                imageUrl={item.mainImage}
-                                name={item.productName}
-                                type={item.brand}
-                                price={Number(item.price).toFixed(2)}
-                                navigation={this.props.navigation}
-                            />)
+                                />  
                             )}
                         />
                         {this.state.showNewsletter == true ?

@@ -199,17 +199,6 @@ export default class ProductPage extends Component {
     this.setState({ selectedQuantity: quantityOptionsArray[index] })
   }
 
-  //To get the data from child component and update the state of main component. Expects a json object.
-
-  customSetState(stateVal) {
-    var key = Object.keys(stateVal)[0];
-    console.log(stateVal[key])
-    this.setState({[key]: stateVal[key], isReady: false});
-    this.getData();
-    console.log([key], stateVal[key])
-  }
-
-
   render() {
 
     console.log(this.state.data.composition)
@@ -352,17 +341,12 @@ export default class ProductPage extends Component {
               renderItem={({ item, index }) => (
                 (item.main_pair)?
                 <ProductPageSimilarListItem //TODO:Confirm CNAME
-                  pid={item.product_id} cname={this.state.cname} imageUrl={item.main_pair.detailed.image_path} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation} customSetState={(stateVal) => {
-                    this.customSetState(stateVal);
-                  }}
+                  pid={item.product_id} cname={this.state.cname} imageUrl={item.main_pair.detailed.image_path} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation}
                 />
                 :
                 //If No product image
                 <ProductPageSimilarListItem //TODO:Confirm CNAME
-                  pid={item.product_id} cname={this.state.cname} imageUrl={"http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg"} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation} customSetState={(stateVal) => {
-                    this.customSetState(stateVal);
-                  }}
-                />
+                  pid={item.product_id} cname={this.state.cname} imageUrl={"http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg"} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation}/>
               )}
             />
           </View>

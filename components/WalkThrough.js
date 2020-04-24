@@ -13,7 +13,7 @@ import Shimmer from 'react-native-shimmer';
 import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
-
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 
 export default class WalkThrough extends Component {
   constructor() {
@@ -25,23 +25,19 @@ export default class WalkThrough extends Component {
       error: null,
       isReady: false,
     };
-    this._retrieveData().then((value) => {
+    RetrieveDataAsync.then((value) => {
       if (value != null) {
         console.log('{{{{{{{{{', value);
         this.props.navigation.navigate('MainPage', {
           userName: JSON.parse(value).name,
-        }); //Passing user Name
+        }); 
       }
     });
   }
-  _retrieveData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('user');
-      return value;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+  navigateScreen=(screen)=>()=>{
+    this.props.navigation.navigate(screen);
+  }
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       var promises = [];
@@ -124,16 +120,12 @@ export default class WalkThrough extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.buttonRegisterNow}
-              onPress={() => {
-                this.props.navigation.navigate('SignUp');
-              }}>
+              onPress={this.navigateScreen("SignUp")}>
               <Text style={styles.registerButtonText}>Register now</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonLogIn}
-              onPress={() => {
-                this.props.navigation.navigate('SignIn');
-              }}>
+              onPress={this.navigateScreen("SignIn")}>
               <Text style={styles.loginButtonText}>Log-in</Text>
             </TouchableOpacity>
           </View>
