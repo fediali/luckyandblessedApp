@@ -19,7 +19,7 @@ import CategoriesProductListSingleItem from "../reusableComponents/CategoriesPro
 import CategoriesProductListDoubleItem from "../reusableComponents/CategoriesProductListDoubleItem"
 import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image'
-
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 const baseUrl = "http://dev.landbw.co/";
 
 class CategoriesProduct extends Component {
@@ -42,11 +42,58 @@ class CategoriesProduct extends Component {
     }
 
     loadData = (cid) => {
-        var promises = []
         console.log(cid)
-        promises.push(GetData(baseUrl + `api/products?cid=${cid}&page=` + this.state.iteratedPage))
-        let itr = this.state.iteratedPage
-        Promise.all(promises).then((promiseResponses) => {
+        if (cid == -2) //Cid of HISTORY
+        {
+            var historyItems = this.props.route.params.items;
+            this.setState({
+                totalProducts: historyItems.length,
+                totalItemsPerRequest: 10, //TOTAL 10 items in case of history
+            })
+
+            async function parseProducts() {
+                const tempProducts = []
+                for (let i = 0; i < historyItems.length; i++) {
+                    console.log(historyItems[i].pid[0])
+                  
+                    await tempProducts.push({
+
+                        product: historyItems[i].productName,
+                        product_id: historyItems[i].pid[0],
+                        price: parseFloat(historyItems[i].price).toFixed(2),
+                        base_price: parseFloat(historyItems[i].base_price).toFixed(2),
+                        imageUrl: historyItems[i].mainImage,
+                        product_brand: "", //TODO: Should come from Defaults
+                        cname: historyItems[i].cname
+                    })
+                }
+
+                return tempProducts
+            }
+            parseProducts().then((prod) => {
+                this.setState({
+                    isReady: true,
+                    products: [...this.state.products, ...prod],
+                    isLoadingMoreListData: false,
+                })
+            })
+
+
+        }
+
+        // else if ()
+        else {
+            var catName = this.state.cname
+            var promises = []
+            if (cid == -3) //-3 is cid of SIMILAR PRODUCTS
+            {
+                promises.push(GetData(baseUrl + `api/similarproducts/54578`)) //TODO: Change the 54578 to ${this.state.pid} 
+            }
+            else {
+                promises.push(GetData(baseUrl + `api/products?cid=${cid}&page=` + this.state.iteratedPage))
+            }
+            let itr = this.state.iteratedPage
+            Promise.all(promises).then((promiseResponses) => {
             Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
                 this.setState({
                     totalProducts: parseFloat(responses[0].params.total_items).toFixed(0),
@@ -57,12 +104,12 @@ class CategoriesProduct extends Component {
                     for (let i = 0; i < responses[0].products.length; i++) {
                         if (responses[0].products[i].main_pair == null) continue;
                         console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
-                        let variant = ""
-                        try {
-                            variant = responses[0].products[i].product_features["2"].variant
-                        } catch{
-                            variant = responses[0].products[i].product
-                        }
+                        // let variant = ""
+                        // try {
+                        //     variant = responses[0].products[i].product_features["2"].variant
+                        // } catch{
+                        //     variant = responses[0].products[i].product
+                        // }
                         await tempProducts.push({
 
                             product: responses[0].products[i].product,
@@ -70,7 +117,8 @@ class CategoriesProduct extends Component {
                             price: parseFloat(responses[0].products[i].price).toFixed(2),
                             base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
                             imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-                            product_brand: variant
+                            product_brand: "", //TODO: should come from defaults
+                            cname: catName //Category name would be the same here.
                         })
                     }
 
@@ -86,6 +134,9 @@ class CategoriesProduct extends Component {
 
             }).catch(ex => { console.log("Exception: Inner Promise", ex) })
         }).catch(ex => { console.log("Exception: Outer Promise", ex) })
+
+        }
+        
     }
 
     handleLoadMore = () => {
@@ -210,7 +261,7 @@ class CategoriesProduct extends Component {
                                 contentContainerStyle={styles.container}
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
-                                    <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} cname={this.state.cname} navigation={this.props.navigation}
+                                    <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
                                         imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={"CHANGE IT"} price2={"$" + item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
@@ -234,7 +285,7 @@ class CategoriesProduct extends Component {
                                 numColumns={2}
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
-                                    <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} cname={this.state.cname} navigation={this.props.navigation}
+                                    <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
                                         imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={"CHANGE IT"} price2={"$" + item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}

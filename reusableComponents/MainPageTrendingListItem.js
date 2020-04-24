@@ -7,6 +7,7 @@ import {
     View
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
+const TRENDING_NAME = "Trending"
 
 export default class MainPageHistoryListItem extends PureComponent {
     render() {
@@ -16,7 +17,9 @@ export default class MainPageHistoryListItem extends PureComponent {
             <View style={innerStyles.mainItemView}>
 
                 {this.props.listItem.map((val,num) => (
-                    <TouchableOpacity key={num.toString()} activeOpacity={0.9} style={innerStyles.trendingView}>
+                    <TouchableOpacity key={num.toString()} activeOpacity={0.9} style={innerStyles.trendingView}
+                        onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [val.product_id], cname: TRENDING_NAME })}}
+                    >
                         <View style={innerStyles.innerTrendingView}>
                             <FastImage
                                 style={innerStyles.trendingImage}
@@ -34,56 +37,6 @@ export default class MainPageHistoryListItem extends PureComponent {
                     </TouchableOpacity>
                 ))}
             </View>
-            // <View style={innerStyles.mainItemView}>
-            //      <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-            //         <View style={innerStyles.innerTrendingView}>
-            //             <FastImage
-            //                 style={innerStyles.trendingImage}
-            //                 source={{ uri: this.props.listItem[0].image }}
-            //                 resizeMode='contain'
-            //             />
-            //             <View style={innerStyles.innerInnerTrendingView}>
-            //                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[0].product}</Text>
-            //                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[0].brand}</Text>
-            //             </View>
-            //         </View>
-            //         <View style={innerStyles.trendingViewPriceView}>
-            //             <Text style={innerStyles.trendingPriceText}>${this.props.listItem[0].price}</Text>
-            //         </View>
-            //     </TouchableOpacity>
-            //     <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-            //         <View style={innerStyles.innerTrendingView}>
-            //             <FastImage
-            //                 style={innerStyles.trendingImage}
-            //                 source={{ uri: this.props.listItem[1].image }}
-            //                 resizeMode='contain'
-            //             />
-            //             <View style={innerStyles.innerInnerTrendingView}>
-            //                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[1].product}</Text>
-            //                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[1].brand}</Text>
-            //             </View>
-            //         </View>
-            //         <View style={innerStyles.trendingViewPriceView}>
-            //             <Text style={innerStyles.trendingPriceText}>${this.props.listItem[1].price}</Text>
-            //         </View>
-            //     </TouchableOpacity>
-            //     <TouchableOpacity activeOpacity={0.9} style={innerStyles.trendingView}>
-            //         <View style={innerStyles.innerTrendingView}>
-            //             <FastImage
-            //                 style={innerStyles.trendingImage}
-            //                 source={{ uri: this.props.listItem[2].image }}
-            //                 resizeMode='contain'
-            //             />
-            //             <View style={innerStyles.innerInnerTrendingView}>
-            //                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.listItem[2].product}</Text>
-            //                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.listItem[2].brand}</Text>
-            //             </View>
-            //         </View>
-            //         <View style={innerStyles.trendingViewPriceView}>
-            //             <Text style={innerStyles.trendingPriceText}>${this.props.listItem[2].price}</Text>
-            //         </View>
-            //     </TouchableOpacity> 
-            // </View>
         )
     }
 }

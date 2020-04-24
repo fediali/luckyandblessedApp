@@ -41,6 +41,9 @@ const STORAGE_PRODUCT_HISTORY_CATEGORY="productHistoryList"
 const STORAGE_DEFAULTS="defaults"
 const NEW_ARRIVAL_NAME = "New Arrivals"
 const TRENDING_NAME = "Trending"
+const HISTORY_NAME = "History"
+const HISTORY_CATEGORY_ID = -2
+
 class MainPage extends Component {
 
 
@@ -222,7 +225,9 @@ class MainPage extends Component {
                         </View>
                         <View style={innerStyles.gridView}>
                             <View style={innerStyles.gridCell}>
-                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}>
+                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
+                                    onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [this.state.newArrivals[0].product_id], cname: NEW_ARRIVAL_NAME })}}
+                                >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -233,7 +238,9 @@ class MainPage extends Component {
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[0].price}</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}>
+                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
+                                    onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [this.state.newArrivals[0].product_id], cname: NEW_ARRIVAL_NAME })}}
+                                >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -245,7 +252,9 @@ class MainPage extends Component {
                                 </TouchableOpacity>
                             </View>
                             <View style={innerStyles.gridCell}>
-                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}>
+                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
+                                    onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [this.state.newArrivals[0].product_id], cname: NEW_ARRIVAL_NAME })}}
+                                >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -256,7 +265,9 @@ class MainPage extends Component {
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[2].price}</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}>
+                                <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
+                                    onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [this.state.newArrivals[0].product_id], cname: NEW_ARRIVAL_NAME })}}
+                                >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -286,7 +297,9 @@ class MainPage extends Component {
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => {
                                 return (
-                                    <MainPageTrendingListItem listItem={item} />
+                                    <MainPageTrendingListItem listItem={item} 
+                                        navigation={this.props.navigation}
+                                    />
                                 )
                             }
                             }
@@ -295,7 +308,8 @@ class MainPage extends Component {
                         {/* history header*/}
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>History</Text>
-                            <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}>
+                            <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
+                                onPress={() => {this.props.navigation.navigate("CategoriesProduct", { cid: HISTORY_CATEGORY_ID, cname: HISTORY_NAME, items: this.state.history })}} >
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
                         </View>

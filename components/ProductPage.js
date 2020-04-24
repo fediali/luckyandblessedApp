@@ -25,6 +25,8 @@ import FastImage from 'react-native-fast-image'
 import ProductPageSimilarListItem from "../reusableComponents/ProductPageSimilarListItem"
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+const SIMILARPRODUCTS_CATEGORY_ID = -3
+const SIMILARPRODUCTS_NAME = "SIMILAR PRODUCTS"
 
 const baseUrl = "http://dev.landbw.co/";
 
@@ -46,6 +48,7 @@ export default class ProductPage extends Component {
       ],
       selectedQuantity: 0,
       pid: this.props.route.params.pid,
+      cname: this.props.route.params.cname,
       data: {
         productName: "",
         price: 0,
@@ -62,69 +65,74 @@ export default class ProductPage extends Component {
     };
   }
 
+  getData (){
+    
+    var promises = []
+    promises.push(GetData(baseUrl + `api/products/${this.state.pid}`))
+    promises.push(GetData(baseUrl + `api/similarproducts/54578`)) //TODO: Change the 54578 to ${this.state.pid} 
+    Promise.all(promises).then((promiseResponses) => {
+      Promise.all(promiseResponses.map(res => res.json())).then((response) => {
+        async function getArray() {
+          const secondaryImagesArray = []
+          for (var key in response[0].image_pairs) {
+            console.log(response[0].image_pairs[key].detailed.image_path)
+            await secondaryImagesArray.push(response[0].image_pairs[key].detailed.image_path)
+          }
+          return secondaryImagesArray
+        }
+        getArray().then((secondaryImagesArray) => {
+
+          
+          // Stroing History of objects
+          RetrieveDataAsync("productHistoryList").then((value)=>{
+            if(value==null)value=[]
+            else value=JSON.parse(value)
+            let historyObj={
+              productName: response[0].product,
+              price: response[0].price,
+              base_price: response[0].base_price,
+              mainImage: response[0].main_pair.detailed.image_path,
+              pid:this.state.pid,
+              cname:this.state.cname
+            }
+            if(value.filter(obj => obj.pid[0] ===historyObj.pid[0] ).length==0){
+              console.log("ppppp",value.filter(obj => obj.pid[0] ===historyObj.pid[0] ))
+              console.log(value)
+              console.log(historyObj)
+
+              value.unshift(historyObj)
+              if(value.length>=10)value.pop()
+              StoreDataAsync("productHistoryList",value)
+            }
+          })
+          // console.log(secondaryImagesArray)
+          this.setState({
+            isReady: true,
+            data: {
+              productName: response[0].product,
+              price: response[0].price,
+              mainImage: response[0].main_pair.detailed.image_path,
+              secondaryImages: secondaryImagesArray,
+              min_qty: Number(response[0].min_qty),
+              max_qty: 18,//TODO: Number(response[0].max_qty) currently 0 from api
+              qty_step: Number(response[0].qty_step),
+              full_description: response[0].full_description,
+              composition: response[0].composition,
+            },
+            similarProducts: response[1].products
+          })
+        })
+
+      })
+    })
+  }
+
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       // "api/products/"+this.props.route.params.id
       //category will also come from this.props.route.params.category
+      this.getData();
 
-      var promises = []
-      promises.push(GetData(baseUrl + `api/products/${this.state.pid}`))
-      promises.push(GetData(baseUrl + `api/similarproducts/54578`)) //TODO: Change the 54578 to ${this.state.pid} 
-      Promise.all(promises).then((promiseResponses) => {
-        Promise.all(promiseResponses.map(res => res.json())).then((response) => {
-          console.log("Similar Items", response[1])
-          async function getArray() {
-            const secondaryImagesArray = []
-            for (var key in response[0].image_pairs) {
-              console.log(response[0].image_pairs[key].detailed.image_path)
-              await secondaryImagesArray.push(response[0].image_pairs[key].detailed.image_path)
-            }
-            return secondaryImagesArray
-          }
-          getArray().then((secondaryImagesArray) => {
-
-            
-            // Stroing History of objects
-            RetrieveDataAsync("productHistoryList").then((value)=>{
-              if(value==null)value=[]
-              else value=JSON.parse(value)
-              let historyObj={
-                productName: response[0].product,
-                price: response[0].price,
-                mainImage: response[0].main_pair.detailed.image_path,
-                pid:this.state.pid,
-                cname:this.props.route.params.cname
-              }
-              if(value.filter(obj => obj.pid[0] ===historyObj.pid[0] ).length==0){
-                console.log("ppppp",value.filter(obj => obj.pid[0] ===historyObj.pid[0] ))
-                console.log(value)
-                console.log(historyObj)
-
-                value.unshift(historyObj)
-                if(value.length>=10)value.pop()
-                StoreDataAsync("productHistoryList",value)
-              }
-            })
-            // console.log(secondaryImagesArray)
-            this.setState({
-              isReady: true,
-              data: {
-                productName: response[0].product,
-                price: response[0].price,
-                mainImage: response[0].main_pair.detailed.image_path,
-                secondaryImages: secondaryImagesArray,
-                min_qty: Number(response[0].min_qty),
-                max_qty: 18,//TODO: Number(response[0].max_qty) currently 0 from api
-                qty_step: Number(response[0].qty_step),
-                full_description: response[0].full_description,
-                composition: response[0].composition,
-              },
-              similarProducts: response[1].products
-            })
-          })
-
-        })
-      })
     })
   };
 
@@ -189,6 +197,16 @@ export default class ProductPage extends Component {
     this.setState({ selectedQuantity: quantityOptionsArray[index] })
   }
 
+  //To get the data from child component and update the state of main component. Expects a json object.
+
+  customSetState(stateVal) {
+    var key = Object.keys(stateVal)[0];
+    console.log(stateVal[key])
+    this.setState({[key]: stateVal[key], isReady: false});
+    this.getData();
+    console.log([key], stateVal[key])
+  }
+
 
   render() {
 
@@ -213,7 +231,7 @@ export default class ProductPage extends Component {
     }
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText={this.props.route.params.cname} rightIcon="share" navigation={this.props.navigation} />
+        <Header centerText={this.state.cname} rightIcon="share" navigation={this.props.navigation} />
         <ScrollView>
           <View style={styles.bottomMarginStyle}>
             <View style={[styles.subContainer,]}>
@@ -318,8 +336,10 @@ export default class ProductPage extends Component {
             
             <View style={[styles.headerView, styles.historyHeaderView]}>
               <Text style={[styles.buttonText, styles.similarProductText]}>Similar Products</Text>
-              <TouchableOpacity style={styles.similarProductTouch}>
-                <Text style={[styles.showAllText]}>Show All</Text>
+              <TouchableOpacity style={styles.similarProductTouch}
+              onPress={() => {this.props.navigation.navigate("CategoriesProduct", { cid: SIMILARPRODUCTS_CATEGORY_ID, cname: SIMILARPRODUCTS_NAME})}}>
+                <Text style={[styles.showAllText]}>Show All</Text> 
+                {/* FIXME: componentDidMount is not being called. What to do? */}
               </TouchableOpacity>
             </View>
             <FlatList
@@ -329,13 +349,17 @@ export default class ProductPage extends Component {
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
                 (item.main_pair)?
-                <ProductPageSimilarListItem
-                  pid={item.product_id} imageUrl={item.main_pair.detailed.image_path} name={item.product} type = "CHANGE IT"
+                <ProductPageSimilarListItem //TODO:Confirm CNAME
+                  pid={item.product_id} cname={this.state.cname} imageUrl={item.main_pair.detailed.image_path} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation} customSetState={(stateVal) => {
+                    this.customSetState(stateVal);
+                  }}
                 />
                 :
                 //If No product image
-                <ProductPageSimilarListItem
-                  pid={item.product_id} imageUrl={"http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg"} name={item.product} type = "CHANGE IT"
+                <ProductPageSimilarListItem //TODO:Confirm CNAME
+                  pid={item.product_id} cname={this.state.cname} imageUrl={"http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg"} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation} customSetState={(stateVal) => {
+                    this.customSetState(stateVal);
+                  }}
                 />
               )}
             />
