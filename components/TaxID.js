@@ -91,7 +91,7 @@ class TaxID extends Component {
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
-      setTimeout(()=>this.callAPI(today),500)
+      setTimeout(() => this.callAPI(today), 500)
     }
   };
 
@@ -115,7 +115,11 @@ class TaxID extends Component {
       // MExicoregistrationNum
       // OutofstateFedralTaxpayNum
     }
-    PostData(baseUrl + 'api/salestaxid', data)
+    PostData(baseUrl + 'api/salestaxid', data).
+    then((res) => res.json()).
+    then((response) => { 
+      console.log(response)
+    }).catch(err=>{console.log(err)})
     Toast.show('Registered Successfully');
     this.props.navigation.navigate("SignIn") //Passing user Name
   }

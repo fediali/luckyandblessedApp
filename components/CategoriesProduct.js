@@ -117,7 +117,7 @@ class CategoriesProduct extends Component {
                             price: parseFloat(responses[0].products[i].price).toFixed(2),
                             base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
                             imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-                            product_brand: "", //TODO: should come from defaults
+                            product_brand: responses[0].products[i].brand, //TODO: should come from defaults
                             cname: catName //Category name would be the same here.
                         })
                     }
@@ -286,7 +286,7 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={"CHANGE IT"} price2={"$" + item.base_price} />
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand?item.product_brand:"aaa"} price2={"$" + item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 columnWrapperStyle={styles.multiRowStyling}

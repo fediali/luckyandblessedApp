@@ -19,7 +19,7 @@ class CategoriesProductListSingleItem extends PureComponent {
     }
     
     render() {
-        
+        console.log("nnnn",this.props)
         return (
             <TouchableOpacity activeOpacity={0.9} onPress={this.navigateToProductPage}>
                 <View style={styles.imageView}>
