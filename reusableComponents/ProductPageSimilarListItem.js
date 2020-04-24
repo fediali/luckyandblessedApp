@@ -55,7 +55,8 @@ const innerStyles = StyleSheet.create({
         lineHeight: 20,
         letterSpacing: 0,
         textAlign: "left",
-        color: '#2d2d2f'
+        color: '#2d2d2f',
+        maxWidth:Width * 0.427
     },
     showAllText: {
         fontFamily: "Avenir-Book",
