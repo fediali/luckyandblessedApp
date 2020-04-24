@@ -96,9 +96,8 @@ class TaxID extends Component {
   };
 
   callAPI(today) {
-    // TODO:CALL API salestaxid
 
-    // console.log("???" + this.state.signImage)
+    // console.log("000" + this.state.signImage)
     const data = {
       name: this.state.nameOfPurchase,
       phone: this.state.phone,
@@ -119,7 +118,6 @@ class TaxID extends Component {
     PostData(baseUrl + 'api/salestaxid', data)
     Toast.show('Registered Successfully');
     this.props.navigation.navigate("SignIn") //Passing user Name
-    //call your API here
   }
   isValid() {
     let validFlag = true;
