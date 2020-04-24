@@ -81,10 +81,11 @@ export default class ProductPage extends Component {
           return secondaryImagesArray
         }
         getArray().then((secondaryImagesArray) => {
-
+          secondaryImagesArray.unshift(response[0].main_pair.detailed.image_path)
           
           // Stroing History of objects
           RetrieveDataAsync("productHistoryList").then((value)=>{
+            console.log(";;;;;;;",response)
             if(value==null)value=[]
             else value=JSON.parse(value)
             let historyObj={
@@ -93,7 +94,8 @@ export default class ProductPage extends Component {
               base_price: response[0].base_price,
               mainImage: response[0].main_pair.detailed.image_path,
               pid:this.state.pid,
-              cname:this.state.cname
+              cname:this.state.cname,
+              brand:response[0].brand
             }
             if(value.filter(obj => obj.pid[0] ===historyObj.pid[0] ).length==0){
               console.log("ppppp",value.filter(obj => obj.pid[0] ===historyObj.pid[0] ))
@@ -337,7 +339,7 @@ export default class ProductPage extends Component {
             <View style={[styles.headerView, styles.historyHeaderView]}>
               <Text style={[styles.buttonText, styles.similarProductText]}>Similar Products</Text>
               <TouchableOpacity style={styles.similarProductTouch}
-              onPress={() => {this.props.navigation.navigate("CategoriesProduct", { cid: SIMILARPRODUCTS_CATEGORY_ID, cname: SIMILARPRODUCTS_NAME})}}>
+              onPress={() => {this.props.navigation.push("CategoriesProduct", { cid: SIMILARPRODUCTS_CATEGORY_ID, cname: SIMILARPRODUCTS_NAME})}}>
                 <Text style={[styles.showAllText]}>Show All</Text> 
                 {/* FIXME: componentDidMount is not being called. What to do? */}
               </TouchableOpacity>
@@ -473,6 +475,8 @@ const styles = StyleSheet.create({
   },
   verticalMarginStyle:{
     marginVertical: 15,
+    flexGrow:1,
+    justifyContent:"center"
   },
   customThumbnailImage:{
     borderColor: "#2967ff", borderWidth: 2

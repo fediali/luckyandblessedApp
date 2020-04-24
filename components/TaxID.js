@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -12,10 +12,13 @@ import {
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import SignatureCapture from 'react-native-signature-capture';
-import {Icon} from 'react-native-elements';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Icon } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-simple-toast';
 
 import LogoSmall from './Styles/LogoSmall';
+import { call } from 'react-native-reanimated';
+const baseUrl = 'http://dev.landbw.co/';
 
 class TaxID extends Component {
   constructor(props) {
@@ -41,6 +44,7 @@ class TaxID extends Component {
       descriptionError: '',
       sign: false,
       signError: '',
+      signImage: ''//base64 encoded
     };
   }
 
@@ -62,27 +66,59 @@ class TaxID extends Component {
   }
 
   resetSign() {
-    this.setState({sign: false});
+    this.setState({ sign: false });
     this.refs['sign'].resetImage();
   }
 
-  _onSaveEvent(result) {
+  _onSaveEvent = (result) => {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
-    console.log(result);
+    this.setState({ signImage: "data:image/png;base64," + result.encoded })
+    // console.log(result.encoded);
   }
   _onDragEvent() {
     // This callback will be called when the user enters signature
-    this.setState({sign: true});
+    this.setState({ sign: true });
     console.log('dragged');
   }
 
-  submitClick () {
+  submitClick() {
     if (this.isValid()) {
-      //call your API here
+      this.refs["sign"].saveImage();
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = today.getFullYear();
+      today = mm + '/' + dd + '/' + yyyy;
+      //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
+      setTimeout(()=>this.callAPI(today),500)
     }
   };
 
+  callAPI(today) {
+
+    // console.log("000" + this.state.signImage)
+    const data = {
+      name: this.state.nameOfPurchase,
+      phone: this.state.phone,
+      address: this.state.address,
+      // address2: "",
+      tax_number: this.state.texasSales,
+      // registration_number: "",
+      // products_description:
+      business_description: this.state.description,
+      date: today,
+      signature: this.state.signImage,
+      user_id: this.props.user_id,
+      // company_id:
+      timestamp: + new Date()
+      // MExicoregistrationNum
+      // OutofstateFedralTaxpayNum
+    }
+    PostData(baseUrl + 'api/salestaxid', data)
+    Toast.show('Registered Successfully');
+    this.props.navigation.navigate("SignIn") //Passing user Name
+  }
   isValid() {
     let validFlag = true;
     if (this.state.nameOfPurchase == '') {
@@ -91,14 +127,14 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({nameOfPurchaseError: ''});
+      this.setState({ nameOfPurchaseError: '' });
     }
 
     if (this.state.phone == '') {
-      this.setState({phoneError: 'Phone is required.'});
+      this.setState({ phoneError: 'Phone is required.' });
       validFlag = false;
     } else {
-      this.setState({phoneError: ''});
+      this.setState({ phoneError: '' });
     }
 
     if (this.state.address == '') {
@@ -107,7 +143,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({addressError: ''});
+      this.setState({ addressError: '' });
     }
 
     if (this.state.texasSales == '') {
@@ -116,7 +152,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({texasSalesError: ''});
+      this.setState({ texasSalesError: '' });
     }
 
     if (this.state.outOfState == '') {
@@ -125,7 +161,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({outOfStateError: ''});
+      this.setState({ outOfStateError: '' });
     }
 
     if (this.state.mexicoRegistration == '') {
@@ -134,21 +170,21 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({mexicoRegistrationError: ''});
+      this.setState({ mexicoRegistrationError: '' });
     }
 
     if (this.state.description == '') {
-      this.setState({descriptionError: 'Description of buisness is required.'});
+      this.setState({ descriptionError: 'Description of buisness is required.' });
       validFlag = false;
     } else {
-      this.setState({descriptionError: ''});
+      this.setState({ descriptionError: '' });
     }
 
     if (this.state.sign == false) {
-      this.setState({signError: 'Your signature is required.'});
+      this.setState({ signError: 'Your signature is required.' });
       validFlag = false;
     } else {
-      this.setState({signError: ''});
+      this.setState({ signError: '' });
     }
     return validFlag;
   }
@@ -166,10 +202,9 @@ class TaxID extends Component {
       </View>
     );
   }
-
   render() {
-    const {value1, _, height1, __} = this.state;
-    const {___, value2, ____, height2} = this.state;
+    const { value1, _, height1, __ } = this.state;
+    const { ___, value2, ____, height2 } = this.state;
 
     let newStyle1 = {
       height1,
@@ -200,15 +235,15 @@ class TaxID extends Component {
                   style={styles.input}
                   placeholder="Name of purchaser, firm or agence"
                   onChangeText={(text) => {
-                    this.setState({nameOfPurchase: text});
+                    this.setState({ nameOfPurchase: text });
                   }}
                 />
               </View>
               {this.state.nameOfPurchaseError != '' ? (
                 this.showErrorMessage(this.state.nameOfPurchaseError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -216,30 +251,30 @@ class TaxID extends Component {
                   placeholder="Phone"
                   keyboardType={'number-pad'}
                   onChangeText={(text) => {
-                    this.setState({phone: text});
+                    this.setState({ phone: text });
                   }}
                 />
               </View>
               {this.state.phoneError != '' ? (
                 this.showErrorMessage(this.state.phoneError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="Address, City, State, ZIP code"
                   onChangeText={(text) => {
-                    this.setState({address: text});
+                    this.setState({ address: text });
                   }}
                 />
               </View>
               {this.state.addressError != '' ? (
                 this.showErrorMessage(this.state.addressError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -247,15 +282,15 @@ class TaxID extends Component {
                   placeholder="Texas sales & Use Tax Permit Num"
                   keyboardType={'number-pad'}
                   onChangeText={(text) => {
-                    this.setState({texasSales: text});
+                    this.setState({ texasSales: text });
                   }}
                 />
               </View>
               {this.state.texasSalesError != '' ? (
                 this.showErrorMessage(this.state.texasSalesError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -263,30 +298,30 @@ class TaxID extends Component {
                   placeholder="Out-of-state or Fedral Taxpay Num"
                   keyboardType={'number-pad'}
                   onChangeText={(text) => {
-                    this.setState({outOfState: text});
+                    this.setState({ outOfState: text });
                   }}
                 />
               </View>
               {this.state.outOfStateError != '' ? (
                 this.showErrorMessage(this.state.outOfStateError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="Mexico registration form"
                   onChangeText={(text) => {
-                    this.setState({mexicoRegistration: text});
+                    this.setState({ mexicoRegistration: text });
                   }}
                 />
               </View>
               {this.state.mexicoRegistrationError != '' ? (
                 this.showErrorMessage(this.state.mexicoRegistrationError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <Text style={[innerStyles.customText1]}>
                 I, the purchaser named above, claim the right to make a
@@ -319,7 +354,7 @@ class TaxID extends Component {
                 <TextInput
                   placeholder="Type here"
                   onChangeText={(value1) =>
-                    this.setState({value1, description: value1})
+                    this.setState({ value1, description: value1 })
                   }
                   style={[innerStyles.customInput]}
                   editable={true}
@@ -332,8 +367,8 @@ class TaxID extends Component {
               {this.state.descriptionError != '' ? (
                 this.showErrorMessage(this.state.descriptionError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <Text
                 style={[
@@ -371,8 +406,8 @@ class TaxID extends Component {
               {this.state.signError != '' ? (
                 this.showErrorMessage(this.state.signError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <Text
                 style={[innerStyles.customTextBoldSmall, innerStyles.dateText]}>
@@ -433,7 +468,7 @@ const innerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 15,
   },
-  errorMessageText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
+  errorMessageText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
   customInput: {
     borderRadius: 6,
     backgroundColor: '#f6f6f6',
@@ -453,12 +488,12 @@ const innerStyles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
   },
-  titleFontSize: {fontSize: 20},
-  scrollMargin: {marginBottom: 38},
-  textMargin: {marginTop: 20},
-  customTextMargin: {marginTop: 15},
-  customPadding: {paddingHorizontal: 30},
-  customDim: {height: 240, paddingHorizontal: 30},
+  titleFontSize: { fontSize: 20 },
+  scrollMargin: { marginBottom: 38 },
+  textMargin: { marginTop: 20 },
+  customTextMargin: { marginTop: 15 },
+  customPadding: { paddingHorizontal: 30 },
+  customDim: { height: 240, paddingHorizontal: 30 },
   customView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -476,9 +511,9 @@ const innerStyles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
   },
-  buttonView: {paddingHorizontal: 30, marginTop: 20, width: '100%'},
-  dateText: {width: '100%', textAlign: 'left'},
-  signCap: {borderRadius: 6, borderColor: '#000', flex: 1},
+  buttonView: { paddingHorizontal: 30, marginTop: 20, width: '100%' },
+  dateText: { width: '100%', textAlign: 'left' },
+  signCap: { borderRadius: 6, borderColor: '#000', flex: 1 },
   buttonSubmit: {
     width: '100%',
     backgroundColor: '#2967ff',

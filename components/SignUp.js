@@ -139,9 +139,14 @@ class SignUp extends Component {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
               console.log(responses[0])
-              if (responses[0].user_id) {
-                Toast.show('Registered Successfully');
-                this.props.navigation.navigate("SignIn") //Passing user Name
+              if (responses[0].user_id){
+                console.log("::::::::::",responses[0].user_id)
+                if(this.state.salesTaxIdFile){
+                  // TODO: Sent this file to api
+                }else{
+                  this.props.navigation.navigate("TaxID",{user_id:responses[0].user_id})
+                }
+                
               }
               else {
                 this.setState({ emailError: 'The username or email you have chosen already exists', email: "", password: "", confirmPassword: "" });
@@ -235,15 +240,19 @@ class SignUp extends Component {
     );
   }
 
+  handleFillOutTXId=()=>{
+    this.signUpClick()
+  }
+
   render() {
     return (
-      <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
         <SafeAreaView style={styles.parentContainer}>
           <Header
             navigation={this.props.navigation}
             centerText={''}
             rightIcon="info"
           />
+      <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
 
           <View style={styles.subParentContainer}>
             <LogoSmall />
@@ -353,9 +362,7 @@ class SignUp extends Component {
             <View style={[styles.buttonContainer, innerStyles.buttonPadding]}>
               <TouchableOpacity
                 style={innerStyles.fillTaxID}
-                onPress={() => {
-                  this.props.navigation.navigate('TaxID');
-                }}>
+                onPress={this.handleFillOutTXId}>
                 <View style={innerStyles.fillTaxView}>
                   <Text
                     style={[
@@ -390,8 +397,9 @@ class SignUp extends Component {
               </TouchableOpacity>
             </View>
           </View>
+          </ScrollView>
+
         </SafeAreaView>
-      </ScrollView>
     );
   }
 }

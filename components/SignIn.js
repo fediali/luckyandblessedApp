@@ -56,6 +56,8 @@ class SignIn extends Component {
                         }
                         this._storeData(user)
                         this.props.navigation.navigate("MainPage", { userName: fullName }) //Passing user Name
+                        this.setState({requested:false})
+
                     }
                     else {
                         Toast.show('Username or password incorrect', Toast.LONG);
