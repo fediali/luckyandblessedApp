@@ -21,6 +21,7 @@ import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 const baseUrl = "http://dev.landbw.co/";
+const STORAGE_DEFAULTS="defaults"
 
 class CategoriesProduct extends Component {
 
@@ -41,7 +42,7 @@ class CategoriesProduct extends Component {
         }
     }
 
-    loadData = (cid) => {
+    loadData = (cid,defaults) => {
         console.log(cid)
         if (cid == -2) //Cid of HISTORY
         {
@@ -63,7 +64,7 @@ class CategoriesProduct extends Component {
                         price: parseFloat(historyItems[i].price).toFixed(2),
                         base_price: parseFloat(historyItems[i].base_price).toFixed(2),
                         imageUrl: historyItems[i].mainImage,
-                        product_brand: "", //TODO: Should come from Defaults
+                        product_brand: defaults.brand, //TODO: Should come from Defaults
                         cname: historyItems[i].cname
                     })
                 }
@@ -117,7 +118,7 @@ class CategoriesProduct extends Component {
                             price: parseFloat(responses[0].products[i].price).toFixed(2),
                             base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
                             imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-                            product_brand: responses[0].products[i].brand, //TODO: should come from defaults
+                            product_brand: responses[0].products[i].brand ? responses[0].products[i].brand : defaults.brand, //TODO: should come from defaults
                             cname: catName //Category name would be the same here.
                         })
                     }
@@ -151,7 +152,11 @@ class CategoriesProduct extends Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.loadData(this.state.cid)
+            RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults=>{
+
+                this.loadData(this.state.cid,JSON.parse(defaults))
+
+            })
         })
     }
 
@@ -262,7 +267,7 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={"CHANGE IT"} price2={"$" + item.base_price} />
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 onEndReached={this.handleLoadMore}
@@ -286,7 +291,7 @@ class CategoriesProduct extends Component {
                                 keyExtractor={(item, index) => item.product_id}
                                 renderItem={({ item }) => (
                                     <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand?item.product_brand:"aaa"} price2={"$" + item.base_price} />
+                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
                                 )}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 columnWrapperStyle={styles.multiRowStyling}

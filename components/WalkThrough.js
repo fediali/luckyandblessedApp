@@ -25,7 +25,7 @@ export default class WalkThrough extends Component {
       error: null,
       isReady: false,
     };
-    RetrieveDataAsync.then((value) => {
+    RetrieveDataAsync("user").then((value) => {
       if (value != null) {
         console.log('{{{{{{{{{', value);
         this.props.navigation.navigate('MainPage', {
