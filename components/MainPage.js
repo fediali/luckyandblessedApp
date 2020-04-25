@@ -155,8 +155,20 @@ class MainPage extends Component {
         this.props.onShowAllPressed(cid, cname);
     }
 
-    enableNewsLetter(flag) {
+    enableNewsLetter=(flag)=>()=>{
         this.setState({ showNewsletter: flag })
+    }
+
+    navigateToCategoryScreen=(cid, cname)=>()=>{
+        this.props.navigation.navigate("CategoriesProduct", { cid, cname })
+    }
+
+    navigateToHistoryCategoryScreen=(cid, cname, items)=>()=>{
+        this.props.navigation.navigate("CategoriesProduct", { cid, cname, items })
+    }
+
+    navigateToProductScreen=(pid, cname)=>()=>{
+        this.props.navigation.navigate("ProductPage", {pid, cname})
     }
 
     mapTrendingList(tList, sliceValue) {
@@ -218,7 +230,7 @@ class MainPage extends Component {
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>New Arrivals</Text>
                             <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
-                                onPress={() => {this.props.navigation.navigate("CategoriesProduct", { cid: [this.state.newArrivals_cid], cname: NEW_ARRIVAL_NAME })}} >
+                                onPress={this.navigateToCategoryScreen([this.state.newArrivals_cid], NEW_ARRIVAL_NAME)} >
                             
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
@@ -226,7 +238,7 @@ class MainPage extends Component {
                         <View style={innerStyles.gridView}>
                             <View style={innerStyles.gridCell}>
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
-                                    onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [this.state.newArrivals[0].product_id], cname: NEW_ARRIVAL_NAME })}}
+                                    onPress={this.navigateToProductScreen([this.state.newArrivals[0].product_id],NEW_ARRIVAL_NAME)}
                                 >
                                     <FastImage
                                         style={innerStyles.gridImage}
@@ -239,8 +251,8 @@ class MainPage extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
-                                    onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [this.state.newArrivals[0].product_id], cname: NEW_ARRIVAL_NAME })}}
-                                >
+                                    onPress={this.navigateToProductScreen([this.state.newArrivals[1].product_id],NEW_ARRIVAL_NAME)}
+                                    >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -253,8 +265,8 @@ class MainPage extends Component {
                             </View>
                             <View style={innerStyles.gridCell}>
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
-                                    onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [this.state.newArrivals[0].product_id], cname: NEW_ARRIVAL_NAME })}}
-                                >
+                                    onPress={this.navigateToProductScreen([this.state.newArrivals[2].product_id],NEW_ARRIVAL_NAME)}
+                                    >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -266,8 +278,8 @@ class MainPage extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
-                                    onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [this.state.newArrivals[0].product_id], cname: NEW_ARRIVAL_NAME })}}
-                                >
+                                    onPress={this.navigateToProductScreen([this.state.newArrivals[3].product_id],NEW_ARRIVAL_NAME)}
+                                    >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         resizeMode='contain'
@@ -285,7 +297,7 @@ class MainPage extends Component {
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>What’s trending</Text>
                             <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
-                                onPress={() => {this.props.navigation.navigate("CategoriesProduct", { cid: [this.state.trending_cid], cname: TRENDING_NAME })}} >
+                                onPress={this.navigateToCategoryScreen ([this.state.trending_cid], TRENDING_NAME )} >
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
                         </View>
@@ -309,7 +321,7 @@ class MainPage extends Component {
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>History</Text>
                             <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
-                                onPress={() => {this.props.navigation.navigate("CategoriesProduct", { cid: HISTORY_CATEGORY_ID, cname: HISTORY_NAME, items: this.state.history })}} >
+                                onPress={ this.navigateToHistoryCategoryScreen(HISTORY_CATEGORY_ID, HISTORY_NAME,this.state.history )} >
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
                         </View>
@@ -334,7 +346,7 @@ class MainPage extends Component {
                             <View style={innerStyles.newsLetterMainView}>
                                 <View style={innerStyles.newsLetterInnerView}>
                                     <Text style={[styles.buttonText, innerStyles.newsLetterText]}>Newsletter</Text>
-                                    <TouchableOpacity onPress={() => { this.enableNewsLetter(false) }}>
+                                    <TouchableOpacity onPress={this.enableNewsLetter(false) }>
                                         <FastImage
                                             style={innerStyles.newsLetterCloseButtonImage}
                                             resizeMode='contain'

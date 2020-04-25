@@ -187,9 +187,13 @@ export default class ProductPage extends Component {
 
   }
 
-  appendImageToData=(val)=>{
+  appendImageToData=(val) =>() =>{
     this.setState({ data: { ...this.state.data, mainImage: val } })
   }
+
+  navigateToCategoryScreen=(cid, cname)=>()=>{
+    this.props.navigation.push("CategoriesProduct", { cid, cname })
+}
 
   onQuantityTextChange=(text)=>{
     this.setState({ selectedQuantity: text })
@@ -250,7 +254,7 @@ export default class ProductPage extends Component {
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={styles.verticalMarginStyle}>
                   {this.state.data.secondaryImages.map((val, num) => {
                     return (
-                      <TouchableOpacity key={num} onPress={() => { this.appendImageToData(val) }}>
+                      <TouchableOpacity key={num} onPress={this.appendImageToData(val)}>
 
                         <FastImage style={this.state.data.mainImage == val ? [styles.thumbnail, styles.customThumbnailImage] : styles.thumbnail} source={{ uri: val }}></FastImage>
                       </TouchableOpacity>
@@ -328,7 +332,7 @@ export default class ProductPage extends Component {
             <View style={[styles.headerView, styles.historyHeaderView]}>
               <Text style={[styles.buttonText, styles.similarProductText]}>Similar Products</Text>
               <TouchableOpacity style={styles.similarProductTouch}
-              onPress={() => {this.props.navigation.push("CategoriesProduct", { cid: SIMILARPRODUCTS_CATEGORY_ID, cname: SIMILARPRODUCTS_NAME})}}>
+              onPress={this.navigateToCategoryScreen(SIMILARPRODUCTS_CATEGORY_ID, SIMILARPRODUCTS_NAME)}>
                 <Text style={[styles.showAllText]}>Show All</Text> 
                 {/* FIXME: componentDidMount is not being called. What to do? */}
               </TouchableOpacity>
@@ -346,7 +350,7 @@ export default class ProductPage extends Component {
                 :
                 //If No product image
                 <ProductPageSimilarListItem //TODO:Confirm CNAME
-                  pid={item.product_id} cname={this.state.cname} imageUrl={"http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg"} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation}/>
+                  pid={item.product_id} cname={this.state.cname} imageUrl={"https://www.dhresource.com/0x0/f2/albu/g9/M00/25/59/rBVaVVxvaJmAeWPpAAE-IYplWiA081.jpg"} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation}/>
               )}
             />
           </View>
