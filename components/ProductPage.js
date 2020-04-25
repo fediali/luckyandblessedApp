@@ -25,10 +25,13 @@ import FastImage from 'react-native-fast-image'
 import ProductPageSimilarListItem from "../reusableComponents/ProductPageSimilarListItem"
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+
 const SIMILARPRODUCTS_CATEGORY_ID = -3
 const SIMILARPRODUCTS_NAME = "SIMILAR PRODUCTS"
+const STORAGE_DEFAULTS = "defaults"
 
 const baseUrl = "http://dev.landbw.co/";
+let DEFAULTS_OBJ = []
 
 export default class ProductPage extends Component {
   constructor(props) {
@@ -133,8 +136,13 @@ export default class ProductPage extends Component {
     InteractionManager.runAfterInteractions(() => {
       // "api/products/"+this.props.route.params.id
       //category will also come from this.props.route.params.category
-      this.getData();
+      
+      RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
+        DEFAULTS_OBJ = JSON.parse(defaults)
+        this.getData();
 
+      })
+      
     })
   };
 
@@ -345,12 +353,12 @@ export default class ProductPage extends Component {
               renderItem={({ item, index }) => (
                 (item.main_pair)?
                 <ProductPageSimilarListItem //TODO:Confirm CNAME
-                  pid={item.product_id} cname={this.state.cname} imageUrl={item.main_pair.detailed.image_path} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation}
+                  pid={item.product_id} cname={this.state.cname} imageUrl={item.main_pair.detailed.image_path} name={item.product} type = {item.brand?item.brand:DEFAULTS_OBJ.brand}  navigation={this.props.navigation}
                 />
                 :
                 //If No product image
                 <ProductPageSimilarListItem //TODO:Confirm CNAME
-                  pid={item.product_id} cname={this.state.cname} imageUrl={"https://www.dhresource.com/0x0/f2/albu/g9/M00/25/59/rBVaVVxvaJmAeWPpAAE-IYplWiA081.jpg"} name={item.product} type = "CHANGE IT"  navigation={this.props.navigation}/>
+                  pid={item.product_id} cname={this.state.cname} imageUrl={"https://www.dhresource.com/0x0/f2/albu/g9/M00/25/59/rBVaVVxvaJmAeWPpAAE-IYplWiA081.jpg"} name={item.product} type = {item.brand?item.brand:DEFAULTS_OBJ.brand}  navigation={this.props.navigation}/>
               )}
             />
           </View>

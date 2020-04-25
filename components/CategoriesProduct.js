@@ -21,8 +21,8 @@ import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 const baseUrl = "http://dev.landbw.co/";
-const STORAGE_DEFAULTS="defaults"
-
+const STORAGE_DEFAULTS = "defaults"
+let DEFAULTS_OBJ = []
 class CategoriesProduct extends Component {
 
     constructor(props) {
@@ -42,7 +42,7 @@ class CategoriesProduct extends Component {
         }
     }
 
-    loadData = (cid,defaults) => {
+    loadData = (cid) => {
         console.log(cid)
         if (cid == -2) //Cid of HISTORY
         {
@@ -56,7 +56,7 @@ class CategoriesProduct extends Component {
                 const tempProducts = []
                 for (let i = 0; i < historyItems.length; i++) {
                     console.log(historyItems[i].pid[0])
-                  
+
                     await tempProducts.push({
 
                         product: historyItems[i].productName,
@@ -64,7 +64,7 @@ class CategoriesProduct extends Component {
                         price: parseFloat(historyItems[i].price).toFixed(2),
                         base_price: parseFloat(historyItems[i].base_price).toFixed(2),
                         imageUrl: historyItems[i].mainImage,
-                        product_brand: defaults.brand, //TODO: Should come from Defaults
+                        product_brand: DEFAULTS_OBJ.brand, //TODO: Should come from Defaults
                         cname: historyItems[i].cname
                     })
                 }
@@ -95,49 +95,49 @@ class CategoriesProduct extends Component {
             }
             let itr = this.state.iteratedPage
             Promise.all(promises).then((promiseResponses) => {
-            Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-                this.setState({
-                    totalProducts: parseFloat(responses[0].params.total_items).toFixed(0),
-                    totalItemsPerRequest: parseFloat(responses[0].params.items_per_page).toFixed(0),
-                })
-                async function parseProducts() {
-                    const tempProducts = []
-                    for (let i = 0; i < responses[0].products.length; i++) {
-                        if (responses[0].products[i].main_pair == null) continue;
-                        console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
-                        // let variant = ""
-                        // try {
-                        //     variant = responses[0].products[i].product_features["2"].variant
-                        // } catch{
-                        //     variant = responses[0].products[i].product
-                        // }
-                        await tempProducts.push({
-
-                            product: responses[0].products[i].product,
-                            product_id: responses[0].products[i].product_id,
-                            price: parseFloat(responses[0].products[i].price).toFixed(2),
-                            base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
-                            imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-                            product_brand: responses[0].products[i].brand ? responses[0].products[i].brand : defaults.brand, //TODO: should come from defaults
-                            cname: catName //Category name would be the same here.
-                        })
-                    }
-
-                    return tempProducts
-                }
-                parseProducts().then((prod) => {
+                Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
                     this.setState({
-                        isReady: true,
-                        products: [...this.state.products, ...prod],
-                        isLoadingMoreListData: false,
+                        totalProducts: parseFloat(responses[0].params.total_items).toFixed(0),
+                        totalItemsPerRequest: parseFloat(responses[0].params.items_per_page).toFixed(0),
                     })
-                })
+                    async function parseProducts() {
+                        const tempProducts = []
+                        for (let i = 0; i < responses[0].products.length; i++) {
+                            if (responses[0].products[i].main_pair == null) continue;
+                            console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
+                            // let variant = ""
+                            // try {
+                            //     variant = responses[0].products[i].product_features["2"].variant
+                            // } catch{
+                            //     variant = responses[0].products[i].product
+                            // }
+                            await tempProducts.push({
 
-            }).catch(ex => { console.log("Exception: Inner Promise", ex) })
-        }).catch(ex => { console.log("Exception: Outer Promise", ex) })
+                                product: responses[0].products[i].product,
+                                product_id: responses[0].products[i].product_id,
+                                price: parseFloat(responses[0].products[i].price).toFixed(2),
+                                base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
+                                imageUrl: responses[0].products[i].main_pair.detailed.image_path,
+                                product_brand: responses[0].products[i].brand ? responses[0].products[i].brand : DEFAULTS_OBJ.brand, //TODO: should come from defaults
+                                cname: catName //Category name would be the same here.
+                            })
+                        }
+
+                        return tempProducts
+                    }
+                    parseProducts().then((prod) => {
+                        this.setState({
+                            isReady: true,
+                            products: [...this.state.products, ...prod],
+                            isLoadingMoreListData: false,
+                        })
+                    })
+
+                }).catch(ex => { console.log("Exception: Inner Promise", ex) })
+            }).catch(ex => { console.log("Exception: Outer Promise", ex) })
 
         }
-        
+
     }
 
     handleLoadMore = () => {
@@ -146,15 +146,18 @@ class CategoriesProduct extends Component {
             this.setState({
                 iteratedPage: this.state.iteratedPage + 1,
                 isLoadingMoreListData: true,
-            }, () => this.loadData(this.state.cid))
+            }, () => this.loadData(this.state.cid)
+
+            )
         }
     }
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults=>{
+            RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
+                DEFAULTS_OBJ = JSON.parse(defaults)
 
-                this.loadData(this.state.cid,JSON.parse(defaults))
+                this.loadData(this.state.cid)
 
             })
         })
@@ -207,7 +210,7 @@ class CategoriesProduct extends Component {
                             <Text style={styles.numCategoryText}>{this.state.totalProducts} products</Text>
                         </View>
                         <View style={styles.horizontalImagesView}>
-                            <FastImage style={styles.imageList} source={require('../static/listIcon.png')}/>
+                            <FastImage style={styles.imageList} source={require('../static/listIcon.png')} />
 
                             <Text style={styles.sortingText}>Sorting</Text>
                             <View style={styles.rightImages}>
@@ -337,20 +340,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     paddingHorizontal: { paddingHorizontal: 20 },
-    loader:{ flex: 1, alignItems: "center", justifyContent: "center" },
-    categoryNameText:{ fontSize: 30, lineHeight: 36, fontFamily: "Montserrat-Bold", color: "#2d2d2f" },
-    numCategoryText:{ fontSize: 14, lineHeight: 18, color: "#8d8d8e", fontFamily: "Avenir-Book" },
-    horizontalImagesView:{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingTop: 10, paddingBottom: 5 },
-    imageList:{ width: 23, height: 23 },
-    sortingText:{ paddingLeft: 13, fontSize: 16, lineHeight: 20, color: "#2d2d2f", fontFamily: "Montserrat-Medium" },
-    rightImages:{ flex: 1, flexDirection: "row", justifyContent: "flex-end" },
-    paddingLeftView:{ paddingLeft: 10 },
-    renderSeparator:{
+    loader: { flex: 1, alignItems: "center", justifyContent: "center" },
+    categoryNameText: { fontSize: 30, lineHeight: 36, fontFamily: "Montserrat-Bold", color: "#2d2d2f" },
+    numCategoryText: { fontSize: 14, lineHeight: 18, color: "#8d8d8e", fontFamily: "Avenir-Book" },
+    horizontalImagesView: { flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingTop: 10, paddingBottom: 5 },
+    imageList: { width: 23, height: 23 },
+    sortingText: { paddingLeft: 13, fontSize: 16, lineHeight: 20, color: "#2d2d2f", fontFamily: "Montserrat-Medium" },
+    rightImages: { flex: 1, flexDirection: "row", justifyContent: "flex-end" },
+    paddingLeftView: { paddingLeft: 10 },
+    renderSeparator: {
         paddingBottom: 15
     },
-    listFooter:{ flex: 1, alignItems: "center", justifyContent: "center" },
-    iconRight:{ alignSelf: "flex-end" },
-    filterImage:{ height: 22, width: 22 }
+    listFooter: { flex: 1, alignItems: "center", justifyContent: "center" },
+    iconRight: { alignSelf: "flex-end" },
+    filterImage: { height: 22, width: 22 }
 })
 
 export default CategoriesProduct
