@@ -164,6 +164,10 @@ class SignUp extends Component {
     }
   }
 
+  navigateToSignIn=()=>{
+    this.props.navigation.navigate("SignIn") 
+}
+
   isValid() {
     let validFlag = true;
     if (this.state.fullName == '') {
@@ -388,9 +392,7 @@ class SignUp extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[innerStyles.buttonAlreadyHaveAccount]}
-                onPress={() => {
-                  this.props.navigation.navigate('SignIn');
-                }}>
+                onPress={this.navigateScreen("SignUp")}>
                 <Text style={[styles.buttonText, innerStyles.buttonText]}>
                   I have an account
                 </Text>

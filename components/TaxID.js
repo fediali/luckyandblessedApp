@@ -82,7 +82,7 @@ class TaxID extends Component {
     console.log('dragged');
   }
 
-  submitClick() {
+  submitClick=()=> {
     if (this.isValid()) {
       this.refs["sign"].saveImage();
       var today = new Date();
@@ -420,7 +420,7 @@ class TaxID extends Component {
               <View style={[styles.buttonContainer, innerStyles.buttonView]}>
                 <TouchableOpacity
                   style={[innerStyles.buttonSubmit]}
-                  onPress={() => this.submitClick()}>
+                  onPress={this.submitClick}>
                   <Text style={[styles.buttonText, innerStyles.submitText]}>
                     Submit
                   </Text>

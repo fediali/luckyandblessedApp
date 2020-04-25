@@ -10,6 +10,11 @@ import FastImage from 'react-native-fast-image'
 const TRENDING_NAME = "Trending"
 
 export default class MainPageHistoryListItem extends PureComponent {
+
+    navigateToProductPage=(val)=>()=>{
+        this.props.navigation.push("ProductPage", { pid: [val.pid], cname:[TRENDING_NAME] }) 
+    }
+
     render() {
         console.log(("-------------------------------------------------------"))
         console.log(this.props.listItem)
@@ -18,7 +23,7 @@ export default class MainPageHistoryListItem extends PureComponent {
 
                 {this.props.listItem.map((val,num) => (
                     <TouchableOpacity key={num.toString()} activeOpacity={0.9} style={innerStyles.trendingView}
-                        onPress={() => {this.props.navigation.navigate("ProductPage", { pid: [val.product_id], cname: TRENDING_NAME })}}
+                        onPress={this.navigateToProductPage(val.product_id)}
                     >
                         <View style={innerStyles.innerTrendingView}>
                             <FastImage

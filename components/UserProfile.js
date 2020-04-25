@@ -94,6 +94,13 @@ export default class UserProfile extends Component {
     console.log([key], stateVal[key])
   }
 
+  logoutPressed=()=>{
+    AsyncStorage.removeItem(STORAGE_USER);
+    AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
+    AsyncStorage.removeItem(STORAGE_DEFAULTS)
+    this.props.navigation.navigate('SignIn');
+  }
+
   render() {
     console.log("here", this.state.fullName)
 
@@ -183,12 +190,7 @@ export default class UserProfile extends Component {
               <TouchableOpacity
               activeOpacity={0.5}
                 style={styles.buttonSignIn}
-                onPress={() => {
-                  AsyncStorage.removeItem(STORAGE_USER);
-                  AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
-                  AsyncStorage.removeItem(STORAGE_DEFAULTS)
-                  this.props.navigation.navigate('SignIn');
-                }}>
+                onPress={this.logoutPressed}>
                 <Text style={styles.buttonText}>Logout</Text>
               </TouchableOpacity>
             </View>

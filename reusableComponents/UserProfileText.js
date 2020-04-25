@@ -10,15 +10,31 @@ class ProfileText extends PureComponent {
     };
   }
 
-  editButtonPressed(){
+  editButtonPressed=()=>{
     var key = this.props.stateKey; //fullName
     this.setState({isEdit: true, [key]:this.props.valueText})
   }
 
-  checkButtonPressed(){
+  checkButtonPressed=()=>{
     this.setState({isEdit: false})
     var key = this.props.stateKey; //fullName
     this.props.customSetState({[key]:this.state[key]})  //fullName: "Updated Text"
+  }
+
+  navigateScreen=()=>{
+    if(this.props.keyText=="TAX ID"){
+      this.props.navigation.navigate("TaxID")
+    }
+    else if(this.props.keyText=="Referral Link"){
+      this.props.navigation.navigate("TaxID")
+    }
+    else if(this.props.keyText=="My orders"){
+      this.props.navigation.navigate("TrackOrders")
+    }
+
+    else if(this.props.keyText=="Payment"){
+      this.props.navigation.navigate("Payment")
+    }
   }
 
   customSetState(stateVal){
@@ -38,21 +54,7 @@ class ProfileText extends PureComponent {
         {/*If contains right arrow then it shouldn't be editable
         but it should either be navigated or accordian*/}
         {this.props.containIcon ? (
-          <TouchableOpacity style={styles.userDetails} onPress={()=>{
-            if(this.props.keyText=="TAX ID"){
-              this.props.navigation.navigate("TaxID")
-            }
-            else if(this.props.keyText=="Referral Link"){
-              this.props.navigation.navigate("TaxID")
-            }
-            else if(this.props.keyText=="My orders"){
-              this.props.navigation.navigate("TrackOrders")
-            }
-
-            else if(this.props.keyText=="Payment"){
-              this.props.navigation.navigate("Payment")
-            }
-          }}>
+          <TouchableOpacity style={styles.userDetails} onPress={this.navigateScreen}>
             <View style={styles.pad19}>
               <Text style={styles.keyText}>{this.props.keyText}</Text>
             </View>
@@ -95,13 +97,13 @@ class ProfileText extends PureComponent {
               <View style={styles.pad18}></View>
               {!this.state.isEdit ? (
               <TouchableOpacity
-                 onPress={() => { this.editButtonPressed() }}
+                 onPress={this.editButtonPressed}
                   style={styles.iconView}>
                 <Icon size={20} name="edit" type="feather" />
               </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                 onPress={() => { this.checkButtonPressed() }}
+                 onPress={this.checkButtonPressed}
                 style={styles.iconView}>
                 <Icon size={20} name="checksquare" type="antdesign" />
               </TouchableOpacity>
