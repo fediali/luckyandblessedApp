@@ -14,6 +14,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
+const STORAGE_DEFAULTS="defaults"
 
 export default class WalkThrough extends Component {
   constructor() {
@@ -51,6 +53,10 @@ export default class WalkThrough extends Component {
                 images: responses[0].home.not_logged.sliders,
                 headerText: responses[0].home.not_logged.header
               });
+
+              StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
+                console.log("Defaults saved in storage")
+            )
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);

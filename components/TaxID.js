@@ -18,7 +18,12 @@ import Toast from 'react-native-simple-toast';
 
 import LogoSmall from './Styles/LogoSmall';
 import { call } from 'react-native-reanimated';
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+const STORAGE_DEFAULTS="defaults"
 const baseUrl = 'http://dev.landbw.co/';
+
+
+let DEFAULTS_OBJ = []
 
 class TaxID extends Component {
   constructor(props) {
@@ -34,6 +39,8 @@ class TaxID extends Component {
       phoneError: '',
       address: '',
       addressError: '',
+      address2: '',
+      address2Error: '',
       texasSales: '',
       texasSalesError: '',
       outOfState: '',
@@ -44,8 +51,14 @@ class TaxID extends Component {
       descriptionError: '',
       sign: false,
       signError: '',
-      signImage: ''//base64 encoded
+      signImage: '', //base64 encoded
+      defaults: null
     };
+
+    RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
+      DEFAULTS_OBJ = JSON.parse(defaults)
+    })
+
   }
 
   updateSize = (height) => {
@@ -102,26 +115,30 @@ class TaxID extends Component {
       name: this.state.nameOfPurchase,
       phone: this.state.phone,
       address: this.state.address,
-      // address2: "",
+      address2: this.state.address2,
       tax_number: this.state.texasSales,
-      // registration_number: "",
-      // products_description:
+      registration_number: this.state.outOfState,
+      mexico_registration: this.state.mexicoRegistration,
+      products_description: this.state.description,
       business_description: this.state.description,
       date: today,
       signature: this.state.signImage,
-      user_id: this.props.user_id,
-      // company_id:
+      user_id: this.props.route.params.user_id.toString(), //CHECK THIS
+      company_id: DEFAULTS_OBJ.store_id.toString(),
       timestamp: + new Date()
       // MExicoregistrationNum
       // OutofstateFedralTaxpayNum
     }
+    console.log("Data", data)
+
     PostData(baseUrl + 'api/salestaxid', data).
     then((res) => res.json()).
     then((response) => { 
       console.log(response)
-    }).catch(err=>{console.log(err)})
-    Toast.show('Registered Successfully');
+      Toast.show('Registered Successfully');
     this.props.navigation.navigate("SignIn") //Passing user Name
+    }).catch(err=>{console.log(err)})
+    
   }
   isValid() {
     let validFlag = true;
@@ -143,7 +160,16 @@ class TaxID extends Component {
 
     if (this.state.address == '') {
       this.setState({
-        addressError: 'Address, City, State, Zip code is required.',
+        addressError: 'Address is required.',
+      });
+      validFlag = false;
+    } else {
+      this.setState({ addressError: '' });
+    }
+
+    if (this.state.address2 == '') {
+      this.setState({ 
+        address2Error: 'City, State, Zip code is required.',
       });
       validFlag = false;
     } else {
@@ -268,7 +294,7 @@ class TaxID extends Component {
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
-                  placeholder="Address, City, State, ZIP code"
+                  placeholder="Address"
                   onChangeText={(text) => {
                     this.setState({ address: text });
                   }}
@@ -276,6 +302,21 @@ class TaxID extends Component {
               </View>
               {this.state.addressError != '' ? (
                 this.showErrorMessage(this.state.addressError)
+              ) : (
+                  <View></View>
+                )}
+
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="City, State, ZIP code"
+                  onChangeText={(text) => {
+                    this.setState({ address2: text });
+                  }}
+                />
+              </View>
+              {this.state.address2Error != '' ? (
+                this.showErrorMessage(this.state.address2Error)
               ) : (
                   <View></View>
                 )}
@@ -316,6 +357,7 @@ class TaxID extends Component {
                 <TextInput
                   style={styles.input}
                   placeholder="Mexico registration form"
+                  keyboardType={'number-pad'}
                   onChangeText={(text) => {
                     this.setState({ mexicoRegistration: text });
                   }}

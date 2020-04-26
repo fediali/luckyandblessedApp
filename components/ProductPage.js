@@ -342,7 +342,6 @@ export default class ProductPage extends Component {
               <TouchableOpacity style={styles.similarProductTouch}
               onPress={this.navigateToCategoryScreen(SIMILARPRODUCTS_CATEGORY_ID, SIMILARPRODUCTS_NAME)}>
                 <Text style={[styles.showAllText]}>Show All</Text> 
-                {/* FIXME: componentDidMount is not being called. What to do? */}
               </TouchableOpacity>
             </View>
             <FlatList

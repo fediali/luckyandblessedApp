@@ -20,9 +20,13 @@ import CategoriesProductListDoubleItem from "../reusableComponents/CategoriesPro
 import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+
 const baseUrl = "http://dev.landbw.co/";
 const STORAGE_DEFAULTS = "defaults"
 let DEFAULTS_OBJ = []
+const HISTORY_CATEGORY_ID = -2
+const SIMILARPRODUCTS_CATEGORY_ID = -3
+
 class CategoriesProduct extends Component {
 
     constructor(props) {
@@ -44,7 +48,7 @@ class CategoriesProduct extends Component {
 
     loadData = (cid) => {
         console.log(cid)
-        if (cid == -2) //Cid of HISTORY
+        if (cid == HISTORY_CATEGORY_ID) //Cid of HISTORY
         {
             var historyItems = this.props.route.params.items;
             this.setState({
@@ -86,7 +90,7 @@ class CategoriesProduct extends Component {
         else {
             var catName = this.state.cname
             var promises = []
-            if (cid == -3) //-3 is cid of SIMILAR PRODUCTS
+            if (cid == SIMILARPRODUCTS_CATEGORY_ID) //-3 is cid of SIMILAR PRODUCTS
             {
                 promises.push(GetData(baseUrl + `api/similarproducts/54578`)) //TODO: Change the 54578 to ${this.state.pid} 
             }

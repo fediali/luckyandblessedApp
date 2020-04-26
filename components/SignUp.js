@@ -149,7 +149,7 @@ class SignUp extends Component {
                 
               }
               else {
-                this.setState({ emailError: 'The username or email you have chosen already exists', email: "", password: "", confirmPassword: "" });
+                this.setState({ emailError: 'The username or email you have chosen already exists'});
               }
             })
             .catch((ex) => {
@@ -246,6 +246,10 @@ class SignUp extends Component {
 
   handleFillOutTXId=()=>{
     this.signUpClick()
+  }
+
+  navigateScreen=(screen)=>()=>{
+    this.props.navigation.navigate(screen);
   }
 
   render() {
@@ -392,7 +396,7 @@ class SignUp extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[innerStyles.buttonAlreadyHaveAccount]}
-                onPress={this.navigateScreen("SignUp")}>
+                onPress={this.navigateScreen("SignIn")}>
                 <Text style={[styles.buttonText, innerStyles.buttonText]}>
                   I have an account
                 </Text>
