@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native';
 
+
+//Main Container, logoImageLoader and Loader are used throughout
 export default StyleSheet.create({
   parentContainer: {
     flex: 1,
     backgroundColor: '#ffffff',
-    marginBottom: 10
   },
   subParentContainer: {
     alignItems: 'center',
@@ -60,4 +61,6 @@ export default StyleSheet.create({
     height: '15%',
     marginTop: 10,
   },
+  logoImageLoader: {height: 200, width: 200},
+  loader: {flex: 1, alignItems: 'center', justifyContent: 'center'},
 });

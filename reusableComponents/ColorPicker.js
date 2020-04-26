@@ -54,7 +54,6 @@ class ColorPicker extends PureComponent {
         this.setState({ 
             isChange: !this.state.isChange
         })
-        // console.log(this.state.isChange);
         this.state.colorList[item.id].isCheck = !this.state.colorList[item.id].isCheck
         this.props.callbackFunction(this.state.colorList)
     }
@@ -63,7 +62,7 @@ class ColorPicker extends PureComponent {
     render() {
         //TODO: this I want to call only once, but it is getting called on every click
         return (
-            <View style={{ paddingBottom: 10}}>
+            <View style={innerStyles.paddingBottom}>
                 <FlatList
                     keyExtractor={(item) => item.id}
                     data={this.state.colorList}
@@ -77,10 +76,7 @@ class ColorPicker extends PureComponent {
                             <View style={[innerStyles.colorView, { backgroundColor: item.color }]}>
                                 {item.isCheck ?
                                     <Image
-                                        style={{
-                                            width: '31%',
-                                            height: '31%',
-                                        }}
+                                        style={innerStyles.image}
                                         resizeMode="contain" source={require("../static/icon_select.png")}
 
                                     /> : <View></View>
@@ -101,7 +97,6 @@ const Height = Dimensions.get('window').height;
 const innerStyles = StyleSheet.create({
     colorView: {
         alignSelf: 'stretch',
-        
         alignContent: 'flex-start',
         width: Width * 0.15,
         height: Height * 0.065,
@@ -109,10 +104,16 @@ const innerStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal:Width*0.014,
-
     },
     multiRowStyling: {
         marginTop: 15,
+    },
+    paddingBottom:{ 
+        paddingBottom: 10
+    },
+    image:{
+        width: '31%',
+        height: '31%',
     }
 })
 

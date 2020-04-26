@@ -1,40 +1,141 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from "react-native"
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView,ScrollView, ActivityIndicator } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
+import { Icon } from 'react-native-elements'
+import PostData from '../reusableComponents/API/PostData';
+import Toast from 'react-native-simple-toast';
+import GetData from '../reusableComponents/API/GetData';
+import AsyncStorage from '@react-native-community/async-storage';
+
+const baseUrl = "http://dev.landbw.co/";
+
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
-// TODO: code onPress to the Buttons
 // Naming Conventions for assets camelCase = **assetName-componentName**
 class SignIn extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            email: "",
+            password: "",
+            emailError: "",
+            passwordError: "",
+            requested:false
+        }
+
+    }
+
+    _storeData = async (user) => {
+        try {
+            console.log("vaing ", user)
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+        } catch (error) {
+            // Error saving data
+            console.log(error)
+        }
+    };
+
+    signInClick = () => {
+        if (this.isValid()) {
+            var promises = []
+            this.setState({requested:true})
+            promises.push(PostData(baseUrl + 'api/usertoken', {email: this.state.email, password: this.state.password}))
+            promises.push(GetData(baseUrl + `api/users?email=${this.state.email}`))
+            Promise.all(promises).then((promiseResponses) => {
+                Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+                    console.log(responses[0].token)
+                    console.log(responses[1].users[0])
+
+                    if (responses[0].token) {
+                        Toast.show('Login Successful');
+                        var fullName = responses[1].users[0].firstname + " " + responses[1].users[0].lastname;
+                        var user={
+                            user_id: responses[1].users[0].user_id,
+                            name: fullName
+                        }
+                        this._storeData(user)
+                        this.props.navigation.navigate("MainPage", { userName: fullName }) //Passing user Name
+                        this.setState({requested:false})
+
+                    }
+                    else {
+                        Toast.show('Username or password incorrect', Toast.LONG);
+                        this.setState({requested:false})
+                    }
+
+                }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
+            }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
+        }
+        // this.props.navigation.navigate("MainPage",{userName: "Test Name"}) //TODO: Remove this
+
+    }
+
+    isValid() {
+        let validFlag = true
+
+        if (this.state.email == "") {
+            this.setState({ emailError: "Email is required." })
+            validFlag = false;
+        } else {
+            this.setState({ emailError: "" })
+        }
+
+        if (this.state.password == "") {
+            this.setState({ passwordError: "Password is required." })
+            validFlag = false;
+        } else {
+            this.setState({ passwordError: "" })
+        }
+
+        return validFlag;
+    }
+
+    showErrorMessage(errorMessage) {
+        return (
+            <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 15 }}>
+                <Icon size={30} name='md-information-circle-outline' type='ionicon' color='#FF0000' />
+                <Text style={{ paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' }}>{errorMessage}</Text>
+            </View>
+        )
+    }
+
     render() {
         return (
-            // <SafeAreaView>
-                <SafeAreaView style={styles.mainContainer}>
-                    <View style={styles.subContainer}>
-                        <Image style={{
-                            width: "53%",
-                            height: "35%",
-                        }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
-                        {/* TODO: Image has to be changed with orignal one */}
-                        <View style={styles.emailInputView}>
-                            <TextInput style={styles.input} placeholder="Email" />
-                        </View>
-                        <View style={styles.passwordInputView}>
-                            <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" />
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            {/* TODO: Check whether to apply the touchable opacity or ripple */}
-                            <TouchableOpacity style={styles.buttonSignUp} onPress={()=>{this.props.navigation.navigate("SignUp")}} >
-                                <Text style={styles.buttonText}>Sign up</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.buttonSignIn} onPress={()=>{this.props.navigation.navigate("MainPage")}}>
-                                <Text style={styles.buttonText}>Sign in</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity>
-                            <Text style={styles.forgotPassword}>Forgot Password?</Text>
+            <SafeAreaView style={styles.mainContainer}>
+            
+                <View style={styles.subContainer}>
+                    <Image style={{
+                        width: "53%",
+                        height: "35%",
+                        marginBottom:20
+                    
+                    }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
+                    <View style={styles.emailInputView}>
+                        <TextInput style={styles.input} placeholder="Email" onChangeText={(text) => { this.setState({ email: text }) }} />
+                    </View>
+                    {this.state.emailError != "" ? this.showErrorMessage(this.state.emailError) : <View></View>}
+                    <View style={styles.passwordInputView}>
+                        <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" onChangeText={(text) => { this.setState({ password: text }) }} />
+                    </View>
+                    {this.state.passwordError != "" ? this.showErrorMessage(this.state.passwordError) : <View></View>}
+
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.buttonSignUp} onPress={() => { this.props.navigation.navigate("SignUp") }} >
+                            <Text style={styles.buttonText}>Sign up</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.buttonSignIn} onPress={() => { this.signInClick() }}>
+                            <Text style={styles.buttonText}>Sign in</Text>
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity>
+                        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                    </TouchableOpacity>
+                    {
+                        this.state.requested?<ActivityIndicator style={{marginTop:30}}size="large" color="#2967ff"/>
+                        :null
+                    }
+                </View>
 
             </SafeAreaView>
         )
@@ -61,7 +162,7 @@ const styles = StyleSheet.create({
         // lineHeight: 24,
         letterSpacing: 0,
         color: "#2d2d2f",
-        paddingVertical:11,
+        paddingVertical: 11,
 
 
     },

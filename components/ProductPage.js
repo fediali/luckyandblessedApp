@@ -21,17 +21,24 @@ import { _categoryList, _collections, _newArrivals, _trending, _history } from '
 import Shimmer from 'react-native-shimmer';
 import GetData from "../reusableComponents/API/GetData"
 import HTML from 'react-native-render-html';
+import FastImage from 'react-native-fast-image'
+import ProductPageSimilarListItem from "../reusableComponents/ProductPageSimilarListItem"
+import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+
+const SIMILARPRODUCTS_CATEGORY_ID = -3
+const SIMILARPRODUCTS_NAME = "SIMILAR PRODUCTS"
+const STORAGE_DEFAULTS = "defaults"
 
 const baseUrl = "http://dev.landbw.co/";
+let DEFAULTS_OBJ = []
 
 export default class ProductPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recentProducts: _history,
       activeSections: [],
       isReady: false,
-      // tagsStyles: {h3: { color:'#f00'}, ul: {margin: '5px'}} , //FIXME: Add Styling
       sections: [
         {
           id: 0,
@@ -44,6 +51,7 @@ export default class ProductPage extends Component {
       ],
       selectedQuantity: 0,
       pid: this.props.route.params.pid,
+      cname: this.props.route.params.cname,
       data: {
         productName: "",
         price: 0,
@@ -54,73 +62,87 @@ export default class ProductPage extends Component {
         qty_step: 0,
         full_description: "",
         composition: "",
-      }
-      // data: {
-      //   category: 'Jeans',
-      //   itemName1: 'RED MINT AZTEC BELL',
-      //   itemName2: 'SLEEVE BLAZER',
-      //   totalPrice: '$48.99',
-      //   unitPrice: '$19.40',
-      //   color: ['Turquoise', 'Green Snake'],
-      //   minQuantity: 6,
-      //   Quanitities: [6, 12, 18],
-      //   imageURL: [
-      //     { img1: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-      //     { img2: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-      //     { img3: 'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg' },
-      //   ],
-
-      //   description: {
-      //     details:
-      //       "This women's tank top is designed to help you stay cool. It's made of stretchy and breathable fabric that moves heat away from your skin",
-      //     composition: '84% nylon, 16% elastane',
-      //     sizes: '2XS, XS, S, M, L, XL',
-      //     gender: 'Women',
-      //     country: 'Indonesia',
-      //     code: 'EC142690002',
-      //   },
-      // },
-      // mainImage: {require('../static/demoimg1-walkthrough.png'},
-
+      },
+      similarProducts: []
+    
     };
+  }
+
+  getData (){
+    
+    var promises = []
+    promises.push(GetData(baseUrl + `api/products/${this.state.pid}`))
+    promises.push(GetData(baseUrl + `api/similarproducts/54578`)) //TODO: Change the 54578 to ${this.state.pid} 
+    Promise.all(promises).then((promiseResponses) => {
+      Promise.all(promiseResponses.map(res => res.json())).then((response) => {
+        async function getArray() {
+          const secondaryImagesArray = []
+          for (var key in response[0].image_pairs) {
+            console.log(response[0].image_pairs[key].detailed.image_path)
+            await secondaryImagesArray.push(response[0].image_pairs[key].detailed.image_path)
+          }
+          return secondaryImagesArray
+        }
+        getArray().then((secondaryImagesArray) => {
+          secondaryImagesArray.unshift(response[0].main_pair.detailed.image_path)
+          
+          // Stroing History of objects
+          RetrieveDataAsync("productHistoryList").then((value)=>{
+            console.log(";;;;;;;",response)
+            if(value==null)value=[]
+            else value=JSON.parse(value)
+            let historyObj={
+              productName: response[0].product,
+              price: response[0].price,
+              base_price: response[0].base_price,
+              mainImage: response[0].main_pair.detailed.image_path,
+              pid:this.state.pid,
+              cname:this.state.cname,
+              brand:response[0].brand
+            }
+            if(value.filter(obj => obj.pid[0] ===historyObj.pid[0] ).length==0){
+              console.log("ppppp",value.filter(obj => obj.pid[0] ===historyObj.pid[0] ))
+              console.log(value)
+              console.log(historyObj)
+
+              value.unshift(historyObj)
+              if(value.length>=10)value.pop()
+              StoreDataAsync("productHistoryList",value)
+            }
+          })
+          // console.log(secondaryImagesArray)
+          this.setState({
+            isReady: true,
+            data: {
+              productName: response[0].product,
+              price: response[0].price,
+              mainImage: response[0].main_pair.detailed.image_path,
+              secondaryImages: secondaryImagesArray,
+              min_qty: Number(response[0].min_qty),
+              max_qty: 18,//TODO: Number(response[0].max_qty) currently 0 from api
+              qty_step: Number(response[0].qty_step),
+              full_description: response[0].full_description,
+              composition: response[0].composition,
+            },
+            similarProducts: response[1].products
+          })
+        })
+
+      })
+    })
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       // "api/products/"+this.props.route.params.id
       //category will also come from this.props.route.params.category
+      
+      RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
+        DEFAULTS_OBJ = JSON.parse(defaults)
+        this.getData();
 
-      GetData(baseUrl + `api/products/${this.state.pid}`).then(res => res.json()).then(
-        (response) => {
-          console.log(response)
-          async function getArray() {
-            const secondaryImagesArray = []
-            for (var key in response.image_pairs) {
-              console.log(response.image_pairs[key].detailed.image_path)
-              await secondaryImagesArray.push(response.image_pairs[key].detailed.image_path)
-            }
-            return secondaryImagesArray
-          }
-          getArray().then((secondaryImagesArray) => {
-            // console.log(secondaryImagesArray)
-            this.setState({
-              isReady: true,
-              data: {
-                productName: response.product,
-                price: response.price,
-                mainImage: response.main_pair.detailed.image_path,
-                secondaryImages: secondaryImagesArray,
-                min_qty: Number(response.min_qty),
-                max_qty: 18,//TODO: Number(response.max_qty) currently 0 from api
-                qty_step: Number(response.qty_step),
-                full_description: response.full_description,
-                composition: response.composition,
-              }
-
-            })
-          })
-
-        })
+      })
+      
     })
   };
 
@@ -130,8 +152,8 @@ export default class ProductPage extends Component {
   };
   _renderHeader = section => {
     return (
-      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 10 }}>
-        <Text style={{ fontSize: 18, fontFamily: "Montserrat-SemiBold", lineHeight: 22, color: "#2d2d2f" }}>
+      <View style={styles.headerMainView}>
+        <Text style={styles.headerMainText}>
           {section.name}
         </Text>
         {
@@ -160,53 +182,35 @@ export default class ProductPage extends Component {
         <View style={{ paddingHorizontal: 20 }}>
           <HTML html={this.state.data.full_description} imagesMaxWidth={Dimensions.get('window').width} />
           <HTML html={this.state.data.composition} tagsStyles={this.state.tagsStyles} imagesMaxWidth={Dimensions.get('window').width} />
-
-          {/* <Text style={[styles.descriptionText, { paddingBottom: 20 }]}>{this.state.data.description}</Text>
-          <View style={{ flexDirection: "row" }}>
-            <View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Composition  </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Sizes  </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Gender  </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Country  </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ height: 5, width: 5, borderRadius: 5, backgroundColor: "#000", marginRight: 10 }}></View>
-                <Text style={styles.descriptionText}>Code  </Text>
-              </View>
-            </View>
-            <View> */}
-          {/* <Text style={styles.descriptionText}>{this.state.data.description.composition}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.sizes}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.gender}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.country}</Text>
-              <Text style={styles.descriptionText}>{this.state.data.description.code}</Text> */}
-
-          {/* </View> */}
-          {/* </View> */}
-
         </View>
       )
     }
     else {
       return (
         <View style={{ paddingHorizontal: 20, alignItems: "center" }}>
-          <Image style={{ width: "100%", height: 400 }} resizeMode={"contain"} source={require("../static/sizeGuide.png")} />
+          <FastImage style={{ width: "100%", height: 400 }} resizeMode={"contain"} source={require("../static/sizeGuide.png")} />
         </View>
       )
     }
 
   }
+
+  appendImageToData=(val) =>() =>{
+    this.setState({ data: { ...this.state.data, mainImage: val } })
+  }
+
+  navigateToCategoryScreen=(cid, cname)=>()=>{
+    this.props.navigation.push("CategoriesProduct", { cid, cname })
+}
+
+  onQuantityTextChange=(text)=>{
+    this.setState({ selectedQuantity: text })
+  }
+
+  onQuantityModalChange=(quantityOptionsArray,index)=>{
+    this.setState({ selectedQuantity: quantityOptionsArray[index] })
+  }
+
   render() {
 
     console.log(this.state.data.composition)
@@ -222,7 +226,7 @@ export default class ProductPage extends Component {
       return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
           <Shimmer>
-            <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+            <FastImage style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
           </Shimmer>
         </View>
       )
@@ -230,37 +234,37 @@ export default class ProductPage extends Component {
     }
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText={this.state.data.category} rightIcon="share" navigation={this.props.navigation} />
+        <Header centerText={this.state.cname} rightIcon="share" navigation={this.props.navigation} />
         <ScrollView>
-          <View style={{ marginBottom: 10 }}>
+          <View style={styles.bottomMarginStyle}>
             <View style={[styles.subContainer,]}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={styles.productView}>
                 <View>
                   <Text style={styles.itemNameText}>
                     {this.state.data.productName}
                   </Text>
                 </View>
                 <View>
-                  <Text style={[styles.itemNameText, { alignSelf: "flex-end" }]}>
+                  <Text style={[styles.itemNameText, styles.alignFlexEndStyle]}>
                     ${Number(this.state.data.price).toFixed(2)}
                   </Text>
                   <Text style={styles.subText}>
-                    Prepack Price: ${Number(this.state.data.price*this.state.data.min_qty).toFixed(2)}
+                    Prepack Price: ${Number(this.state.data.price * this.state.data.min_qty).toFixed(2)}
                   </Text>
                 </View>
               </View>
               <View style={{}}>
 
-                <View style={[styles.mainPicture,{backgroundColor:"#f6f6f6",borderRadius:6}]}>
-                  <Image style={styles.mainPicture} source={{ uri: this.state.data.mainImage }} resizeMode="contain"></Image>
+                <View style={[styles.mainPicture, styles.mainImageView]}>
+                  <FastImage style={styles.mainPicture} source={{ uri: this.state.data.mainImage }} resizeMode="contain"></FastImage>
 
                 </View>
-                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{ marginVertical: 15, }}>
+                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={styles.verticalMarginStyle}>
                   {this.state.data.secondaryImages.map((val, num) => {
                     return (
-                      <TouchableOpacity key={num} onPress={() => { this.setState({ data: { ...this.state.data, mainImage: val } }) }}>
+                      <TouchableOpacity key={num} onPress={this.appendImageToData(val)}>
 
-                        <Image style={this.state.data.mainImage == val ? [styles.thumbnail, { borderColor: "#2967ff", borderWidth: 2 }] : styles.thumbnail} source={{ uri: val }}></Image>
+                        <FastImage style={this.state.data.mainImage == val ? [styles.thumbnail, styles.customThumbnailImage] : styles.thumbnail} source={{ uri: val }}></FastImage>
                       </TouchableOpacity>
                     )
                   })}
@@ -268,28 +272,28 @@ export default class ProductPage extends Component {
               </View>
 
             </View>
-            <View style={{ backgroundColor: "#f6f6f6", paddingTop: 20, paddingHorizontal: 20 }}>
-              <View style={{ flexDirection: "row" }}>
-                <View style={{ flex: 1 }}>
+            <View style={styles.productOptionsView}>
+              <View style={styles.rowView}>
+                <View style={styles.flexOneView}>
                   {
                     this.state.data.min_qty == 1 ?
                       <TextInput
                         style={styles.valueText}
                         placeholder={"Quantity"}
-                        onChangeText={text => this.setState({ selectedQuantity: text })}
+                        onChangeText={(text) => {this.onQuantityTextChange(text)}}
 
                       />
                       :
                       <ModalDropdown
-                        onSelect={(index) => { this.setState({ selectedQuantity: quantityOptionsArray[index] }) }}
+                        onSelect={(index) => { this.onQuantityModalChange(quantityOptionsArray,index) }}
                         options={quantityOptionsArray}
                         defaultValue={this.state.data.min_qty}
-                        style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
-                        dropdownStyle={{ width: 0.25 * Width, height: 134 }}
-                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                        style={styles.quantityModalStyle}
+                        dropdownStyle={styles.quantityModalDropdownStyle}
+                        textStyle={styles.quantityModalTextStyle}
                         renderRow={(option, index, isSelected) => {
                           return (
-                            <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
+                            <Text style={styles.modalActualTextstyle}>{option}</Text>
                           )
                         }}
                       />
@@ -301,21 +305,21 @@ export default class ProductPage extends Component {
                   <ModalDropdown options={["Male", 'Female', "All"]}
                     hexCode={"#000"}
                     defaultValue={"Green"}
-                    style={{ padding: 10, backgroundColor: "#fff", borderRadius: 6 }}
-                    dropdownStyle={{ width: 0.5 * Width, height: 134 }}
-                    textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                    style={ styles.quantityModalStyle}
+                    dropdownStyle={styles.colorModalDropdownStyle}
+                    textStyle={styles.quantityModalTextStyle}
                     renderRow={(option, index, isSelected) => {
                       return (
-                        <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
+                        <Text style={styles.modalActualTextstyle}>{option}</Text>
                       )
                     }}
                   />
                 </View>
               </View>
-              <View style={{ alignItems: "center", marginTop: 17 }}>
-                <Text style={{ textAlign: "center", fontSize: 14, fontFamily: "Avenir-Book", lineHeight: 18, color: "#8d8d8e" }}>Minimum quantity for "{this.state.data.productName}" is {this.state.data.min_qty}.</Text>
-                <TouchableOpacity style={{ backgroundColor: "#2967ff", alignItems: "center", width: "100%", borderRadius: 6, marginVertical: 15 }}>
-                  <Text style={{ color: "#fff", paddingVertical: 11, fontSize: 18, lineHeight: 22, fontFamily: "Montserrat-SemiBold" }}>
+              <View style={styles.addToCartView}>
+                <Text style={styles.minQuantityText}>Minimum quantity for "{this.state.data.productName}" is {this.state.data.min_qty}.</Text>
+                <TouchableOpacity style={styles.addToCartTouch}>
+                  <Text style={styles.addToCartText}>
                     Add to cart
                   </Text>
                 </TouchableOpacity>
@@ -332,27 +336,28 @@ export default class ProductPage extends Component {
               // touchableComponent={(props) => <TouchableOpacity {...props} />}
               expandMultiple={true}
             />
-            {/* history header*/}
-            <View style={[styles.headerView, { marginTop: 20, marginBottom: 10 }]}>
-              <Text style={[styles.buttonText, { flex: 0.5, textAlign: 'left' }]}>Similar Products</Text>
-              <TouchableOpacity style={{ flex: 0.5, textAlign: 'right' }}>
-                <Text style={[styles.showAllText]}>Show All</Text>
+            
+            <View style={[styles.headerView, styles.historyHeaderView]}>
+              <Text style={[styles.buttonText, styles.similarProductText]}>Similar Products</Text>
+              <TouchableOpacity style={styles.similarProductTouch}
+              onPress={this.navigateToCategoryScreen(SIMILARPRODUCTS_CATEGORY_ID, SIMILARPRODUCTS_NAME)}>
+                <Text style={[styles.showAllText]}>Show All</Text> 
               </TouchableOpacity>
             </View>
             <FlatList
-              keyExtractor={(item) => item.id.toString()}
-              data={this.state.recentProducts}
+              keyExtractor={(item) => item.product_id}
+              data={this.state.similarProducts}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
-                <TouchableOpacity style={{ flexDirection: 'column', paddingHorizontal: 10, marginBottom: 50 }}>
-                  <Image
-                    style={styles.gridImage}
-                    source={item.imageUrl}
-                  />
-                  <Text style={styles.gridItemNameAndPriceText}>{item.name}</Text>
-                  <Text style={[styles.showAllText, { fontSize: 14, lineHeight: 18, textAlign: "left", marginTop: 5 }]}>{item.type}</Text>
-                </TouchableOpacity>
+                (item.main_pair)?
+                <ProductPageSimilarListItem //TODO:Confirm CNAME
+                  pid={item.product_id} cname={this.state.cname} imageUrl={item.main_pair.detailed.image_path} name={item.product} type = {item.brand?item.brand:DEFAULTS_OBJ.brand}  navigation={this.props.navigation}
+                />
+                :
+                //If No product image
+                <ProductPageSimilarListItem //TODO:Confirm CNAME
+                  pid={item.product_id} cname={this.state.cname} imageUrl={"https://www.dhresource.com/0x0/f2/albu/g9/M00/25/59/rBVaVVxvaJmAeWPpAAE-IYplWiA081.jpg"} name={item.product} type = {item.brand?item.brand:DEFAULTS_OBJ.brand}  navigation={this.props.navigation}/>
               )}
             />
           </View>
@@ -444,7 +449,77 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     justifyContent: "center",
     textAlign: "center"
-
+  },
+  headerMainView:{
+    flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 20, paddingVertical: 10 
+  },
+  headerMainText:{
+    fontSize: 18, fontFamily: "Montserrat-SemiBold", lineHeight: 22, color: "#2d2d2f" 
+  },
+  bottomMarginStyle: {
+    marginBottom: 10
+  },
+  productView: {
+    flexDirection: 'row', justifyContent: 'space-between'
+  },
+  alignFlexEndStyle: {
+    alignSelf: "flex-end"
+  },
+  mainImageView: {
+    backgroundColor: "#f6f6f6", borderRadius: 6
+  },
+  verticalMarginStyle:{
+    marginVertical: 15,
+    flexGrow:1,
+    justifyContent:"center"
+  },
+  customThumbnailImage:{
+    borderColor: "#2967ff", borderWidth: 2
+  },
+  productOptionsView:{
+    backgroundColor: "#f6f6f6", paddingTop: 20, paddingHorizontal: 20 
+  },
+  rowView:{
+    flexDirection: "row" 
+  },
+  flexOneView:{
+    flex:1
+  },
+  quantityModalStyle:{
+    padding: 10, backgroundColor: "#fff", borderRadius: 6 
+  },
+  quantityModalDropdownStyle:{
+    width: 0.25 * Width, height: 134 
+  },
+  quantityModalTextStyle:{
+    fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" 
+  },
+  colorModalDropdownStyle:{
+    width: 0.5 * Width, height: 134
+  },
+  modalActualTextstyle:{
+    fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 
+  },
+  addToCartView:{
+    alignItems: "center", marginTop: 17 
+  },
+  minQuantityText:{
+    textAlign: "center", fontSize: 14, fontFamily: "Avenir-Book", lineHeight: 18, color: "#8d8d8e" 
+  },
+  addToCartText:{
+    color: "#fff", paddingVertical: 11, fontSize: 18, lineHeight: 22, fontFamily: "Montserrat-SemiBold" 
+  },
+  addToCartTouch:{
+    backgroundColor: "#2967ff", alignItems: "center", width: "100%", borderRadius: 6, marginVertical: 15 
+  },
+  similarHeaderView:{
+    marginTop: 20, marginBottom: 10 
+  },
+  similarProductText:{
+    flex: 0.5, textAlign: 'left' 
+  },
+  similarProductTouch:{
+    flex: 0.5, textAlign: 'right' 
   }
 
 });

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    Image,
     StyleSheet,
     TextInput,
     TouchableOpacity,
@@ -16,6 +15,7 @@ import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import LogoSmall from "./Styles/LogoSmall"
 import Shimmer from 'react-native-shimmer';
+import FastImage from 'react-native-fast-image'
 
 class Payment extends Component {
 
@@ -39,9 +39,9 @@ class Payment extends Component {
 
         if (!this.state.isReady) {
             return (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                <View style={styles.shimmerMainView}>
                     <Shimmer>
-                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                        <FastImage style={styles.shimmerImage} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>
             )
@@ -53,82 +53,76 @@ class Payment extends Component {
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}>
                     <View style={{ marginBottom: 50 }}>
                         <View style={styles.subContainer}>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                            <View style={styles.paymentAndSecureView}>
                                 <View>
-                                    <Text style={{ fontFamily: "Montserrat-Bold", fontSize: 30, lineHeight: 36, color: "#2d2d2f" }}>Payment</Text>
-                                    <Text style={{ fontFamily: "Avenir-Book", fontSize: 14, lineHeight: 18, color: "#8d8d8e" }}>Secure Checkout</Text>
+                                    <Text style={styles.paymentText}>Payment</Text>
+                                    <Text style={styles.secureCheckoutText}>Secure Checkout</Text>
                                 </View>
                             </View>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 25 }}>
-                                <TouchableOpacity>
-                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <View style={styles.cardSelectorView}>
+                                <TouchableOpacity activeOpacity={0.5}>
+                                    <View style={styles.cardSelectorTouchView}>
 
-                                        <Image style={{ height: 25, width: 25, marginRight: 5 }} source={require("../static/icon_done.png")} />
-                                        <Image style={{ height: 24, width: 149 }} source={require("../static/visaLogo.png")} />
+                                        <FastImage style={styles.imageDone} source={require("../static/icon_done.png")} />
+                                        <FastImage style={styles.imageVisaLogo} source={require("../static/visaLogo.png")} />
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
+                                <TouchableOpacity activeOpacity={0.5}>
 
-                                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                        <Image style={{ height: 25, width: 25, marginRight: 5 }} source={require("../static/icon_done.png")} />
-                                        <Image style={{ height: 21, width: 89 }} source={require("../static/paypalLogo.png")} />
+                                    <View style={styles.cardSelectorTouchView}>
+                                        <FastImage style={styles.imageDone} source={require("../static/icon_done.png")} />
+                                        <FastImage style={styles.imagePaypalLogo} source={require("../static/paypalLogo.png")} />
                                     </View>
                                 </TouchableOpacity>
                                 {/* <Text style={{ fontFamily: "Montserrat-SemiBold", fontSize: 18, lineHeight: 22, color: "#2967ff" }}>Credit Card</Text> */}
                                 {/* <Text style={styles.heading}>Paypal</Text> */}
                             </View>
                             <View>
-                                <Text style={[styles.heading, { marginTop: 29, marginBottom: 18 }]}>Delivery details:</Text>
+                                <Text style={[styles.heading, styles.deliveryDetailText]}>Delivery details:</Text>
                                 <Text>UPS Shipping - shipping will be added later</Text>
-                                <View style={{ marginTop: 29, marginBottom: 11, flexDirection: "row", justifyContent: "space-between" }}>
+                                <View style={styles.shippingAddressView}>
                                     <Text style={styles.heading}>Shipping address:</Text>
                                     <Text style={styles.textButton}>Edit</Text>
                                 </View>
-                                <Text style={{ width: width * 0.6 }}>Monika Willems,455 Larkspur Dr. california springs, Ca 92926, USA</Text>
-                                <View style={{ marginTop: 36, marginBottom: 18, flexDirection: "row", justifyContent: "space-between" }}>
+                                <Text style={styles.monikaWillemsText}>Monika Willems,455 Larkspur Dr. california springs, Ca 92926, USA</Text>
+                                <View style={styles.promoAndCreditCardView}>
                                     <Text style={styles.heading}>Gift Certificate Or Promo Code:</Text>
                                     <Text style={styles.textButton}>Edit</Text>
                                 </View>
                                 <Text style={styles.smallGreyText}>123456576785857 - $200 added</Text>
-                                <View style={{ marginTop: 34, marginBottom: 18, flexDirection: "row", justifyContent: "space-between" }}>
+                                <View style={styles.promoAndCreditCardView}>
                                     <Text style={styles.heading}>Credit card</Text>
                                     <Text style={styles.textButton}>Clear All</Text>
                                 </View>
-                                <TextInput style={[styles.textInput, { borderRadius: 6 }]} placeholder="Card holder name" />
-                                <TextInput style={[styles.textInput, { marginTop: 20, borderRadius: 6 }]} placeholder="Card number" />
-                                <View style={{ flexDirection: "row", marginTop: 20, marginBottom: 25 }}>
-                                    <TextInput style={[styles.textInput, { marginRight: 13, flex: 1, borderRadius: 6 }]} placeholder="mm" />
-                                    <TextInput style={[styles.textInput, { marginRight: 13, flex: 1, borderRadius: 6 }]} placeholder="yyyy" />
-                                    <TextInput style={[styles.textInput, { flex: 1, borderRadius: 6 }]} placeholder="CVV" />
+                                <TextInput style={[styles.textInput, styles.cardHolderTextInput]} placeholder="Card holder name" />
+                                <TextInput style={[styles.textInput, styles.cardNumTextInput]} placeholder="Card number" />
+                                <View style={styles.cardInfoView}>
+                                    <TextInput style={[styles.textInput, styles.dateTextInput]} placeholder="mm" />
+                                    <TextInput style={[styles.textInput, styles.dateTextInput]} placeholder="yyyy" />
+                                    <TextInput style={[styles.textInput, styles.cvvTextInput]} placeholder="CVV" />
                                 </View>
 
                             </View>
                         </View>
                         <View style={styles.divider}></View>
-                        <View style={{ paddingHorizontal: 20 }}>
+                        <View style={styles.commentView}>
                             <TextInput
-                                style={[styles.textInput, { marginTop: 13, marginBottom: 15, borderRadius: 6 }]}
+                                style={[styles.textInput, styles.commentTextInput]}
                                 multiline={true}
                                 numberOfLines={4}
                                 placeholder="You can leave us a comment here" />
                         </View>
-                        <View style={{ backgroundColor: "#f6f6f6", paddingHorizontal: 20, paddingVertical: 13 }}>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 6 }}>
+                        <View style={styles.orderView}>
+                            <View style={styles.orderRowView}>
                                 <Text style={styles.heading}>Order Amount</Text>
                                 <Text style={styles.heading}>$103.88</Text>
                             </View>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
+                            <View style={styles.orderRowView}>
                                 <Text style={styles.smallGreyText}>Gift card/Promo applied:</Text>
                                 <Text style={styles.smallGreyText}>-$55.02</Text>
                             </View>
-                            <TouchableOpacity style={{ backgroundColor: "#2967ff", alignItems: "center", borderRadius: 6 }}>
-                                <Text style={{
-                                    fontFamily: "Montserrat-SemiBold",
-                                    fontSize: 18,
-                                    lineHeight: 22,
-                                    color: "#fff",
-                                    paddingVertical: 11
-                                }}>Place Order</Text>
+                            <TouchableOpacity style={styles.orderTouch}>
+                                <Text style={styles.orderTouchText}>Place Order</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -180,6 +174,85 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 18,
         color: "#8d8d8e"
+    },
+    shimmerMainView:{
+        flex: 1, alignItems: "center", justifyContent: "center", 
+    },
+    shimmerImage:{
+        height: 200, width: 200 
+    },
+    paymentAndSecureView:{ 
+        flexDirection: "row", justifyContent: "space-between" 
+    },
+    paymentText:{
+        fontFamily: "Montserrat-Bold", fontSize: 30, lineHeight: 36, color: "#2d2d2f" 
+    },
+    secureCheckoutText:{
+        fontFamily: "Avenir-Book", fontSize: 14, lineHeight: 18, color: "#8d8d8e" 
+    },
+    cardSelectorView:{
+        flexDirection: "row", justifyContent: "space-between", marginTop: 25 
+    },
+    cardSelectorTouchView:{
+        flexDirection: "row", alignItems: "center" 
+    },
+    imageDone:{
+        height: 25, width: 25, marginRight: 5 
+    },
+    imageVisaLogo:{
+        height: 24, width: 149 
+    },
+    imagePaypalLogo:{
+        height: 21, width: 89 
+    },
+    deliveryDetailText:{
+        marginTop: 29, marginBottom: 18 
+    },
+    shippingAddressView:{
+        marginTop: 29, marginBottom: 11, flexDirection: "row", justifyContent: "space-between" 
+    },
+    monikaWillemsText:{
+        width: width * 0.6 
+    },
+    promoAndCreditCardView:{
+        marginTop: 36, marginBottom: 18, flexDirection: "row", justifyContent: "space-between" 
+    },
+    cardHolderTextInput:{
+        borderRadius: 6
+    },
+    cardNumTextInput:{
+        marginTop: 20, borderRadius: 6 
+    },
+    cardInfoView:{
+        flexDirection: "row", marginTop: 20, marginBottom: 25 
+    },
+    dateTextInput:{
+        marginRight: 13, flex: 1, borderRadius: 6 
+    },
+    cvvTextInput:{
+        flex: 1, borderRadius: 6
+    },
+    commentView:{
+        paddingHorizontal: 20 
+    },
+    commentTextInput:{
+        marginTop: 13, marginBottom: 15, borderRadius: 6 
+    },
+    orderView:{
+        backgroundColor: "#f6f6f6", paddingHorizontal: 20, paddingVertical: 13 
+    },
+    orderRowView:{
+        flexDirection: "row", justifyContent: "space-between", marginBottom: 8 
+    },
+    orderTouch:{
+        backgroundColor: "#2967ff", alignItems: "center", borderRadius: 6 
+    },
+    orderTouchText:{
+        fontFamily: "Montserrat-SemiBold",
+        fontSize: 18,
+        lineHeight: 22,
+        color: "#fff",
+        paddingVertical: 11
     }
 
 })

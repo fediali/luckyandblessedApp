@@ -50,7 +50,7 @@ class SizePicker extends PureComponent {
 
 
 
-    onSizeSelect = (item) => {
+    onSizeSelect = (item) => { //Inline function here
         this.setState({
             isChange: !this.state.isChange
         })
@@ -75,15 +75,15 @@ class SizePicker extends PureComponent {
                             onPress={() => this.onSizeSelect(item)}
                         >
                             {item.isCheck ?
-                                <View style={[innerStyles.colorView, { backgroundColor: "#3c3c3e" }]}>
-                                    <View style={{ alignItems: "center", justifyContent: "center" }}>
-                                        <Text style={{fontSize:16,fontFamily:"Montserrat-SemiBold",color:"#fff"}}>{item.size}</Text>
+                                <View style={[innerStyles.colorView, styles.backgroundColorCheck]}>
+                                    <View style={styles.textView}>
+                                        <Text style={styles.text}>{item.size}</Text>
                                     </View>
                                 </View>
                                 :
-                                <View style={[innerStyles.colorView, { backgroundColor: "#f6f6f6" }]}>
-                                    <View style={{ alignItems: "center", justifyContent: "center" }}>
-                                        <Text style={{fontSize:16,fontFamily:"Montserrat-Medium"}}>{item.size}</Text>
+                                <View style={[innerStyles.colorView, styles.backgroundColorUnheck]}>
+                                    <View style={styles.textView}>
+                                        <Text style={styles.text}>{item.size}</Text>
                                     </View>
                                 </View>
                             }
@@ -114,7 +114,12 @@ const innerStyles = StyleSheet.create({
     },
     multiRowStyling: {
         marginTop: 15,
-    }
+    },
+    backgroundColorCheck: { backgroundColor: "#3c3c3e" },
+    textView: { alignItems: "center", justifyContent: "center" },
+    text: {fontSize:16,fontFamily:"Montserrat-SemiBold",color:"#fff"},
+    backgroundColorUnheck: { backgroundColor: "#f6f6f6" },
+    
 })
 
 export default SizePicker;

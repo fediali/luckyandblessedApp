@@ -80,7 +80,7 @@ class Filter extends Component {
     }
 
     //This function Receives the state from size component when item is changed 
-    parentCallBackSize(sizeListData){
+    parentCallBackSize(sizeListData) {
         this.setState({ sizeList: sizeListData })
 
     }
@@ -90,9 +90,13 @@ class Filter extends Component {
         console.log(this.state)
     }
 
-    customSetState(stateVal){
+    customSetState(stateVal) {
         // console.log("AAA",stateVal)
         this.setState(stateVal)
+    }
+
+    onItemClick(key){
+        this.setState({ selected: key })
     }
 
 
@@ -279,21 +283,21 @@ class Filter extends Component {
     //     this.setState({ activeSections });
     // };
     render() {
-        let width = Dimensions.get('window').width;
-        let height = Dimensions.get('window').height;
+        // let width = Dimensions.get('window').width;
+        // let height = Dimensions.get('window').height;
         let filterListItemsText = ["Most popular", "New items", "Price: High - Low", "Price: Low - High"]
-        console.log(this.state)
+        // console.log(this.state)
         return (
             <SafeAreaView style={styles.mainContainer}>
-                <Header  navigation={this.props.navigation} centerText="Filter" rightIcon="clear" rightIconClickHandler={() => { this.rightIconClickHandler() }} />
+                <Header navigation={this.props.navigation} centerText="Filter" rightIcon="clear" rightIconClickHandler={() => { this.rightIconClickHandler() }} />
                 {/*add justifyContent: 'space-between' */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
-                    <View style={{ padding: 20 }}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.grownFlex}>
+                    <View style={styles.twentyPad}>
                         {filterListItemsText.map((item, key) => (
                             this.state.selected == key ?
                                 <TouchableOpacity key={key.toString()}
-                                    style={[styles.listItem, { justifyContent: "space-between" }]}>
-                                    <Text style={[styles.listItemText, { fontFamily: "Montserrat-SemiBold" }]}>{item}</Text>
+                                    style={[styles.listItem, styles.spaceBetweenContent]}>
+                                    <Text style={[styles.listItemText, styles.msbText]}>{item}</Text>
                                     < Icon
                                         size={23}
                                         name='check'
@@ -302,14 +306,14 @@ class Filter extends Component {
                                     />
                                 </TouchableOpacity>
                                 :
-                                <TouchableOpacity key={key.toString()} style={styles.listItem} onPressIn={() => { this.setState({ selected: key }) }}>
-                                    <Text style={[styles.listItemText, { fontFamily: "Avenir-Book" }]}>{item}</Text>
+                                <TouchableOpacity key={key.toString()} style={styles.listItem} onPressIn={() => { this.onItemClick(key) }}>
+                                    <Text style={[styles.listItemText, styles.abText]}>{item}</Text>
                                 </TouchableOpacity>
 
                         ))}
                     </View>
                     <View style={styles.divider}></View>
-                    <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+                    <View style={styles.verticalAndHorizontalPad}>
                         {/* <Accordion
                             style={{ marginBottom: 0, paddingBottom: 0 }}
                             underlayColor="#fff"
@@ -322,11 +326,11 @@ class Filter extends Component {
                             expandMultiple={true}
 
                         /> */}
-                        <AccordionReusable state={this.state} customSetState={(stateVal)=>{this.customSetState(stateVal)}}/>
+                        <AccordionReusable state={this.state} customSetState={(stateVal) => { this.customSetState(stateVal) }} />
                     </View>
-                    <View style={{ backgroundColor: "#f6f6f6", marginBottom: 50, paddingTop: 20, alignItems: "center", paddingBottom: 20 }}>
-                        <TouchableOpacity style={{ backgroundColor: "#2967ff", alignItems: "center", width: "90%", borderRadius: 6 }}>
-                            <Text style={{ color: "#fff", paddingVertical: 11,fontSize:18,lineHeight:22,fontFamily:"Montserrat-SemiBold" }}>
+                    <View style={styles.allItemsView}>
+                        <TouchableOpacity style={styles.allItemsTouch}>
+                            <Text style={styles.allItemsText}>
                                 View All Items
                             </Text>
                         </TouchableOpacity>
@@ -334,7 +338,7 @@ class Filter extends Component {
 
                 </ScrollView>
 
-                <Footer  navigation={this.props.navigation}/>
+                <Footer navigation={this.props.navigation} />
             </SafeAreaView>
         )
     }
@@ -369,6 +373,15 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 20,
     },
+    twentyPad: {padding: 20},
+    grownFlex: {flexGrow: 1},
+    verticalAndHorizontalPad:{ paddingHorizontal: 20, paddingVertical: 10 },
+    spaceBetweenContent: {justifyContent: 'space-between'},
+    msbText:{ fontFamily: "Montserrat-SemiBold" },
+    abText: { fontFamily: "Avenir-Book" },
+    allItemsView: { backgroundColor: "#f6f6f6", marginBottom: 50, paddingTop: 20, alignItems: "center", paddingBottom: 20 },
+    allItemsTouch: { backgroundColor: "#2967ff", alignItems: "center", width: "90%", borderRadius: 6 },
+    allItemsText: { color: "#fff", paddingVertical: 11, fontSize: 18, lineHeight: 22, fontFamily: "Montserrat-SemiBold" }
 })
 
 const pickerSelectStyles = StyleSheet.create({

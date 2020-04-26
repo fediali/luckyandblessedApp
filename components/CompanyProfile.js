@@ -96,9 +96,8 @@ export default class CompanyProfile extends Component {
 
   _renderContent = (section) => {
     return (
-      <View style={{justifyContent: 'center'}}>
-        {/* TODO: Justify Text to center */}
-        <Text style={[styles.descriptionText, {marginHorizontal: 20}]}>
+      <View style={styles.justifyCenter}>
+        <Text style={styles.descriptionText}>
           {section.content}
         </Text>
       </View>
@@ -109,16 +108,12 @@ export default class CompanyProfile extends Component {
     return (
       <View>
         <View style={styles.userDetails}>
-          <View style={{paddingVertical: 19}}>
+          <View style={styles.paddingVertical}>
             <Text style={styles.keyText}>{section.title}</Text>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={styles.flexDirectionRow}>
             <View
-              style={{
-                marginVertical: 18,
-                marginRight: 6,
-                marginLeft: 19.5,
-              }}>
+              style={styles.headerViewStyle}>
               {!this.state.activeSection1.includes(section.id) ? (
                 <Icon size={20} name="right" type="antdesign" />
               ) : (
@@ -135,16 +130,12 @@ export default class CompanyProfile extends Component {
     return (
       <View>
         <View style={styles.userDetails}>
-          <View style={{paddingVertical: 19}}>
+          <View style={styles.paddingVertical}>
             <Text style={styles.keyText}>{section.title}</Text>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={styles.flexDirectionRow}>
             <View
-              style={{
-                marginVertical: 18,
-                marginRight: 6,
-                marginLeft: 19.5,
-              }}>
+              style={styles.headerViewStyle}>
               {!this.state.activeSection2.includes(section.id) ? (
                 <Icon size={20} name="right" type="antdesign" />
               ) : (
@@ -162,9 +153,9 @@ export default class CompanyProfile extends Component {
     let Width = Dimensions.get('window').width;
     if (!this.state.isReady) {
       return (
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+          <View style={styles.loader}>
               <Shimmer>
-                  <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                  <Image style={styles.logoImage} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
               </Shimmer>
           </View>
       )
@@ -175,14 +166,10 @@ export default class CompanyProfile extends Component {
         <Header centerText="Help & Info"  navigation={this.props.navigation}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            backgroundColor: '#fff',
-            flexGrow: 1,
-            justifyContent: 'space-between',
-          }}>
+          contentContainerStyle={styles.scrollView}>
           <View style={styles.subContainer}>
             <Image
-              style={{height: 168.9, width: 198.7, marginBottom: 26}}
+              style={styles.topProfileLogo}
               source={require('../static/logo-companyProfile.png')}></Image>
 
             <Text style={styles.userAddress}>
@@ -191,7 +178,7 @@ export default class CompanyProfile extends Component {
             <Text style={styles.userAddress}>
               {this.state.data.longAddress2}
             </Text>
-            <View style={{marginTop: 33}}></View>
+            <View style={styles.marginTop}></View>
             <View style={styles.divider}></View>
           </View>
 
@@ -215,6 +202,7 @@ export default class CompanyProfile extends Component {
             renderContent={this._renderContent}
             onChange={this._updateSection1}
             expandMultiple={true}
+
           />
 
           <View style={styles.divider}></View>
@@ -229,7 +217,7 @@ export default class CompanyProfile extends Component {
           />
 
           {/* Below view is useless */}
-          <View style={{paddingBottom: 60, backgroundColor: '#ffffff'}}></View>
+          <View style={styles.belowPaddingView}></View>
         </ScrollView>
 
         <Footer selected="Info"  navigation={this.props.navigation}/>
@@ -281,11 +269,12 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     paddingHorizontal: 131.5,
   },
-  decriptionText: {
+  descriptionText: {
     fontFamily: 'Avenir-Book',
     fontSize: 14,
     color: '#2d2d2f',
     textAlign: 'justify',
+    marginHorizontal: 20
   },
   userDetails: {
     flexDirection: 'row',
@@ -299,4 +288,22 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: '#2d2d2f',
   },
+  paddingVertical:{paddingVertical: 19},
+  headerViewStyle:{
+    marginVertical: 18,
+    marginRight: 6,
+    marginLeft: 19.5,
+  },
+  flexDirectionRow:{flexDirection: 'row'},
+  logoImage:{ height: 200, width: 200 },
+  loader:{ flex: 1, alignItems: "center", justifyContent: "center", },
+  scrollView:{
+    backgroundColor: '#fff',
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
+  topProfileLogo:{height: 168.9, width: 198.7, marginBottom: 26},
+  marginTop:{marginTop: 33},
+  belowPaddingView:{paddingBottom: 60, backgroundColor: '#ffffff'},
+  justifyCenter:{justifyContent: 'center'}
 });

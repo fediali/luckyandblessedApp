@@ -31,7 +31,7 @@ YellowBox.ignoreWarnings([
     'Warning: componentWillMount has been renamed',
     'Warning: componentWillReceiveProps is deprecated',
     'Warning: componentWillUpdate is deprecated',
-    ]);
+]);
 
 //TODO: Too long file. FlatListItem should be separated
 class FlatListItem extends Component {
@@ -43,39 +43,54 @@ class FlatListItem extends Component {
         };
     }
 
+    onDeleteClose = () => {
+        if (this.state.activeRowKey != null) {
+            this.setState({ activeRowKey: null });
+        }
+    }
+    onDeleteOpen = () => {
+        this.setState({ activeRowKey: this.props.item.itemNum });
+    }
+
+    onDeletePress = () => {
+        const deletingRow = this.state.activeRowKey;
+        Alert.alert(
+            'Alert',
+            'Are you sure you want to delete ?',
+            [
+                { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+                {
+                    text: 'Yes', onPress: () => {
+                        itemList.splice(this.props.index, 1);
+                        //Refresh FlatList ! 
+                        this.props.parentFlatList.refreshFlatList(deletingRow);
+                    }
+                },
+            ],
+            { cancelable: true }
+        );
+    }
+
+    onColorModalSelect=(index)=>{
+        this.setState({ currentSelectedColor: this.props.item.availableColors[index] })
+    }
+
     render() {
 
 
         const swipeSettings = {
             autoClose: true,
             onClose: (secId, rowId, direction) => {
-                if (this.state.activeRowKey != null) {
-                    this.setState({ activeRowKey: null });
-                }
+                this.onDeleteClose()
             },
             onOpen: (secId, rowId, direction) => {
-                this.setState({ activeRowKey: this.props.item.itemNum });
+                this.onDeleteOpen()
             },
             right: [
                 {
                     autoClose: true,
                     onPress: () => {
-                        const deletingRow = this.state.activeRowKey;
-                        Alert.alert(
-                            'Alert',
-                            'Are you sure you want to delete ?',
-                            [
-                                { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                {
-                                    text: 'Yes', onPress: () => {
-                                        itemList.splice(this.props.index, 1);
-                                        //Refresh FlatList ! 
-                                        this.props.parentFlatList.refreshFlatList(deletingRow);
-                                    }
-                                },
-                            ],
-                            { cancelable: true }
-                        );
+                        this.onDeletePress()
                     },
                     text: 'Delete', type: 'delete',
                 }
@@ -85,22 +100,23 @@ class FlatListItem extends Component {
         };
 
 
+
         return (
             <Swipeout {...swipeSettings}>
-                <View style={[innerStyles.itemView, { backgroundColor: '#ffffff' }]}>
-                    <View style={{ flexDirection: 'column', padding: 15 }}>
-                        <View style={{ flexDirection: 'row' }}>
+                <View style={[innerStyles.itemView, innerStyles.whiteBackground]}>
+                    <View style={innerStyles.listMainView}>
+                        <View style={innerStyles.listInnerView}>
                             <Image style={[innerStyles.itemImage]}
                                 resizeMode='contain' source={require("../static/item_cart1.png")}
                             />
-                            <View style={{ flex: 1, flexDirection: 'column', marginLeft: 10 }}>
-                                <View style={{ flexDirection: 'row', paddingBottom: 4 }}>
-                                    <Text style={[innerStyles.itemNameText, { textAlign: 'left', flex: 2 }]}>{this.props.item.name}</Text>
-                                    <Text style={[innerStyles.itemNameText, { textAlign: 'right', flex: 1 }]}>${this.props.item.price}</Text>
+                            <View style={innerStyles.listTextsContainerView}>
+                                <View style={innerStyles.listRowView}>
+                                    <Text style={[innerStyles.itemNameText, innerStyles.listRowNameText]}>{this.props.item.name}</Text>
+                                    <Text style={[innerStyles.itemNameText, innerStyles.listRowPriceText]}>${this.props.item.price}</Text>
                                 </View>
-                                <View style={{ flexDirection: 'row', paddingBottom: 4 }}>
-                                    <Text style={[innerStyles.itemUnitPriceText, { textAlign: 'left', flex: 2 }]}>Unit price</Text>
-                                    <Text style={[innerStyles.lightText, { textAlign: 'right', flex: 1 }]}>${this.props.item.unitPrice}</Text>
+                                <View style={innerStyles.listRowView}>
+                                    <Text style={[innerStyles.itemUnitPriceText, innerStyles.listRowNameText]}>Unit price</Text>
+                                    <Text style={[innerStyles.lightText, innerStyles.listRowPriceText]}>${this.props.item.unitPrice}</Text>
                                 </View>
                                 <Text style={innerStyles.lightText}>SIZE: {this.props.item.sizes}</Text>
                                 <Text style={innerStyles.lightText}>Color: {this.props.item.selectedColor}</Text>
@@ -109,16 +125,16 @@ class FlatListItem extends Component {
                         </View>
 
                         <View style={[innerStyles.horizontalView]}>
-                            <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5 }]}>
-                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <TouchableOpacity style={[innerStyles.bottomSelectors, innerStyles.halfFlex]}>
+                                <View style={innerStyles.modalView}>
 
                                     <ModalDropdown
-                                        onSelect={(index) => { console.log(index) }}
+                                        // onSelect={(index) => { console.log(index) }}
                                         options={this.props.item.availableSizes}
                                         defaultValue={this.props.item.unknownNum}
-                                        style={{ flex: 1, padding: 5, borderRadius: 6 }}
-                                        dropdownStyle={{ width: "30%", height: 110 }}
-                                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                                        style={innerStyles.modalStyle}
+                                        dropdownStyle={innerStyles.modalDropdownStyle}
+                                        textStyle={innerStyles.modalTextStyle}
                                         renderRow={(option, index, isSelected) => {
                                             return (
                                                 <Text style={[innerStyles.numText]}>{option}</Text>
@@ -127,8 +143,8 @@ class FlatListItem extends Component {
                                     />
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={[innerStyles.bottomSelectors, { flex: 0.5, marginStart: 40 }]}>
-                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <TouchableOpacity style={[innerStyles.bottomSelectors, innerStyles.colorModalTouch]}>
+                                <View style={innerStyles.modalView}>
                                     {/* <View style={{ width: 25, height: 25, marginStart: 15, borderRadius: 25, backgroundColor: this.props.item.hexColor, alignSelf: "center" }} />
                                     <Image
                                         style={{
@@ -140,16 +156,16 @@ class FlatListItem extends Component {
 
                                     <ModalDropdown
                                         hexCode={this.state.currentSelectedColor}
-                                        onSelect={(index) => { this.setState({ currentSelectedColor: this.props.item.availableColors[index] }) }}
+                                        onSelect={(index) => {this.onColorModalSelect(index) }}
                                         options={this.props.item.availableColors}
                                         defaultValue={this.props.item.selectedColor}
-                                        style={{ flex: 1, padding: 5, borderRadius: 6 }}
-                                        dropdownStyle={{ width: "30%", height: 110 }}
-                                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 0, lineHeight: 24, color: "#2d2d2f" }}
+                                        style={innerStyles.modalStyle}
+                                        dropdownStyle={innerStyles.modalDropdownStyle}
+                                        textStyle={innerStyles.modalTextStyle}
                                         renderRow={(option, index, isSelected) => {
                                             return (
                                                 <View>
-                                                    <View style={{ width: 25, height: 25, alignSelf: "center", marginVertical: 10, borderRadius: 25, backgroundColor: option, alignSelf: "center" }} />
+                                                    <View style={[innerStyles.modalInnerView, { backgroundColor: option }]} />
                                                 </View>
                                             )
 
@@ -160,7 +176,7 @@ class FlatListItem extends Component {
                         </View>
 
                     </View>
-                    <View style={[styles.line, { marginTop: 10 }]} />
+                    <View style={[styles.line, innerStyles.viewMargin]} />
                 </View>
             </Swipeout>
 
@@ -195,11 +211,11 @@ class ShoppingCart extends Component {
     renderFlatListHeader = () => {
         var listHeader = (
             <View>
-                <View style={{ paddingHorizontal: 20 }}>
+                <View style={innerStyles.listHeaderPad}>
                     <Text style={innerStyles.mainTextBold}>Your bag</Text>
                     <Text style={innerStyles.lightText}>You have 3 items in your bag</Text>
                 </View>
-                <View style={[styles.line, { marginTop: 10 }]} />
+                <View style={[styles.line, innerStyles.viewMargin]} />
             </View>
         );
         return listHeader;
@@ -207,58 +223,45 @@ class ShoppingCart extends Component {
 
     renderFlatListFooter = () => {
         var listFooter = (
-            <View style={{ paddingBottom: 60 }}>
+            <View style={innerStyles.listFooterPad}>
                 <View style={innerStyles.promoView}>
                     <View style={styles.inputView}>
                         <TextInput style={[styles.input]} placeholder="Gift Or Promo code" />
-                        <TouchableOpacity style={[innerStyles.giftButton]}>
+                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]}>
                             <Text
                                 style={[
                                     styles.buttonText,
-                                    {
-                                        color: '#ffffff',
-                                        fontSize: 18,
-                                        lineHeight: 22,
-                                    },
+                                    innerStyles.giftButtonText
                                 ]}>
                                 Add
-                                        </Text>
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
 
-                <View style={[styles.line, { marginTop: 20 }]} />
+                <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
 
 
 
                 <View style={innerStyles.showOrderView}>
-                    <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
-                        <Text style={[styles.buttonText, { fontSize: 18, lineHeight: 30 }]}>Order amount: </Text>
-                        <Text style={[styles.buttonText, { flex: 1, fontSize: 18, lineHeight: 30, textAlign: 'right' }]}>$103.88</Text>
+                    <View style={innerStyles.orderRowView}>
+                        <Text style={[styles.buttonText, innerStyles.orderAmountText]}>Order amount: </Text>
+                        <Text style={[styles.buttonText, innerStyles.orderAmountValueText]}>$103.88</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', paddingHorizontal: 20 }}>
-                        <Text style={[innerStyles.lightText, { lineHeight: 30 }]}>Gift card / Promo applied:</Text>
-                        <Text style={[innerStyles.lightText, { flex: 1, lineHeight: 30, textAlign: 'right' }]}>-$55.02</Text>
+                    <View style={innerStyles.orderRowView}>
+                        <Text style={[innerStyles.lightText, innerStyles.orderGiftText]}>Gift card / Promo applied:</Text>
+                        <Text style={[innerStyles.lightText, innerStyles.orderAmountValueText]}>-$55.02</Text>
                     </View>
                 </View>
-                <View style={[styles.buttonContainer, {
-                    paddingHorizontal: 30, width: '100%',
-                    backgroundColor: '#f6f6f6',
-                    paddingBottom: 20
-                }]}>
-                    <TouchableOpacity style={[innerStyles.buttonPaymentMethod]} onPress={() => { this.props.navigation.navigate("Delivery") }}>
+                <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
+                    <TouchableOpacity activeOpacity={0.5} style={[innerStyles.buttonPaymentMethod]} onPress={() => {this.navigateToNextScreen("Delivery")}}>
                         <Text
                             style={[
-                                styles.buttonText,
-                                {
-                                    color: '#ffffff',
-                                    fontSize: 18,
-                                    lineHeight: 22
-                                },
+                                styles.buttonText, innerStyles.orderButtonText
                             ]}>
                             Checkout
-                                </Text>
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -267,15 +270,19 @@ class ShoppingCart extends Component {
         return listFooter;
     }
 
+    navigateToNextScreen=(screenName)=>{
+        this.props.navigation.navigate(screenName)
+    }
+
     render() {
 
         const Width = Dimensions.get('window').width;
-
+        //TODO: Did not refactor it coz it will surely be changed later with lazy loader..
         if (!this.state.isReady) {
             return (
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
+                <View style={styles.loader}>
                     <Shimmer>
-                        <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+                        <Image style={styles.logoImageLoader} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>
             )
@@ -284,7 +291,7 @@ class ShoppingCart extends Component {
         const Height = Dimensions.get('window').height;
 
         return (
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={innerStyles.itemView}>
                 <Header navigation={this.props.navigation} />
                 <View style={styles.parentContainer}>
                     <FlatList
@@ -332,7 +339,7 @@ const innerStyles = StyleSheet.create({
         color: '#8d8d8e',
     },
     itemView: {
-        // flex:1
+        flex: 1
     },
     itemImage: {
         width: Width * 0.2,
@@ -436,5 +443,84 @@ const innerStyles = StyleSheet.create({
         paddingHorizontal: 30,
         marginTop: 15,
     },
+    whiteBackground: {
+        backgroundColor: '#ffffff'
+    },
+    listMainView: {
+        flexDirection: 'column', padding: 15
+    },
+    listInnerView: {
+        flexDirection: 'row'
+    },
+    listTextsContainerView: {
+        flex: 1, flexDirection: 'column', marginLeft: 10
+    },
+    listRowView: {
+        flexDirection: 'row', paddingBottom: 4
+    },
+    listRowNameText: {
+        textAlign: 'left', flex: 2
+    },
+    listRowPriceText: {
+        textAlign: 'right', flex: 1
+    },
+    halfFlex: {
+        flex: 0.5
+    },
+    modalView: {
+        flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center'
+    },
+    modalStyle: {
+        flex: 1, padding: 5, borderRadius: 6
+    },
+    modalDropdownStyle: {
+        width: "30%", height: 110
+    },
+    modalTextStyle: {
+        fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f"
+    },
+    modalInnerView: {
+        width: 25, height: 25, alignSelf: "center", marginVertical: 10, borderRadius: 25, alignSelf: "center"
+    },
+    viewMargin: {
+        marginTop: 15
+    },
+    colorModalTouch: {
+        flex: 0.5, marginStart: 40
+    },
+    giftButtonText: {
+        color: '#ffffff',
+        fontSize: 18,
+        lineHeight: 22,
+    },
+    listHeaderPad: {
+        paddingHorizontal: 20
+    },
+    listFooterPad: {
+        paddingBottom: 60
+    },
+    orderRowView: {
+        flexDirection: 'row', paddingHorizontal: 20
+    },
+    orderAmountText: {
+        fontSize: 18, lineHeight: 30
+    },
+    orderAmountValueText: {
+        flex: 1, fontSize: 18, lineHeight: 30, textAlign: 'right'
+    },
+    orderGiftText: {
+        lineHeight: 30
+    },
+    orderButtonView: {
+        paddingHorizontal: 30, width: '100%',
+        backgroundColor: '#f6f6f6',
+        paddingBottom: 20
+    },
+    orderButtonText: {
+        color: '#ffffff',
+        fontSize: 18,
+        lineHeight: 22
+    }
+
 })
 export default ShoppingCart;

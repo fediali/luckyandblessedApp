@@ -13,6 +13,7 @@ import Footer from '../reusableComponents/Footer';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import SearchResultListItem from '../reusableComponents/SearchResultListItem';
 
 //TODO: Check for the last row
 export default class SearchResults extends Component {
@@ -84,14 +85,10 @@ export default class SearchResults extends Component {
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Search" navigation={this.props.navigation} />
-        <View style={{ marginHorizontal: 20 }}>
+        <View style={styles.mainView}>
           <View style={styles.inputView}>
             <View
-              style={{
-                marginVertical: 9.8,
-                marginLeft: 20.8,
-                marginRight: 10.8,
-              }}>
+              style={styles.innerView}>
               <Icon
                 size={20}
                 name="ios-search"
@@ -109,21 +106,7 @@ export default class SearchResults extends Component {
             data={this.state.data}
             keyExtractor={(item, index) => item.itemNum}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Image
-                    style={[styles.thumbnailImage]}
-                    resizeMode="contain"
-                    source={require('../static/item_cart1.png')}
-                  />
-                  <View style={{ flexDirection: 'column', marginLeft: 20 }}>
-                    <Text style={styles.itemNameText}>{item.itemName}</Text>
-                    <Text style={[styles.categoriesText]}>{item.category}</Text>
-                    <Text style={[styles.priceText]}>{item.totalPrice}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
+              <SearchResultListItem item={item}/>
             )}
             ItemSeparatorComponent={this.renderSeparator}
           />
@@ -141,6 +124,14 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: '#ffffff',
+  },
+  mainView: {
+    marginHorizontal: 20
+  },
+  innerView: {
+    marginVertical: 9.8,
+    marginLeft: 20.8,
+    marginRight: 10.8,
   },
   inputText: {
     fontFamily: 'Avenir-Book',

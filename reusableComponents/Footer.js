@@ -1,13 +1,9 @@
 import React, { PureComponent } from 'react';
 import {
     View,
-    Text,
     Image,
     StyleSheet,
-    TextInput,
     TouchableOpacity,
-    ScrollView,
-    Dimensions,
     Platform
 } from 'react-native';
 import { Icon } from 'react-native-elements'
@@ -33,27 +29,18 @@ class Footer extends PureComponent {
             }
         }
     }
+
+    navigateToScreen=(screenName)=>{
+        this.props.navigation.navigate(screenName)
+    }
     
 
     render() {
         return (
-            <View style={{
-                backgroundColor:"#fff",
-                position: "absolute",
-                bottom: 0,
-                height: 50,
-                width: "100%",
-                paddingBottom:10,
-                marginBottom: (Platform.OS === 'ios') ? 15:0 
-            }}>
-                <View style={{
-                    flex: 1,
-                    justifyContent: "space-around",
-                    flexDirection: "row",
-                    alignItems: "center"
-                }}>
+            <View style={innerStyles.mainViewStyle}>
+                <View style={innerStyles.subViewStyle}>
 
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("MainPage") }}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("MainPage")}}>
                         {this.state.selected == "Home" ?
                             <Icon
                                 size={32}
@@ -69,20 +56,20 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("ShoppingCart") }}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("ShoppingCart") }}>
                         {this.state.selected == "Shop" ?
-                            <Image style={{width:30,height:30}} source={require('../static/cartSelected.png')}></Image>
+                            <Image style={innerStyles.imageStyle} source={require('../static/cartSelected.png')}></Image>
                             :
-                            <Image style={{width:30,height:30}} source={require('../static/cart.png')}></Image>
+                            <Image style={innerStyles.imageStyle} source={require('../static/cart.png')}></Image>
                         }
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("TrackOrders") }}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("TrackOrders")}}>
                         {this.state.selected == "Van" ?
                             <Icon
                                 size={35}
                                 name='truck'
-                                type='material-community' //TODO: Find the truck icon
+                                type='material-community' 
                                 color="#2967ff"
                             />
                             :
@@ -93,7 +80,7 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("UserProfile") }}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("UserProfile") }}>
                         {this.state.selected == "Person" ?
                             <Icon
                                 size={35}
@@ -109,7 +96,7 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingHorizontal: 8 }} onPress={() => {this.props.navigation.navigate("CompanyProfile") }}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("CompanyProfile") }}>
                         {this.state.selected == "Info" ?
                             <Icon
                                 size={35}
@@ -132,5 +119,28 @@ class Footer extends PureComponent {
     }
 }
 
+const innerStyles = StyleSheet.create({
+    mainViewStyle:{
+        backgroundColor:"#fff",
+        position: "absolute",
+        bottom: 0,
+        height: 50,
+        width: "100%",
+        marginBottom: (Platform.OS === 'ios') ? 25:0 
+    },
+    subViewStyle:{
+        flex: 1,
+        justifyContent: "space-around",
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    touchPad:{
+        paddingHorizontal: 8 
+    },
+    imageStyle:{
+        width:30,height:30
+    }
+
+})
 
 export default Footer;
