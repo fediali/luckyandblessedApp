@@ -65,6 +65,8 @@ class MainPage extends Component {
 
     }
 
+    //FIXME: This doesn't works when the a new user is registered and then signs in
+
     backAction = () => {
         console.log(this.props.navigation)
         if (this.props.navigation.isFocused()) {
