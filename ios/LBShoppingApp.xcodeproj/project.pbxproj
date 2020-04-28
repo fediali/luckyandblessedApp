@@ -74,6 +74,7 @@
 		F0E3C6A2CC1C402CA3569B55 /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3F3FB3F270E14A379F14CD05 /* SF-Pro-Display-Regular.otf */; };
 		F330CDB923AA4FCFB089C42F /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B88EBF5FB62466E944C4AAE /* Montserrat-BoldItalic.ttf */; };
 		FA402E4789E44A5CBDE15F22 /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 429910F111CD49259F2D5D1C /* Montserrat-MediumItalic.ttf */; };
+		44DDCE8E02E244ACBDCBC3DE /* Arial, Helvetica, Verdana, Tahoma, sans-serif.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0523E0B1C9949EA92AEE94B /* Arial, Helvetica, Verdana, Tahoma, sans-serif.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +192,7 @@
 		FC2CAE22908A4A6580F60DB8 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		FEF30C830CC9439BAC39AEB1 /* Avenir-BookOblique.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-BookOblique.ttf"; path = "../assets/fonts/Avenir-BookOblique.ttf"; sourceTree = "<group>"; };
 		FFA0F87A1E084D40A4FCB20F /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-SemiBold.ttf"; path = "../assets/fonts/Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
+		F0523E0B1C9949EA92AEE94B /* Arial, Helvetica, Verdana, Tahoma, sans-serif.ttf */ = {isa = PBXFileReference; name = "Arial, Helvetica, Verdana, Tahoma, sans-serif.ttf"; path = "../assets/fonts/Arial, Helvetica, Verdana, Tahoma, sans-serif.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -395,6 +397,7 @@
 				6D254F0E641943DBAB903DC7 /* sans-serif.ttf */,
 				8B3840C25E8447A987EF50E3 /* Tahoma.TTF */,
 				125910B40BC44E099ECD8330 /* Verdana.ttf */,
+				F0523E0B1C9949EA92AEE94B /* Arial, Helvetica, Verdana, Tahoma, sans-serif.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -597,6 +600,7 @@
 				3353174E6C364AA5A169819A /* sans-serif.ttf in Resources */,
 				D37D022AF7BE4B6DBA2AEEE0 /* Tahoma.TTF in Resources */,
 				6FD48545E82E4A7ABBB50AF2 /* Verdana.ttf in Resources */,
+				44DDCE8E02E244ACBDCBC3DE /* Arial, Helvetica, Verdana, Tahoma, sans-serif.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

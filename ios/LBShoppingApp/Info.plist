@@ -125,6 +125,7 @@
 		<string>sans-serif.ttf</string>
 		<string>Tahoma.TTF</string>
 		<string>Verdana.ttf</string>
+		<string>Arial, Helvetica, Verdana, Tahoma, sans-serif.ttf</string>
 	</array>
 </dict>
 </plist>
