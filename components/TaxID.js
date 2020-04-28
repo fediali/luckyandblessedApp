@@ -152,9 +152,9 @@ componentWillUnmount() {
       address2: this.state.address2,
       tax_number: this.state.texasSales,
       registration_number: this.state.outOfState,
-      mexico_registration: this.state.mexicoRegistration,
       products_description: this.state.description,
       business_description: this.state.description,
+      title: this.state.nameOfPurchase,
       date: today,
       signature: this.state.signImage,
       user_id: this.props.route.params.user_id.toString(), //CHECK THIS
