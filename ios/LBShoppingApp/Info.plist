@@ -120,6 +120,11 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Arial.ttf</string>
+		<string>Helvetica.ttf</string>
+		<string>sans-serif.ttf</string>
+		<string>Tahoma.TTF</string>
+		<string>Verdana.ttf</string>
 	</array>
 </dict>
 </plist>
