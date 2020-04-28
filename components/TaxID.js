@@ -166,7 +166,7 @@ componentWillUnmount() {
     console.log("Data", data)
 
     PostData(baseUrl + 'api/salestaxid', data).
-    then((res) => res.text()).
+    then((res) => res.json()).
     then((response) => { 
       console.log(response)
       Toast.show('Registered Successfully');
