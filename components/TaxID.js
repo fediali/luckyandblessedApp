@@ -120,7 +120,7 @@ componentWillUnmount() {
   _onSaveEvent = (result) => {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
-    this.setState({ signImage: "data:image/png;base64," + result.encoded })
+    this.setState({ signImage: "data:image/png;base64," + result.encoded.toString() })
     // console.log(result.encoded);
   }
   _onDragEvent() {
@@ -166,12 +166,12 @@ componentWillUnmount() {
     console.log("Data", data)
 
     PostData(baseUrl + 'api/salestaxid', data).
-    then((res) => res.json()).
+    then((res) => res.text()).
     then((response) => { 
       console.log(response)
       Toast.show('Registered Successfully');
     this.props.navigation.navigate("SignIn") //Passing user Name
-    }).catch(err=>{console.log(err)})
+    }).catch(err=>{throw err})
     
   }
   isValid() {
