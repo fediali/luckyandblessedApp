@@ -20,7 +20,9 @@ import { Icon } from 'react-native-elements'
 import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 import Shimmer from 'react-native-shimmer';
 import GetData from "../reusableComponents/API/GetData"
-import HTML from 'react-native-render-html';
+// import HTML from 'react-native-render-html';
+import HTMLView from 'react-native-htmlview';
+
 import FastImage from 'react-native-fast-image'
 import ProductPageSimilarListItem from "../reusableComponents/ProductPageSimilarListItem"
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
@@ -180,8 +182,8 @@ export default class ProductPage extends Component {
     if (section.name == "Description") {
       return (
         <View style={{ paddingHorizontal: 20 }}>
-          <HTML html={this.state.data.full_description} imagesMaxWidth={Dimensions.get('window').width} />
-          <HTML html={this.state.data.composition} tagsStyles={this.state.tagsStyles} imagesMaxWidth={Dimensions.get('window').width} />
+          <HTMLView value={this.state.data.full_description} />
+          <HTMLView value={this.state.data.composition} />
         </View>
       )
     }
