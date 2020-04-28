@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
-
+import md5 from "react-native-md5";
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import LogoSmall from './Styles/LogoSmall';
@@ -17,8 +17,13 @@ import FastImage from 'react-native-fast-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
 import { Icon } from 'react-native-elements';
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+const STORAGE_DEFAULTS="defaults"
 const baseUrl = 'http://dev.landbw.co/';
 
+let DEFAULTS_OBJ = []
+
+//TODO: Handle backPress and if back pressed then delete the recently created user
 class SignUp extends Component {
   constructor() {
     super();
@@ -38,6 +43,10 @@ class SignUp extends Component {
       salesTaxIDError: '',
       salesTaxIDFileError: '',
     };
+
+    RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
+      DEFAULTS_OBJ = JSON.parse(defaults)
+    })
   }
 
   async selectOneFile() {
@@ -124,10 +133,10 @@ class SignUp extends Component {
 
       var data = {
         email: this.state.email,
-        password: this.state.password,
+        password: md5.hex_md5(this.state.password), //TODO MD5 password
         firstname: fullName[0],
         lastname: fullName[1],
-        company_id: 1, //TODO: Use AsyncStorage
+        company_id: DEFAULTS_OBJ.store_id.toString(),
         is_root: 'N',
         user_type: 'C',
         status: 'A',

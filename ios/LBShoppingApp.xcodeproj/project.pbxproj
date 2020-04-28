@@ -16,26 +16,30 @@
 		148FCCFA9BEA49EE8BBE9CEA /* SF-Pro-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = F13393C540544F5DAA36D5FB /* SF-Pro-Display-Heavy.otf */; };
 		14F954880A3449B592BE6A21 /* SF-Pro-Display-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 160E6F9583FD4AB3A13726AC /* SF-Pro-Display-Thin.otf */; };
 		150245D786684663AC1CD94F /* SF-Pro-Display-Semibold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E17C8E0C2FD94FD297CB4177 /* SF-Pro-Display-Semibold.otf */; };
-		1584F6E483FC5A68BF31BDF2 /* libPods-LBShoppingApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 653C83732EE8F1B0B8AFE833 /* libPods-LBShoppingApp-tvOS.a */; };
 		16F8A7089C8E497BA7BC240F /* SF-Pro-Display-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9251F343D1F6491B89C64BF3 /* SF-Pro-Display-LightItalic.otf */; };
 		1C1D2537053B43199FA2D954 /* Montserrat-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17ED43ED157645B69D7F3964 /* Montserrat-ExtraLightItalic.ttf */; };
 		1E7A581E175E4F5E81274AFA /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FFA0F87A1E084D40A4FCB20F /* Montserrat-SemiBold.ttf */; };
+		20F6DCB6FB0BB4E4B9521476 /* libPods-LBShoppingApp-LBShoppingAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D5117D9204B004AD25615841 /* libPods-LBShoppingApp-LBShoppingAppTests.a */; };
 		23363B2E195C4B07BFE21807 /* Avenir-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B25D7BA00F9A43CDB3446E6F /* Avenir-Medium.ttf */; };
+		23FE6DE5D45BCD4637D8C6A0 /* libPods-LBShoppingApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CED7D6C6C4E9D3E1381F7C33 /* libPods-LBShoppingApp-tvOSTests.a */; };
 		25C6A1D8906E4BF5A6EA01CB /* Avenir-Heavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CA0F24EDA1D544B999B8FA53 /* Avenir-Heavy.ttf */; };
 		2B449724CDD14B2B9F68444D /* Montserrat-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFD99EF898A24DE0A1003FDF /* Montserrat-Black.ttf */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* LBShoppingAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LBShoppingAppTests.m */; };
+		3353174E6C364AA5A169819A /* sans-serif.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6D254F0E641943DBAB903DC7 /* sans-serif.ttf */; };
 		348312F4FF16483CB96850B9 /* Avenir.ttc in Resources */ = {isa = PBXBuildFile; fileRef = A63DAC39731F4FEBB19F8BA7 /* Avenir.ttc */; };
 		38720F43A02348EDAD8689A1 /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E1192D4D2A85445B8591783F /* Montserrat-Light.ttf */; };
 		3F8CD13B211F45AB92347621 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B5D2022421746F98A230413 /* Montserrat-ExtraBold.ttf */; };
 		402C1A5C4F2F41B4AF476FD1 /* Avenir-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77783304007843A087F4CC1D /* Avenir-Book.ttf */; };
 		4643BE3082F24A42B3735990 /* Montserrat-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7D35536539554CD0B4D63712 /* Montserrat-LightItalic.ttf */; };
+		46586D51D13D99E5FC977EB5 /* libPods-LBShoppingApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45493BC6D9D7CDC99AAC249A /* libPods-LBShoppingApp-tvOS.a */; };
 		46F9829C61164ED3B76E8859 /* Montserrat-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 523F1AD783304A8DAF420268 /* Montserrat-ExtraBoldItalic.ttf */; };
 		4866E1198E8C49158E230B1C /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86581A0999CE486DAFE56944 /* Montserrat-Italic.ttf */; };
 		4920D97DBF1548FB81CE6566 /* Avenir-Roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BC51FA7B5D4A468289197123 /* Avenir-Roman.ttf */; };
 		49DA8FAA720F43BABD01C335 /* Montserrat-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0EA0E902F97B4D0185069BB9 /* Montserrat-ExtraLight.ttf */; };
+		4B3C557D6A1C4286B65EF327 /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE4662224B5A42F59FFDA4BF /* Arial.ttf */; };
 		58B39F895623472595CDE01C /* SF-Pro-Display-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = CA387B091CB845DA8A8249BD /* SF-Pro-Display-Black.otf */; };
 		5A56BA66B34B4E7D84DCFAFE /* Montserrat-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC091FAE73134514BC05C841 /* Montserrat-Thin.ttf */; };
 		5DC0B8A3A43A4C29AF29BC30 /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F0C940B61264D20B23B8267 /* Montserrat-Medium.ttf */; };
@@ -43,6 +47,7 @@
 		67DC2F22E0FE41438C54B34C /* Avenir-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2745A0D832E4434FA7093E30 /* Avenir-Black.ttf */; };
 		6AA9DEE82DFA4051A3BFF065 /* Avenir-MediumOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CA6D637DCA58497082C42C96 /* Avenir-MediumOblique.ttf */; };
 		6C453F1774874C5A9639AD29 /* Avenir-BlackOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC11E22506034425BBD2AF5C /* Avenir-BlackOblique.ttf */; };
+		6FD48545E82E4A7ABBB50AF2 /* Verdana.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 125910B40BC44E099ECD8330 /* Verdana.ttf */; };
 		73E92D191A9B4EBBB7E7DE9B /* Avenir-Oblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0BAAA7A418B2406999F61C85 /* Avenir-Oblique.ttf */; };
 		753DC4A575F44055A8EE2977 /* SF-Pro-Display-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = AC5CEA592EB049CF945C1F1C /* SF-Pro-Display-ThinItalic.otf */; };
 		76C2C70405E948E99791AB39 /* Avenir-HeavyOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3821114C9964CA099377B88 /* Avenir-HeavyOblique.ttf */; };
@@ -50,6 +55,7 @@
 		82B3918B0C91484AA3C81B11 /* Avenir-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E849BE11737248F9B98C789F /* Avenir-Light.ttf */; };
 		92ED0A584E6042B8B73C2D6F /* SF-Pro-Display-UltralightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2788B33BF45449C58299ACD5 /* SF-Pro-Display-UltralightItalic.otf */; };
 		97FF87814D88494D94441DF0 /* Avenir-BookOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FEF30C830CC9439BAC39AEB1 /* Avenir-BookOblique.ttf */; };
+		98277CF02FC14C5D8387566F /* Helvetica.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A55987F277A144808FFCF787 /* Helvetica.ttf */; };
 		A82DEDB9076645259FEEF724 /* SF-Pro-Display-SemiboldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0E0D36A6CBA944419000CB84 /* SF-Pro-Display-SemiboldItalic.otf */; };
 		A919971CA4A6488B9761EAD9 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8726249CB1CE4555B6D0B946 /* Montserrat-Regular.ttf */; };
 		AEBB037BC92A4F309645A975 /* SF-Pro-Display-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1D130853D11A489984B46986 /* SF-Pro-Display-BoldItalic.otf */; };
@@ -57,17 +63,16 @@
 		B8F4E5DF99EC44AF8F6F36A8 /* Avenir-LightOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 993C1D40355E4A90B79B11BE /* Avenir-LightOblique.ttf */; };
 		B9DAA83C763645D580F5A879 /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = AF5A3421B3E947E3BF16DB4A /* SF-Pro-Display-Medium.otf */; };
 		BDAA607435574E54AE9404E8 /* SF-Pro-Display-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9341B9D1CC204300A64AF735 /* SF-Pro-Display-BlackItalic.otf */; };
-		C75F2D25E337C41A7E33E4A7 /* libPods-LBShoppingApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F306253565E14F62ECFA70F9 /* libPods-LBShoppingApp-tvOSTests.a */; };
 		CCE8D251C32948BDACB57B27 /* SF-Pro-Display-Ultralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3D2EF7ED6FF74DDCAAF80D13 /* SF-Pro-Display-Ultralight.otf */; };
 		CEA6374B1EB745E4A3295476 /* SF-Pro-Display-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2A5FFF4A35264F0E9F87B77C /* SF-Pro-Display-Light.otf */; };
+		D37D022AF7BE4B6DBA2AEEE0 /* Tahoma.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 8B3840C25E8447A987EF50E3 /* Tahoma.TTF */; };
 		D49CF302508C4CF3ADA3B103 /* Montserrat-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 21FAA517CA4F4A529DE44618 /* Montserrat-SemiBoldItalic.ttf */; };
 		D659EECFF1D4424982D59580 /* Montserrat-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AAA5848E0822485A8639302E /* Montserrat-BlackItalic.ttf */; };
+		DA443769041F7EF99F686612 /* libPods-LBShoppingApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE3EFDA2BB1820CE7F861E8A /* libPods-LBShoppingApp.a */; };
 		DAA8B0FF7A8D46158E60E83F /* SF-Pro-Display-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4CC511D9ECA84A0696637D1A /* SF-Pro-Display-MediumItalic.otf */; };
 		DF842D82791E45C7AE41C713 /* SF-Pro-Display-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6C49B5519FB4A5690F30F5F /* SF-Pro-Display-Bold.otf */; };
-		E08D90CED2EF8D15E3D29558 /* libPods-LBShoppingApp-LBShoppingAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F270170B4898FA9B567A55 /* libPods-LBShoppingApp-LBShoppingAppTests.a */; };
 		F0E3C6A2CC1C402CA3569B55 /* SF-Pro-Display-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3F3FB3F270E14A379F14CD05 /* SF-Pro-Display-Regular.otf */; };
 		F330CDB923AA4FCFB089C42F /* Montserrat-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B88EBF5FB62466E944C4AAE /* Montserrat-BoldItalic.ttf */; };
-		F9E6C2F003124919BC076A1F /* libPods-LBShoppingApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FCF7D797F6313BD660A7D25 /* libPods-LBShoppingApp.a */; };
 		FA402E4789E44A5CBDE15F22 /* Montserrat-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 429910F111CD49259F2D5D1C /* Montserrat-MediumItalic.ttf */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +94,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0050920CCB743D8325288C22 /* Pods-LBShoppingApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-tvOSTests/Pods-LBShoppingApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		005DCA802DF845EFA717D972 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Bold.ttf"; path = "../assets/fonts/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* LBShoppingAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LBShoppingAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +105,8 @@
 		0E0D36A6CBA944419000CB84 /* SF-Pro-Display-SemiboldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-SemiboldItalic.otf"; path = "../assets/fonts/SF-Pro-Display-SemiboldItalic.otf"; sourceTree = "<group>"; };
 		0EA0E902F97B4D0185069BB9 /* Montserrat-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLight.ttf"; path = "../assets/fonts/Montserrat-ExtraLight.ttf"; sourceTree = "<group>"; };
 		1161338C4EA04434ABB58FBF /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		125910B40BC44E099ECD8330 /* Verdana.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Verdana.ttf; path = ../assets/fonts/Verdana.ttf; sourceTree = "<group>"; };
+		12C08B6199D1E73ACF2471E1 /* Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-LBShoppingAppTests/Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* LBShoppingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LBShoppingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = LBShoppingApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = LBShoppingApp/AppDelegate.m; sourceTree = "<group>"; };
@@ -110,8 +118,8 @@
 		17ED43ED157645B69D7F3964 /* Montserrat-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraLightItalic.ttf"; path = "../assets/fonts/Montserrat-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
 		1D130853D11A489984B46986 /* SF-Pro-Display-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-BoldItalic.otf"; path = "../assets/fonts/SF-Pro-Display-BoldItalic.otf"; sourceTree = "<group>"; };
 		1F0C940B61264D20B23B8267 /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Medium.ttf"; path = "../assets/fonts/Montserrat-Medium.ttf"; sourceTree = "<group>"; };
+		1FB52DDDF15F6AD327CD20E0 /* Pods-LBShoppingApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-tvOS/Pods-LBShoppingApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		21FAA517CA4F4A529DE44618 /* Montserrat-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-SemiBoldItalic.ttf"; path = "../assets/fonts/Montserrat-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
-		25F270170B4898FA9B567A55 /* libPods-LBShoppingApp-LBShoppingAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBShoppingApp-LBShoppingAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2745A0D832E4434FA7093E30 /* Avenir-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Black.ttf"; path = "../assets/fonts/Avenir-Black.ttf"; sourceTree = "<group>"; };
 		2788B33BF45449C58299ACD5 /* SF-Pro-Display-UltralightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-UltralightItalic.otf"; path = "../assets/fonts/SF-Pro-Display-UltralightItalic.otf"; sourceTree = "<group>"; };
 		2A5FFF4A35264F0E9F87B77C /* SF-Pro-Display-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Light.otf"; path = "../assets/fonts/SF-Pro-Display-Light.otf"; sourceTree = "<group>"; };
@@ -119,49 +127,51 @@
 		2D02E47B1E0B4A5D006451C7 /* LBShoppingApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LBShoppingApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* LBShoppingApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LBShoppingApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		31430193ACC54490AB556D74 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		33DD7C04318DCF42941096DE /* Pods-LBShoppingApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-tvOSTests/Pods-LBShoppingApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		356EBB2750F56D57F85DFFA7 /* Pods-LBShoppingApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp.release.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp/Pods-LBShoppingApp.release.xcconfig"; sourceTree = "<group>"; };
 		3712140AC27F4CB7A8CB42E1 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		3D2EF7ED6FF74DDCAAF80D13 /* SF-Pro-Display-Ultralight.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Ultralight.otf"; path = "../assets/fonts/SF-Pro-Display-Ultralight.otf"; sourceTree = "<group>"; };
 		3F3FB3F270E14A379F14CD05 /* SF-Pro-Display-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Regular.otf"; path = "../assets/fonts/SF-Pro-Display-Regular.otf"; sourceTree = "<group>"; };
-		3FCF7D797F6313BD660A7D25 /* libPods-LBShoppingApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBShoppingApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40A642C93E534D23852A2503 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		429910F111CD49259F2D5D1C /* Montserrat-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-MediumItalic.ttf"; path = "../assets/fonts/Montserrat-MediumItalic.ttf"; sourceTree = "<group>"; };
+		45493BC6D9D7CDC99AAC249A /* libPods-LBShoppingApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBShoppingApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B88EBF5FB62466E944C4AAE /* Montserrat-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-BoldItalic.ttf"; path = "../assets/fonts/Montserrat-BoldItalic.ttf"; sourceTree = "<group>"; };
 		4CC511D9ECA84A0696637D1A /* SF-Pro-Display-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-MediumItalic.otf"; path = "../assets/fonts/SF-Pro-Display-MediumItalic.otf"; sourceTree = "<group>"; };
+		4E4E2CA2859BAAFB3CFE389D /* Pods-LBShoppingApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp.debug.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp/Pods-LBShoppingApp.debug.xcconfig"; sourceTree = "<group>"; };
 		523F1AD783304A8DAF420268 /* Montserrat-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBoldItalic.ttf"; path = "../assets/fonts/Montserrat-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		596D5E64ACBBBFF489793F84 /* Pods-LBShoppingApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-tvOS/Pods-LBShoppingApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		5C0B9CEBF52146B3B727D693 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		5DC65634403543B6A6B0AFD4 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
-		60D8D55C27DE7B819C8BD2DB /* Pods-LBShoppingApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-tvOSTests/Pods-LBShoppingApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		6398B447E29473CCD5EDD584 /* Pods-LBShoppingApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-tvOS/Pods-LBShoppingApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		653C83732EE8F1B0B8AFE833 /* libPods-LBShoppingApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBShoppingApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D254F0E641943DBAB903DC7 /* sans-serif.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "sans-serif.ttf"; path = "../assets/fonts/sans-serif.ttf"; sourceTree = "<group>"; };
 		70041CB202BB4E74BDFFFE98 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		752FC417FC40C190B3A088A3 /* Pods-LBShoppingApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp.debug.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp/Pods-LBShoppingApp.debug.xcconfig"; sourceTree = "<group>"; };
 		77783304007843A087F4CC1D /* Avenir-Book.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Book.ttf"; path = "../assets/fonts/Avenir-Book.ttf"; sourceTree = "<group>"; };
 		7B5D2022421746F98A230413 /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBold.ttf"; path = "../assets/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
 		7D35536539554CD0B4D63712 /* Montserrat-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-LightItalic.ttf"; path = "../assets/fonts/Montserrat-LightItalic.ttf"; sourceTree = "<group>"; };
 		7E4B6FDC24DB4DB78CC02E60 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		86581A0999CE486DAFE56944 /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Italic.ttf"; path = "../assets/fonts/Montserrat-Italic.ttf"; sourceTree = "<group>"; };
 		8726249CB1CE4555B6D0B946 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Regular.ttf"; path = "../assets/fonts/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		8B3840C25E8447A987EF50E3 /* Tahoma.TTF */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Tahoma.TTF; path = ../assets/fonts/Tahoma.TTF; sourceTree = "<group>"; };
 		9251F343D1F6491B89C64BF3 /* SF-Pro-Display-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-LightItalic.otf"; path = "../assets/fonts/SF-Pro-Display-LightItalic.otf"; sourceTree = "<group>"; };
+		92D0391B8556CE8AAFD31660 /* Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-LBShoppingAppTests/Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9341B9D1CC204300A64AF735 /* SF-Pro-Display-BlackItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-BlackItalic.otf"; path = "../assets/fonts/SF-Pro-Display-BlackItalic.otf"; sourceTree = "<group>"; };
 		993C1D40355E4A90B79B11BE /* Avenir-LightOblique.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-LightOblique.ttf"; path = "../assets/fonts/Avenir-LightOblique.ttf"; sourceTree = "<group>"; };
 		A3C50401522A4B39B66DF3AE /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		A4077F25B3CCE82EE014E86D /* Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-LBShoppingAppTests/Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		A55987F277A144808FFCF787 /* Helvetica.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Helvetica.ttf; path = ../assets/fonts/Helvetica.ttf; sourceTree = "<group>"; };
 		A63DAC39731F4FEBB19F8BA7 /* Avenir.ttc */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Avenir.ttc; path = ../assets/fonts/Avenir.ttc; sourceTree = "<group>"; };
 		AAA5848E0822485A8639302E /* Montserrat-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-BlackItalic.ttf"; path = "../assets/fonts/Montserrat-BlackItalic.ttf"; sourceTree = "<group>"; };
 		AC5CEA592EB049CF945C1F1C /* SF-Pro-Display-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-ThinItalic.otf"; path = "../assets/fonts/SF-Pro-Display-ThinItalic.otf"; sourceTree = "<group>"; };
 		AF5A3421B3E947E3BF16DB4A /* SF-Pro-Display-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Medium.otf"; path = "../assets/fonts/SF-Pro-Display-Medium.otf"; sourceTree = "<group>"; };
-		AF69E12A289FC323871A981C /* Pods-LBShoppingApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp.release.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp/Pods-LBShoppingApp.release.xcconfig"; sourceTree = "<group>"; };
-		AFFF5F8729D316F1E29E2A64 /* Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-LBShoppingAppTests/Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		B110ACBF882C42FDA9DA78DD /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		B25D7BA00F9A43CDB3446E6F /* Avenir-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Medium.ttf"; path = "../assets/fonts/Avenir-Medium.ttf"; sourceTree = "<group>"; };
-		B71ADD87DF121F34E8512272 /* Pods-LBShoppingApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-tvOSTests/Pods-LBShoppingApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BC51FA7B5D4A468289197123 /* Avenir-Roman.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Roman.ttf"; path = "../assets/fonts/Avenir-Roman.ttf"; sourceTree = "<group>"; };
 		BEF22183634C49DEAAF70248 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		CA0F24EDA1D544B999B8FA53 /* Avenir-Heavy.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Heavy.ttf"; path = "../assets/fonts/Avenir-Heavy.ttf"; sourceTree = "<group>"; };
 		CA387B091CB845DA8A8249BD /* SF-Pro-Display-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Black.otf"; path = "../assets/fonts/SF-Pro-Display-Black.otf"; sourceTree = "<group>"; };
 		CA6D637DCA58497082C42C96 /* Avenir-MediumOblique.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-MediumOblique.ttf"; path = "../assets/fonts/Avenir-MediumOblique.ttf"; sourceTree = "<group>"; };
+		CE3EFDA2BB1820CE7F861E8A /* libPods-LBShoppingApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBShoppingApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CED7D6C6C4E9D3E1381F7C33 /* libPods-LBShoppingApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBShoppingApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2FAC45F6EBB469EA9864592 /* SF-Pro-Display-RegularItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-RegularItalic.otf"; path = "../assets/fonts/SF-Pro-Display-RegularItalic.otf"; sourceTree = "<group>"; };
-		D4B7B0E12617348C2BD564CE /* Pods-LBShoppingApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LBShoppingApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-LBShoppingApp-tvOS/Pods-LBShoppingApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		D5117D9204B004AD25615841 /* libPods-LBShoppingApp-LBShoppingAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBShoppingApp-LBShoppingAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6C49B5519FB4A5690F30F5F /* SF-Pro-Display-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Bold.otf"; path = "../assets/fonts/SF-Pro-Display-Bold.otf"; sourceTree = "<group>"; };
 		DC091FAE73134514BC05C841 /* Montserrat-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Thin.ttf"; path = "../assets/fonts/Montserrat-Thin.ttf"; sourceTree = "<group>"; };
 		E1192D4D2A85445B8591783F /* Montserrat-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Light.ttf"; path = "../assets/fonts/Montserrat-Light.ttf"; sourceTree = "<group>"; };
@@ -171,10 +181,10 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		ED3B651B3A3D448BBD742751 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		EE4662224B5A42F59FFDA4BF /* Arial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Arial.ttf; path = ../assets/fonts/Arial.ttf; sourceTree = "<group>"; };
 		EEC769731C584E6E817840D6 /* Montserrat-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ThinItalic.ttf"; path = "../assets/fonts/Montserrat-ThinItalic.ttf"; sourceTree = "<group>"; };
 		EFD99EF898A24DE0A1003FDF /* Montserrat-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Black.ttf"; path = "../assets/fonts/Montserrat-Black.ttf"; sourceTree = "<group>"; };
 		F13393C540544F5DAA36D5FB /* SF-Pro-Display-Heavy.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Heavy.otf"; path = "../assets/fonts/SF-Pro-Display-Heavy.otf"; sourceTree = "<group>"; };
-		F306253565E14F62ECFA70F9 /* libPods-LBShoppingApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LBShoppingApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3D0F1079F204667AD5AA1BB /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		F6F9A92A965C48A39B16FF07 /* SF-Pro-Display-HeavyItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-HeavyItalic.otf"; path = "../assets/fonts/SF-Pro-Display-HeavyItalic.otf"; sourceTree = "<group>"; };
 		FC11E22506034425BBD2AF5C /* Avenir-BlackOblique.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-BlackOblique.ttf"; path = "../assets/fonts/Avenir-BlackOblique.ttf"; sourceTree = "<group>"; };
@@ -188,7 +198,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E08D90CED2EF8D15E3D29558 /* libPods-LBShoppingApp-LBShoppingAppTests.a in Frameworks */,
+				20F6DCB6FB0BB4E4B9521476 /* libPods-LBShoppingApp-LBShoppingAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,7 +206,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9E6C2F003124919BC076A1F /* libPods-LBShoppingApp.a in Frameworks */,
+				DA443769041F7EF99F686612 /* libPods-LBShoppingApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +214,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1584F6E483FC5A68BF31BDF2 /* libPods-LBShoppingApp-tvOS.a in Frameworks */,
+				46586D51D13D99E5FC977EB5 /* libPods-LBShoppingApp-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,7 +222,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C75F2D25E337C41A7E33E4A7 /* libPods-LBShoppingApp-tvOSTests.a in Frameworks */,
+				23FE6DE5D45BCD4637D8C6A0 /* libPods-LBShoppingApp-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,10 +265,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				3FCF7D797F6313BD660A7D25 /* libPods-LBShoppingApp.a */,
-				25F270170B4898FA9B567A55 /* libPods-LBShoppingApp-LBShoppingAppTests.a */,
-				653C83732EE8F1B0B8AFE833 /* libPods-LBShoppingApp-tvOS.a */,
-				F306253565E14F62ECFA70F9 /* libPods-LBShoppingApp-tvOSTests.a */,
+				CE3EFDA2BB1820CE7F861E8A /* libPods-LBShoppingApp.a */,
+				D5117D9204B004AD25615841 /* libPods-LBShoppingApp-LBShoppingAppTests.a */,
+				45493BC6D9D7CDC99AAC249A /* libPods-LBShoppingApp-tvOS.a */,
+				CED7D6C6C4E9D3E1381F7C33 /* libPods-LBShoppingApp-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -300,14 +310,14 @@
 		B0567CC92E1511C1D61D0094 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				752FC417FC40C190B3A088A3 /* Pods-LBShoppingApp.debug.xcconfig */,
-				AF69E12A289FC323871A981C /* Pods-LBShoppingApp.release.xcconfig */,
-				AFFF5F8729D316F1E29E2A64 /* Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig */,
-				A4077F25B3CCE82EE014E86D /* Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig */,
-				D4B7B0E12617348C2BD564CE /* Pods-LBShoppingApp-tvOS.debug.xcconfig */,
-				6398B447E29473CCD5EDD584 /* Pods-LBShoppingApp-tvOS.release.xcconfig */,
-				B71ADD87DF121F34E8512272 /* Pods-LBShoppingApp-tvOSTests.debug.xcconfig */,
-				60D8D55C27DE7B819C8BD2DB /* Pods-LBShoppingApp-tvOSTests.release.xcconfig */,
+				4E4E2CA2859BAAFB3CFE389D /* Pods-LBShoppingApp.debug.xcconfig */,
+				356EBB2750F56D57F85DFFA7 /* Pods-LBShoppingApp.release.xcconfig */,
+				92D0391B8556CE8AAFD31660 /* Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig */,
+				12C08B6199D1E73ACF2471E1 /* Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig */,
+				596D5E64ACBBBFF489793F84 /* Pods-LBShoppingApp-tvOS.debug.xcconfig */,
+				1FB52DDDF15F6AD327CD20E0 /* Pods-LBShoppingApp-tvOS.release.xcconfig */,
+				0050920CCB743D8325288C22 /* Pods-LBShoppingApp-tvOSTests.debug.xcconfig */,
+				33DD7C04318DCF42941096DE /* Pods-LBShoppingApp-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -380,6 +390,11 @@
 				5DC65634403543B6A6B0AFD4 /* Octicons.ttf */,
 				FC2CAE22908A4A6580F60DB8 /* SimpleLineIcons.ttf */,
 				40A642C93E534D23852A2503 /* Zocial.ttf */,
+				EE4662224B5A42F59FFDA4BF /* Arial.ttf */,
+				A55987F277A144808FFCF787 /* Helvetica.ttf */,
+				6D254F0E641943DBAB903DC7 /* sans-serif.ttf */,
+				8B3840C25E8447A987EF50E3 /* Tahoma.TTF */,
+				125910B40BC44E099ECD8330 /* Verdana.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -391,11 +406,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "LBShoppingAppTests" */;
 			buildPhases = (
-				A7BD96E7E4C19BC2273803DB /* [CP] Check Pods Manifest.lock */,
+				7141F51AFC44CAB8C86C2640 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				986B0384C620F9F13AB5ECDC /* [CP] Copy Pods Resources */,
+				1A1EC051863C81DACA9D5661 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -411,13 +426,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "LBShoppingApp" */;
 			buildPhases = (
-				2D2D71D3A07704115032C6A5 /* [CP] Check Pods Manifest.lock */,
+				18AA42C06CE45E9A3AFB9414 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				4D1AC1C743D84A291AA28D5B /* [CP] Copy Pods Resources */,
+				663171ECE294130E861C8366 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -432,7 +447,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "LBShoppingApp-tvOS" */;
 			buildPhases = (
-				C3A38D9AC8945C7E46DAAEF4 /* [CP] Check Pods Manifest.lock */,
+				C52E57C802E2E261FC7ACA01 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -452,7 +467,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "LBShoppingApp-tvOSTests" */;
 			buildPhases = (
-				C0A86CB81DC0F3080573B2BE /* [CP] Check Pods Manifest.lock */,
+				63F0384F1A795BFAEE112B8E /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -577,6 +592,11 @@
 				753DC4A575F44055A8EE2977 /* SF-Pro-Display-ThinItalic.otf in Resources */,
 				CCE8D251C32948BDACB57B27 /* SF-Pro-Display-Ultralight.otf in Resources */,
 				92ED0A584E6042B8B73C2D6F /* SF-Pro-Display-UltralightItalic.otf in Resources */,
+				4B3C557D6A1C4286B65EF327 /* Arial.ttf in Resources */,
+				98277CF02FC14C5D8387566F /* Helvetica.ttf in Resources */,
+				3353174E6C364AA5A169819A /* sans-serif.ttf in Resources */,
+				D37D022AF7BE4B6DBA2AEEE0 /* Tahoma.TTF in Resources */,
+				6FD48545E82E4A7ABBB50AF2 /* Verdana.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -612,21 +632,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		2D2D71D3A07704115032C6A5 /* [CP] Check Pods Manifest.lock */ = {
+		18AA42C06CE45E9A3AFB9414 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -648,55 +654,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4D1AC1C743D84A291AA28D5B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-LBShoppingApp/Pods-LBShoppingApp-resources.sh",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LBShoppingApp/Pods-LBShoppingApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		986B0384C620F9F13AB5ECDC /* [CP] Copy Pods Resources */ = {
+		1A1EC051863C81DACA9D5661 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -744,29 +702,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LBShoppingApp-LBShoppingAppTests/Pods-LBShoppingApp-LBShoppingAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A7BD96E7E4C19BC2273803DB /* [CP] Check Pods Manifest.lock */ = {
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
+			name = "Bundle React Native Code And Images";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-LBShoppingApp-LBShoppingAppTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		C0A86CB81DC0F3080573B2BE /* [CP] Check Pods Manifest.lock */ = {
+		63F0384F1A795BFAEE112B8E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -788,7 +738,77 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C3A38D9AC8945C7E46DAAEF4 /* [CP] Check Pods Manifest.lock */ = {
+		663171ECE294130E861C8366 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-LBShoppingApp/Pods-LBShoppingApp-resources.sh",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-LBShoppingApp/Pods-LBShoppingApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7141F51AFC44CAB8C86C2640 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LBShoppingApp-LBShoppingAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C52E57C802E2E261FC7ACA01 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -915,7 +935,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AFFF5F8729D316F1E29E2A64 /* Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig */;
+			baseConfigurationReference = 92D0391B8556CE8AAFD31660 /* Pods-LBShoppingApp-LBShoppingAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -938,7 +958,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A4077F25B3CCE82EE014E86D /* Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig */;
+			baseConfigurationReference = 12C08B6199D1E73ACF2471E1 /* Pods-LBShoppingApp-LBShoppingAppTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -958,7 +978,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 752FC417FC40C190B3A088A3 /* Pods-LBShoppingApp.debug.xcconfig */;
+			baseConfigurationReference = 4E4E2CA2859BAAFB3CFE389D /* Pods-LBShoppingApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -985,7 +1005,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AF69E12A289FC323871A981C /* Pods-LBShoppingApp.release.xcconfig */;
+			baseConfigurationReference = 356EBB2750F56D57F85DFFA7 /* Pods-LBShoppingApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1006,7 +1026,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D4B7B0E12617348C2BD564CE /* Pods-LBShoppingApp-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 596D5E64ACBBBFF489793F84 /* Pods-LBShoppingApp-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1034,7 +1054,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6398B447E29473CCD5EDD584 /* Pods-LBShoppingApp-tvOS.release.xcconfig */;
+			baseConfigurationReference = 1FB52DDDF15F6AD327CD20E0 /* Pods-LBShoppingApp-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1062,7 +1082,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B71ADD87DF121F34E8512272 /* Pods-LBShoppingApp-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 0050920CCB743D8325288C22 /* Pods-LBShoppingApp-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1089,7 +1109,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60D8D55C27DE7B819C8BD2DB /* Pods-LBShoppingApp-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 33DD7C04318DCF42941096DE /* Pods-LBShoppingApp-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;

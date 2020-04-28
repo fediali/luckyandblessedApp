@@ -7,6 +7,8 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  BackHandler,
+  Alert
 } from 'react-native';
 
 import styles from './Styles/Style';
@@ -15,7 +17,7 @@ import SignatureCapture from 'react-native-signature-capture';
 import { Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
-
+import DeleteData from '../reusableComponents/API/DeleteData'
 import LogoSmall from './Styles/LogoSmall';
 import { call } from 'react-native-reanimated';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
@@ -55,10 +57,42 @@ class TaxID extends Component {
       defaults: null
     };
 
+  }
+
+  handleBackPress=()=>{
+    DeleteData("http://dev.landbw.co/api/users", this.props.route.params.user_id)
+    BackHandler.exitApp()
+  }
+
+  backAction = () => {
+    console.log(this.props.navigation)
+    if (this.props.navigation.isFocused()) {
+        Alert.alert("Hold on!", "Are you sure you want to go back?", [
+            {
+                text: "Cancel",
+                onPress: () => null,
+                style: "cancel"
+            },
+            { text: "YES", onPress: this.handleBackPress }
+        ]);
+        return true;
+    }
+};
+
+componentWillUnmount() {
+    this.backHandler.remove();
+}
+
+  componentDidMount(){
+
     RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
       DEFAULTS_OBJ = JSON.parse(defaults)
     })
 
+    this.backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.backAction
+  );
   }
 
   updateSize = (height) => {
@@ -86,7 +120,7 @@ class TaxID extends Component {
   _onSaveEvent = (result) => {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
-    this.setState({ signImage: "data:image/png;base64," + result.encoded })
+    this.setState({ signImage: "data:image/png;base64," + result.encoded.toString() })
     // console.log(result.encoded);
   }
   _onDragEvent() {
@@ -118,9 +152,9 @@ class TaxID extends Component {
       address2: this.state.address2,
       tax_number: this.state.texasSales,
       registration_number: this.state.outOfState,
-      mexico_registration: this.state.mexicoRegistration,
       products_description: this.state.description,
       business_description: this.state.description,
+      title: this.state.nameOfPurchase,
       date: today,
       signature: this.state.signImage,
       user_id: this.props.route.params.user_id.toString(), //CHECK THIS
@@ -137,7 +171,7 @@ class TaxID extends Component {
       console.log(response)
       Toast.show('Registered Successfully');
     this.props.navigation.navigate("SignIn") //Passing user Name
-    }).catch(err=>{console.log(err)})
+    }).catch(err=>{throw err})
     
   }
   isValid() {

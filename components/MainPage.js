@@ -65,6 +65,8 @@ class MainPage extends Component {
 
     }
 
+    //FIXME: This doesn't works when the a new user is registered and then signs in
+
     backAction = () => {
         console.log(this.props.navigation)
         if (this.props.navigation.isFocused()) {
@@ -103,14 +105,6 @@ class MainPage extends Component {
 
                     //Adding "All" to categories response
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
-<<<<<<< HEAD
-                    console.log(responses[1])
-                    this.setState({
-                        isReady: true,
-                        collections: responses[0].home.logged.sliders,
-                        categoryList: responses[1].categories
-                    })
-=======
                     RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then(value => {
                         console.log("Product History: ", value)
                         this.setState({
@@ -130,7 +124,6 @@ class MainPage extends Component {
                     )
                    
 
->>>>>>> 19546b82127b5e80603ffee07a0fe337007f37bd
                 }).catch(ex => { console.log("Inner Promise", ex) })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.props.navigation.navigate("SignIn") })
 
@@ -219,24 +212,8 @@ class MainPage extends Component {
                             extraData={this.selectedCategory}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
-<<<<<<< HEAD
-                                <View style={{height: Height * 0.028 , marginVertical: 10 }}>
-                                    {this.state.selectedCategory == index ?
-                                        < TouchableOpacity onPress={() => {
-                                            this.onCategorySelect(item.category_id, item.category)
-                                        }}>
-                                            <Text style={[styles.buttonText, { marginHorizontal: 10, color: "#2967ff" }]}>{item.category}</Text>
-                                        </TouchableOpacity>
-                                        :
-                                        < TouchableOpacity onPress={() => { this.onCategorySelect(item.category_id, item.category) }}>
-                                            <Text style={[styles.buttonText, { marginHorizontal: 10 }]}>{item.category}</Text>
-                                        </TouchableOpacity>
-                                    }
-                                </View>
-=======
                                 <HeaderHorizontalListItem cid={this.state.selectedCategory} index={index} item={item} onCategorySelect={this.onCategorySelect} />
 
->>>>>>> 19546b82127b5e80603ffee07a0fe337007f37bd
                             )}
 
                         />
