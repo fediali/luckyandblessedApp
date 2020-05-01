@@ -87,8 +87,10 @@ class ProfileText extends PureComponent {
                   style={[styles.valueText, styles.textInput]}
                   multiline={true}
                   numberOfLines={4}
+                  returnKeyType="done" //FIXME: Check why done is not apperating on keyboard
                   defaultValue={this.props.valueText}
                   onChangeText={text => this.textChanged(text)}
+                  onEndEditing={this.checkButtonPressed}
                 />
               </View>
             )}
@@ -102,11 +104,7 @@ class ProfileText extends PureComponent {
                 <Icon size={20} name="edit" type="feather" />
               </TouchableOpacity>
               ) : (
-                <TouchableOpacity
-                 onPress={this.checkButtonPressed}
-                style={styles.iconView}>
-                <Icon size={20} name="checksquare" type="antdesign" />
-              </TouchableOpacity>
+               <View style={styles.iconView}></View>
               )
               }
             </View>

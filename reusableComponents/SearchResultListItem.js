@@ -9,20 +9,23 @@ import {
 import FastImage from 'react-native-fast-image'
 
 export default class ProductPageSimilarListItem extends PureComponent {
+
+  navigateToProductPage=()=>{
+    this.props.navigation.push("ProductPage", { pid: [this.props.pid], cname:"//TODO" }) 
+}
     render() {
         return (
-            <TouchableOpacity  activeOpacity={0.8}
+            <TouchableOpacity  activeOpacity={0.8} onPress={this.navigateToProductPage}
                 style={innerStyles.touchStyle}>
                 <View style={innerStyles.touchView}>
                   <FastImage
                     style={[innerStyles.thumbnailImage]}
-                    resizeMode="contain"
-                    source={require('../static/item_cart1.png')}
+                    source={this.props.imageUrl}
                   />
                   <View style={innerStyles.touchInnerView}>
-                    <Text style={innerStyles.itemNameText}>{this.props.item.itemName}</Text>
-                    <Text style={[innerStyles.categoriesText]}>{this.props.item.category}</Text>
-                    <Text style={[innerStyles.priceText]}>{this.props.item.totalPrice}</Text>
+                    <Text style={[innerStyles.itemNameText, innerStyles.limitWidth]}>{this.props.name1}</Text>
+                    <Text style={[innerStyles.categoriesText]}>{this.props.name2}</Text>
+                    <Text style={[innerStyles.priceText]}>{this.props.price1}</Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -68,6 +71,8 @@ const innerStyles = StyleSheet.create({
       color: '#2d2d2f',
       marginTop: 6,
     },
+    limitWidth: { maxWidth: Width * 0.60 },
+
 })
 
 

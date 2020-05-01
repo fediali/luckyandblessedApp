@@ -16,6 +16,7 @@ import FastImage from 'react-native-fast-image'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 const STORAGE_DEFAULTS="defaults"
+const baseUrl = "http://dev.landbw.co/";
 
 export default class WalkThrough extends Component {
   constructor() {
@@ -43,7 +44,7 @@ export default class WalkThrough extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       var promises = [];
-      promises.push(GetData('http://dev.landbw.co/api/mobile'));
+      promises.push(GetData(baseUrl + 'api/mobile'));
       Promise.all(promises)
         .then((promiseResponses) => {
           Promise.all(promiseResponses.map((res) => res.json()))
