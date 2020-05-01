@@ -191,7 +191,19 @@ class CategoriesProduct extends Component {
         )
         return listFooter
     }
+    renderSingleItem = ({ item }) => {
+        return (
+            <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
+                imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
+        )
+    }
 
+    renderGridItems = ({ item }) => {
+        return (
+            <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
+                imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
+        )
+    }
     render() {
         // if (!this.state.isReady) {
         //     return (
@@ -218,7 +230,7 @@ class CategoriesProduct extends Component {
 
                             <Text style={styles.sortingText}>Sorting</Text>
                             <View style={styles.rightImages}>
-                                <TouchableOpacity style={styles.paddingLeftView} onPress={() => { this.setState({ singleItem: false }) }}>
+                                <TouchableOpacity style={styles.paddingLeftView} activeOpacity={0.99} onPress={() => { this.setState({ singleItem: false }) }}>
                                     {this.state.singleItem ?
                                         <Icon
                                             size={25}
@@ -236,7 +248,7 @@ class CategoriesProduct extends Component {
                                     }
 
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.paddingLeftView} onPress={() => { this.setState({ singleItem: true }) }}>
+                                <TouchableOpacity style={styles.paddingLeftView} activeOpacity={0.99} onPress={() => { this.setState({ singleItem: true }) }}>
                                     {this.state.singleItem ?
 
                                         <Icon
@@ -272,14 +284,14 @@ class CategoriesProduct extends Component {
                                 data={this.state.products}
                                 contentContainerStyle={styles.container}
                                 keyExtractor={(item, index) => item.product_id}
-                                renderItem={({ item }) => (
-                                    <CategoriesProductListSingleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
-                                )}
+                                renderItem={this.renderSingleItem}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 onEndReached={this.handleLoadMore}
                                 onEndReachedThreshold={5}
                                 ListFooterComponent={this.ListFooter}
+                                maxToRenderPerBatch={4}
+                                initialNumToRender={2}
+                                windowSize={8}
 
                             /> :
                             /*
@@ -296,15 +308,16 @@ class CategoriesProduct extends Component {
                                 contentContainerStyle={styles.container}
                                 numColumns={2}
                                 keyExtractor={(item, index) => item.product_id}
-                                renderItem={({ item }) => (
-                                    <CategoriesProductListDoubleItem key={item.product_id} pid={item.product_id} cname={item.cname} navigation={this.props.navigation}
-                                        imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
-                                )}
+                                renderItem={this.renderGridItems}
                                 ItemSeparatorComponent={this.renderSeparator}
                                 columnWrapperStyle={styles.multiRowStyling}
                                 onEndReached={this.handleLoadMore}
                                 onEndReachedThreshold={5}
                                 ListFooterComponent={this.ListFooter}
+                                maxToRenderPerBatch={6}
+                                initialNumToRender={6}
+                                windowSize={12}
+
 
                             />
 

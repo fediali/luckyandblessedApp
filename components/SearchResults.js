@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Icon} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Icon } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import SearchResultListItem from '../reusableComponents/SearchResultListItem';
 const baseUrl = 'http://dev.landbw.co/';
 const STORAGE_DEFAULTS = "defaults"
@@ -36,12 +36,12 @@ export default class SearchResults extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
-          DEFAULTS_OBJ = JSON.parse(defaults)
+        DEFAULTS_OBJ = JSON.parse(defaults)
       })
-  })
+    })
   }
 
 
@@ -67,72 +67,72 @@ export default class SearchResults extends Component {
     );
     let itr = this.state.iteratedPage
     Promise.all(promises).then((promiseResponses) => {
-        Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-          console.log(responses[0].products.length)
-            this.setState({
-                totalProducts: parseFloat(responses[0].params.total_items).toFixed(0),
-                totalItemsPerRequest: parseFloat(responses[0].params.items_per_page).toFixed(0),
+      Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+        console.log(responses[0].products.length,"length of")
+        async function parseProducts() {
+          const tempProducts = []
+          for (let i = 0; i < responses[0].products.length; i++) {
+            if (responses[0].products[i].main_pair == null) {console.log("Tabahi");continue;}
+            // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
+
+            await tempProducts.push({
+
+              product: responses[0].products[i].product,
+              product_id: responses[0].products[i].product_id,
+              price: parseFloat(responses[0].products[i].price).toFixed(2),
+              base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
+              imageUrl: responses[0].products[i].main_pair.detailed.image_path,
+              product_brand: responses[0].products[i].brand ? responses[0].products[i].brand : DEFAULTS_OBJ.brand, //TODO: should come from defaults
             })
-            async function parseProducts() {
-                const tempProducts = []
-                for (let i = 0; i < responses[0].products.length; i++) {
-                    if (responses[0].products[i].main_pair == null) continue;
-                    // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
+          }
 
-                    await tempProducts.push({
+          return tempProducts
+        }
+        parseProducts().then((prod) => {
+          console.log("PPP",prod.length)
+          this.setState({
+            totalProducts: parseFloat(responses[0].params.total_items).toFixed(0),
+            totalItemsPerRequest: parseFloat(responses[0].params.items_per_page).toFixed(0),
+            isReady: true,
+            products: [...this.state.products, ...prod],
+            isLoadingMoreListData: false,
+          })
+        })
 
-                        product: responses[0].products[i].product,
-                        product_id: responses[0].products[i].product_id,
-                        price: parseFloat(responses[0].products[i].price).toFixed(2),
-                        base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
-                        imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-                        product_brand: responses[0].products[i].brand ? responses[0].products[i].brand : DEFAULTS_OBJ.brand, //TODO: should come from defaults
-                    })
-                }
-
-                return tempProducts
-            }
-            parseProducts().then((prod) => {
-                this.setState({
-                    isReady: true,
-                    products: [...this.state.products, ...prod],
-                    isLoadingMoreListData: false,
-                })
-            })
-
-        }).catch(ex => { console.log("Exception: Inner Promise", ex) })
+      }).catch(ex => { console.log("Exception: Inner Promise", ex) })
     }).catch(ex => { console.log("Exception: Outer Promise", ex) })
 
   };
 
   handleLoadMore = () => {
     if (this.state.iteratedPage < Math.ceil(this.state.totalProducts / this.state.totalItemsPerRequest)) {//59/10 = 5.9~6
-        console.log("Getting more data")
-        this.setState({
-            iteratedPage: this.state.iteratedPage + 1,
-            isLoadingMoreListData: true,
-        }, () => this.searchText()
+      console.log("Getting more data")
+      this.setState({
+        iteratedPage: this.state.iteratedPage + 1,
+        isLoadingMoreListData: true,
+      }, () => this.searchText()
 
-        )
-        
+      )
+
     }
-}
+  }
 
-  
+
   ListFooter = () => {
 
     var listFooter = (
-        (this.state.isLoadingMoreListData) ?
-            <View style={styles.listFooter}>
-                <ActivityIndicator size="large" />
-            </View>
-            :
-            null
+      (this.state.isLoadingMoreListData) ?
+        <View style={styles.listFooter}>
+          <ActivityIndicator size="large" />
+        </View>
+        :
+        null
     )
     return listFooter
-}
+  }
 
   render() {
+    console.log("MYNUM", this.state.products.length)
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Search" navigation={this.props.navigation} />
@@ -151,8 +151,8 @@ export default class SearchResults extends Component {
               style={styles.inputText}
               placeholder="Search"
               returnKeyType="search"
-              onFocus={this.searchTextBoxClicked}
-              onChangeText={(searchText) => this.setState({searchText})}
+              // onFocus={this.searchTextBoxClicked}
+              onChangeText={(searchText) => this.setState({ searchText })}
               onEndEditing={this.searchText}
             />
           </View>
@@ -161,14 +161,14 @@ export default class SearchResults extends Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.marTop15}
             data={this.state.products}
-            keyExtractor={(item, index) => item.itemNum}
-            renderItem={({item}) => (
-            <SearchResultListItem 
-              key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-              imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand}  />
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <SearchResultListItem
+                key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
+                imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} />
             )}
             ItemSeparatorComponent={this.renderSeparator}
-            onEndReachedThreshold={0.1} //FIXME: Some Problem with this
+            onEndReachedThreshold={0.3} //FIXME: Some Problem with this
             onEndReached={this.handleLoadMore}
             ListFooterComponent={this.ListFooter}
           />
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     marginTop: 6,
   },
-  marTop15: {marginTop: 15},
-  marBottom60: {marginBottom: 60},
-  seperator: {paddingBottom: 20},
+  marTop15: { marginTop: 15 },
+  marBottom60: { marginBottom: 60 },
+  seperator: { paddingBottom: 20 },
 });
