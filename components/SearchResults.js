@@ -61,6 +61,7 @@ export default class SearchResults extends Component {
   }
 
   searchText = () => {
+    console.log("WAALLL")
     var promises = [];
     promises.push(
       GetData(baseUrl + `api/products?q=${this.state.searchText}&search_app=Y&page=` + this.state.iteratedPage),
@@ -68,11 +69,11 @@ export default class SearchResults extends Component {
     let itr = this.state.iteratedPage
     Promise.all(promises).then((promiseResponses) => {
       Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-        console.log(responses[0].products.length,"length of")
+        console.log(responses[0].products.length, "length of")
         async function parseProducts() {
           const tempProducts = []
           for (let i = 0; i < responses[0].products.length; i++) {
-            if (responses[0].products[i].main_pair == null) {console.log("Tabahi");continue;}
+            if (responses[0].products[i].main_pair == null) { console.log("Tabahi"); continue; }
             // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
 
             await tempProducts.push({
@@ -89,7 +90,7 @@ export default class SearchResults extends Component {
           return tempProducts
         }
         parseProducts().then((prod) => {
-          console.log("PPP",prod.length)
+          console.log("PPP", prod.length)
           this.setState({
             totalProducts: parseFloat(responses[0].params.total_items).toFixed(0),
             totalItemsPerRequest: parseFloat(responses[0].params.items_per_page).toFixed(0),
@@ -105,28 +106,33 @@ export default class SearchResults extends Component {
   };
 
   handleLoadMore = () => {
-    if (this.state.iteratedPage < Math.ceil(this.state.totalProducts / this.state.totalItemsPerRequest)) {//59/10 = 5.9~6
-      console.log("Getting more data")
-      this.setState({
-        iteratedPage: this.state.iteratedPage + 1,
-        isLoadingMoreListData: true,
-      }, () => this.searchText()
 
-      )
-
+    if (this.state.isLoadingMoreListData == false) {
+      if (this.state.iteratedPage < Math.ceil(this.state.totalProducts / this.state.totalItemsPerRequest)) {//59/10 = 5.9~6
+        console.log("Getting more data")
+        this.setState({
+          iteratedPage: this.state.iteratedPage + 1,
+          isLoadingMoreListData: true,
+        }, () => this.searchText()
+        )
+      }
     }
+
+
   }
 
 
   ListFooter = () => {
 
     var listFooter = (
-      (this.state.isLoadingMoreListData) ?
-        <View style={styles.listFooter}>
+      <View style={styles.listFooter}>
+
+        {this.state.isLoadingMoreListData ?
           <ActivityIndicator size="large" />
-        </View>
         :
         null
+        }
+    </View>
     )
     return listFooter
   }
@@ -151,7 +157,7 @@ export default class SearchResults extends Component {
               style={styles.inputText}
               placeholder="Search"
               returnKeyType="search"
-              // onFocus={this.searchTextBoxClicked}
+              onFocus={this.searchTextBoxClicked}
               onChangeText={(searchText) => this.setState({ searchText })}
               onEndEditing={this.searchText}
             />
@@ -168,11 +174,11 @@ export default class SearchResults extends Component {
                 imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} />
             )}
             ItemSeparatorComponent={this.renderSeparator}
-            onEndReachedThreshold={0.3} //FIXME: Some Problem with this
+            onEndReachedThreshold={0.01}
             onEndReached={this.handleLoadMore}
             ListFooterComponent={this.ListFooter}
+
           />
-          <View style={styles.marBottom60}></View>
         </View>
         <Footer navigation={this.props.navigation} />
       </SafeAreaView>
@@ -189,6 +195,7 @@ const styles = StyleSheet.create({
   },
   mainView: {
     marginHorizontal: 20,
+
   },
   innerView: {
     marginVertical: 9.8,
@@ -209,6 +216,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 18,
     marginTop: 4,
+    marginBottom:8
     // height: Height * 0.044
   },
   thumbnailImage: {
@@ -237,6 +245,13 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   marTop15: { marginTop: 15 },
-  marBottom60: { marginBottom: 60 },
+  marBottom60: {
+    marginBottom: 100,
+
+  },
+  listFooter: {
+    marginBottom: 108,
+    height: 100
+  },
   seperator: { paddingBottom: 20 },
 });
