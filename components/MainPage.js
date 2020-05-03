@@ -244,7 +244,7 @@ class MainPage extends Component {
                                 >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        resizeMode='contain'
+                                        // resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[0].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].product}</Text>
@@ -257,7 +257,7 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        resizeMode='contain'
+                                        // resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[1].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
@@ -271,7 +271,7 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        resizeMode='contain'
+                                        // resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[2].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
@@ -284,7 +284,7 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        resizeMode='contain'
+                                        // resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[3].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
@@ -492,6 +492,7 @@ const innerStyles = StyleSheet.create({
         width: Width * 0.427,
         height: Height * 0.28,
         borderRadius: 6,
+        backgroundColor: '#f6f6f6'
     },
     gridItemNameAndPriceText: {
         fontFamily: "Montserrat-Medium",

@@ -29,7 +29,7 @@ export default class MainPageHistoryListItem extends PureComponent {
                             <FastImage
                                 style={innerStyles.trendingImage}
                                 source={{ uri: val.image }}
-                                resizeMode='contain'
+                                // resizeMode='contain'
                             />
                             <View style={innerStyles.innerInnerTrendingView}>
                                 <Text style={innerStyles.gridItemNameAndPriceText}>{val.product}</Text>

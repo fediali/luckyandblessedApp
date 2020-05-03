@@ -82,7 +82,7 @@ export default class SearchResults extends Component {
               price: parseFloat(responses[0].products[i].price).toFixed(2),
               base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
               imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-              product_brand: responses[0].products[i].brand ? responses[0].products[i].brand : DEFAULTS_OBJ.brand, //TODO: should come from defaults
+              product_brand: responses[0].products[i].brand ? responses[0].products[i].brand : DEFAULTS_OBJ.brand, 
             })
           }
 
@@ -161,14 +161,14 @@ export default class SearchResults extends Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.marTop15}
             data={this.state.products}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item, index) => item.product_id}
             renderItem={({ item }) => (
               <SearchResultListItem
                 key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
                 imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} />
             )}
             ItemSeparatorComponent={this.renderSeparator}
-            onEndReachedThreshold={0.3} //FIXME: Some Problem with this
+            onEndReachedThreshold={0.3} 
             onEndReached={this.handleLoadMore}
             ListFooterComponent={this.ListFooter}
           />
