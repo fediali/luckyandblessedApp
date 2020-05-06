@@ -18,6 +18,7 @@
     "react": "16.11.0",
     "react-clone-referenced-element": "^1.1.0",
     "react-native": "0.62.0",
+    "react-native-code-push": "^6.2.0",
     "react-native-collapsible": "^1.5.2",
     "react-native-document-picker": "^3.3.3",
     "react-native-elements": "^1.2.7",
