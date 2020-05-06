@@ -73,7 +73,11 @@ class App extends Component {
     );
   }
 }
-App = codePush(App);
+
+const codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_START
+}
 
 
-export default App;
+
+export default codePush(codePushOptions)(App);
