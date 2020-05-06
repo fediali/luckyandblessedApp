@@ -25,8 +25,9 @@ import TrackOrders from "./components/TrackOrders"
 import SearchResults from "./components/SearchResults"
 import ProductPage from "./components/ProductPage"
 import MainPage from "./components/MainPage"
-
+import codePush from "react-native-code-push";
 import Filter from "./components/Filter"
+
 class App extends Component {
   render() {
     const Stack = createStackNavigator();
@@ -72,5 +73,7 @@ class App extends Component {
     );
   }
 }
+App = codePush(App);
+
 
 export default App;

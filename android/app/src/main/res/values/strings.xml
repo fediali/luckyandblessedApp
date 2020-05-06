@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LBShoppingApp</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">7glnrNbXgTC0sRIuuD7Gqt_fCkLOQzoxlFmVm</string>
 </resources>
