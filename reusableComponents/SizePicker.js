@@ -1,4 +1,4 @@
-import React, { useState, PureComponent } from 'react';
+import React, { useState, PureComponent,Component } from 'react';
 import {
     FlatList,
     StyleSheet,
@@ -50,56 +50,80 @@ class SizePicker extends PureComponent {
 
 
 
-    onSizeSelect = (item) => { //Inline function here
-        this.setState({
-            isChange: !this.state.isChange
+    onSizeSelect = (item) => {
+
+        let arr = [...this.state.sizeList]
+        arr = arr.map((val) => {
+            if (val.id == item.id) {
+                return { "size": val.size, "id": val.id, "isCheck": !val.isCheck }
+            }
+            else {
+                return { "size": val.size, "id": val.id, "isCheck": val.isCheck }
+            }
+
         })
-        // console.log(this.state.isChange);
-        this.state.sizeList[item.id].isCheck = !this.state.sizeList[item.id].isCheck
-        this.props.callbackFunction(this.state.sizeList)
+        this.setState({
+            sizeList: arr,
+        })
     }
 
-
+    renderItemSize = (item ) => {
+        return (
+            <TouchableOpacity
+            activeOpacity={0.99}
+                onPressIn={() => this.onSizeSelect(item)}
+            >
+                <SizePickerItem item={item} />
+            </TouchableOpacity>
+        )
+    }
     render() {
         //TODO: this I want to call only once, but it is getting called on every click
         return (
-            <View style={{ paddingBottom: 10 }}>
-                <FlatList
-                    keyExtractor={(item) => item.id}
-                    data={this.state.sizeList}
-                    numColumns={5}
-                    columnWrapperStyle={innerStyles.multiRowStyling}
-                    extraData={this.state.isChange}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            onPress={() => this.onSizeSelect(item)}
-                        >
-                            {item.isCheck ?
-                                <View style={[innerStyles.colorView, styles.backgroundColorCheck]}>
-                                    <View style={styles.textView}>
-                                        <Text style={styles.text}>{item.size}</Text>
-                                    </View>
-                                </View>
-                                :
-                                <View style={[innerStyles.colorView, styles.backgroundColorUnheck]}>
-                                    <View style={styles.textView}>
-                                        <Text style={styles.text}>{item.size}</Text>
-                                    </View>
-                                </View>
-                            }
-                        </TouchableOpacity>
-                    )}
+            <View style={innerStyles.mainView}>
+            {this.state.sizeList.map(this.renderItemSize)}
 
-                />
             </View>
         )
     }
 }
 
+class SizePickerItem extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+
+        if (nextProps.item.isCheck != this.props.item.isCheck)
+            return true;
+        return false
+    }
+    render() {
+        console.log(this.props.item)
+        return (
+            this.props.item.isCheck ?
+                <View style={[innerStyles.colorView, innerStyles.backgroundColorCheck]}>
+                    <View style={innerStyles.textView}>
+                        <Text style={innerStyles.text1}>{this.props.item.size}</Text>
+                    </View>
+                </View>
+                :
+                <View style={[innerStyles.colorView, innerStyles.backgroundColorUnheck]}>
+                    <View style={innerStyles.textView}>
+                        <Text style={innerStyles.text2}>{this.props.item.size}</Text>
+                    </View>
+                </View>
+
+
+        )
+    }
+}
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
+    mainView:{
+        paddingVertical: 10,
+        flexDirection:"row",
+        flexWrap:"wrap",
+    },
     colorView: {
         alignSelf: 'stretch',
 
@@ -109,17 +133,18 @@ const innerStyles = StyleSheet.create({
         borderRadius: 6,
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: Width * 0.014,
-
+        marginVertical:7,
+        marginHorizontal:5
     },
     multiRowStyling: {
         marginTop: 15,
     },
     backgroundColorCheck: { backgroundColor: "#3c3c3e" },
     textView: { alignItems: "center", justifyContent: "center" },
-    text: {fontSize:16,fontFamily:"Montserrat-SemiBold",color:"#fff"},
+    text1: { fontSize: 16, fontFamily: "Montserrat-SemiBold", color: "#fff" },
+    text2: { fontSize: 16, fontFamily: "Montserrat", color: "#000" },
     backgroundColorUnheck: { backgroundColor: "#f6f6f6" },
-    
+
 })
 
 export default SizePicker;
