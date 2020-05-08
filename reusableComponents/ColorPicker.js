@@ -1,4 +1,4 @@
-import React, { useState, PureComponent } from 'react';
+import React, { useState, PureComponent, Component } from 'react';
 import {
     FlatList,
     StyleSheet,
@@ -16,11 +16,10 @@ class ColorPicker extends PureComponent {
         super(props)
         this.setupState();
     }
-    
-    setupState(){
-        if(this.props.colorPickerList == null){
+
+    setupState() {
+        if (this.props.colorPickerList == null) {
             this.state = {
-                isChange: false,
                 colorList: [
                     { id: 0, color: '#000000', isCheck: false },
                     { id: 1, color: '#85836a', isCheck: false },
@@ -38,54 +37,73 @@ class ColorPicker extends PureComponent {
                     { id: 13, color: '#99836a', isCheck: false },
                 ]
             }
-        }else{
+        } else {
             this.state = {
-                isChange: false,
                 colorList: this.props.colorPickerList
             }
         }
         // console.log("Called");
 
     }
-    
 
 
-    onColorSelect = (item) => {
-        this.setState({ 
-            isChange: !this.state.isChange
+
+    onColorSelect = (item) => () => {
+
+        let arr = [...this.state.colorList]
+        arr = arr.map((val) => {
+            if (val.id == item.id) {
+                return { "color": val.color, "id": val.id, "isCheck": !val.isCheck }
+            }
+            else {
+                return { "color": val.color, "id": val.id, "isCheck": val.isCheck }
+            }
+
         })
-        this.state.colorList[item.id].isCheck = !this.state.colorList[item.id].isCheck
-        this.props.callbackFunction(this.state.colorList)
+        this.setState({
+            colorList: arr,
+        })
     }
-    
 
-    render() {
-        //TODO: this I want to call only once, but it is getting called on every click
+    renderItemColour = (item) => {
         return (
-            <View style={innerStyles.paddingBottom}>
-                <FlatList
-                    keyExtractor={(item) => item.id}
-                    data={this.state.colorList}
-                    numColumns={5}
-                    columnWrapperStyle={innerStyles.multiRowStyling}
-                    extraData={this.state.isChange}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            onPress={()=> this.onColorSelect(item)}
-                        >
-                            <View style={[innerStyles.colorView, { backgroundColor: item.color }]}>
-                                {item.isCheck ?
-                                    <Image
-                                        style={innerStyles.image}
-                                        resizeMode="contain" source={require("../static/icon_select.png")}
+            <TouchableOpacity
+            activeOpacity={0.99}
 
-                                    /> : <View></View>
-                                }
-                            </View>
-                        </TouchableOpacity>
-                    )}
+                onPressIn={this.onColorSelect(item)}
+            >
+                <ColorPickerItem item={item} />
+            </TouchableOpacity>
+        )
+    }
+    render() {
+        return (
+            <View style={innerStyles.mainView}>
+                {this.state.colorList.map(this.renderItemColour)}
+            </View>
+        )
+    }
+}
 
-                />
+class ColorPickerItem extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+
+        if (nextProps.item.isCheck != this.props.item.isCheck)
+            return true;
+        return false
+    }
+    render() {
+        console.log(this.props.item)
+        return (
+
+            <View style={[innerStyles.colorView, { backgroundColor: this.props.item.color }]}>
+                {this.props.item.isCheck ?
+                    <Image
+                        style={innerStyles.image}
+                        resizeMode="contain" source={require("../static/icon_select.png")}
+
+                    /> : <View></View>
+                }
             </View>
         )
     }
@@ -103,15 +121,19 @@ const innerStyles = StyleSheet.create({
         borderRadius: 6,
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal:Width*0.014,
+        marginVertical:7,
+        marginHorizontal:5
     },
     multiRowStyling: {
         marginTop: 15,
     },
-    paddingBottom:{ 
-        paddingBottom: 10
+    mainView: {
+        paddingVertical: 10,
+        flexDirection:"row",
+        flexWrap:"wrap",
+        // justifyContent:"space-around"
     },
-    image:{
+    image: {
         width: '31%',
         height: '31%',
     }
