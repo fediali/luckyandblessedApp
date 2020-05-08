@@ -16,6 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SearchResultListItem from '../reusableComponents/SearchResultListItem';
+import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 const baseUrl = 'http://dev.landbw.co/';
 const STORAGE_DEFAULTS = "defaults"
 let DEFAULTS_OBJ = []
@@ -33,6 +34,7 @@ export default class SearchResults extends Component {
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
       searchText: null,
+      showZeroProductScreen: false
     };
   }
 
@@ -72,6 +74,11 @@ export default class SearchResults extends Component {
         console.log(responses[0].products.length, "length of")
         async function parseProducts() {
           const tempProducts = []
+          if(responses[0].products.length==0){
+            this.setState({
+              showZeroProductScreen: true
+            })
+          }
           for (let i = 0; i < responses[0].products.length; i++) {
             if (responses[0].products[i].main_pair == null) { console.log("Tabahi"); continue; }
             // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
@@ -139,7 +146,15 @@ export default class SearchResults extends Component {
 
   render() {
     console.log("MYNUM", this.state.products.length)
+
+    if(this.state.showZeroProductScreen){
+      return (
+        <ZeroDataScreen/>
+      )
+    }
     return (
+
+      
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Search" navigation={this.props.navigation} />
         <View style={styles.mainView}>
