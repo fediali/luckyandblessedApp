@@ -74,7 +74,7 @@ export default class SearchResults extends Component {
         console.log(responses[0].products.length, "length of")
         async function parseProducts() {
           const tempProducts = []
-          if(responses[0].products.length==0){
+          if (responses[0].products.length == 0) {
             this.setState({
               showZeroProductScreen: true
             })
@@ -107,8 +107,18 @@ export default class SearchResults extends Component {
           })
         })
 
-      }).catch(ex => { console.log("Exception: Inner Promise", ex) })
-    }).catch(ex => { console.log("Exception: Outer Promise", ex) })
+      }).catch(ex => {
+        console.log("Exception: Inner Promise", ex)
+        this.setState({
+          showZeroProductScreen: true
+        })
+      })
+    }).catch(ex => {
+      console.log("Exception: Outer Promise", ex)
+      this.setState({
+        showZeroProductScreen: true
+      })
+    })
 
   };
 
@@ -136,10 +146,10 @@ export default class SearchResults extends Component {
 
         {this.state.isLoadingMoreListData ?
           <ActivityIndicator size="large" />
-        :
-        null
+          :
+          null
         }
-    </View>
+      </View>
     )
     return listFooter
   }
@@ -147,54 +157,54 @@ export default class SearchResults extends Component {
   render() {
     console.log("MYNUM", this.state.products.length)
 
-    if(this.state.showZeroProductScreen){
-      return (
-        <ZeroDataScreen/>
-      )
-    }
     return (
 
-      
+
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Search" navigation={this.props.navigation} />
-        <View style={styles.mainView}>
-          <View style={styles.inputView}>
-            <View style={styles.innerView}>
-              <Icon
-                size={20}
-                name="ios-search"
-                type="ionicon"
-                color="#bababa"
+        {this.showZeroProductScreen ?
+          <ZeroDataScreen />
+
+          :
+          <View style={styles.mainView}>
+            <View style={styles.inputView}>
+              <View style={styles.innerView}>
+                <Icon
+                  size={20}
+                  name="ios-search"
+                  type="ionicon"
+                  color="#bababa"
+                />
+              </View>
+
+              <TextInput
+                style={styles.inputText}
+                placeholder="Search"
+                returnKeyType="search"
+                onFocus={this.searchTextBoxClicked}
+                onChangeText={(searchText) => this.setState({ searchText })}
+                onEndEditing={this.searchText}
               />
             </View>
 
-            <TextInput
-              style={styles.inputText}
-              placeholder="Search"
-              returnKeyType="search"
-              onFocus={this.searchTextBoxClicked}
-              onChangeText={(searchText) => this.setState({ searchText })}
-              onEndEditing={this.searchText}
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.marTop15}
+              data={this.state.products}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <SearchResultListItem
+                  key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
+                  imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} />
+              )}
+              ItemSeparatorComponent={this.renderSeparator}
+              onEndReachedThreshold={0.01}
+              onEndReached={this.handleLoadMore}
+              ListFooterComponent={this.ListFooter}
+
             />
           </View>
-
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.marTop15}
-            data={this.state.products}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <SearchResultListItem
-                key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} />
-            )}
-            ItemSeparatorComponent={this.renderSeparator}
-            onEndReachedThreshold={0.01}
-            onEndReached={this.handleLoadMore}
-            ListFooterComponent={this.ListFooter}
-
-          />
-        </View>
+        }
         <Footer navigation={this.props.navigation} />
       </SafeAreaView>
     );
@@ -231,7 +241,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 18,
     marginTop: 4,
-    marginBottom:8
+    marginBottom: 8
     // height: Height * 0.044
   },
   thumbnailImage: {
