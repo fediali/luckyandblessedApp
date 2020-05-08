@@ -99,6 +99,9 @@ class Filter extends Component {
         this.setState({ multislideVal: values })
     }
 
+    handleViewAll=()=>{
+        this.child.method()
+    }
     _renderHeader = section => {
         // console.log(section)
         let colors = []
@@ -167,7 +170,7 @@ class Filter extends Component {
         }
         else if (section.title == "Color") {
             return (
-                <ColorPicker callbackFunction={this.parentCallBackColor} />
+                <ColorPicker  onRef={ref => (this.child = ref)} callbackFunction={this.parentCallBackColor} />
             )
         }
         else if (section.title == "Price") {
@@ -190,7 +193,7 @@ class Filter extends Component {
         }
         else if (section.title == "Size") {
             return (
-                <SizePicker callbackFunction={this.parentCallBackSize}  />
+                <SizePicker  onRef={ref => (this.child = ref)}  callbackFunction={this.parentCallBackSize}  />
             )
         }
 
@@ -254,7 +257,7 @@ class Filter extends Component {
                         {/* <AccordionReusable state={this.state} customSetState={(stateVal) => { this.customSetState(stateVal) }} /> */}
                     </View>
                     <View style={styles.allItemsView}>
-                        <TouchableOpacity style={styles.allItemsTouch}>
+                        <TouchableOpacity style={styles.allItemsTouch} onClick={this.handleViewAll}>
                             <Text style={styles.allItemsText}>
                                 View All Items
                             </Text>

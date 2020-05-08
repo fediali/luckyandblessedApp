@@ -1,4 +1,4 @@
-import React, { useState, PureComponent,Component } from 'react';
+import React, { useState, PureComponent, Component } from 'react';
 import {
     FlatList,
     StyleSheet,
@@ -18,6 +18,15 @@ class SizePicker extends PureComponent {
         this.setupState();
     }
 
+    componentDidMount() {
+        this.props.onRef(this)
+    }
+    componentWillUnmount() {
+        this.props.onRef(undefined)
+    }
+    method() {
+        alert('do stuff')
+    }
     setupState() {
         if (this.props.colorPickerList == null) {
             this.state = {
@@ -67,10 +76,10 @@ class SizePicker extends PureComponent {
         })
     }
 
-    renderItemSize = (item ) => {
+    renderItemSize = (item) => {
         return (
             <TouchableOpacity
-            activeOpacity={0.99}
+                activeOpacity={0.99}
                 onPressIn={() => this.onSizeSelect(item)}
             >
                 <SizePickerItem item={item} />
@@ -81,7 +90,7 @@ class SizePicker extends PureComponent {
         //TODO: this I want to call only once, but it is getting called on every click
         return (
             <View style={innerStyles.mainView}>
-            {this.state.sizeList.map(this.renderItemSize)}
+                {this.state.sizeList.map(this.renderItemSize)}
 
             </View>
         )
@@ -119,10 +128,10 @@ const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
-    mainView:{
+    mainView: {
         paddingVertical: 10,
-        flexDirection:"row",
-        flexWrap:"wrap",
+        flexDirection: "row",
+        flexWrap: "wrap",
     },
     colorView: {
         alignSelf: 'stretch',
@@ -133,8 +142,8 @@ const innerStyles = StyleSheet.create({
         borderRadius: 6,
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical:7,
-        marginHorizontal:5
+        marginVertical: 7,
+        marginHorizontal: 5
     },
     multiRowStyling: {
         marginTop: 15,

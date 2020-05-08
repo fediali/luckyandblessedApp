@@ -16,7 +16,15 @@ class ColorPicker extends PureComponent {
         super(props)
         this.setupState();
     }
-
+    componentDidMount() {
+        this.props.onRef(this)
+    }
+    componentWillUnmount() {
+        this.props.onRef(undefined)
+    }
+    method() {
+        alert('do stuff')
+    }
     setupState() {
         if (this.props.colorPickerList == null) {
             this.state = {
@@ -68,7 +76,7 @@ class ColorPicker extends PureComponent {
     renderItemColour = (item) => {
         return (
             <TouchableOpacity
-            activeOpacity={0.99}
+                activeOpacity={0.99}
 
                 onPressIn={this.onColorSelect(item)}
             >
@@ -121,16 +129,16 @@ const innerStyles = StyleSheet.create({
         borderRadius: 6,
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical:7,
-        marginHorizontal:5
+        marginVertical: 7,
+        marginHorizontal: 5
     },
     multiRowStyling: {
         marginTop: 15,
     },
     mainView: {
         paddingVertical: 10,
-        flexDirection:"row",
-        flexWrap:"wrap",
+        flexDirection: "row",
+        flexWrap: "wrap",
         // justifyContent:"space-around"
     },
     image: {
