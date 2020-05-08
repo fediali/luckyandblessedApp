@@ -6,15 +6,12 @@ import {
     TouchableOpacity
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import Header from './Header'
 import styles from '../components/Styles/Style'
-import Footer from './Footer'
 
 export default class ZeroDataScreen extends Component {
     render() {
         return (
             <View style={styles.parentContainer}>
-                <Header />
                 <View style={[styles.subParentContainer, innerStyles.centeredView]}>
                     <FastImage
                         style={innerStyles.emptyImage}
@@ -27,7 +24,6 @@ export default class ZeroDataScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Footer />
             </View>
         )
     }
