@@ -97,7 +97,7 @@ export default class UserProfile extends Component {
   logoutPressed=()=>{
     AsyncStorage.removeItem(STORAGE_USER);
     AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
-    this.props.navigation.navigate('WalkThrough');
+    this.props.navigation.navigate('SignIn');
   }
 
   render() {
