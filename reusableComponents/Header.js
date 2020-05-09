@@ -113,7 +113,7 @@ class Header extends PureComponent {
             )}
 
           {this.props.homepage ? (
-            <View style={styles.marT5}>
+            <View style={styles.homePageCenterText}>
               <Text
                 style={styles.centerText}>
                 {this.props.centerText}
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: '#8d8d8e',
     fontFamily: 'Avenir-Book',
-    textAlign: "center"
   },
   iconStyle: { height: 22, width: 20 },
   clearAllText: {
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 22,
   },
-  marT5: { marginTop: 5 },
+  homePageCenterText: { marginTop: 5, alignItems: "center" },
 
 
 });
