@@ -80,6 +80,8 @@ class SizePicker extends PureComponent {
         return (
             <TouchableOpacity
                 activeOpacity={0.99}
+                key={item.id.toString()}
+
                 onPressIn={() => this.onSizeSelect(item)}
             >
                 <SizePickerItem item={item} />

@@ -77,7 +77,7 @@ class ColorPicker extends PureComponent {
         return (
             <TouchableOpacity
                 activeOpacity={0.99}
-
+                key={item.id.toString()}
                 onPressIn={this.onColorSelect(item)}
             >
                 <ColorPickerItem item={item} />

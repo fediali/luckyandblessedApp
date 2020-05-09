@@ -25,8 +25,9 @@ import TrackOrders from "./components/TrackOrders"
 import SearchResults from "./components/SearchResults"
 import ProductPage from "./components/ProductPage"
 import MainPage from "./components/MainPage"
-import codePush from "react-native-code-push";
+import codePush from "react-native-code-push"
 import Filter from "./components/Filter"
+import ZeroDataScreen from "./reusableComponents/ZeroDataScreen"
 
 class App extends Component {
   render() {
