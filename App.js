@@ -45,7 +45,7 @@ class App extends Component {
           {/* <Stack.Screen name="MainPage" component={MainPage} /> */}
           {/* <Stack.Screen name="Categories" component={Categories} /> */}
           {/* <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} /> */}
-          {/* <Stack.Screen name="Filter" component={Filter} /> */}
+          <Stack.Screen name="Filter" component={Filter} />
           {/* <Stack.Screen name="ZeroDataScreen" component={ZeroDataScreen} /> */}
 
           <Stack.Screen name="WalkThrough" component={WalkThrough} />

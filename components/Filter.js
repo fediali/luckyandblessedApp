@@ -23,6 +23,8 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 // import console = require('console');
 import ModalDropdown from 'react-native-modal-dropdown';
 import AccordionReusable from "../reusableComponents/AccordianReusable"
+import GetData from '../reusableComponents/API/GetData';
+
 YellowBox.ignoreWarnings([
     'ReactNativeFiberHostComponent', // Useless Warning
     'Failed prop type', // Useless Warning
@@ -33,7 +35,7 @@ class Filter extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selected: 1,
+            selected: 1,//0,1,2,3 corresponds to Most Popular, New Items, Price H-L , Price L-H
             multislideVal: [0, 1000],
             sections: [
                 {
@@ -72,6 +74,25 @@ class Filter extends Component {
         }
     }
 
+    callFilterAPI=()=>{
+        let BASE_URL="http://dev.landbw.co/api/products"
+        let url=BASE_URL
+        if(this.state.selected==2){
+            url+="&sort_by=price&sort_order=desc"
+        }
+        else if(this.state.selected==3){
+            url+="&sort_by=price&sort_order=asc"
+        }
+        if(this.state.multislideVal[0]!=0 || this.state.multislideVal[1]!=1000){
+            url+=`&price_from=${this.state.multislideVal[0]}&price_to=${this.state.multislideVal[1]}`
+        }
+        GetData(url).then((res)=>res.json()).then((result)=>{
+            // TODO: RESULT is obtained from Filters now show them in products page
+            console.log(result)
+        })
+        // console.log(url)
+    }
+
     //This function Receives the state from colour component when item is changed 
     parentCallBackColor=(colorListData)=> {
         // console.log(colorListData)
@@ -100,7 +121,12 @@ class Filter extends Component {
     }
 
     handleViewAll=()=>{
-        this.child.method()
+          // To retrive value of colour and size not implement yet
+        //   this.child.method()
+       
+        // console.log("CALAED")
+        this.callFilterAPI()
+     
     }
     _renderHeader = section => {
         // console.log(section)
@@ -257,7 +283,7 @@ class Filter extends Component {
                         {/* <AccordionReusable state={this.state} customSetState={(stateVal) => { this.customSetState(stateVal) }} /> */}
                     </View>
                     <View style={styles.allItemsView}>
-                        <TouchableOpacity style={styles.allItemsTouch} onClick={this.handleViewAll}>
+                        <TouchableOpacity style={styles.allItemsTouch} onPress={this.handleViewAll}>
                             <Text style={styles.allItemsText}>
                                 View All Items
                             </Text>
