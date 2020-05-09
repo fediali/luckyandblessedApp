@@ -7,11 +7,12 @@ import PostData from '../reusableComponents/API/PostData';
 import Toast from 'react-native-simple-toast';
 import GetData from '../reusableComponents/API/GetData';
 import AsyncStorage from '@react-native-community/async-storage';
-
 const baseUrl = "http://dev.landbw.co/";
+import ThemeContext from '../reusableComponents/ThemeContext'
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // Naming Conventions for assets camelCase = **assetName-componentName**
+
 class SignIn extends Component {
 
     constructor() {
@@ -25,6 +26,7 @@ class SignIn extends Component {
         }
 
     }
+    static contextType = ThemeContext
 
     _storeData = async (user) => {
         try {
@@ -55,7 +57,11 @@ class SignIn extends Component {
                             name: fullName
                         }
                         this._storeData(user)
-                        this.props.navigation.navigate("MainPage", { userName: fullName }) //Passing user Name
+                        // this.props.navigation.navigate("MainPage", { userName: fullName }) //Passing user Name
+                        // const contextType = ThemeContext
+
+                        console.log("aaa",this.context)
+                        this.context.setAuthenticated(fullName)
                         this.setState({requested:false})
 
                     }
@@ -101,6 +107,8 @@ class SignIn extends Component {
     }
 
     render() {
+        // const contextType = ThemeContext
+        // console.log(contextType)
         return (
             <SafeAreaView style={styles.mainContainer}>
             

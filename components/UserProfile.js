@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -10,18 +10,19 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/UserProfileText';
 import Accordion from 'react-native-collapsible/Accordion';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
+import ThemeContext from '../reusableComponents/ThemeContext'
 
-const STORAGE_PRODUCT_HISTORY_CATEGORY="productHistoryList"
-const STORAGE_USER='user'
-const STORAGE_DEFAULTS="defaults"
+const STORAGE_PRODUCT_HISTORY_CATEGORY = "productHistoryList"
+const STORAGE_USER = 'user'
+const STORAGE_DEFAULTS = "defaults"
 
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 export default class UserProfile extends Component {
@@ -47,14 +48,15 @@ export default class UserProfile extends Component {
       myOrders: '1 in transit',
     };
   }
+  static contextType = ThemeContext
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: true});
+      this.setState({ isReady: true });
     });
   }
   _updateSection1 = (activeSection1) => {
-    this.setState({activeSection1});
+    this.setState({ activeSection1 });
   };
 
   _renderContent = (section) => {
@@ -70,18 +72,18 @@ export default class UserProfile extends Component {
 
   _renderHeader1 = (section) => {
     return (
-        <View style={styles.userDetails}>
-          <View style={styles.titleTextView}>
-            <Text style={styles.keyText}>{section.title}</Text>
-          </View>
-            <View style={styles.iconStyle}>
-              {!this.state.activeSection1.includes(section.id) ? (
-                <Icon size={20} name="right" type="antdesign" />
-              ) : (
-                <Icon size={20} name="down" type="antdesign" />
-              )}
-            </View>
+      <View style={styles.userDetails}>
+        <View style={styles.titleTextView}>
+          <Text style={styles.keyText}>{section.title}</Text>
         </View>
+        <View style={styles.iconStyle}>
+          {!this.state.activeSection1.includes(section.id) ? (
+            <Icon size={20} name="right" type="antdesign" />
+          ) : (
+              <Icon size={20} name="down" type="antdesign" />
+            )}
+        </View>
+      </View>
     );
   };
 
@@ -90,14 +92,16 @@ export default class UserProfile extends Component {
   customSetState(stateVal) {
     var key = Object.keys(stateVal)[0];
     console.log(stateVal[key])
-    this.setState({[key]: stateVal[key]});
+    this.setState({ [key]: stateVal[key] });
     console.log([key], stateVal[key])
   }
 
-  logoutPressed=()=>{
+  logoutPressed = () => {
     AsyncStorage.removeItem(STORAGE_USER);
     AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
-    this.props.navigation.navigate('WalkThrough');
+    console.log(this.context)
+    this.context.setAuthenticated("")
+    // this.props.navigation.navigate('WalkThrough');
   }
 
   render() {
@@ -185,14 +189,16 @@ export default class UserProfile extends Component {
           {/* <ProfileText keyText="Return Request" containIcon={true}></ProfileText>
           <ProfileText keyText="Settings" containIcon={true}></ProfileText> */}
           <View style={styles.bottomContainer}>
-            <View style={styles.logOutButton}>
-              <TouchableOpacity
+            <TouchableOpacity
               activeOpacity={0.5}
-                style={styles.buttonSignIn}
-                onPress={this.logoutPressed}>
+              style={styles.buttonSignIn}
+              onPress={this.logoutPressed}>
+              <View style={styles.logOutButton}>
+
                 <Text style={styles.buttonText}>Logout</Text>
-              </TouchableOpacity>
-            </View>
+              </View>
+            </TouchableOpacity>
+
           </View>
         </ScrollView>
 
@@ -211,7 +217,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     // marginBottom:150
   },
-  divideProfile:{marginTop: 50},
+  divideProfile: { marginTop: 50 },
   scrollViewStyles: {
     backgroundColor: '#fff',
     flexGrow: 1,
@@ -235,8 +241,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
   },
   buttonSignIn: {
-    backgroundColor: '#2967ff',
-    borderRadius: 6,
+    // backgroundColor: '#2967ff',
+    // borderRadius: 6,
+    // margin: 20,
+    alignItems: 'center',
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
@@ -254,7 +262,7 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     marginHorizontal: 20
   },
-  descriptionTextView: {justifyContent: 'center'},
+  descriptionTextView: { justifyContent: 'center' },
   userDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -272,14 +280,15 @@ const styles = StyleSheet.create({
     marginRight: 6,
     marginLeft: 19.5,
   },
-  displayPicture: {height: 88, width: 88, borderRadius: 88},
-  bottomContainer: {paddingBottom: 80, backgroundColor: '#f6f6f6'},
+  displayPicture: { height: 88, width: 88, borderRadius: 88 },
+  bottomContainer: { paddingBottom: 60, backgroundColor: '#f6f6f6' },
   logOutButton: {
     height: Height * 0.074,
-    width: Width,
-    backgroundColor: '#f6f6f6',
-    padding: 20,
+    width: Width*0.9,
+    backgroundColor: '#2967ff',
     alignItems: 'center',
+    borderRadius: 6,
+
   },
-  titleTextView: {paddingVertical: 19}
+  titleTextView: { paddingVertical: 19 }
 });

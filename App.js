@@ -28,55 +28,121 @@ import MainPage from "./components/MainPage"
 import codePush from "react-native-code-push"
 import Filter from "./components/Filter"
 import ZeroDataScreen from "./reusableComponents/ZeroDataScreen"
+import ThemeContext from "./reusableComponents/ThemeContext"
+import RetrieveDataAsync from './reusableComponents/AsyncStorage/RetrieveDataAsync'
 
 class App extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      isAuthenticated: false,
+      username: "",
+      loading: true
+    }
+    RetrieveDataAsync("user").then((value) => {
+      if (value != null) {
+        // this.state = {
+
+        // }
+        this.setState({
+          isAuthenticated: true,
+          username: JSON.parse(value).name,
+          loading: false
+
+        })
+        // console.log('{{{{{{{{{', value);
+        // this.props.navigation.navigate('MainPage', {
+        //   userName: JSON.parse(value).name,
+        // }); 
+
+      }
+      else {
+        this.setState({
+          loading: false
+        })
+      }
+    });
+
+  }
+
+  setAuthenticated = (username) => {
+    if (username == "") {
+      this.setState({ isAuthenticated: false, username: username })
+    }
+    else {
+      this.setState({ isAuthenticated: true, username: username })
+
+    }
+  }
+
   render() {
     const Stack = createStackNavigator();
-
+    const { isAuthenticated, loading } = this.state
+    const { username } = this.state
+    const { setAuthenticated } = this
     return (
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            // ...TransitionPresets.SlideFromRightIOS
-          }}
-        >
-          {/* <Stack.Screen name="TaxID" component={TaxID} /> */}
-          {/* <Stack.Screen name="MainPage" component={MainPage} /> */}
-          {/* <Stack.Screen name="Categories" component={Categories} /> */}
-          {/* <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} /> */}
-          <Stack.Screen name="Filter" component={Filter} />
-          {/* <Stack.Screen name="ZeroDataScreen" component={ZeroDataScreen} /> */}
 
-          <Stack.Screen name="WalkThrough" component={WalkThrough} />
-          <Stack.Screen name="SignIn" component={SignIn} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="MainPage" component={MainPage} />
-          <Stack.Screen name="CompanyProfile" component={CompanyProfile} />
-          <Stack.Screen name="UserProfile" component={UserProfile} />
-          <Stack.Screen name="ProductPage" component={ProductPage} />
-          <Stack.Screen name="Delivery" component={Delivery} />
-          <Stack.Screen name="ShoppingCart" component={ShoppingCart} />
-          <Stack.Screen name="TrackOrders" component={TrackOrders} />
-          <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} />
-          <Stack.Screen name="Payment" component={Payment} />
-          <Stack.Screen name="Categories" component={Categories} />
-          <Stack.Screen name="TaxID" component={TaxID} />
-          <Stack.Screen name="ConfirmationSuccess" component={ConfirmationSuccess} />
-          <Stack.Screen name="SearchResults" component={SearchResults} />
-          {/* <Stack.Screen name="ProductPage" component={ProductPage} /> */}
-          {/* <Stack.Screen name="Payment" component={Payment} /> */}
+      loading ?
+        <>
+        </>
+        :
+        <NavigationContainer>
+          <ThemeContext.Provider
+            value={{
+              isAuthenticated,
+              setAuthenticated,
+              username,
+            }}
+          >
+            <Stack.Navigator
+              screenOptions={{
+                headerShown: false,
+                // ...TransitionPresets.SlideFromRightIOS
+              }}
+            >
+              {!this.state.isAuthenticated ?
+                <>
 
-          {/* <Stack.Screen name="Filter" component={Filter} />
+                  <Stack.Screen name="WalkThrough" component={WalkThrough} />
+                  <Stack.Screen name="SignIn" component={SignIn} />
+                  <Stack.Screen name="SignUp" component={SignUp} />
+                </>
+
+                :
+                <>
+
+                  <Stack.Screen name="MainPage" component={MainPage} />
+                  <Stack.Screen name="CompanyProfile" component={CompanyProfile} />
+                  <Stack.Screen name="UserProfile" component={UserProfile} />
+                  <Stack.Screen name="ProductPage" component={ProductPage} />
+                  <Stack.Screen name="Delivery" component={Delivery} />
+                  <Stack.Screen name="ShoppingCart" component={ShoppingCart} />
+                  <Stack.Screen name="TrackOrders" component={TrackOrders} />
+                  <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} />
+                  <Stack.Screen name="Payment" component={Payment} />
+                  <Stack.Screen name="Categories" component={Categories} />
+                  <Stack.Screen name="TaxID" component={TaxID} />
+                  <Stack.Screen name="ConfirmationSuccess" component={ConfirmationSuccess} />
+                  <Stack.Screen name="SearchResults" component={SearchResults} />
+                </>
+
+              }
+
+
+              {/* <Stack.Screen name="ProductPage" component={ProductPage} /> */}
+              {/* <Stack.Screen name="Payment" component={Payment} /> */}
+
+              {/* <Stack.Screen name="Filter" component={Filter} />
           <Stack.Screen name="ColorPicker" component={ColorPicker} /> */}
 
-        </Stack.Navigator>
-      </NavigationContainer>
+            </Stack.Navigator>
+          </ThemeContext.Provider>
+        </NavigationContainer>
     );
   }
 }
 
 App = codePush(App);
-
-
 export default App;
+
