@@ -28,14 +28,14 @@ export default class WalkThrough extends Component {
       error: null,
       isReady: false,
     };
-    RetrieveDataAsync("user").then((value) => {
-      if (value != null) {
-        console.log('{{{{{{{{{', value);
-        this.props.navigation.navigate('MainPage', {
-          userName: JSON.parse(value).name,
-        }); 
-      }
-    });
+    // RetrieveDataAsync("user").then((value) => {
+    //   if (value != null) {
+    //     console.log('{{{{{{{{{', value);
+    //     this.props.navigation.navigate('MainPage', {
+    //       userName: JSON.parse(value).name,
+    //     }); 
+    //   }
+    // });
   }
 
   navigateScreen=(screen)=>()=>{
