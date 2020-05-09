@@ -42,19 +42,13 @@ class App extends Component {
     }
     RetrieveDataAsync("user").then((value) => {
       if (value != null) {
-        // this.state = {
 
-        // }
         this.setState({
           isAuthenticated: true,
           username: JSON.parse(value).name,
           loading: false
 
         })
-        // console.log('{{{{{{{{{', value);
-        // this.props.navigation.navigate('MainPage', {
-        //   userName: JSON.parse(value).name,
-        // }); 
 
       }
       else {

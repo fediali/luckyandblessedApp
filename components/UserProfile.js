@@ -241,9 +241,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
   },
   buttonSignIn: {
-    // backgroundColor: '#2967ff',
-    // borderRadius: 6,
-    // margin: 20,
     alignItems: 'center',
   },
   buttonText: {
