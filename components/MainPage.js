@@ -21,7 +21,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import styles from './Styles/Style'
 import Header from '../reusableComponents/Header'
 import Footer from '../reusableComponents/Footer'
-import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 import GetData from "../reusableComponents/API/GetData"
 import Shimmer from 'react-native-shimmer';
 import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalListItem"
@@ -31,6 +30,9 @@ import MainPageTrendingListItem from "../reusableComponents/MainPageTrendingList
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 import FastImage from 'react-native-fast-image'
+// import { ThemeContext } from '../App'
+import ThemeContext from '../reusableComponents/ThemeContext'
+
 YellowBox.ignoreWarnings([
     'Require cycle:'
 ])
@@ -45,8 +47,6 @@ const HISTORY_NAME = "History"
 const HISTORY_CATEGORY_ID = -2
 
 class MainPage extends Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -67,32 +67,32 @@ class MainPage extends Component {
 
     //FIXME: This doesn't works when the a new user is registered and then signs in
 
-    backAction = () => {
-        console.log(this.props.navigation)
-        if (this.props.navigation.isFocused()) {
-            Alert.alert("Hold on!", "Are you sure you want to go back?", [
-                {
-                    text: "Cancel",
-                    onPress: () => null,
-                    style: "cancel"
-                },
-                { text: "YES", onPress: () => BackHandler.exitApp() }
-            ]);
-            return true;
-        }
-    };
+    // backAction = () => {
+    //     console.log(this.props.navigation)
+    //     if (this.props.navigation.isFocused()) {
+    //         Alert.alert("Hold on!", "Are you sure you want to go back?", [
+    //             {
+    //                 text: "Cancel",
+    //                 onPress: () => null,
+    //                 style: "cancel"
+    //             },
+    //             { text: "YES", onPress: () => BackHandler.exitApp() }
+    //         ]);
+    //         return true;
+    //     }
+    // };
 
-    componentWillUnmount() {
-        this.backHandler.remove();
-    }
+    // componentWillUnmount() {
+    //     this.backHandler.remove();
+    // }
     componentDidMount() {
 
         InteractionManager.runAfterInteractions(() => {
             var prodHistory;
-            this.backHandler = BackHandler.addEventListener(
-                "hardwareBackPress",
-                this.backAction
-            );
+            // this.backHandler = BackHandler.addEventListener(
+            //     "hardwareBackPress",
+            //     this.backAction
+            // );
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
@@ -106,7 +106,7 @@ class MainPage extends Component {
                     //Adding "All" to categories response
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
                     RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then(value => {
-                        console.log("Product History: ", value)
+                        // console.log("Product History: ", value)
                         this.setState({
                             collections: responses[0].home.logged.sliders,
                             newArrivals: responses[0].home.logged.new_arrivals.products,
@@ -184,7 +184,8 @@ class MainPage extends Component {
     }
 
     render() {
-
+        const contextType = ThemeContext
+        // console.log(contextType)
         const Width = Dimensions.get('window').width;
         const Height = Dimensions.get('window').height;
         if (!this.state.isReady) {
@@ -199,7 +200,7 @@ class MainPage extends Component {
         }
         return (
             <SafeAreaView style={[styles.parentContainer]}>
-                <Header navigation={this.props.navigation} centerText="Welcome" homepage={true} person={this.props.route.params.userName} rightIcon="search" />
+                <Header navigation={this.props.navigation} centerText="Welcome" homepage={true} person={contextType._currentValue.username} rightIcon="search" />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={innerStyles.scrollContainer}

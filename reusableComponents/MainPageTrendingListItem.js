@@ -16,8 +16,8 @@ export default class MainPageHistoryListItem extends PureComponent {
     }
 
     render() {
-        console.log(("-------------------------------------------------------"))
-        console.log(this.props.listItem)
+        // console.log(("-------------------------------------------------------"))
+        // console.log(this.props.listItem)
         return (
             <View style={innerStyles.mainItemView}>
 
