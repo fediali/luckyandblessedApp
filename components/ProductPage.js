@@ -129,8 +129,8 @@ export default class ProductPage extends Component {
           })
         })
 
-      })
-    })
+      }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
+    }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
   }
 
   componentDidMount() {

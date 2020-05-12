@@ -18,11 +18,7 @@ export default class ZeroDataScreen extends PureComponent {
                         source={require("../static/empty_product.png")}
                     />
                     <Text style={innerStyles.customText}>Oops.. No Product Found. We will provide this soon.</Text>
-                    <View style={innerStyles.buttonContainer}>
-                        <TouchableOpacity style={innerStyles.buttonGoBack} onPress={() => { this.props.navigation.goBack()}} >
-                            <Text style={innerStyles.buttonText}>Go Back</Text>
-                        </TouchableOpacity>
-                    </View>
+                    
                 </View>
             </View>
         )
@@ -31,10 +27,6 @@ export default class ZeroDataScreen extends PureComponent {
 
 const innerStyles = StyleSheet.create({
 
-    marTop:{
-        marginTop: 100,
-        backgroundColor: "#000"
-    },
     centeredView: {
         flex: 1,
         alignItems: 'center',
@@ -58,23 +50,7 @@ const innerStyles = StyleSheet.create({
     buttonContainer: {
         flexDirection: "row",
         marginTop: 25
-    },
-    buttonGoBack: {
-        backgroundColor: "#00c5db",
-        borderRadius: 6,
-        paddingVertical: 11,
-        paddingHorizontal: 38
-    },
-    buttonText: {
-        fontFamily: "Montserrat-SemiBold",
-        fontSize: 18,
-        fontWeight: "600",
-        fontStyle: "normal",
-        lineHeight: 22,
-        letterSpacing: 0,
-        textAlign: "center",
-        color: "#ffffff"
-    },
+    }
 
 
 })
