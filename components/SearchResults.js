@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -8,19 +8,19 @@ import {
   TextInput,
   Dimensions,
   InteractionManager,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Icon } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Icon} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import SearchResultListItem from '../reusableComponents/SearchResultListItem';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 const baseUrl = 'http://dev.landbw.co/';
-const STORAGE_DEFAULTS = "defaults"
-let DEFAULTS_OBJ = []
-import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+const STORAGE_DEFAULTS = 'defaults';
+let DEFAULTS_OBJ = [];
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 
 //TODO: Add text view if no products found
 export default class SearchResults extends Component {
@@ -34,18 +34,17 @@ export default class SearchResults extends Component {
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
       searchText: null,
-      showZeroProductScreen: false
+      showZeroProductScreen: false,
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
-        DEFAULTS_OBJ = JSON.parse(defaults)
-      })
-    })
+      RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
+        DEFAULTS_OBJ = JSON.parse(defaults);
+      });
+    });
   }
-
 
   renderSeparator = (item) => {
     return <View style={styles.seperator} />;
@@ -59,152 +58,180 @@ export default class SearchResults extends Component {
       totalProducts: 0,
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
-    })
-  }
+    });
+  };
 
   searchText = () => {
-    console.log("WAALLL")
+    console.log('WAALLL');
     var promises = [];
     promises.push(
-      GetData(baseUrl + `api/products?q=${this.state.searchText}&search_app=Y&page=` + this.state.iteratedPage),
+      GetData(
+        baseUrl +
+          `api/products?q=${this.state.searchText}&search_app=Y&page=` +
+          this.state.iteratedPage,
+      ),
     );
-    let itr = this.state.iteratedPage
-    Promise.all(promises).then((promiseResponses) => {
-      Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-        console.log(responses[0].products.length, "length of")
-        async function parseProducts() {
-          const tempProducts = []
-          if (responses[0].products.length == 0) {
-            this.setState({
-              showZeroProductScreen: true
-            })
-          }
-          for (let i = 0; i < responses[0].products.length; i++) {
-            if (responses[0].products[i].main_pair == null) { console.log("Tabahi"); continue; }
-            // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
+    let itr = this.state.iteratedPage;
+    Promise.all(promises)
+      .then((promiseResponses) => {
+        Promise.all(promiseResponses.map((res) => res.json()))
+          .then((responses) => {
+            console.log(responses[0].products.length, 'length of');
+            parseProducts = async () => {
+              const tempProducts = [];
+              if (responses[0].products.length == 0) {
+                this.setState(
+                  {
+                    showZeroProductScreen: true,
+                  },
+                  () => console.log('No produccts found '),
+                );
+              } else {
+                for (let i = 0; i < responses[0].products.length; i++) {
+                  if (responses[0].products[i].main_pair == null) {
+                    console.log('Tabahi');
+                    continue;
+                  }
+                  // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
 
-            await tempProducts.push({
+                  await tempProducts.push({
+                    product: responses[0].products[i].product,
+                    product_id: responses[0].products[i].product_id,
+                    price: parseFloat(responses[0].products[i].price).toFixed(
+                      2,
+                    ),
+                    base_price: parseFloat(
+                      responses[0].products[i].base_price,
+                    ).toFixed(2),
+                    imageUrl:
+                      responses[0].products[i].main_pair.detailed.image_path,
+                    product_brand: responses[0].products[i].brand
+                      ? responses[0].products[i].brand
+                      : DEFAULTS_OBJ.brand, //TODO: should come from defaults
+                  });
+                }
+              }
 
-              product: responses[0].products[i].product,
-              product_id: responses[0].products[i].product_id,
-              price: parseFloat(responses[0].products[i].price).toFixed(2),
-              base_price: parseFloat(responses[0].products[i].base_price).toFixed(2),
-              imageUrl: responses[0].products[i].main_pair.detailed.image_path,
-              product_brand: responses[0].products[i].brand ? responses[0].products[i].brand : DEFAULTS_OBJ.brand, //TODO: should come from defaults
-            })
-          }
-
-          return tempProducts
-        }
-        parseProducts().then((prod) => {
-          console.log("PPP", prod.length)
-          this.setState({
-            totalProducts: parseFloat(responses[0].params.total_items).toFixed(0),
-            totalItemsPerRequest: parseFloat(responses[0].params.items_per_page).toFixed(0),
-            isReady: true,
-            products: [...this.state.products, ...prod],
-            isLoadingMoreListData: false,
+              return tempProducts;
+            };
+            parseProducts().then((prod) => {
+              console.log('PPP', prod.length);
+              this.setState({
+                totalProducts: parseFloat(
+                  responses[0].params.total_items,
+                ).toFixed(0),
+                totalItemsPerRequest: parseFloat(
+                  responses[0].params.items_per_page,
+                ).toFixed(0),
+                isReady: true,
+                products: [...this.state.products, ...prod],
+                isLoadingMoreListData: false,
+              });
+            });
           })
-        })
-
-      }).catch(ex => {
-        console.log("Exception: Inner Promise", ex)
+          .catch((ex) => {
+            console.log('Exception: Inner Promise', ex);
+            this.setState({
+              showZeroProductScreen: true,
+            });
+          });
+      })
+      .catch((ex) => {
+        console.log('Exception: Outer Promise', ex);
         this.setState({
-          showZeroProductScreen: true
-        })
-      })
-    }).catch(ex => {
-      console.log("Exception: Outer Promise", ex)
-      this.setState({
-        showZeroProductScreen: true
-      })
-    })
-
+          showZeroProductScreen: true,
+        });
+      });
   };
 
   handleLoadMore = () => {
-
     if (this.state.isLoadingMoreListData == false) {
-      if (this.state.iteratedPage < Math.ceil(this.state.totalProducts / this.state.totalItemsPerRequest)) {//59/10 = 5.9~6
-        console.log("Getting more data")
-        this.setState({
-          iteratedPage: this.state.iteratedPage + 1,
-          isLoadingMoreListData: true,
-        }, () => this.searchText()
-        )
+      if (
+        this.state.iteratedPage <
+        Math.ceil(this.state.totalProducts / this.state.totalItemsPerRequest)
+      ) {
+        //59/10 = 5.9~6
+        console.log('Getting more data');
+        this.setState(
+          {
+            iteratedPage: this.state.iteratedPage + 1,
+            isLoadingMoreListData: true,
+          },
+          () => this.searchText(),
+        );
       }
     }
-
-
-  }
-
+  };
 
   ListFooter = () => {
-
     var listFooter = (
       <View style={styles.listFooter}>
-
-        {this.state.isLoadingMoreListData ?
+        {this.state.isLoadingMoreListData ? (
           <ActivityIndicator size="large" />
-          :
-          null
-        }
+        ) : null}
       </View>
-    )
-    return listFooter
-  }
+    );
+    return listFooter;
+  };
 
   render() {
-    console.log("MYNUM", this.state.products.length)
+    if (this.state.showZeroProductScreen) {
+      console.log('Zero zero zero');
+    }
+    console.log('MYNUM', this.state.products.length);
 
     return (
-
-
       <SafeAreaView style={styles.mainContainer}>
         <Header centerText="Search" navigation={this.props.navigation} />
-        {this.showZeroProductScreen ?
-          <ZeroDataScreen />
-
-          :
-          <View style={styles.mainView}>
-            <View style={styles.inputView}>
-              <View style={styles.innerView}>
-                <Icon
-                  size={20}
-                  name="ios-search"
-                  type="ionicon"
-                  color="#bababa"
-                />
-              </View>
-
-              <TextInput
-                style={styles.inputText}
-                placeholder="Search"
-                returnKeyType="search"
-                onFocus={this.searchTextBoxClicked}
-                onChangeText={(searchText) => this.setState({ searchText })}
-                onEndEditing={this.searchText}
+        <View style={styles.mainView}>
+          <View style={styles.inputView}>
+            <View style={styles.innerView}>
+              <Icon
+                size={20}
+                name="ios-search"
+                type="ionicon"
+                color="#bababa"
               />
             </View>
 
+            <TextInput
+              style={styles.inputText}
+              placeholder="Search"
+              returnKeyType="search"
+              onFocus={this.searchTextBoxClicked}
+              onChangeText={(searchText) => this.setState({searchText})}
+              onEndEditing={this.searchText}
+            />
+          </View>
+
+          {this.state.showZeroProductScreen ? (
+            <View style={styles.marTop15}>
+              <ZeroDataScreen />
+            </View>
+          ) : (
             <FlatList
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.marTop15}
               data={this.state.products}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <SearchResultListItem
-                  key={item.product_id} pid={item.product_id} navigation={this.props.navigation}
-                  imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} />
+                  key={item.product_id}
+                  pid={item.product_id}
+                  navigation={this.props.navigation}
+                  imageUrl={{uri: item.imageUrl}}
+                  name1={item.product}
+                  price1={'$' + item.price}
+                  name2={item.product_brand}
+                />
               )}
               ItemSeparatorComponent={this.renderSeparator}
               onEndReachedThreshold={0.01}
               onEndReached={this.handleLoadMore}
               ListFooterComponent={this.ListFooter}
-
             />
-          </View>
-        }
+          )}
+        </View>
         <Footer navigation={this.props.navigation} />
       </SafeAreaView>
     );
@@ -220,7 +247,6 @@ const styles = StyleSheet.create({
   },
   mainView: {
     marginHorizontal: 20,
-
   },
   innerView: {
     marginVertical: 9.8,
@@ -241,7 +267,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 18,
     marginTop: 4,
-    marginBottom: 8
+    marginBottom: 8,
     // height: Height * 0.044
   },
   thumbnailImage: {
@@ -269,14 +295,13 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     marginTop: 6,
   },
-  marTop15: { marginTop: 15 },
+  marTop15: {marginTop: 15},
   marBottom60: {
     marginBottom: 100,
-
   },
   listFooter: {
     marginBottom: 108,
-    height: 100
+    height: 100,
   },
-  seperator: { paddingBottom: 20 },
+  seperator: {paddingBottom: 20},
 });

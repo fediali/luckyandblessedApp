@@ -17,7 +17,6 @@ import Footer from '../reusableComponents/Footer';
 import Accordion from 'react-native-collapsible/Accordion';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Icon } from 'react-native-elements'
-import { _categoryList, _collections, _newArrivals, _trending, _history } from '../data/MainPageData'
 import Shimmer from 'react-native-shimmer';
 import GetData from "../reusableComponents/API/GetData"
 // import HTML from 'react-native-render-html';

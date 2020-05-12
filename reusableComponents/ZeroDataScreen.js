@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {
     Text,
     StyleSheet,
@@ -8,10 +8,10 @@ import {
 import FastImage from 'react-native-fast-image'
 import styles from '../components/Styles/Style'
 
-export default class ZeroDataScreen extends Component {
+export default class ZeroDataScreen extends PureComponent {
     render() {
         return (
-            <View style={styles.parentContainer}>
+            <View style={[styles.parentContainer, innerStyles.marTop]}>
                 <View style={[styles.subParentContainer, innerStyles.centeredView]}>
                     <FastImage
                         style={innerStyles.emptyImage}
@@ -31,6 +31,10 @@ export default class ZeroDataScreen extends Component {
 
 const innerStyles = StyleSheet.create({
 
+    marTop:{
+        marginTop: 100,
+        backgroundColor: "#000"
+    },
     centeredView: {
         flex: 1,
         alignItems: 'center',
