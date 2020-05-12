@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Icon} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Icon } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import SearchResultListItem from '../reusableComponents/SearchResultListItem';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 const baseUrl = 'http://dev.landbw.co/';
@@ -67,8 +67,8 @@ export default class SearchResults extends Component {
     promises.push(
       GetData(
         baseUrl +
-          `api/products?q=${this.state.searchText}&search_app=Y&page=` +
-          this.state.iteratedPage,
+        `api/products?q=${this.state.searchText}&search_app=Y&page=` +
+        this.state.iteratedPage,
       ),
     );
     let itr = this.state.iteratedPage;
@@ -87,6 +87,12 @@ export default class SearchResults extends Component {
                   () => console.log('No produccts found '),
                 );
               } else {
+                this.setState(
+                  {
+                    showZeroProductScreen: false,
+                  },
+                  () => console.log('produccts found '),
+                );
                 for (let i = 0; i < responses[0].products.length; i++) {
                   if (responses[0].products[i].main_pair == null) {
                     console.log('Tabahi');
@@ -131,6 +137,7 @@ export default class SearchResults extends Component {
           })
           .catch((ex) => {
             console.log('Exception: Inner Promise', ex);
+            alert(ex);
             this.setState({
               showZeroProductScreen: true,
             });
@@ -138,6 +145,7 @@ export default class SearchResults extends Component {
       })
       .catch((ex) => {
         console.log('Exception: Outer Promise', ex);
+        alert(ex);
         this.setState({
           showZeroProductScreen: true,
         });
@@ -199,38 +207,37 @@ export default class SearchResults extends Component {
               placeholder="Search"
               returnKeyType="search"
               onFocus={this.searchTextBoxClicked}
-              onChangeText={(searchText) => this.setState({searchText})}
+              onChangeText={(searchText) => this.setState({ searchText })}
               onEndEditing={this.searchText}
             />
           </View>
 
           {this.state.showZeroProductScreen ? (
-            <View style={styles.marTop15}>
-              <ZeroDataScreen />
-            </View>
+
+            <ZeroDataScreen />
           ) : (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.marTop15}
-              data={this.state.products}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => (
-                <SearchResultListItem
-                  key={item.product_id}
-                  pid={item.product_id}
-                  navigation={this.props.navigation}
-                  imageUrl={{uri: item.imageUrl}}
-                  name1={item.product}
-                  price1={'$' + item.price}
-                  name2={item.product_brand}
-                />
-              )}
-              ItemSeparatorComponent={this.renderSeparator}
-              onEndReachedThreshold={0.01}
-              onEndReached={this.handleLoadMore}
-              ListFooterComponent={this.ListFooter}
-            />
-          )}
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.marTop15}
+                data={this.state.products}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <SearchResultListItem
+                    key={item.product_id}
+                    pid={item.product_id}
+                    navigation={this.props.navigation}
+                    imageUrl={{ uri: item.imageUrl }}
+                    name1={item.product}
+                    price1={'$' + item.price}
+                    name2={item.product_brand}
+                  />
+                )}
+                ItemSeparatorComponent={this.renderSeparator}
+                onEndReachedThreshold={0.01}
+                onEndReached={this.handleLoadMore}
+                ListFooterComponent={this.ListFooter}
+              />
+            )}
         </View>
         <Footer navigation={this.props.navigation} />
       </SafeAreaView>
@@ -247,6 +254,7 @@ const styles = StyleSheet.create({
   },
   mainView: {
     marginHorizontal: 20,
+    flex:1
   },
   innerView: {
     marginVertical: 9.8,
@@ -295,7 +303,7 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     marginTop: 6,
   },
-  marTop15: {marginTop: 15},
+  marTop15: { marginTop: 15 },
   marBottom60: {
     marginBottom: 100,
   },
@@ -303,5 +311,5 @@ const styles = StyleSheet.create({
     marginBottom: 108,
     height: 100,
   },
-  seperator: {paddingBottom: 20},
+  seperator: { paddingBottom: 20 },
 });
