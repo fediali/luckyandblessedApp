@@ -21,7 +21,7 @@ import DeleteData from '../reusableComponents/API/DeleteData'
 import LogoSmall from './Styles/LogoSmall';
 import { call } from 'react-native-reanimated';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
-const STORAGE_DEFAULTS="defaults"
+const STORAGE_DEFAULTS = "defaults"
 const baseUrl = 'http://dev.landbw.co/';
 
 
@@ -59,7 +59,7 @@ class TaxID extends Component {
 
   }
 
-  handleBackPress=()=>{
+  handleBackPress = () => {
     DeleteData("http://dev.landbw.co/api/users", this.props.route.params.user_id)
     BackHandler.exitApp()
   }
@@ -67,23 +67,23 @@ class TaxID extends Component {
   backAction = () => {
     console.log(this.props.navigation)
     if (this.props.navigation.isFocused()) {
-        Alert.alert("Hold on!", "Are you sure you want to go back?", [
-            {
-                text: "Cancel",
-                onPress: () => null,
-                style: "cancel"
-            },
-            { text: "YES", onPress: this.handleBackPress }
-        ]);
-        return true;
+      Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "YES", onPress: this.handleBackPress }
+      ]);
+      return true;
     }
-};
+  };
 
-componentWillUnmount() {
+  componentWillUnmount() {
     this.backHandler.remove();
-}
+  }
 
-  componentDidMount(){
+  componentDidMount() {
 
     RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
       DEFAULTS_OBJ = JSON.parse(defaults)
@@ -92,7 +92,7 @@ componentWillUnmount() {
     this.backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       this.backAction
-  );
+    );
   }
 
   updateSize = (height) => {
@@ -129,7 +129,7 @@ componentWillUnmount() {
     console.log('dragged');
   }
 
-  submitClick=()=> {
+  submitClick = () => {
     if (this.isValid()) {
       this.refs["sign"].saveImage();
       var today = new Date();
@@ -137,12 +137,20 @@ componentWillUnmount() {
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
+      this.props.route.params.signUpRequest.then((res) => res.json)
+        .then((response) => {
+          console.log("::::::::::", response.user_id)
+          setTimeout(() => this.callAPI(today, response.user_id), 500)
+
+        }).catch((ex) => {
+          console.log('Promise exception', ex);
+          alert(ex);
+        })
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
-      setTimeout(() => this.callAPI(today), 500)
     }
   };
 
-  callAPI(today) {
+  callAPI(today, user_id) {
 
     // console.log("000" + this.state.signImage)
     const data = {
@@ -157,7 +165,7 @@ componentWillUnmount() {
       title: this.state.nameOfPurchase,
       date: today,
       signature: this.state.signImage,
-      user_id: this.props.route.params.user_id.toString(), //CHECK THIS
+      user_id: user_id, //CHECK THIS
       company_id: DEFAULTS_OBJ.store_id.toString(),
       timestamp: + new Date()
       // MExicoregistrationNum
@@ -166,13 +174,13 @@ componentWillUnmount() {
     console.log("Data", data)
 
     PostData(baseUrl + 'api/salestaxid', data).
-    then((res) => res.json()).
-    then((response) => { 
-      console.log(response)
-      Toast.show('Registered Successfully');
-    this.props.navigation.navigate("SignIn") //Passing user Name
-    }).catch(err=>{throw err})
-    
+      then((res) => res.json()).
+      then((response) => {
+        console.log(response)
+        Toast.show('Registered Successfully');
+        this.props.navigation.navigate("SignIn") //Passing user Name
+      }).catch(err => { throw err })
+
   }
   isValid() {
     let validFlag = true;
@@ -202,7 +210,7 @@ componentWillUnmount() {
     }
 
     if (this.state.address2 == '') {
-      this.setState({ 
+      this.setState({
         address2Error: 'City, State, Zip code is required.',
       });
       validFlag = false;
