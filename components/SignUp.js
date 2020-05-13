@@ -80,13 +80,7 @@ class SignUp extends Component {
         throw err;
       }
     }
-
-
-
-
-
   }
-
 
   displayImagePicker() {
     /////////////////////////   Image Picker   ////////////////////////////
