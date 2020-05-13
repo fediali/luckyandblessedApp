@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Share,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 
 /* How to use Custom Header
 
@@ -24,11 +24,11 @@ class Header extends PureComponent {
     if (this.lockSubmit) return;
     this.lockSubmit = true;
     this.props.navigation.goBack();
-  }
+  };
 
   navigateToScreen = (screenName) => {
-    this.props.navigation.navigate(screenName)
-  }
+    this.props.navigation.navigate(screenName);
+  };
 
   onShare = async () => {
     try {
@@ -52,17 +52,24 @@ class Header extends PureComponent {
   getRightIcon() {
     if (this.props.rightIcon == 'info') {
       return (
-        <Icon
-          size={30}
-          name="md-information-circle-outline"
-          type="ionicon"
-          color="#000"
-        />
+        <TouchableOpacity
+          onPress={() => {
+            this.navigateToScreen('CompanyProfile');
+          }}>
+          <Icon
+            size={30}
+            name="md-information-circle-outline"
+            type="ionicon"
+            color="#000"
+          />
+        </TouchableOpacity>
       );
     } else if (this.props.rightIcon == 'search') {
       return (
         <TouchableOpacity
-          onPress={() => { this.navigateToScreen("SearchResults"); }}>
+          onPress={() => {
+            this.navigateToScreen('SearchResults');
+          }}>
           <Icon size={30} name="ios-search" type="ionicon" color="#000" />
         </TouchableOpacity>
       );
@@ -95,39 +102,31 @@ class Header extends PureComponent {
   }
   render() {
     return (
-      <View
-        style={styles.topLevelView}>
-        <View
-          style={styles.subParent}>
+      <View style={styles.topLevelView}>
+        <View style={styles.subParent}>
           {this.props.homepage ? (
             <View style={styles.backView}></View>
           ) : (
-              <View>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.navigateBack()
-                  }}>
-                  <Icon size={30} name="arrow-left" type="feather" />
-                </TouchableOpacity>
-              </View>
-            )}
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  this.navigateBack();
+                }}>
+                <Icon size={30} name="arrow-left" type="feather" />
+              </TouchableOpacity>
+            </View>
+          )}
 
           {this.props.homepage ? (
             <View style={styles.homePageCenterText}>
-              <Text
-                style={styles.centerText}>
-                {this.props.centerText}
-              </Text>
+              <Text style={styles.centerText}>{this.props.centerText}</Text>
               <Text style={styles.homePersonText}>{this.props.person}</Text>
             </View>
           ) : (
-              <View>
-                <Text
-                  style={styles.centerText}>
-                  {this.props.centerText}
-                </Text>
-              </View>
-            )}
+            <View>
+              <Text style={styles.centerText}>{this.props.centerText}</Text>
+            </View>
+          )}
           <View>{this.getRightIcon()}</View>
         </View>
       </View>
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
     color: '#8d8d8e',
     fontFamily: 'Avenir-Book',
   },
-  iconStyle: { height: 22, width: 20 },
+  iconStyle: {height: 22, width: 20},
   clearAllText: {
     fontSize: 18,
     lineHeight: 24,
@@ -161,14 +160,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     alignItems: 'center',
   },
-  backView: { height: 30, width: 30 },
+  backView: {height: 30, width: 30},
   centerText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
     lineHeight: 22,
   },
-  homePageCenterText: { marginTop: 5, alignItems: "center" },
-
-
+  homePageCenterText: {marginTop: 5, alignItems: 'center'},
 });
 export default Header;

@@ -101,6 +101,7 @@ class App extends Component {
                   <Stack.Screen name="WalkThrough" component={WalkThrough} />
                   <Stack.Screen name="SignIn" component={SignIn} />
                   <Stack.Screen name="SignUp" component={SignUp} />
+                  <Stack.Screen name="CompanyProfile" component={CompanyProfile} />
                 </>
 
                 :
