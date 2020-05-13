@@ -64,92 +64,95 @@ export default class SearchResults extends Component {
   searchText = () => {
     console.log('WAALLL');
     var promises = [];
-    promises.push(
-      GetData(
-        baseUrl +
-        `api/products?q=${this.state.searchText}&search_app=Y&page=` +
-        this.state.iteratedPage,
-      ),
-    );
-    let itr = this.state.iteratedPage;
-    Promise.all(promises)
-      .then((promiseResponses) => {
-        Promise.all(promiseResponses.map((res) => res.json()))
-          .then((responses) => {
-            console.log(responses[0].products.length, 'length of');
-            parseProducts = async () => {
-              const tempProducts = [];
-              if (responses[0].products.length == 0) {
-                this.setState(
-                  {
-                    showZeroProductScreen: true,
-                  },
-                  () => console.log('No produccts found '),
-                );
-              } else {
-                this.setState(
-                  {
-                    showZeroProductScreen: false,
-                  },
-                  () => console.log('produccts found '),
-                );
-                for (let i = 0; i < responses[0].products.length; i++) {
-                  if (responses[0].products[i].main_pair == null) {
-                    console.log('Tabahi');
-                    continue;
+    console.log("Search Text", this.state.searchText.length)
+    if (this.state.searchText != null && this.state.searchText.length > 0){
+      promises.push(
+        GetData(
+          baseUrl +
+          `api/products?q=${this.state.searchText}&search_app=Y&page=` +
+          this.state.iteratedPage,
+        ),
+      );
+      let itr = this.state.iteratedPage;
+      Promise.all(promises)
+        .then((promiseResponses) => {
+          Promise.all(promiseResponses.map((res) => res.json()))
+            .then((responses) => {
+              console.log(responses[0].products.length, 'length of');
+              parseProducts = async () => {
+                const tempProducts = [];
+                if (responses[0].products.length == 0) {
+                  this.setState(
+                    {
+                      showZeroProductScreen: true,
+                    },
+                    () => console.log('No produccts found '),
+                  );
+                } else {
+                  this.setState(
+                    {
+                      showZeroProductScreen: false,
+                    },
+                    () => console.log('produccts found '),
+                  );
+                  for (let i = 0; i < responses[0].products.length; i++) {
+                    if (responses[0].products[i].main_pair == null) {
+                      console.log('Tabahi');
+                      continue;
+                    }
+                    // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
+  
+                    await tempProducts.push({
+                      product: responses[0].products[i].product,
+                      product_id: responses[0].products[i].product_id,
+                      price: parseFloat(responses[0].products[i].price).toFixed(
+                        2,
+                      ),
+                      base_price: parseFloat(
+                        responses[0].products[i].base_price,
+                      ).toFixed(2),
+                      imageUrl:
+                        responses[0].products[i].main_pair.detailed.image_path,
+                      product_brand: responses[0].products[i].brand
+                        ? responses[0].products[i].brand
+                        : DEFAULTS_OBJ.brand, //TODO: should come from defaults
+                    });
                   }
-                  // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
-
-                  await tempProducts.push({
-                    product: responses[0].products[i].product,
-                    product_id: responses[0].products[i].product_id,
-                    price: parseFloat(responses[0].products[i].price).toFixed(
-                      2,
-                    ),
-                    base_price: parseFloat(
-                      responses[0].products[i].base_price,
-                    ).toFixed(2),
-                    imageUrl:
-                      responses[0].products[i].main_pair.detailed.image_path,
-                    product_brand: responses[0].products[i].brand
-                      ? responses[0].products[i].brand
-                      : DEFAULTS_OBJ.brand, //TODO: should come from defaults
-                  });
                 }
-              }
-
-              return tempProducts;
-            };
-            parseProducts().then((prod) => {
-              console.log('PPP', prod.length);
+  
+                return tempProducts;
+              };
+              parseProducts().then((prod) => {
+                console.log('PPP', prod.length);
+                this.setState({
+                  totalProducts: parseFloat(
+                    responses[0].params.total_items,
+                  ).toFixed(0),
+                  totalItemsPerRequest: parseFloat(
+                    responses[0].params.items_per_page,
+                  ).toFixed(0),
+                  isReady: true,
+                  products: [...this.state.products, ...prod],
+                  isLoadingMoreListData: false,
+                });
+              });
+            })
+            .catch((ex) => {
+              console.log('Exception: Inner Promise', ex);
+              alert(ex);
               this.setState({
-                totalProducts: parseFloat(
-                  responses[0].params.total_items,
-                ).toFixed(0),
-                totalItemsPerRequest: parseFloat(
-                  responses[0].params.items_per_page,
-                ).toFixed(0),
-                isReady: true,
-                products: [...this.state.products, ...prod],
-                isLoadingMoreListData: false,
+                showZeroProductScreen: true,
               });
             });
-          })
-          .catch((ex) => {
-            console.log('Exception: Inner Promise', ex);
-            alert(ex);
-            this.setState({
-              showZeroProductScreen: true,
-            });
+        })
+        .catch((ex) => {
+          console.log('Exception: Outer Promise', ex);
+          alert(ex);
+          this.setState({
+            showZeroProductScreen: true,
           });
-      })
-      .catch((ex) => {
-        console.log('Exception: Outer Promise', ex);
-        alert(ex);
-        this.setState({
-          showZeroProductScreen: true,
         });
-      });
+    }
   };
 
   handleLoadMore = () => {
