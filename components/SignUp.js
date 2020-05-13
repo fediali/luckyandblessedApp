@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
 import { Icon } from 'react-native-elements';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
-const STORAGE_DEFAULTS="defaults"
+const STORAGE_DEFAULTS = "defaults"
 const baseUrl = 'http://dev.landbw.co/';
 
 let DEFAULTS_OBJ = []
@@ -63,8 +63,8 @@ class SignUp extends Component {
       });
       // console.log('res : ' + JSON.stringify(res));
       // console.log('URI : ' + res.uri);
-      this.setState({fileSelectText: res.name, salesTaxIdFile: res.uri});
-      console.log("DL URI: "+res.uri)
+      this.setState({ fileSelectText: res.name, salesTaxIdFile: res.uri });
+      console.log("DL URI: " + res.uri)
 
       // console.log('Type : ' + res.type);
       // console.log('File Name : ' + res.name);
@@ -118,8 +118,8 @@ class SignUp extends Component {
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        this.setState({fileSelectText: response.fileName, salesTaxIdFile: response.uri});
-        console.log("IP URI: "+response.uri)
+        this.setState({ fileSelectText: response.fileName, salesTaxIdFile: response.uri });
+        console.log("IP URI: " + response.uri)
       }
     });
   }
@@ -141,41 +141,50 @@ class SignUp extends Component {
         user_type: 'C',
         status: 'A',
       };
-      var promises = [];
-      promises.push(PostData(baseUrl + 'api/users', data));
-      Promise.all(promises)
-        .then((promiseResponses) => {
-          Promise.all(promiseResponses.map((res) => res.json()))
-            .then((responses) => {
-              console.log(responses[0])
-              if (responses[0].user_id){
-                console.log("::::::::::",responses[0].user_id)
-                if(this.state.salesTaxIdFile){
-                  // TODO: Sent this file to api
-                }else{
-                  this.props.navigation.navigate("TaxID",{user_id:responses[0].user_id})
-                }
-                
-              }
-              else {
-                this.setState({ emailError: 'The username or email you have chosen already exists'});
-              }
-            })
-            .catch((ex) => {
-              console.log('Inner Promise', ex);
-              alert(ex);
-            });
-        })
-        .catch((ex) => {
-          console.log('Outer Promise', ex);
-          alert(ex);
-        });
+      // var promises = [];
+      fetchRequest = PostData(baseUrl + 'api/users', data)
+      if (this.state.salesTaxIdFile) {
+        // TODO: Sent this file to api
+        fetchRequest.then((res) => res.json)
+          .then((response) => {
+            console.log("::::::::::", response.user_id)
+          }).catch((ex) => {
+            console.log('Promise exception', ex);
+            alert(ex);
+          })
+      } else {
+        this.props.navigation.navigate("TaxID", { user_id: responses[0].user_id, signUpRequest: fetchRequest })
+      }
+      // promises.push();
+      // Promise.all(promises)
+      //   .then((promiseResponses) => {
+      //     Promise.all(promiseResponses.map((res) => res.json()))
+      //       .then((responses) => {
+      //         console.log(responses[0])
+      //         if (responses[0].user_id) {
+      //           console.log("::::::::::", responses[0].user_id)
+
+
+      //         }
+      //         else {
+      //           this.setState({ emailError: 'The username or email you have chosen already exists' });
+      //         }
+      //       })
+      //       .catch((ex) => {
+      //         console.log('Inner Promise', ex);
+      //         alert(ex);
+      //       });
+      //   })
+      //   .catch((ex) => {
+      //     console.log('Outer Promise', ex);
+      //     alert(ex);
+      //   });
     }
   }
 
-  navigateToSignIn=()=>{
-    this.props.navigation.navigate("SignIn") 
-}
+  navigateToSignIn = () => {
+    this.props.navigation.navigate("SignIn")
+  }
 
   isValid() {
     let validFlag = true;
@@ -253,23 +262,23 @@ class SignUp extends Component {
     );
   }
 
-  handleFillOutTXId=()=>{
+  handleFillOutTXId = () => {
     this.signUpClick()
   }
 
-  navigateScreen=(screen)=>()=>{
+  navigateScreen = (screen) => () => {
     this.props.navigation.navigate(screen);
   }
 
   render() {
     return (
-        <SafeAreaView style={styles.parentContainer}>
-          <Header
-            navigation={this.props.navigation}
-            centerText={''}
-            rightIcon="info"
-          />
-      <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
+      <SafeAreaView style={styles.parentContainer}>
+        <Header
+          navigation={this.props.navigation}
+          centerText={''}
+          rightIcon="info"
+        />
+        <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
 
           <View style={styles.subParentContainer}>
             <LogoSmall />
@@ -405,16 +414,16 @@ class SignUp extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[innerStyles.buttonAlreadyHaveAccount]}
-                onPress={()=>this.navigateScreen("SignIn")}>
+                onPress={() => this.navigateScreen("SignIn")}>
                 <Text style={[styles.buttonText, innerStyles.buttonText]}>
                   I have an account
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
-          </ScrollView>
+        </ScrollView>
 
-        </SafeAreaView>
+      </SafeAreaView>
     );
   }
 }
