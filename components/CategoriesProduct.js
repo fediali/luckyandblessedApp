@@ -137,8 +137,8 @@ class CategoriesProduct extends Component {
                         })
                     })
 
-                }).catch(ex => { console.log("Exception: Inner Promise", ex) })
-            }).catch(ex => { console.log("Exception: Outer Promise", ex) })
+                }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
+            }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
 
         }
 
