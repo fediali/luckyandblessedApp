@@ -20,6 +20,7 @@ import CategoriesProductListDoubleItem from "../reusableComponents/CategoriesPro
 import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 
 const baseUrl = "http://dev.landbw.co/";
 const STORAGE_DEFAULTS = "defaults"
@@ -42,7 +43,8 @@ class CategoriesProduct extends Component {
             isReady: false,
             totalProducts: 0,
             totalItemsPerRequest: 0,
-            isLoadingMoreListData: false
+            isLoadingMoreListData: false,
+            showZeroProductScreen: false,
         }
     }
 
@@ -130,11 +132,19 @@ class CategoriesProduct extends Component {
                         return tempProducts
                     }
                     parseProducts().then((prod) => {
-                        this.setState({
-                            isReady: true,
-                            products: [...this.state.products, ...prod],
-                            isLoadingMoreListData: false,
-                        })
+                        allProducts = [...this.state.products, ...prod]
+                        if (allProducts.length == 0) {
+                            this.setState({
+                                showZeroProductScreen: true
+                            })
+                        } else {
+                            this.setState({
+                                showZeroProductScreen: false,
+                                isReady: true,
+                                products: allProducts,
+                                isLoadingMoreListData: false,
+                            })
+                        }
                     })
 
                 }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
@@ -221,59 +231,64 @@ class CategoriesProduct extends Component {
                 {!this.state.isReady ? <View style={styles.loader}><ActivityIndicator size="large" /></View> :
 
                     <View style={styles.mainContainer}>
-                        <View style={styles.paddingHorizontal}>
-                            <Text style={styles.categoryNameText}>{this.state.cname}</Text>
-                            <Text style={styles.numCategoryText}>{this.state.totalProducts} products</Text>
-                        </View>
-                        <View style={styles.horizontalImagesView}>
-                            <FastImage style={styles.imageList} source={require('../static/listIcon.png')} />
+                        {this.state.showZeroProductScreen ?
+                            <ZeroDataScreen /> :
+                            <>
+                                <View style={styles.paddingHorizontal}>
+                                    <Text style={styles.categoryNameText}>{this.state.cname}</Text>
+                                    <Text style={styles.numCategoryText}>{this.state.totalProducts} products</Text>
+                                </View>
+                                <View style={styles.horizontalImagesView}>
+                                    <FastImage style={styles.imageList} source={require('../static/listIcon.png')} />
 
-                            <Text style={styles.sortingText}>Sorting</Text>
-                            <View style={styles.rightImages}>
-                                <TouchableOpacity style={styles.paddingLeftView} activeOpacity={0.99} onPress={() => { this.setState({ singleItem: false }) }}>
-                                    {this.state.singleItem ?
-                                        <Icon
-                                            size={25}
-                                            name='grid'
-                                            type='feather'
-                                            color="#2d2d2f"
+                                    <Text style={styles.sortingText}>Sorting</Text>
+                                    <View style={styles.rightImages}>
+                                        <TouchableOpacity style={styles.paddingLeftView} activeOpacity={0.99} onPress={() => { this.setState({ singleItem: false }) }}>
+                                            {this.state.singleItem ?
+                                                <Icon
+                                                    size={25}
+                                                    name='grid'
+                                                    type='feather'
+                                                    color="#2d2d2f"
 
-                                        /> :
-                                        <Icon
-                                            size={25}
-                                            name='grid'
-                                            type='feather'
-                                            color="#2967ff"
-                                        />
-                                    }
+                                                /> :
+                                                <Icon
+                                                    size={25}
+                                                    name='grid'
+                                                    type='feather'
+                                                    color="#2967ff"
+                                                />
+                                            }
 
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.paddingLeftView} activeOpacity={0.99} onPress={() => { this.setState({ singleItem: true }) }}>
-                                    {this.state.singleItem ?
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.paddingLeftView} activeOpacity={0.99} onPress={() => { this.setState({ singleItem: true }) }}>
+                                            {this.state.singleItem ?
 
-                                        <Icon
-                                            style={styles.iconRight}
-                                            size={25}
-                                            name='square'
-                                            type='feather'
-                                            color="#2967ff"
+                                                <Icon
+                                                    style={styles.iconRight}
+                                                    size={25}
+                                                    name='square'
+                                                    type='feather'
+                                                    color="#2967ff"
 
-                                        /> :
-                                        <Icon
-                                            style={styles.iconRight}
-                                            size={25}
-                                            name='square'
-                                            type='feather'
-                                            color="#2d2d2f"
+                                                /> :
+                                                <Icon
+                                                    style={styles.iconRight}
+                                                    size={25}
+                                                    name='square'
+                                                    type='feather'
+                                                    color="#2d2d2f"
 
-                                        />
-                                    }
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.paddingLeftView}>
-                                    <FastImage style={styles.filterImage} source={require("../static/Filter.png")} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                                                />
+                                            }
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.paddingLeftView}>
+                                            <FastImage style={styles.filterImage} source={require("../static/Filter.png")} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </>
+                        }
 
                         {/* Checking whether the Flatlist should render single item row or double item row */}
                         {this.state.singleItem ?

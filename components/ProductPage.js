@@ -26,6 +26,7 @@ import FastImage from 'react-native-fast-image'
 import ProductPageSimilarListItem from "../reusableComponents/ProductPageSimilarListItem"
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 
 const SIMILARPRODUCTS_CATEGORY_ID = -3
 const SIMILARPRODUCTS_NAME = "SIMILAR PRODUCTS"
@@ -64,8 +65,9 @@ export default class ProductPage extends Component {
         full_description: "",
         composition: "",
       },
-      similarProducts: []
-    
+      similarProducts: [],
+      showZeroProductScreen: false,
+
     };
   }
 
