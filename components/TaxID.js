@@ -59,40 +59,11 @@ class TaxID extends Component {
 
   }
 
-  handleBackPress = () => {
-    DeleteData("http://dev.landbw.co/api/users", this.props.route.params.user_id)
-    BackHandler.exitApp()
-  }
-
-  backAction = () => {
-    console.log(this.props.navigation)
-    if (this.props.navigation.isFocused()) {
-      Alert.alert("Hold on!", "Are you sure you want to go back?", [
-        {
-          text: "Cancel",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "YES", onPress: this.handleBackPress }
-      ]);
-      return true;
-    }
-  };
-
-  componentWillUnmount() {
-    this.backHandler.remove();
-  }
-
   componentDidMount() {
 
     RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
       DEFAULTS_OBJ = JSON.parse(defaults)
     })
-
-    this.backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      this.backAction
-    );
   }
 
   updateSize = (height) => {
@@ -137,8 +108,10 @@ class TaxID extends Component {
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
-      this.props.route.params.signUpRequest.then((res) => res.json)
+      console.log("API PARAMS",this.props.route.params.url,this.props.route.params.data)
+      PostData(this.props.route.params.url,this.props.route.params.data).then((res) => res.json())
         .then((response) => {
+          console.log("RESSPONSE",response)
           console.log("::::::::::", response.user_id)
           setTimeout(() => this.callAPI(today, response.user_id), 500)
 
