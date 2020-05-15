@@ -135,7 +135,8 @@ class CategoriesProduct extends Component {
                         allProducts = [...this.state.products, ...prod]
                         if (allProducts.length == 0) {
                             this.setState({
-                                showZeroProductScreen: true
+                                showZeroProductScreen: true,
+                                isReady: true
                             })
                         } else {
                             this.setState({
@@ -232,7 +233,10 @@ class CategoriesProduct extends Component {
 
                     <View style={styles.mainContainer}>
                         {this.state.showZeroProductScreen ?
-                            <ZeroDataScreen /> :
+                            <View style={styles.completeScreen}>
+                                <ZeroDataScreen/>
+                            </View> 
+                            :
                             <>
                                 <View style={styles.paddingHorizontal}>
                                     <Text style={styles.categoryNameText}>{this.state.cname}</Text>
@@ -347,6 +351,10 @@ class CategoriesProduct extends Component {
 }
 
 const styles = StyleSheet.create({
+    completeScreen:{
+        width: '100%',
+        height: '100%'
+    },
     superMainContainer: {
         flex: 1,
         backgroundColor: "#fff",
