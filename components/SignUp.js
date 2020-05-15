@@ -127,6 +127,7 @@ class SignUp extends Component {
 
   signUpClick() {
     if (this.isValid()) {
+      this.setState({ emailError: '' })
       //call signup API here
       //Splitting name to first and last name
       var fullName = this.state.fullName.split(' ');
@@ -142,43 +143,34 @@ class SignUp extends Component {
         status: 'A',
       };
       // var promises = [];
-      fetchRequest = PostData(baseUrl + 'api/users', data)
       if (this.state.salesTaxIdFile) {
         // TODO: Sent this file to api
-        fetchRequest.then((res) => res.json)
+        PostData(baseUrl + 'api/users', data).then((res) => res.json())
           .then((response) => {
-            console.log("::::::::::", response.user_id)
+            if (response.user_id) {
+              console.log("::::::::::", response.user_id)
+            }
+            else {
+              this.setState({ emailError: 'The username or email you have chosen already exists' });
+            }
           }).catch((ex) => {
             console.log('Promise exception', ex);
             alert(ex);
           })
       } else {
-        this.props.navigation.navigate("TaxID", { user_id: responses[0].user_id, signUpRequest: fetchRequest })
+        GetData(baseUrl + 'api/users?email='+this.state.email).then((res)=>res.json())
+        .then(response=>{
+          console.log("***********",response)
+          if(response.users.length==0){
+            this.props.navigation.navigate("TaxID", {url:baseUrl + 'api/users',data })
+          }
+          else {
+            this.setState({ emailError: 'The username or email you have chosen already exists' });
+          }
+
+        })
+
       }
-      // promises.push();
-      // Promise.all(promises)
-      //   .then((promiseResponses) => {
-      //     Promise.all(promiseResponses.map((res) => res.json()))
-      //       .then((responses) => {
-      //         console.log(responses[0])
-      //         if (responses[0].user_id) {
-      //           console.log("::::::::::", responses[0].user_id)
-
-
-      //         }
-      //         else {
-      //           this.setState({ emailError: 'The username or email you have chosen already exists' });
-      //         }
-      //       })
-      //       .catch((ex) => {
-      //         console.log('Inner Promise', ex);
-      //         alert(ex);
-      //       });
-      //   })
-      //   .catch((ex) => {
-      //     console.log('Outer Promise', ex);
-      //     alert(ex);
-      //   });
     }
   }
 

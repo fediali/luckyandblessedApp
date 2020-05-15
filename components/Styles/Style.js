@@ -5,11 +5,11 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   parentContainer: {
     flex: 1,
-    // backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
   },
   subParentContainer: {
     alignItems: 'center',
-    // backgroundColor: "#fff"
+    backgroundColor: "#fff"
   },
   input: {
     borderRadius: 6,

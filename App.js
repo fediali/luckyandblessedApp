@@ -30,7 +30,7 @@ import Filter from "./components/Filter"
 import ZeroDataScreen from "./reusableComponents/ZeroDataScreen"
 import ThemeContext from "./reusableComponents/ThemeContext"
 import RetrieveDataAsync from './reusableComponents/AsyncStorage/RetrieveDataAsync'
-
+// import fcmService from './firebase/FCMService'
 class App extends Component {
 
   constructor(props) {
@@ -40,6 +40,10 @@ class App extends Component {
       username: "",
       loading: true
     }
+
+    // componentDidMount(){
+
+    // }
     RetrieveDataAsync("user").then((value) => {
       if (value != null) {
 
@@ -102,6 +106,7 @@ class App extends Component {
                   <Stack.Screen name="SignIn" component={SignIn} />
                   <Stack.Screen name="SignUp" component={SignUp} />
                   <Stack.Screen name="CompanyProfile" component={CompanyProfile} />
+                  <Stack.Screen name="TaxID" component={TaxID} />
                 </>
 
                 :
