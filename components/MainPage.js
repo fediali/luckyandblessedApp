@@ -175,7 +175,7 @@ class MainPage extends Component {
     }
 
     mapTrendingList(tList, sliceValue) {
-
+        console.log("trending  =>  ", tList);
         let tempList = []
 
         for (var i = 0; i < tList.length / sliceValue; i++) {

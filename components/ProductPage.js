@@ -102,7 +102,7 @@ export default class ProductPage extends Component {
             showZeroProductScreen: false,
           })
         }
-        getArray().then((secondaryImagesArray) => {
+        getArray().then((secondaryImagesArray) => {//TODO: trending objects are hardcoded used. i.e. such product do not exists in API.
           secondaryImagesArray.unshift(response[0].main_pair.detailed.image_path)
 
           // Stroing History of objects
@@ -146,7 +146,7 @@ export default class ProductPage extends Component {
             },
             similarProducts: response[1].products
           })
-        })
+        }).catch(ex=>{console.log(ex)});
 
       }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
     }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
