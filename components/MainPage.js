@@ -95,7 +95,7 @@ class MainPage extends Component {
             // );
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
-            promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33'))
+            promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33')) //Category id for store.
             // Retriving the user_id
             // this._retrieveData('user_id').then(value => {
             //     console.log("THIS IS VALUE", value)
