@@ -78,73 +78,74 @@ export default class ProductPage extends Component {
     promises.push(GetData(baseUrl + `api/similarproducts/54578`)) //TODO: Change the 54578 to ${this.state.pid} 
     Promise.all(promises).then((promiseResponses) => {
       Promise.all(promiseResponses.map(res => res.json())).then((response) => {
-        async function getArray() {
-          const secondaryImagesArray = []
-          for (var key in response[0].image_pairs) {
-            console.log(response[0].image_pairs[key].detailed.image_path)
-            await secondaryImagesArray.push(response[0].image_pairs[key].detailed.image_path)
-          }
-          return secondaryImagesArray
-        }
-        console.log("*********************")
-        console.log(response);
-        
-        console.log("*********************")
         if (response[0].status == 404) {
           this.setState({
             showZeroProductScreen: true,
             isReady: true
           })
-        } else {
-          this.setState({
-            showZeroProductScreen: false,
+        }else {
+          async function getArray() {
+            const secondaryImagesArray = []
+            for (var key in response[0].image_pairs) {
+              console.log(response[0].image_pairs[key].detailed.image_path)
+              await secondaryImagesArray.push(response[0].image_pairs[key].detailed.image_path)
+            }
+            return secondaryImagesArray
+          }
+          console.log("*********************")
+          console.log(response);
+          
+          console.log("*********************")
+           
+          getArray().then((secondaryImagesArray) => {
+            secondaryImagesArray.unshift(response[0].main_pair.detailed.image_path)
+  
+            // Stroing History of objects
+            RetrieveDataAsync("productHistoryList").then((value) => {
+              console.log(";;;;;;;", response)
+              if (value == null) value = []
+              else value = JSON.parse(value)
+              let historyObj = {
+                productName: response[0].product,
+                price: response[0].price,
+                base_price: response[0].base_price,
+                mainImage: response[0].main_pair.detailed.image_path,
+                pid: this.state.pid,
+                cname: this.state.cname,
+                brand: response[0].brand
+              }
+              if (value.filter(obj => obj.pid[0] === historyObj.pid[0]).length == 0) {
+                console.log("ppppp", value.filter(obj => obj.pid[0] === historyObj.pid[0]))
+                console.log(value)
+                console.log(historyObj)
+  
+                value.unshift(historyObj)
+                if (value.length >= 10) value.pop()
+                StoreDataAsync("productHistoryList", value)
+              }
+            })
+            // console.log(secondaryImagesArray)
+  
+            this.setState({
+              isReady: true,
+              data: {
+                productName: response[0].product,
+                price: response[0].price,
+                mainImage: response[0].main_pair.detailed.image_path,
+                secondaryImages: secondaryImagesArray,
+                min_qty: Number(response[0].min_qty),
+                max_qty: 18,//TODO: Number(response[0].max_qty) currently 0 from api
+                qty_step: Number(response[0].qty_step),
+                full_description: response[0].full_description,
+                composition: response[0].composition,
+              },
+              similarProducts: response[1].products
+            })
           })
         }
-        getArray().then((secondaryImagesArray) => {
-          secondaryImagesArray.unshift(response[0].main_pair.detailed.image_path)
+        
 
-          // Stroing History of objects
-          RetrieveDataAsync("productHistoryList").then((value) => {
-            console.log(";;;;;;;", response)
-            if (value == null) value = []
-            else value = JSON.parse(value)
-            let historyObj = {
-              productName: response[0].product,
-              price: response[0].price,
-              base_price: response[0].base_price,
-              mainImage: response[0].main_pair.detailed.image_path,
-              pid: this.state.pid,
-              cname: this.state.cname,
-              brand: response[0].brand
-            }
-            if (value.filter(obj => obj.pid[0] === historyObj.pid[0]).length == 0) {
-              console.log("ppppp", value.filter(obj => obj.pid[0] === historyObj.pid[0]))
-              console.log(value)
-              console.log(historyObj)
-
-              value.unshift(historyObj)
-              if (value.length >= 10) value.pop()
-              StoreDataAsync("productHistoryList", value)
-            }
-          })
-          // console.log(secondaryImagesArray)
-
-          this.setState({
-            isReady: true,
-            data: {
-              productName: response[0].product,
-              price: response[0].price,
-              mainImage: response[0].main_pair.detailed.image_path,
-              secondaryImages: secondaryImagesArray,
-              min_qty: Number(response[0].min_qty),
-              max_qty: 18,//TODO: Number(response[0].max_qty) currently 0 from api
-              qty_step: Number(response[0].qty_step),
-              full_description: response[0].full_description,
-              composition: response[0].composition,
-            },
-            similarProducts: response[1].products
-          })
-        })
+       
 
       }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
     }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
