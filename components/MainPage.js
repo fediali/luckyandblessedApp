@@ -133,8 +133,9 @@ class MainPage extends Component {
         // this.setState({ selectedCategory: index })
         // console.log(cid)
         this.setState({ isReady: false })
-        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true`).then(res => res.json()).then(
+        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true`).then(res =>res.json()).then(
             (responses) => {
+
                 // console.log(responses)
                 if (responses.categories.length > 0) {
                     var subCat = responses.categories;
@@ -149,7 +150,7 @@ class MainPage extends Component {
                 setTimeout(() => { this.setState({ isReady: true }) }, 1000)
 
             }
-        ).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
+        ).catch(ex => { console.log("abcd Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
 
     }
 
@@ -174,7 +175,7 @@ class MainPage extends Component {
     }
 
     mapTrendingList(tList, sliceValue) {
-
+        console.log("trending  =>  ", tList);
         let tempList = []
 
         for (var i = 0; i < tList.length / sliceValue; i++) {

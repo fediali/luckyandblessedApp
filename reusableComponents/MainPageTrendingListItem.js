@@ -9,10 +9,11 @@ import {
 import FastImage from 'react-native-fast-image'
 const TRENDING_NAME = "Trending"
 
-export default class MainPageHistoryListItem extends PureComponent {
+export default class MainPageTrendingListItem extends PureComponent {
 
-    navigateToProductPage=(val)=>()=>{
-        this.props.navigation.push("ProductPage", { pid: [val.pid], cname:[TRENDING_NAME] }) 
+    navigateToProductPage=(product_id)=>()=>{
+        console.log("MainPage",product_id);
+        this.props.navigation.push("ProductPage", { pid: product_id, cname:[TRENDING_NAME] }) 
     }
 
     render() {
