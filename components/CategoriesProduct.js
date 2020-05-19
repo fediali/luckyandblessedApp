@@ -133,7 +133,7 @@ class CategoriesProduct extends Component {
                         return tempProducts
                     }
                     parseProducts().then((prod) => {
-                        allProducts = [...this.state.products, ...prod]
+                        let allProducts = [...this.state.products, ...prod]
                         if (allProducts.length == 0) {
                             this.setState({
                                 showZeroProductScreen: true,
@@ -216,6 +216,10 @@ class CategoriesProduct extends Component {
                 imageUrl={{ uri: item.imageUrl }} name1={item.product} price1={"$" + item.price} name2={item.product_brand} price2={"$" + item.base_price} />
         )
     }
+
+    navigateToFilter = () => {
+        this.props.navigation.navigate('Filter');
+    }
     render() {
         // if (!this.state.isReady) {
         //     return (
@@ -287,7 +291,7 @@ class CategoriesProduct extends Component {
                                                 />
                                             }
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.paddingLeftView}>
+                                        <TouchableOpacity style={styles.paddingLeftView} onPress={this.navigateToFilter}>
                                             <FastImage style={styles.filterImage} source={require("../static/Filter.png")} />
                                         </TouchableOpacity>
                                     </View>

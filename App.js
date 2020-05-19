@@ -127,6 +127,7 @@ class App extends Component {
                   <Stack.Screen name="ConfirmationSuccess" component={ConfirmationSuccess} />
                   <Stack.Screen name="SearchResults" component={SearchResults} />
                   <Stack.Screen name="BarCodeScanner" component={BarCodeScanner} />
+                  <Stack.Screen name="Filter" component={Filter} />
 
                 </>
 
