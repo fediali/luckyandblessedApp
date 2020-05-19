@@ -30,6 +30,9 @@ YellowBox.ignoreWarnings([
     'Failed prop type', // Useless Warning
     'componentWillReceiveProps'
 ])
+
+
+//TODO: ClearAll
 class Filter extends Component {
 
     constructor(props) {
