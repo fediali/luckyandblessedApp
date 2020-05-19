@@ -43,7 +43,7 @@ const innerStyles = StyleSheet.create({
         lineHeight: 25,
         letterSpacing: 1,
         textAlign: 'center',
-        color: '#00c5db',
+        color: '#000',
         marginTop: 10,
         paddingHorizontal: 20,
     },

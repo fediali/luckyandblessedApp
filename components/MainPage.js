@@ -13,7 +13,6 @@ import {
     InteractionManager,
     YellowBox,
     SafeAreaView,
-    BackHandler,
     Alert
 } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -33,9 +32,9 @@ import FastImage from 'react-native-fast-image'
 // import { ThemeContext } from '../App'
 import ThemeContext from '../reusableComponents/ThemeContext'
 
-YellowBox.ignoreWarnings([
-    'Require cycle:'
-])
+// YellowBox.ignoreWarnings([
+//     'Require cycle:'
+// ])
 
 const baseUrl = "http://dev.landbw.co/";
 const SELECTED_CATEGORY_ALL = -1
@@ -65,37 +64,13 @@ class MainPage extends Component {
 
     }
 
-    //FIXME: This doesn't works when the a new user is registered and then signs in
-
-    // backAction = () => {
-    //     console.log(this.props.navigation)
-    //     if (this.props.navigation.isFocused()) {
-    //         Alert.alert("Hold on!", "Are you sure you want to go back?", [
-    //             {
-    //                 text: "Cancel",
-    //                 onPress: () => null,
-    //                 style: "cancel"
-    //             },
-    //             { text: "YES", onPress: () => BackHandler.exitApp() }
-    //         ]);
-    //         return true;
-    //     }
-    // };
-
-    // componentWillUnmount() {
-    //     this.backHandler.remove();
-    // }
     componentDidMount() {
 
         InteractionManager.runAfterInteractions(() => {
             var prodHistory;
-            // this.backHandler = BackHandler.addEventListener(
-            //     "hardwareBackPress",
-            //     this.backAction
-            // );
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
-            promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33')) //Category id for store.
+            promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33&status=A')) //Category id for store.
             // Retriving the user_id
             // this._retrieveData('user_id').then(value => {
             //     console.log("THIS IS VALUE", value)
@@ -133,7 +108,7 @@ class MainPage extends Component {
         // this.setState({ selectedCategory: index })
         // console.log(cid)
         this.setState({ isReady: false })
-        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true`).then(res =>res.json()).then(
+        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`).then(res =>res.json()).then(
             (responses) => {
 
                 // console.log(responses)
@@ -141,7 +116,6 @@ class MainPage extends Component {
                     var subCat = responses.categories;
                     // console.log(subCat)
                     this.props.navigation.navigate("Categories", { cid: cid, cname: cname, subCats: subCat, categoryList: this.state.categoryList }); //SubCat of the selected category and categoryList is main categories
-                    this.backHandler.remove();
 
                 }
 

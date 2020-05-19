@@ -94,10 +94,11 @@ class CategoriesProduct extends Component {
             var promises = []
             if (cid == SIMILARPRODUCTS_CATEGORY_ID) //-3 is cid of SIMILAR PRODUCTS
             {
-                promises.push(GetData(baseUrl + `api/similarproducts/54578`)) //TODO: Change the 54578 to ${this.state.pid} 
+                promises.push(GetData(baseUrl + `api/similarproducts/54578&status=A`)) //TODO: Change the 54578 to ${this.state.pid} 
             }
             else {
-                promises.push(GetData(baseUrl + `api/products?cid=${cid}&page=` + this.state.iteratedPage))
+                promises.push(GetData(baseUrl + `api/products?cid=${cid}&page=${this.state.iteratedPage}&status=A`))
+                console.log(baseUrl + `api/products?cid=${cid}&page=${this.state.iteratedPage}&status=A`)
             }
             let itr = this.state.iteratedPage
             Promise.all(promises).then((promiseResponses) => {

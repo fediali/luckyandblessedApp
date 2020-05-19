@@ -18,120 +18,157 @@ import OrderProducts from '../reusableComponents/OrdersProduct';
 import Accordion from 'react-native-collapsible/Accordion';
 import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+
+const baseUrl = 'http://dev.landbw.co/';
+const STORAGE_USER = 'user';
 
 //FIXME: Accordian ScrollView
+//FIXME: Accordian loads content as well at the time of rendering. Should we avoid this?
 export default class TrackOrders extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeSections: [],
+      iteratedPage: 1,
+      orders: [],
       isReady: false,
-
-      data: [
-        {
-          orderId: '48392004',
-          date: 'June 4, 2020',
-          trackingNumber: '1Z04563340987283920',
-          products: [
-            {
-              itemNum: '0',
-              itemName: '3-Stripes Shirt-1',
-              totalPrice: '$48.99',
-              unitPrice: '$19.40',
-              size: '2(S), 2(M), 2(L)',
-              color: 'Turquoise',
-              quantity: 14,
-              imageURL:
-                'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg',
-            },
-            {
-              itemNum: '1',
-
-              itemName: '3-Stripes Shirt-1',
-              totalPrice: '$48.99',
-              unitPrice: '$19.40',
-              size: '2(S), 2(M), 2(L)',
-              color: 'Turquoise',
-              quantity: 14,
-              imageURL:
-                'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg',
-            },
-          ],
-        },
-        {
-
-          orderId: '78309897',
-          date: 'June 5, 2020',
-          trackingNumber: '1Z04563340987283920',
-          products: [
-            {
-              itemNum: '0',
-
-              itemName: '3-Stripes Shirt-2',
-              totalPrice: '$48.99',
-              unitPrice: '$19.40',
-              size: '2(S), 2(M), 2(L)',
-              color: 'Turquoise',
-              quantity: 6,
-              imageURL: 'http://dev.landbw.co/images/detailed/39/26.jpg',
-            },
-            {
-              itemNum: '1',
-
-              itemName: '3-Stripes Shirt-2',
-              totalPrice: '$48.99',
-              unitPrice: '$19.40',
-              size: '2(S), 2(M), 2(L)',
-              color: 'Turquoise',
-              quantity: 14,
-              imageURL:
-                'http://dev.landbw.co/images/detailed/39/default_851g-6z.jpg',
-            },
-          ],
-        },
-        {
-
-          orderId: '78309898',
-          date: 'June 5, 2020',
-          trackingNumber: '1Z04563340987283920',
-
-          products: [
-            {
-              itemNum: '0',
-
-              itemName: '3-Stripes Shirt',
-              totalPrice: '$48.99',
-              unitPrice: '$19.40',
-              size: '2(S), 2(M), 2(L)',
-              color: 'Turquoise',
-              quantity: 14,
-              imageURL: 'http://dev.landbw.co/images/detailed/39/26.jpg',
-            },
-          ],
-        },
-      ],
+      totalOrders: 0,
+      totalItemsPerRequest: 0,
+      isLoadingMoreListData: false,
+      showZeroProductScreen: false,
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: true});
+      this.setState({isReady: false});
+
+      // Retriving the user_id
+      RetrieveDataAsync(STORAGE_USER).then((user) => {
+        this.getData(user);
+      });
     });
   }
 
+  getData = (user) => {
+    var promises = [];
+    promises.push(
+      GetData(
+        baseUrl +
+          `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`,
+      ),
+    ); 
+
+    Promise.all(promises)
+      .then((promiseResponses) => {
+        Promise.all(promiseResponses.map((res) => res.json()))
+          .then((responses) => {
+            //Converting to required date format
+            parseProducts = async () => {
+              const tempOrders = [];
+              if (responses[0].orders.length == 0) {
+                this.setState(
+                  {
+                    showZeroProductScreen: true,
+                  },
+                  () => console.log('No produccts found '),
+                );
+              } else {
+                let newOrders = responses[0].orders.map((ord) => {
+                  let mlist = [
+                    'January',
+                    'February',
+                    'March',
+                    'April',
+                    'May',
+                    'June',
+                    'July',
+                    'August',
+                    'September',
+                    'October',
+                    'November',
+                    'December',
+                  ];
+
+                  let milliseconds = ord.timestamp * 1000; //
+                  let dateObject = new Date(milliseconds);
+                  let monthIndex = dateObject.getMonth(); //2019-12-9 10:30:15
+                  let monthName = mlist[monthIndex];
+                  let day = dateObject.getDate();
+                  let year = dateObject.getFullYear();
+
+                  ord.timestamp = `${monthName} ${day}, ${year}`;
+                });
+
+                for (let i = 0; i < responses[0].orders.length; i++) {
+                  await tempOrders.push({
+                    order_id: responses[0].orders[i].order_id,
+                    timestamp: responses[0].orders[i].timestamp,
+                  });
+                }
+              }
+              return tempOrders;
+            };
+
+            parseProducts().then((ord) => {
+              console.log('PPP', ord.length);
+              this.setState({
+                totalOrders: parseFloat(
+                  responses[0].params.total_items,
+                ).toFixed(0),
+                totalItemsPerRequest: parseFloat(
+                  responses[0].params.items_per_page,
+                ).toFixed(0),
+                isReady: true,
+                orders: [...this.state.orders, ...ord],
+                isLoadingMoreListData: false,
+                showZeroProductScreen: false,
+              });
+            });
+          })
+          .catch((ex) => {
+            console.log('Inner Promise', ex);
+          });
+      })
+      .catch((ex) => {
+        console.log('Outer Promise', ex);
+        alert(ex);
+      });
+  };
+
+  handleLoadMore = () => {
+    if (this.state.isLoadingMoreListData == false) {
+      if (
+        this.state.iteratedPage <
+        Math.ceil(this.state.totalOrders / this.state.totalItemsPerRequest)
+      ) {
+        //59/10 = 5.9~6
+        console.log('Getting more data');
+        this.setState(
+          {
+            iteratedPage: this.state.iteratedPage + 1,
+            isLoadingMoreListData: true,
+          },
+          () => this.getData(),
+        );
+      }
+    }
+  };
+
   _renderHeader = (section, index) => {
-    //console.log(section);
+    console.log(section);
 
     return (
       <View>
         <View style={styles.seperator}></View>
 
-        <TouchableOpacity  activeOpacity={0.6} style={styles.order}>
-          <Text style={styles.orderIdText}>{'#' + section.orderId}</Text>
+        <TouchableOpacity activeOpacity={0.6} style={styles.order}>
+          <Text style={styles.orderIdText}>{'#' + section.order_id}</Text>
 
           <View style={styles.details}>
             <View style={styles.marginIcon}>
-              <Text style={styles.orderDateText}>{section.date}</Text>
+              <Text style={styles.orderDateText}>{section.timestamp}</Text>
               <Text style={styles.subText}>Tap for details</Text>
             </View>
 
@@ -149,16 +186,15 @@ export default class TrackOrders extends Component {
   };
 
   _updateSections = (activeSections) => {
-    console.log("Update sec")
-    console.log(activeSections);
+
     this.setState({activeSections});
   };
 
   _renderContent = (section) => {
     return (
       <OrderProducts
-        trackingNumber={section.trackingNumber}
-        productList={section.products}
+        // trackingNumber={section.trackingNumber}
+        orderId={section.order_id}
       />
     );
   };
@@ -180,31 +216,36 @@ export default class TrackOrders extends Component {
         </View>
       );
     }
-    return (
-      <SafeAreaView style={GlobalStyles.parentContainer}>
-        <Header
-          centerText="Your orders"
-          rightIcon="search"
-          navigation={this.props.navigation}
-        />
 
-        <View style={styles.accordionStart}>
-          <Accordion
-            underlayColor="#fff"
-            sections={this.state.data}
-            activeSections={this.state.activeSections}
-            renderHeader={this._renderHeader}
-            renderContent={this._renderContent}
-            onChange={this._updateSections}
-            expandMultiple={true}
+    if (this.state.showZeroProductScreen) {
+      return <ZeroDataScreen />;
+    } else {
+      return (
+        <SafeAreaView style={GlobalStyles.parentContainer}>
+          <Header
+            centerText="Your orders"
+            rightIcon="search"
+            navigation={this.props.navigation}
           />
-        </View>
 
-        <View style={styles.bottomContainer}></View>
+          <View style={styles.accordionStart}>
+            <Accordion
+              underlayColor="#fff"
+              sections={this.state.orders}
+              activeSections={this.state.activeSections}
+              renderHeader={this._renderHeader}
+              renderContent={this._renderContent}
+              onChange={this._updateSections}
+              expandMultiple={true}
+            />
+          </View>
 
-        <Footer selected="Van" navigation={this.props.navigation} />
-      </SafeAreaView>
-    );
+          <View style={styles.bottomContainer}></View>
+
+          <Footer selected="Van" navigation={this.props.navigation} />
+        </SafeAreaView>
+      );
+    }
   }
 }
 
