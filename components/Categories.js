@@ -41,7 +41,7 @@ class Categories extends Component {
         }
         else {
             this.setState({ isReady: false })
-            GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true`).then(res => res.json()).then(
+            GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`).then(res => res.json()).then(
                 (responses) => {
                     console.log(baseUrl + `api/categories?visible=1&category_id=${cid}`)
                     if (responses.categories.length > 0) {

@@ -30,6 +30,7 @@ import Filter from "./components/Filter"
 import ZeroDataScreen from "./reusableComponents/ZeroDataScreen"
 import ThemeContext from "./reusableComponents/ThemeContext"
 import RetrieveDataAsync from './reusableComponents/AsyncStorage/RetrieveDataAsync'
+import BarCodeScanner from './components/BarCodeScanner'
 // import fcmService from './firebase/FCMService'
 class App extends Component {
 
@@ -125,6 +126,8 @@ class App extends Component {
                   <Stack.Screen name="TaxID" component={TaxID} />
                   <Stack.Screen name="ConfirmationSuccess" component={ConfirmationSuccess} />
                   <Stack.Screen name="SearchResults" component={SearchResults} />
+                  <Stack.Screen name="BarCodeScanner" component={BarCodeScanner} />
+
                 </>
 
               }

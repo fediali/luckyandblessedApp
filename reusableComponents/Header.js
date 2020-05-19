@@ -96,7 +96,17 @@ class Header extends PureComponent {
           <Text style={styles.clearAllText}>Clear All</Text>
         </TouchableOpacity>
       );
-    } else {
+    } else if (this.props.rightIcon == 'scanner') {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            this.navigateToScreen('BarCodeScanner');
+          }}>
+          <Icon size={30} name="ios-barcode" type="ionicon" color="#000" />
+        </TouchableOpacity>
+      )
+    }
+     else {
       return <View style={styles.iconStyle}></View>;
     }
   }

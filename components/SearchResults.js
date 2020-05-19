@@ -46,6 +46,14 @@ export default class SearchResults extends Component {
     });
   }
 
+  focus (){
+    console.log("Focus Called");
+    // if (this.props.route.params.barcode){
+    //   this.setState({searchText: barcode.data})
+    //   console.log("Barcode value", barcode.data)
+    // }
+  }
+
   renderSeparator = (item) => {
     return <View style={styles.seperator} />;
   };
@@ -64,7 +72,6 @@ export default class SearchResults extends Component {
   searchText = () => {
     console.log('WAALLL');
     var promises = [];
-    console.log("Search Text", this.state.searchText.length)
     if (this.state.searchText != null && this.state.searchText.length > 0){
       promises.push(
         GetData(
@@ -79,7 +86,7 @@ export default class SearchResults extends Component {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
               console.log(responses[0].products.length, 'length of');
-              parseProducts = async () => {
+              let parseProducts = async () => {
                 const tempProducts = [];
                 if (responses[0].products.length == 0) {
                   this.setState(
@@ -193,7 +200,7 @@ export default class SearchResults extends Component {
 
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Search" navigation={this.props.navigation} />
+        <Header centerText="Search" navigation={this.props.navigation} rightIcon="scanner"/>
         <View style={styles.mainView}>
           <View style={styles.inputView}>
             <View style={styles.innerView}>
