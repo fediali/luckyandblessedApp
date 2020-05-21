@@ -216,6 +216,7 @@ export default class SearchResults extends Component {
               style={styles.inputText}
               placeholder="Search"
               returnKeyType="search"
+              value={thi.state.searchText}
               onFocus={this.searchTextBoxClicked}
               onChangeText={(searchText) => this.setState({ searchText })}
               onEndEditing={this.searchText}
