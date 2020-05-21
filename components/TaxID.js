@@ -30,6 +30,14 @@ let DEFAULTS_OBJ = []
 class TaxID extends Component {
   constructor(props) {
     super(props);
+
+    var dateToday = new Date();
+      var dd = String(dateToday.getDate()).padStart(2, '0');
+      var mm = String(dateToday.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = dateToday.getFullYear();
+      dateToday = mm + ' - ' + dd + ' - ' + yyyy;
+
+
     this.state = {
       newValue1: '',
       newValue2: '',
@@ -47,14 +55,14 @@ class TaxID extends Component {
       texasSalesError: '',
       outOfState: '',
       outOfStateError: '',
-      mexicoRegistration: '',
       mexicoRegistrationError: '',
       description: '',
       descriptionError: '',
       sign: false,
       signError: '',
       signImage: '', //base64 encoded
-      defaults: null
+      defaults: null,
+      dateToday: dateToday
     };
 
   }
@@ -209,15 +217,6 @@ class TaxID extends Component {
       this.setState({ outOfStateError: '' });
     }
 
-    if (this.state.mexicoRegistration == '') {
-      this.setState({
-        mexicoRegistrationError: 'Mexico registration form is required.',
-      });
-      validFlag = false;
-    } else {
-      this.setState({ mexicoRegistrationError: '' });
-    }
-
     if (this.state.description == '') {
       this.setState({ descriptionError: 'Description of buisness is required.' });
       validFlag = false;
@@ -286,9 +285,7 @@ class TaxID extends Component {
               </View>
               {this.state.nameOfPurchaseError != '' ? (
                 this.showErrorMessage(this.state.nameOfPurchaseError)
-              ) : (
-                  <View></View>
-                )}
+              ) : null}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -302,9 +299,7 @@ class TaxID extends Component {
               </View>
               {this.state.phoneError != '' ? (
                 this.showErrorMessage(this.state.phoneError)
-              ) : (
-                  <View></View>
-                )}
+              ) : null}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -317,9 +312,7 @@ class TaxID extends Component {
               </View>
               {this.state.addressError != '' ? (
                 this.showErrorMessage(this.state.addressError)
-              ) : (
-                  <View></View>
-                )}
+              ) : null}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -332,9 +325,7 @@ class TaxID extends Component {
               </View>
               {this.state.address2Error != '' ? (
                 this.showErrorMessage(this.state.address2Error)
-              ) : (
-                  <View></View>
-                )}
+              ) : null}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -348,9 +339,7 @@ class TaxID extends Component {
               </View>
               {this.state.texasSalesError != '' ? (
                 this.showErrorMessage(this.state.texasSalesError)
-              ) : (
-                  <View></View>
-                )}
+              ) : null}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -364,25 +353,7 @@ class TaxID extends Component {
               </View>
               {this.state.outOfStateError != '' ? (
                 this.showErrorMessage(this.state.outOfStateError)
-              ) : (
-                  <View></View>
-                )}
-
-              <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Mexico registration form"
-                  keyboardType={'number-pad'}
-                  onChangeText={(text) => {
-                    this.setState({ mexicoRegistration: text });
-                  }}
-                />
-              </View>
-              {this.state.mexicoRegistrationError != '' ? (
-                this.showErrorMessage(this.state.mexicoRegistrationError)
-              ) : (
-                  <View></View>
-                )}
+              ) : null}
 
               <Text style={[innerStyles.customText1]}>
                 I, the purchaser named above, claim the right to make a
@@ -427,9 +398,7 @@ class TaxID extends Component {
               </View>
               {this.state.descriptionError != '' ? (
                 this.showErrorMessage(this.state.descriptionError)
-              ) : (
-                  <View></View>
-                )}
+              ) : null}
 
               <Text
                 style={[
@@ -466,13 +435,11 @@ class TaxID extends Component {
               </View>
               {this.state.signError != '' ? (
                 this.showErrorMessage(this.state.signError)
-              ) : (
-                  <View></View>
-                )}
+              ) : null}
 
               <Text
                 style={[innerStyles.customTextBoldSmall, innerStyles.dateText]}>
-                Date: 03 - 04 - 2020
+                Date: {this.state.dateToday}
               </Text>
               <View style={[styles.buttonContainer, innerStyles.buttonView]}>
                 <TouchableOpacity

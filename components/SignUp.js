@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -9,19 +9,19 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
-import md5 from "react-native-md5";
+import md5 from 'react-native-md5';
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import LogoSmall from './Styles/LogoSmall';
 import FastImage from 'react-native-fast-image';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
-import { Icon } from 'react-native-elements';
-import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
-const STORAGE_DEFAULTS = "defaults"
+import {Icon} from 'react-native-elements';
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+const STORAGE_DEFAULTS = 'defaults';
 const baseUrl = 'http://dev.landbw.co/';
 
-let DEFAULTS_OBJ = []
+let DEFAULTS_OBJ = [];
 
 //TODO: Handle backPress and if back pressed then delete the recently created user
 class SignUp extends Component {
@@ -44,9 +44,9 @@ class SignUp extends Component {
       salesTaxIDFileError: '',
     };
 
-    RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
-      DEFAULTS_OBJ = JSON.parse(defaults)
-    })
+    RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
+      DEFAULTS_OBJ = JSON.parse(defaults);
+    });
   }
 
   async selectOneFile() {
@@ -63,8 +63,8 @@ class SignUp extends Component {
       });
       // console.log('res : ' + JSON.stringify(res));
       // console.log('URI : ' + res.uri);
-      this.setState({ fileSelectText: res.name, salesTaxIdFile: res.uri });
-      console.log("DL URI: " + res.uri)
+      this.setState({fileSelectText: res.name, salesTaxIdFile: res.uri});
+      console.log('DL URI: ' + res.uri);
 
       // console.log('Type : ' + res.type);
       // console.log('File Name : ' + res.name);
@@ -86,7 +86,7 @@ class SignUp extends Component {
     /////////////////////////   Image Picker   ////////////////////////////
     const options = {
       title: 'Upload from..',
-      customButtons: [{ name: 'document', title: 'Upload document' }],
+      customButtons: [{name: 'document', title: 'Upload document'}],
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -99,29 +99,31 @@ class SignUp extends Component {
      */
     ImagePicker.showImagePicker(options, (response) => {
       // console.log('Response = ', response);
-      console.log('uri=> ' + response.uri)
+      console.log('uri=> ' + response.uri);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
-        this.selectOneFile()
+        this.selectOneFile();
       } else {
         // const source = { uri: response.uri };
 
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        this.setState({ fileSelectText: response.fileName, salesTaxIdFile: response.uri });
-        console.log("IP URI: " + response.uri)
+        this.setState({
+          fileSelectText: response.fileName,
+          salesTaxIdFile: response.uri,
+        });
+        console.log('IP URI: ' + response.uri);
       }
     });
   }
 
-
   signUpClick() {
     if (this.isValid()) {
-      this.setState({ emailError: '' })
+      this.setState({emailError: ''});
       //call signup API here
       //Splitting name to first and last name
       var fullName = this.state.fullName.split(' ');
@@ -139,68 +141,76 @@ class SignUp extends Component {
       // var promises = [];
       if (this.state.salesTaxIdFile) {
         // TODO: Sent this file to api
-        PostData(baseUrl + 'api/users', data).then((res) => res.json())
+        PostData(baseUrl + 'api/users', data)
+          .then((res) => res.json())
           .then((response) => {
             if (response.user_id) {
-              console.log("::::::::::", response.user_id)
+              console.log('::::::::::', response.user_id);
+            } else {
+              this.setState({
+                emailError:
+                  'The username or email you have chosen already exists',
+              });
             }
-            else {
-              this.setState({ emailError: 'The username or email you have chosen already exists' });
-            }
-          }).catch((ex) => {
+          })
+          .catch((ex) => {
             console.log('Promise exception', ex);
             alert(ex);
-          })
+          });
       } else {
-        GetData(baseUrl + 'api/users?email='+this.state.email).then((res)=>res.json())
-        .then(response=>{
-          console.log("***********",response)
-          if(response.users.length==0){
-            this.props.navigation.navigate("TaxID", {url:baseUrl + 'api/users',data })
-          }
-          else {
-            this.setState({ emailError: 'The username or email you have chosen already exists' });
-          }
-
-        })
-
+        GetData(baseUrl + 'api/users?email=' + this.state.email)
+          .then((res) => res.json())
+          .then((response) => {
+            console.log('***********', response);
+            if (response.users.length == 0) {
+              this.props.navigation.navigate('TaxID', {
+                url: baseUrl + 'api/users',
+                data,
+              });
+            } else {
+              this.setState({
+                emailError:
+                  'The username or email you have chosen already exists',
+              });
+            }
+          });
       }
     }
   }
 
   navigateToSignIn = () => {
-    this.props.navigation.navigate("SignIn")
-  }
+    this.props.navigation.navigate('SignIn');
+  };
 
   isValid() {
     let validFlag = true;
     if (this.state.fullName == '') {
-      this.setState({ fullNameError: 'Full name is required.' });
+      this.setState({fullNameError: 'Full name is required.'});
       validFlag = false;
     } else {
-      this.setState({ fullNameError: '' });
+      this.setState({fullNameError: ''});
     }
 
     if (this.state.email == '') {
-      this.setState({ emailError: 'Email is required.' });
+      this.setState({emailError: 'Email is required.'});
       validFlag = false;
     } else {
       let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
       if (emailRegex.test(this.state.email) === false) {
-        this.setState({ emailError: 'Email is invalid.' });
+        this.setState({emailError: 'Email is invalid.'});
         validFlag = false;
       } else {
-        this.setState({ emailError: '' });
+        this.setState({emailError: ''});
       }
     }
     if (this.state.password != this.state.confirmPassword) {
-      this.setState({ nonMatchingPasswordError: 'Passwords do not match.' });
+      this.setState({nonMatchingPasswordError: 'Passwords do not match.'});
       validFlag = false;
     } else {
-      this.setState({ nonMatchingPasswordError: '' });
+      this.setState({nonMatchingPasswordError: ''});
     }
     if (this.state.password == '') {
-      this.setState({ passwordError: 'Password is required.' });
+      this.setState({passwordError: 'Password is required.'});
       validFlag = false;
     } else {
       let passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{7,}$/;
@@ -212,15 +222,15 @@ class SignUp extends Component {
         validFlag = false;
         console.log('Test Failed');
       } else {
-        this.setState({ passwordError: '' });
+        this.setState({passwordError: ''});
       }
     }
 
     if (this.state.confirmPassword == '') {
-      this.setState({ confirmPasswordError: 'Confirm password is required.' });
+      this.setState({confirmPasswordError: 'Confirm password is required.'});
       validFlag = false;
     } else {
-      this.setState({ confirmPasswordError: '' });
+      this.setState({confirmPasswordError: ''});
     }
 
     //TODO: Uncomment this
@@ -249,12 +259,12 @@ class SignUp extends Component {
   }
 
   handleFillOutTXId = () => {
-    this.signUpClick()
-  }
+    this.signUpClick();
+  };
 
   navigateScreen = (screen) => () => {
     this.props.navigation.navigate(screen);
-  }
+  };
 
   render() {
     return (
@@ -265,7 +275,6 @@ class SignUp extends Component {
           rightIcon="info"
         />
         <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
-
           <View style={styles.subParentContainer}>
             <LogoSmall />
             <Text style={styles.customTextBold}>Register Now</Text>
@@ -275,30 +284,26 @@ class SignUp extends Component {
                 style={styles.input}
                 placeholder="Full Name"
                 onChangeText={(text) => {
-                  this.setState({ fullName: text });
+                  this.setState({fullName: text});
                 }}
               />
             </View>
-            {this.state.fullNameError != '' ? (
-              this.showErrorMessage(this.state.fullNameError)
-            ) : (
-                <View></View>
-              )}
+            {this.state.fullNameError != ''
+              ? this.showErrorMessage(this.state.fullNameError)
+              : null}
             <View style={styles.inputView}>
               <TextInput
                 style={styles.input}
                 textContentType={'emailAddress'}
                 placeholder="Email"
                 onChangeText={(text) => {
-                  this.setState({ email: text });
+                  this.setState({email: text});
                 }}
               />
             </View>
-            {this.state.emailError != '' ? (
-              this.showErrorMessage(this.state.emailError)
-            ) : (
-                <View></View>
-              )}
+            {this.state.emailError != ''
+              ? this.showErrorMessage(this.state.emailError)
+              : null}
 
             <View style={styles.inputView}>
               <TextInput
@@ -306,15 +311,13 @@ class SignUp extends Component {
                 secureTextEntry={true}
                 placeholder="Password"
                 onChangeText={(text) => {
-                  this.setState({ password: text });
+                  this.setState({password: text});
                 }}
               />
             </View>
-            {this.state.passwordError != '' ? (
-              this.showErrorMessage(this.state.passwordError)
-            ) : (
-                <View></View>
-              )}
+            {this.state.passwordError != ''
+              ? this.showErrorMessage(this.state.passwordError)
+              : null}
 
             <View style={styles.inputView}>
               <TextInput
@@ -322,21 +325,17 @@ class SignUp extends Component {
                 secureTextEntry={true}
                 placeholder="Confirm password"
                 onChangeText={(text) => {
-                  this.setState({ confirmPassword: text });
+                  this.setState({confirmPassword: text});
                 }}
               />
             </View>
 
-            {this.state.confirmPasswordError != '' ? (
-              this.showErrorMessage(this.state.confirmPasswordError)
-            ) : (
-                <View></View>
-              )}
-            {this.state.nonMatchingPasswordError != '' ? (
-              this.showErrorMessage(this.state.nonMatchingPasswordError)
-            ) : (
-                <View></View>
-              )}
+            {this.state.confirmPasswordError != ''
+              ? this.showErrorMessage(this.state.confirmPasswordError)
+              : null}
+            {this.state.nonMatchingPasswordError != ''
+              ? this.showErrorMessage(this.state.nonMatchingPasswordError)
+              : null}
 
             <View style={styles.inputView}>
               <TouchableOpacity
@@ -357,16 +356,12 @@ class SignUp extends Component {
               </TouchableOpacity>
             </View>
 
-            {this.state.salesTaxIDError != '' ? (
-              this.showErrorMessage(this.state.salesTaxIDError)
-            ) : (
-                <View></View>
-              )}
-            {this.state.salesTaxIDFileError != '' ? (
-              this.showErrorMessage(this.state.salesTaxIDFileError)
-            ) : (
-                <View></View>
-              )}
+            {this.state.salesTaxIDError != ''
+              ? this.showErrorMessage(this.state.salesTaxIDError)
+              : null}
+            {this.state.salesTaxIDFileError != ''
+              ? this.showErrorMessage(this.state.salesTaxIDFileError)
+              : null}
 
             <Text style={styles.customTextBold}>OR</Text>
             <View style={[styles.line, innerStyles.marginView]} />
@@ -400,7 +395,7 @@ class SignUp extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[innerStyles.buttonAlreadyHaveAccount]}
-                onPress={() => this.navigateScreen("SignIn")}>
+                onPress={() => this.navigateScreen('SignIn')}>
                 <Text style={[styles.buttonText, innerStyles.buttonText]}>
                   I have an account
                 </Text>
@@ -408,7 +403,6 @@ class SignUp extends Component {
             </View>
           </View>
         </ScrollView>
-
       </SafeAreaView>
     );
   }
@@ -458,19 +452,19 @@ const innerStyles = StyleSheet.create({
     color: '#2d2d2f',
     fontFamily: 'Montserrat',
   },
-  arrowButton: { width: 10, height: 17, alignSelf: 'center' },
-  fillTaxView: { width: '100%', flexDirection: 'row' },
+  arrowButton: {width: 10, height: 17, alignSelf: 'center'},
+  fillTaxView: {width: '100%', flexDirection: 'row'},
   fillTaxID: {
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  buttonPadding: { paddingHorizontal: 15 },
-  marginView: { marginTop: 10 },
-  uploadFileImage: { width: 35, height: 47 },
-  uploadFile: { alignItems: 'center', justifyContent: 'center' },
-  uploadFileView: { flexDirection: 'row' },
-  errorMessageText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
+  buttonPadding: {paddingHorizontal: 15},
+  marginView: {marginTop: 10},
+  uploadFileImage: {width: 35, height: 47},
+  uploadFile: {alignItems: 'center', justifyContent: 'center'},
+  uploadFileView: {flexDirection: 'row'},
+  errorMessageText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
   buttonSignUp: {
     width: '100%',
     backgroundColor: '#2d2d2f',
