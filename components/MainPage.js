@@ -102,8 +102,8 @@ class MainPage extends Component {
 
                 else
                     this.props.navigation.navigate("CategoriesProduct", { cid, cname })
-                //TODO: 1000ms delay was given i can't figure out the reason so i changed it to 0 
-                setTimeout(() => { this.setState({ isReady: true }) }, 0)
+                // setting isReady to true after 1s, so after comming back it is not on loading
+                setTimeout(() => { this.setState({ isReady: true }) }, 1000)
 
             }
         ).catch(ex => { console.log("abcd Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
