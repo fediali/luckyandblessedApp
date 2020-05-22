@@ -8,13 +8,11 @@ import {
 import FastImage from 'react-native-fast-image'
 
 export default class ProductPageSimilarListItem extends PureComponent {
-    //FIXME: Check if this method is correct. We have to press the item twice to make it work
     navigateToProductPage=()=>{
         this.props.navigation.push("ProductPage", { pid: this.props.pid, cname:this.props.cname }) 
     }
 
     customSetState(stateVal){
-        // console.log("I am called",stateVal)
         this.props.customSetState(stateVal)
     }
     render() {

@@ -19,10 +19,12 @@ import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
 import ThemeContext from '../reusableComponents/ThemeContext'
+const Globals = require('../Globals');
 
-const STORAGE_PRODUCT_HISTORY_CATEGORY = "productHistoryList"
-const STORAGE_USER = 'user'
-const STORAGE_DEFAULTS = "defaults"
+const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
+const STORAGE_USER = Globals.STORAGE_USER
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
+const baseUrl = Globals.baseUrl;
 
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 export default class UserProfile extends Component {
@@ -91,21 +93,16 @@ export default class UserProfile extends Component {
 
   customSetState(stateVal) {
     var key = Object.keys(stateVal)[0];
-    console.log(stateVal[key])
     this.setState({ [key]: stateVal[key] });
-    console.log([key], stateVal[key])
   }
 
   logoutPressed = () => {
     AsyncStorage.removeItem(STORAGE_USER);
     AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
-    console.log(this.context)
     this.context.setAuthenticated("")
-    // this.props.navigation.navigate('WalkThrough');
   }
 
   render() {
-    console.log("here", this.state.fullName)
 
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;

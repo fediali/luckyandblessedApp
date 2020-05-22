@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView,ScrollView, ActivityIndicator } from "react-native"
-import Header from "../reusableComponents/Header"
-import Footer from "../reusableComponents/Footer"
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, ActivityIndicator } from "react-native"
+
 import { Icon } from 'react-native-elements'
 import PostData from '../reusableComponents/API/PostData';
 import Toast from 'react-native-simple-toast';
 import GetData from '../reusableComponents/API/GetData';
 import AsyncStorage from '@react-native-community/async-storage';
-const baseUrl = "http://dev.landbw.co/";
-import ThemeContext from '../reusableComponents/ThemeContext'
+const Globals = require('../Globals');
+
+const baseUrl = Globals.baseUrl;
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // Naming Conventions for assets camelCase = **assetName-componentName**
@@ -29,7 +29,6 @@ class SignIn extends Component {
 
     _storeData = async (user) => {
         try {
-            console.log("vaing ", user)
             await AsyncStorage.setItem('user', JSON.stringify(user));
         } catch (error) {
             // Error saving data
@@ -45,8 +44,7 @@ class SignIn extends Component {
             promises.push(GetData(baseUrl + `api/users?email=${this.state.email}`))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
-                    console.log(responses[0].token)
-                    console.log(responses[1].users[0])
+
 
                     if (responses[0].token) {
                         Toast.show('Login Successful');
@@ -58,7 +56,6 @@ class SignIn extends Component {
                         this._storeData(user)
 
 
-                        console.log("aaa",this.context)
                         this.context.setAuthenticated(fullName)
                         this.setState({requested:false})
 
@@ -71,7 +68,6 @@ class SignIn extends Component {
                 }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); })
         }
-        // this.props.navigation.navigate("MainPage",{userName: "Test Name"}) //TODO: Remove this
 
     }
 

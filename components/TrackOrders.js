@@ -3,9 +3,7 @@ import {
   Text,
   View,
   StyleSheet,
-  FlatList,
   Dimensions,
-  ScrollView,
   InteractionManager,
   Image,
 } from 'react-native';
@@ -19,9 +17,10 @@ import Accordion from 'react-native-collapsible/Accordion';
 import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+const Globals = require('../Globals');
 
-const baseUrl = 'http://dev.landbw.co/';
-const STORAGE_USER = 'user';
+const baseUrl = Globals.baseUrl;
+const STORAGE_USER = Globals.STORAGE_USER;
 
 //FIXME: Accordian ScrollView
 //FIXME: Accordian loads content as well at the time of rendering. Should we avoid this?
@@ -71,8 +70,7 @@ export default class TrackOrders extends Component {
                 this.setState(
                   {
                     showZeroProductScreen: true,
-                  },
-                  () => console.log('No produccts found '),
+                  }
                 );
               } else {
                 let newOrders = responses[0].orders.map((ord) => {
@@ -112,7 +110,6 @@ export default class TrackOrders extends Component {
             };
 
             parseProducts().then((ord) => {
-              console.log('PPP', ord.length);
               this.setState({
                 totalOrders: parseFloat(
                   responses[0].params.total_items,
@@ -143,8 +140,6 @@ export default class TrackOrders extends Component {
         this.state.iteratedPage <
         Math.ceil(this.state.totalOrders / this.state.totalItemsPerRequest)
       ) {
-        //59/10 = 5.9~6
-        console.log('Getting more data');
         this.setState(
           {
             iteratedPage: this.state.iteratedPage + 1,
@@ -157,7 +152,6 @@ export default class TrackOrders extends Component {
   };
 
   _renderHeader = (section, index) => {
-    console.log(section);
 
     return (
       <View>

@@ -18,12 +18,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
 import {Icon} from 'react-native-elements';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
-const STORAGE_DEFAULTS = 'defaults';
-const baseUrl = 'http://dev.landbw.co/';
+const Globals = require('../Globals');
+
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
+const baseUrl = Globals.baseUrl;
 
 let DEFAULTS_OBJ = [];
 
-//TODO: Handle backPress and if back pressed then delete the recently created user
 class SignUp extends Component {
   constructor() {
     super();
@@ -61,14 +62,9 @@ class SignUp extends Component {
         // DocumentPicker.types.audio
         // DocumentPicker.types.pdf
       });
-      // console.log('res : ' + JSON.stringify(res));
-      // console.log('URI : ' + res.uri);
-      this.setState({fileSelectText: res.name, salesTaxIdFile: res.uri});
-      console.log('DL URI: ' + res.uri);
 
-      // console.log('Type : ' + res.type);
-      // console.log('File Name : ' + res.name);
-      // console.log('File Size : ' + res.size);
+      this.setState({fileSelectText: res.name, salesTaxIdFile: res.uri});
+
     } catch (err) {
       //Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
@@ -98,13 +94,8 @@ class SignUp extends Component {
      * The second arg is the callback which sends object: response (more info in the API Reference)
      */
     ImagePicker.showImagePicker(options, (response) => {
-      // console.log('Response = ', response);
-      console.log('uri=> ' + response.uri);
       if (response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
         this.selectOneFile();
       } else {
         // const source = { uri: response.uri };
@@ -116,7 +107,6 @@ class SignUp extends Component {
           fileSelectText: response.fileName,
           salesTaxIdFile: response.uri,
         });
-        console.log('IP URI: ' + response.uri);
       }
     });
   }
@@ -145,7 +135,6 @@ class SignUp extends Component {
           .then((res) => res.json())
           .then((response) => {
             if (response.user_id) {
-              console.log('::::::::::', response.user_id);
             } else {
               this.setState({
                 emailError:
@@ -161,7 +150,6 @@ class SignUp extends Component {
         GetData(baseUrl + 'api/users?email=' + this.state.email)
           .then((res) => res.json())
           .then((response) => {
-            console.log('***********', response);
             if (response.users.length == 0) {
               this.props.navigation.navigate('TaxID', {
                 url: baseUrl + 'api/users',
@@ -220,7 +208,6 @@ class SignUp extends Component {
             'Password must contain atleast one upper case, one lower case, one numeric charachter, and more than or equal to 7 characters long.',
         });
         validFlag = false;
-        console.log('Test Failed');
       } else {
         this.setState({passwordError: ''});
       }

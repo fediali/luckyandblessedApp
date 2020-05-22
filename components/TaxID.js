@@ -7,8 +7,6 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  BackHandler,
-  Alert,
 } from 'react-native';
 
 import styles from './Styles/Style';
@@ -17,12 +15,12 @@ import SignatureCapture from 'react-native-signature-capture';
 import {Icon} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
-import DeleteData from '../reusableComponents/API/DeleteData';
 import LogoSmall from './Styles/LogoSmall';
-import {call} from 'react-native-reanimated';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
-const STORAGE_DEFAULTS = 'defaults';
-const baseUrl = 'http://dev.landbw.co/';
+const Globals = require('../Globals');
+
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
+const baseUrl = Globals.baseUrl;
 
 let DEFAULTS_OBJ = [];
 
@@ -99,13 +97,11 @@ class TaxID extends Component {
     this.setState({
       signImage: 'data:image/png;base64,' + result.encoded.toString(),
     });
-    // console.log(result.encoded);
   };
   _onDragEvent() {
 
     // This callback will be called when the user enters signature
     this.setState({sign: true});
-    console.log('dragged');
 
   }
 
@@ -117,16 +113,11 @@ class TaxID extends Component {
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
-      console.log(
-        'API PARAMS',
-        this.props.route.params.url,
-        this.props.route.params.data,
-      );
+
       PostData(this.props.route.params.url, this.props.route.params.data)
         .then((res) => res.json())
         .then((response) => {
-          console.log('RESSPONSE', response);
-          console.log('::::::::::', response.user_id);
+
           setTimeout(() => this.callAPI(today, response.user_id), 500);
         })
         .catch((ex) => {
@@ -138,7 +129,6 @@ class TaxID extends Component {
   };
 
   callAPI(today, user_id) {
-    // console.log("000" + this.state.signImage)
     const data = {
       name: this.state.nameOfPurchase,
       phone: this.state.phone,
@@ -156,12 +146,10 @@ class TaxID extends Component {
       timestamp: +new Date(),
 
     };
-    console.log('Data', data);
 
     PostData(baseUrl + 'api/salestaxid', data)
       .then((res) => res.json())
       .then((response) => {
-        console.log(response);
         Toast.show('Registered Successfully');
         this.props.navigation.navigate('SignIn'); //Passing user Name
       })
