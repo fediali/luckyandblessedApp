@@ -10,13 +10,13 @@ import {
   InteractionManager,
 } from 'react-native';
 import Shimmer from 'react-native-shimmer';
-import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
-import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
-const STORAGE_DEFAULTS="defaults"
-const baseUrl = "http://dev.landbw.co/";
+const Globals = require('../Globals');
+
+const STORAGE_DEFAULTS = GlobalStyles.STORAGE_DEFAULTS
+const baseUrl = Globals.baseUrl;
 
 export default class WalkThrough extends Component {
   constructor() {
@@ -28,14 +28,6 @@ export default class WalkThrough extends Component {
       error: null,
       isReady: false,
     };
-    // RetrieveDataAsync("user").then((value) => {
-    //   if (value != null) {
-    //     console.log('{{{{{{{{{', value);
-    //     this.props.navigation.navigate('MainPage', {
-    //       userName: JSON.parse(value).name,
-    //     }); 
-    //   }
-    // });
   }
 
   navigateScreen=(screen)=>()=>{
@@ -56,7 +48,6 @@ export default class WalkThrough extends Component {
               });
 
               StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
-                console.log("Defaults saved in storage")
             )
             })
             .catch((ex) => {

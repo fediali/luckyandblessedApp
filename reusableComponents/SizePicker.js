@@ -1,10 +1,8 @@
 import React, { useState, PureComponent, Component } from 'react';
 import {
-    FlatList,
     StyleSheet,
     View,
     Dimensions,
-    Image,
     TouchableOpacity,
     Text
 } from 'react-native'
@@ -53,7 +51,6 @@ class SizePicker extends PureComponent {
                 sizeList: this.props.sizePickerList
             }
         }
-        // console.log("Called");
 
     }
 
@@ -107,7 +104,6 @@ class SizePickerItem extends Component {
         return false
     }
     render() {
-        console.log(this.props.item)
         return (
             this.props.item.isCheck ?
                 <View style={[innerStyles.colorView, innerStyles.backgroundColorCheck]}>

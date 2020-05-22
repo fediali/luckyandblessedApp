@@ -38,7 +38,6 @@ class ProfileText extends PureComponent {
   }
 
   customSetState(stateVal){
-    // console.log("I am called",stateVal)
     this.props.customSetState(stateVal)
 }
 

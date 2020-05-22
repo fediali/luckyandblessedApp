@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import OrderProductListItem from './OrderProductListItem';
-const baseUrl = 'http://dev.landbw.co/';
+const Globals = require('../Globals');
+
+const baseUrl = Globals.baseUrl;
 
 export default class ordersProduct extends PureComponent {
   constructor(props) {
@@ -53,7 +55,6 @@ export default class ordersProduct extends PureComponent {
             for(var i=0,n=keys.length;i<n;i++){
               var key  = keys[i];
               product[key] = responses[0].products[key];
-              console.log("PID",product[key].product_id)
             }
 
             this.setState({orders: product})
