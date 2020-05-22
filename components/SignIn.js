@@ -26,7 +26,6 @@ class SignIn extends Component {
         }
 
     }
-    static contextType = ThemeContext
 
     _storeData = async (user) => {
         try {
@@ -57,8 +56,7 @@ class SignIn extends Component {
                             name: fullName
                         }
                         this._storeData(user)
-                        // this.props.navigation.navigate("MainPage", { userName: fullName }) //Passing user Name
-                        // const contextType = ThemeContext
+
 
                         console.log("aaa",this.context)
                         this.context.setAuthenticated(fullName)
@@ -107,8 +105,7 @@ class SignIn extends Component {
     }
 
     render() {
-        // const contextType = ThemeContext
-        // console.log(contextType)
+
         return (
             <SafeAreaView style={styles.mainContainer}>
             
@@ -171,8 +168,6 @@ const styles = StyleSheet.create({
         letterSpacing: 0,
         color: "#2d2d2f",
         paddingVertical: 11,
-
-
     },
     buttonContainer: {
         flexDirection: "row",

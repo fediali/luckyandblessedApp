@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -8,35 +8,33 @@ import {
   TouchableOpacity,
   Dimensions,
   BackHandler,
-  Alert
+  Alert,
 } from 'react-native';
 
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import SignatureCapture from 'react-native-signature-capture';
-import { Icon } from 'react-native-elements';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {Icon} from 'react-native-elements';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
-import DeleteData from '../reusableComponents/API/DeleteData'
+import DeleteData from '../reusableComponents/API/DeleteData';
 import LogoSmall from './Styles/LogoSmall';
-import { call } from 'react-native-reanimated';
-import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
-const STORAGE_DEFAULTS = "defaults"
+import {call} from 'react-native-reanimated';
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+const STORAGE_DEFAULTS = 'defaults';
 const baseUrl = 'http://dev.landbw.co/';
 
-
-let DEFAULTS_OBJ = []
+let DEFAULTS_OBJ = [];
 
 class TaxID extends Component {
   constructor(props) {
     super(props);
 
     var dateToday = new Date();
-      var dd = String(dateToday.getDate()).padStart(2, '0');
-      var mm = String(dateToday.getMonth() + 1).padStart(2, '0'); //January is 0!
-      var yyyy = dateToday.getFullYear();
-      dateToday = mm + ' - ' + dd + ' - ' + yyyy;
-
+    var dd = String(dateToday.getDate()).padStart(2, '0');
+    var mm = String(dateToday.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = dateToday.getFullYear();
+    dateToday = mm + ' - ' + dd + ' - ' + yyyy;
 
     this.state = {
       newValue1: '',
@@ -62,16 +60,14 @@ class TaxID extends Component {
       signError: '',
       signImage: '', //base64 encoded
       defaults: null,
-      dateToday: dateToday
+      dateToday: dateToday,
     };
-
   }
 
   componentDidMount() {
-
-    RetrieveDataAsync(STORAGE_DEFAULTS).then(defaults => {
-      DEFAULTS_OBJ = JSON.parse(defaults)
-    })
+    RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
+      DEFAULTS_OBJ = JSON.parse(defaults);
+    });
   }
 
   updateSize = (height) => {
@@ -92,47 +88,56 @@ class TaxID extends Component {
   }
 
   resetSign() {
-    this.setState({ sign: false });
+    this.setState({sign: false});
     this.refs['sign'].resetImage();
   }
 
   _onSaveEvent = (result) => {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
-    this.setState({ signImage: "data:image/png;base64," + result.encoded.toString() })
+
+    this.setState({
+      signImage: 'data:image/png;base64,' + result.encoded.toString(),
+    });
     // console.log(result.encoded);
-  }
+  };
   _onDragEvent() {
+
     // This callback will be called when the user enters signature
-    this.setState({ sign: true });
+    this.setState({sign: true});
     console.log('dragged');
+
   }
 
   submitClick = () => {
     if (this.isValid()) {
-      this.refs["sign"].saveImage();
+      this.refs['sign'].saveImage();
       var today = new Date();
       var dd = String(today.getDate()).padStart(2, '0');
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
-      console.log("API PARAMS",this.props.route.params.url,this.props.route.params.data)
-      PostData(this.props.route.params.url,this.props.route.params.data).then((res) => res.json())
+      console.log(
+        'API PARAMS',
+        this.props.route.params.url,
+        this.props.route.params.data,
+      );
+      PostData(this.props.route.params.url, this.props.route.params.data)
+        .then((res) => res.json())
         .then((response) => {
-          console.log("RESSPONSE",response)
-          console.log("::::::::::", response.user_id)
-          setTimeout(() => this.callAPI(today, response.user_id), 500)
-
-        }).catch((ex) => {
+          console.log('RESSPONSE', response);
+          console.log('::::::::::', response.user_id);
+          setTimeout(() => this.callAPI(today, response.user_id), 500);
+        })
+        .catch((ex) => {
           console.log('Promise exception', ex);
           alert(ex);
-        })
+        });
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
     }
   };
 
   callAPI(today, user_id) {
-
     // console.log("000" + this.state.signImage)
     const data = {
       name: this.state.nameOfPurchase,
@@ -148,20 +153,21 @@ class TaxID extends Component {
       signature: this.state.signImage,
       user_id: user_id, //CHECK THIS
       company_id: DEFAULTS_OBJ.store_id.toString(),
-      timestamp: + new Date()
-      // MExicoregistrationNum
-      // OutofstateFedralTaxpayNum
-    }
-    console.log("Data", data)
+      timestamp: +new Date(),
 
-    PostData(baseUrl + 'api/salestaxid', data).
-      then((res) => res.json()).
-      then((response) => {
-        console.log(response)
+    };
+    console.log('Data', data);
+
+    PostData(baseUrl + 'api/salestaxid', data)
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
         Toast.show('Registered Successfully');
-        this.props.navigation.navigate("SignIn") //Passing user Name
-      }).catch(err => { throw err })
-
+        this.props.navigation.navigate('SignIn'); //Passing user Name
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
   isValid() {
     let validFlag = true;
@@ -171,14 +177,14 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({ nameOfPurchaseError: '' });
+      this.setState({nameOfPurchaseError: ''});
     }
 
     if (this.state.phone == '') {
-      this.setState({ phoneError: 'Phone is required.' });
+      this.setState({phoneError: 'Phone is required.'});
       validFlag = false;
     } else {
-      this.setState({ phoneError: '' });
+      this.setState({phoneError: ''});
     }
 
     if (this.state.address == '') {
@@ -187,7 +193,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({ addressError: '' });
+      this.setState({addressError: ''});
     }
 
     if (this.state.address2 == '') {
@@ -196,7 +202,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({ addressError: '' });
+      this.setState({addressError: ''});
     }
 
     if (this.state.texasSales == '') {
@@ -205,7 +211,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({ texasSalesError: '' });
+      this.setState({texasSalesError: ''});
     }
 
     if (this.state.outOfState == '') {
@@ -214,21 +220,21 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({ outOfStateError: '' });
+      this.setState({outOfStateError: ''});
     }
 
     if (this.state.description == '') {
-      this.setState({ descriptionError: 'Description of buisness is required.' });
+      this.setState({descriptionError: 'Description of buisness is required.'});
       validFlag = false;
     } else {
-      this.setState({ descriptionError: '' });
+      this.setState({descriptionError: ''});
     }
 
     if (this.state.sign == false) {
-      this.setState({ signError: 'Your signature is required.' });
+      this.setState({signError: 'Your signature is required.'});
       validFlag = false;
     } else {
-      this.setState({ signError: '' });
+      this.setState({signError: ''});
     }
     return validFlag;
   }
@@ -247,8 +253,8 @@ class TaxID extends Component {
     );
   }
   render() {
-    const { value1, _, height1, __ } = this.state;
-    const { ___, value2, ____, height2 } = this.state;
+    const {value1, _, height1, __} = this.state;
+    const {___, value2, ____, height2} = this.state;
 
     let newStyle1 = {
       height1,
@@ -279,13 +285,13 @@ class TaxID extends Component {
                   style={styles.input}
                   placeholder="Name of purchaser, firm or agence"
                   onChangeText={(text) => {
-                    this.setState({ nameOfPurchase: text });
+                    this.setState({nameOfPurchase: text});
                   }}
                 />
               </View>
-              {this.state.nameOfPurchaseError != '' ? (
-                this.showErrorMessage(this.state.nameOfPurchaseError)
-              ) : null}
+              {this.state.nameOfPurchaseError != ''
+                ? this.showErrorMessage(this.state.nameOfPurchaseError)
+                : null}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -293,39 +299,39 @@ class TaxID extends Component {
                   placeholder="Phone"
                   keyboardType={'number-pad'}
                   onChangeText={(text) => {
-                    this.setState({ phone: text });
+                    this.setState({phone: text});
                   }}
                 />
               </View>
-              {this.state.phoneError != '' ? (
-                this.showErrorMessage(this.state.phoneError)
-              ) : null}
+              {this.state.phoneError != ''
+                ? this.showErrorMessage(this.state.phoneError)
+                : null}
 
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="Address"
                   onChangeText={(text) => {
-                    this.setState({ address: text });
+                    this.setState({address: text});
                   }}
                 />
               </View>
-              {this.state.addressError != '' ? (
-                this.showErrorMessage(this.state.addressError)
-              ) : null}
+              {this.state.addressError != ''
+                ? this.showErrorMessage(this.state.addressError)
+                : null}
 
               <View style={styles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="City, State, ZIP code"
                   onChangeText={(text) => {
-                    this.setState({ address2: text });
+                    this.setState({address2: text});
                   }}
                 />
               </View>
-              {this.state.address2Error != '' ? (
-                this.showErrorMessage(this.state.address2Error)
-              ) : null}
+              {this.state.address2Error != ''
+                ? this.showErrorMessage(this.state.address2Error)
+                : null}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -333,13 +339,13 @@ class TaxID extends Component {
                   placeholder="Texas sales & Use Tax Permit Num"
                   keyboardType={'number-pad'}
                   onChangeText={(text) => {
-                    this.setState({ texasSales: text });
+                    this.setState({texasSales: text});
                   }}
                 />
               </View>
-              {this.state.texasSalesError != '' ? (
-                this.showErrorMessage(this.state.texasSalesError)
-              ) : null}
+              {this.state.texasSalesError != ''
+                ? this.showErrorMessage(this.state.texasSalesError)
+                : null}
 
               <View style={styles.inputView}>
                 <TextInput
@@ -347,13 +353,13 @@ class TaxID extends Component {
                   placeholder="Out-of-state or Fedral Taxpay Num"
                   keyboardType={'number-pad'}
                   onChangeText={(text) => {
-                    this.setState({ outOfState: text });
+                    this.setState({outOfState: text});
                   }}
                 />
               </View>
-              {this.state.outOfStateError != '' ? (
-                this.showErrorMessage(this.state.outOfStateError)
-              ) : null}
+              {this.state.outOfStateError != ''
+                ? this.showErrorMessage(this.state.outOfStateError)
+                : null}
 
               <Text style={[innerStyles.customText1]}>
                 I, the purchaser named above, claim the right to make a
@@ -386,7 +392,7 @@ class TaxID extends Component {
                 <TextInput
                   placeholder="Type here"
                   onChangeText={(value1) =>
-                    this.setState({ value1, description: value1 })
+                    this.setState({value1, description: value1})
                   }
                   style={[innerStyles.customInput]}
                   editable={true}
@@ -396,9 +402,9 @@ class TaxID extends Component {
                     this.updateSize(e.nativeEvent.contentSize.height)
                   }></TextInput>
               </View>
-              {this.state.descriptionError != '' ? (
-                this.showErrorMessage(this.state.descriptionError)
-              ) : null}
+              {this.state.descriptionError != ''
+                ? this.showErrorMessage(this.state.descriptionError)
+                : null}
 
               <Text
                 style={[
@@ -433,9 +439,9 @@ class TaxID extends Component {
                   minStrokeWidth={7}
                 />
               </View>
-              {this.state.signError != '' ? (
-                this.showErrorMessage(this.state.signError)
-              ) : null}
+              {this.state.signError != ''
+                ? this.showErrorMessage(this.state.signError)
+                : null}
 
               <Text
                 style={[innerStyles.customTextBoldSmall, innerStyles.dateText]}>
@@ -496,7 +502,7 @@ const innerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 15,
   },
-  errorMessageText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
+  errorMessageText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
   customInput: {
     borderRadius: 6,
     backgroundColor: '#f6f6f6',
@@ -516,12 +522,12 @@ const innerStyles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
   },
-  titleFontSize: { fontSize: 20 },
-  scrollMargin: { marginBottom: 38 },
-  textMargin: { marginTop: 20 },
-  customTextMargin: { marginTop: 15 },
-  customPadding: { paddingHorizontal: 30 },
-  customDim: { height: 240, paddingHorizontal: 30 },
+  titleFontSize: {fontSize: 20},
+  scrollMargin: {marginBottom: 38},
+  textMargin: {marginTop: 20},
+  customTextMargin: {marginTop: 15},
+  customPadding: {paddingHorizontal: 30},
+  customDim: {height: 240, paddingHorizontal: 30},
   customView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -539,9 +545,9 @@ const innerStyles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
   },
-  buttonView: { paddingHorizontal: 30, marginTop: 20, width: '100%' },
-  dateText: { width: '100%', textAlign: 'left' },
-  signCap: { borderRadius: 6, borderColor: '#000', flex: 1 },
+  buttonView: {paddingHorizontal: 30, marginTop: 20, width: '100%'},
+  dateText: {width: '100%', textAlign: 'left'},
+  signCap: {borderRadius: 6, borderColor: '#000', flex: 1},
   buttonSubmit: {
     width: '100%',
     backgroundColor: '#2967ff',

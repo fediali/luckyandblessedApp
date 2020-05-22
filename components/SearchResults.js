@@ -39,19 +39,19 @@ export default class SearchResults extends Component {
   }
 
   componentDidMount() {
+
+    // console.log("We here")
+
+    this.onComponentFocus = this.props.navigation.addListener('focus', () => {
+      if (this.props.route.params){
+        this.setState({searchText: this.props.route.params.barcode.data}, () => this.searchText())
+      }
+    });
     InteractionManager.runAfterInteractions(() => {
       RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
         DEFAULTS_OBJ = JSON.parse(defaults);
       });
     });
-  }
-
-  focus (){
-    console.log("Focus Called");
-    // if (this.props.route.params.barcode){
-    //   this.setState({searchText: barcode.data})
-    //   console.log("Barcode value", barcode.data)
-    // }
   }
 
   renderSeparator = (item) => {
@@ -70,7 +70,6 @@ export default class SearchResults extends Component {
   };
 
   searchText = () => {
-    console.log('WAALLL');
     var promises = [];
     if (this.state.searchText != null && this.state.searchText.length > 0){
       promises.push(
@@ -196,7 +195,6 @@ export default class SearchResults extends Component {
     if (this.state.showZeroProductScreen) {
       console.log('Zero zero zero');
     }
-    console.log('MYNUM', this.state.products.length);
 
     return (
       <SafeAreaView style={styles.mainContainer}>
@@ -216,7 +214,7 @@ export default class SearchResults extends Component {
               style={styles.inputText}
               placeholder="Search"
               returnKeyType="search"
-              value={thi.state.searchText}
+              value={this.state.searchText}
               onFocus={this.searchTextBoxClicked}
               onChangeText={(searchText) => this.setState({ searchText })}
               onEndEditing={this.searchText}
