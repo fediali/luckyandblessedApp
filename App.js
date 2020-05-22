@@ -97,7 +97,7 @@ class App extends Component {
             <Stack.Navigator
               screenOptions={{
                 headerShown: false,
-                // ...TransitionPresets.SlideFromRightIOS
+                ...TransitionPresets.DefaultTransition
               }}
             >
               {!this.state.isAuthenticated ?
@@ -132,14 +132,7 @@ class App extends Component {
                 </>
 
               }
-
-
-              {/* <Stack.Screen name="ProductPage" component={ProductPage} /> */}
-              {/* <Stack.Screen name="Payment" component={Payment} /> */}
-
-              {/* <Stack.Screen name="Filter" component={Filter} />
-          <Stack.Screen name="ColorPicker" component={ColorPicker} /> */}
-
+              
             </Stack.Navigator>
           </ThemeContext.Provider>
         </NavigationContainer>

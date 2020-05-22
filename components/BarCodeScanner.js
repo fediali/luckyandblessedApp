@@ -20,11 +20,21 @@ export default class BarCodeScanner extends Component {
     barCodeRead: false,
   };
 
+  componentDidMount() {
+    this.onComponentFocus = this.props.navigation.addListener('focus', () => {
+      this.setState({barCodeRead: false});
+    });
+
+  }
+
   onBarCodeRead = (barcode) => {
-    if (!this.state.barCodeRead){
-      this.setState({barCodeRead: true})
-      Alert.alert("Barcode value is"+barcode.data ,"Barcode type is"+barcode.type);
-      this.props.navigation.navigate("SearchResults", barcode);
+    if (!this.state.barCodeRead) {
+      this.setState({barCodeRead: true});
+      Alert.alert(
+        'Barcode value is' + barcode.data,
+        'Barcode type is' + barcode.type,
+      );
+      this.props.navigation.navigate('SearchResults', {barcode});
     }
   };
 
