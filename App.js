@@ -27,11 +27,10 @@ import ProductPage from "./components/ProductPage"
 import MainPage from "./components/MainPage"
 import codePush from "react-native-code-push"
 import Filter from "./components/Filter"
-import ZeroDataScreen from "./reusableComponents/ZeroDataScreen"
 import ThemeContext from "./reusableComponents/ThemeContext"
 import RetrieveDataAsync from './reusableComponents/AsyncStorage/RetrieveDataAsync'
 import BarCodeScanner from './components/BarCodeScanner'
-// import fcmService from './firebase/FCMService'
+import Globals from "./Globals"
 class App extends Component {
 
   constructor(props) {
@@ -42,10 +41,8 @@ class App extends Component {
       loading: true
     }
 
-    // componentDidMount(){
 
-    // }
-    RetrieveDataAsync("user").then((value) => {
+    RetrieveDataAsync(Globals.STORAGE_USER).then((value) => {
       if (value != null) {
 
         this.setState({
@@ -58,7 +55,9 @@ class App extends Component {
       }
       else {
         this.setState({
-          loading: false
+          loading: false,
+          isAuthenticated:false,
+          username:""
         })
       }
     });
@@ -66,7 +65,7 @@ class App extends Component {
   }
 
   setAuthenticated = (username) => {
-    if (username == "") {
+    if (!username) {
       this.setState({ isAuthenticated: false, username: username })
     }
     else {

@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TextInput, InteractionManager, TouchableOpacity, SafeAreaView, FlatList, ActivityIndicator } from "react-native"
+import { View, StyleSheet, InteractionManager, SafeAreaView, FlatList, ActivityIndicator } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
-import { ScrollView } from 'react-native-gesture-handler';
 import CategoriesListItem from "../reusableComponents/CategoriesListItem"
-import Shimmer from 'react-native-shimmer';
 import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalListItem"
-
-const baseUrl = "http://dev.landbw.co/";
+import Globals from "../Globals"
+const baseUrl = Globals.baseUrl;
 
 class Categories extends Component {
 
@@ -22,7 +20,6 @@ class Categories extends Component {
             isReady: false,
             nextScreen: false
         }
-        console.log()
 
     }
 
@@ -34,7 +31,6 @@ class Categories extends Component {
     }
 
     onCategorySelect = (cid, cname) => {
-        console.log(cid)
         this.setState({ cid, cname })
         if (cid == -1) {
             this.props.navigation.goBack()
@@ -43,7 +39,6 @@ class Categories extends Component {
             this.setState({ isReady: false })
             GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`).then(res => res.json()).then(
                 (responses) => {
-                    console.log(baseUrl + `api/categories?visible=1&category_id=${cid}`)
                     if (responses.categories.length > 0) {
                         var subCat = responses.categories;
                         this.setState({ cid, cname, data: subCat, isReady: true }); //SubCat of the selected category and categoryList is main categories

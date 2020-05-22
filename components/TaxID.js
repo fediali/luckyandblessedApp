@@ -17,7 +17,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import LogoSmall from './Styles/LogoSmall';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
-const Globals = require('../Globals');
+import Globals from '../Globals';
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 const baseUrl = Globals.baseUrl;

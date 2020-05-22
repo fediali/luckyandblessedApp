@@ -17,7 +17,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
-const Globals = require('../Globals');
+import Globals from '../Globals';
 
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;

@@ -18,7 +18,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
 import {Icon} from 'react-native-elements';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
-const Globals = require('../Globals');
+import Globals from '../Globals';
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 const baseUrl = Globals.baseUrl;

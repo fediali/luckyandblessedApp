@@ -1,5 +1,5 @@
-module.export = {
-  APP_NAME: 'Wedding PK',
+module.exports = {
+  APP_NAME: 'LandB',
   Colours: {
     BASE_THEME_COLOR: '#000000',
   },

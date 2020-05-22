@@ -6,7 +6,8 @@ import PostData from '../reusableComponents/API/PostData';
 import Toast from 'react-native-simple-toast';
 import GetData from '../reusableComponents/API/GetData';
 import AsyncStorage from '@react-native-community/async-storage';
-const Globals = require('../Globals');
+import Globals from '../Globals';
+import ThemeContext from '../reusableComponents/ThemeContext'
 
 const baseUrl = Globals.baseUrl;
 
@@ -26,6 +27,7 @@ class SignIn extends Component {
         }
 
     }
+    static contextType = ThemeContext
 
     _storeData = async (user) => {
         try {

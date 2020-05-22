@@ -8,15 +8,9 @@ import {
     StyleSheet,
     Dimensions,
     FlatList,
-    ImageBackground,
-    ActivityIndicator,
     InteractionManager,
-    YellowBox,
     SafeAreaView,
-    Alert
 } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage';
-
 import styles from './Styles/Style'
 import Header from '../reusableComponents/Header'
 import Footer from '../reusableComponents/Footer'
@@ -29,17 +23,13 @@ import MainPageTrendingListItem from "../reusableComponents/MainPageTrendingList
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 import FastImage from 'react-native-fast-image'
-// import { ThemeContext } from '../App'
 import ThemeContext from '../reusableComponents/ThemeContext'
+import Globals from "../Globals"
 
-// YellowBox.ignoreWarnings([
-//     'Require cycle:'
-// ])
-
-const baseUrl = "http://dev.landbw.co/";
+const baseUrl = Globals.baseUrl;
 const SELECTED_CATEGORY_ALL = -1
-const STORAGE_PRODUCT_HISTORY_CATEGORY="productHistoryList"
-const STORAGE_DEFAULTS="defaults"
+const STORAGE_PRODUCT_HISTORY_CATEGORY=Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
+const STORAGE_DEFAULTS=Globals.STORAGE_DEFAULTS
 const NEW_ARRIVAL_NAME = "New Arrivals"
 const TRENDING_NAME = "Trending"
 const HISTORY_NAME = "History"
@@ -67,21 +57,17 @@ class MainPage extends Component {
     componentDidMount() {
 
         InteractionManager.runAfterInteractions(() => {
-            var prodHistory;
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33&status=A')) //Category id for store.
-            // Retriving the user_id
-            // this._retrieveData('user_id').then(value => {
-            //     console.log("THIS IS VALUE", value)
-            // });
+            
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
 
                     //Adding "All" to categories response
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
                     RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then(value => {
-                        // console.log("Product History: ", value)
+
                         this.setState({
                             collections: responses[0].home.logged.sliders,
                             newArrivals: responses[0].home.logged.new_arrivals.products,
@@ -95,7 +81,6 @@ class MainPage extends Component {
                     });
                     //Storing defaults obtained through API
                     StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
-                        console.log("Defaults saved in storage")
                     )
                    
 
@@ -105,23 +90,20 @@ class MainPage extends Component {
         })
     }
     onCategorySelect = (cid, cname) => {
-        // this.setState({ selectedCategory: index })
-        // console.log(cid)
         this.setState({ isReady: false })
         GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`).then(res =>res.json()).then(
             (responses) => {
 
-                // console.log(responses)
                 if (responses.categories.length > 0) {
                     var subCat = responses.categories;
-                    // console.log(subCat)
                     this.props.navigation.navigate("Categories", { cid: cid, cname: cname, subCats: subCat, categoryList: this.state.categoryList }); //SubCat of the selected category and categoryList is main categories
 
                 }
 
                 else
                     this.props.navigation.navigate("CategoriesProduct", { cid, cname })
-                setTimeout(() => { this.setState({ isReady: true }) }, 1000)
+                //TODO: 1000ms delay was given i can't figure out the reason so i changed it to 0 
+                setTimeout(() => { this.setState({ isReady: true }) }, 0)
 
             }
         ).catch(ex => { console.log("abcd Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
@@ -149,7 +131,6 @@ class MainPage extends Component {
     }
 
     mapTrendingList(tList, sliceValue) {
-        console.log("trending  =>  ", tList);
         let tempList = []
 
         for (var i = 0; i < tList.length / sliceValue; i++) {
@@ -160,9 +141,6 @@ class MainPage extends Component {
 
     render() {
         const contextType = ThemeContext
-        // console.log(contextType)
-        const Width = Dimensions.get('window').width;
-        const Height = Dimensions.get('window').height;
         if (!this.state.isReady) {
             return (
                 <View style={styles.loader}>
@@ -233,7 +211,6 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        // resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[1].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
@@ -247,7 +224,6 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        // resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[2].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
@@ -260,7 +236,6 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        // resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[3].image }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>

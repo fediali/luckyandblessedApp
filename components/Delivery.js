@@ -11,7 +11,6 @@ import {
     InteractionManager
 } from 'react-native'
 
-import LogoMedium from './Styles/LogoMedium'
 import styles from './Styles/Style'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../reusableComponents/Header'
@@ -36,9 +35,6 @@ class Delivery extends Component {
     };
 
     render() {
-        let width = Dimensions.get('window').width;
-        let height = Dimensions.get('window').height;
-
         if (!this.state.isReady) {
             return (
                 <View style={innerStyles.loader}>
