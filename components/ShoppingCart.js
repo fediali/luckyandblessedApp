@@ -7,7 +7,6 @@ import {
     TextInput,
     TouchableOpacity,
     FlatList,
-    ScrollView,
     YellowBox,
     Dimensions,
     Alert,

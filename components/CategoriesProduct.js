@@ -3,7 +3,6 @@ import {
     View,
     Text,
     StyleSheet,
-    TextInput,
     TouchableOpacity,
     SafeAreaView,
     FlatList,
@@ -12,18 +11,15 @@ import {
 } from "react-native"
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
-import { ScrollView } from 'react-native-gesture-handler';
-import CategoriesListItem from "../reusableComponents/CategoriesListItem"
 import { Icon } from 'react-native-elements'
 import CategoriesProductListSingleItem from "../reusableComponents/CategoriesProductListSingleItem"
 import CategoriesProductListDoubleItem from "../reusableComponents/CategoriesProductListDoubleItem"
-import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
-
-const baseUrl = "http://dev.landbw.co/";
-const STORAGE_DEFAULTS = "defaults"
+import Globals from "../Globals"
+const baseUrl = Globals.baseUrl;
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 let DEFAULTS_OBJ = []
 const HISTORY_CATEGORY_ID = -2
 const SIMILARPRODUCTS_CATEGORY_ID = -3
@@ -49,7 +45,6 @@ class CategoriesProduct extends Component {
     }
 
     loadData = (cid) => {
-        console.log(cid)
         if (cid == HISTORY_CATEGORY_ID) //Cid of HISTORY
         {
             var historyItems = this.props.route.params.items;
@@ -61,7 +56,6 @@ class CategoriesProduct extends Component {
             async function parseProducts() {
                 const tempProducts = []
                 for (let i = 0; i < historyItems.length; i++) {
-                    console.log(historyItems[i].pid[0])
 
                     await tempProducts.push({
 
@@ -70,7 +64,7 @@ class CategoriesProduct extends Component {
                         price: parseFloat(historyItems[i].price).toFixed(2),
                         base_price: parseFloat(historyItems[i].base_price).toFixed(2),
                         imageUrl: historyItems[i].mainImage,
-                        product_brand: DEFAULTS_OBJ.brand, //TODO: Should come from Defaults
+                        product_brand: DEFAULTS_OBJ.brand,
                         cname: historyItems[i].cname
                     })
                 }
@@ -88,7 +82,6 @@ class CategoriesProduct extends Component {
 
         }
 
-        // else if ()
         else {
             var catName = this.state.cname
             var promises = []
@@ -98,7 +91,6 @@ class CategoriesProduct extends Component {
             }
             else {
                 promises.push(GetData(baseUrl + `api/products?cid=${cid}&page=${this.state.iteratedPage}&status=A`))
-                console.log(baseUrl + `api/products?cid=${cid}&page=${this.state.iteratedPage}&status=A`)
             }
             let itr = this.state.iteratedPage
             Promise.all(promises).then((promiseResponses) => {
@@ -111,13 +103,7 @@ class CategoriesProduct extends Component {
                         const tempProducts = []
                         for (let i = 0; i < responses[0].products.length; i++) {
                             if (responses[0].products[i].main_pair == null) continue;
-                            console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
-                            // let variant = ""
-                            // try {
-                            //     variant = responses[0].products[i].product_features["2"].variant
-                            // } catch{
-                            //     variant = responses[0].products[i].product
-                            // }
+                            
                             await tempProducts.push({
 
                                 product: responses[0].products[i].product,
@@ -221,16 +207,6 @@ class CategoriesProduct extends Component {
         this.props.navigation.navigate('Filter');
     }
     render() {
-        // if (!this.state.isReady) {
-        //     return (
-        //         <View style={{ flex: 1, alignItems: "center", justifyContent: "center", }}>
-        //             <Shimmer>
-        //                 <Image style={{ height: 200, width: 200 }} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
-        //             </Shimmer>
-        //         </View>
-        //     )
-
-        // }
         return (
             <SafeAreaView style={styles.superMainContainer}>
                 <Header navigation={this.props.navigation} rightIcon="search" />
@@ -371,7 +347,6 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         flex: 1,
-        // backgroundColor: "#000",
         paddingBottom: 50,
 
     },

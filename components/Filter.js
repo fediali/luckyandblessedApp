@@ -2,15 +2,12 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
-    Image,
     StyleSheet,
-    TextInput,
     TouchableOpacity,
     ScrollView,
     Dimensions,
     SafeAreaView,
     YellowBox,
-    Picker
 
 } from 'react-native';
 import { Icon } from 'react-native-elements'
@@ -20,11 +17,9 @@ import Accordion from 'react-native-collapsible/Accordion';
 import ColorPicker from "../reusableComponents/ColorPicker"
 import SizePicker from "../reusableComponents/SizePicker"
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-// import console = require('console');
 import ModalDropdown from 'react-native-modal-dropdown';
-import AccordionReusable from "../reusableComponents/AccordianReusable"
 import GetData from '../reusableComponents/API/GetData';
-
+import Globals from "../Globals"
 YellowBox.ignoreWarnings([
     'ReactNativeFiberHostComponent', // Useless Warning
     'Failed prop type', // Useless Warning
@@ -78,7 +73,7 @@ class Filter extends Component {
     }
 
     callFilterAPI=()=>{
-        let BASE_URL="http://dev.landbw.co/api/products"
+        let BASE_URL=Globals.baseUrl
         let url=BASE_URL
         if(this.state.selected==2){
             url+="&sort_by=price&sort_order=desc"
@@ -91,15 +86,11 @@ class Filter extends Component {
         }
         GetData(url).then((res)=>res.json()).then((result)=>{
             // TODO: RESULT is obtained from Filters now show them in products page
-            console.log(result)
         })
-        // console.log(url)
     }
 
     //This function Receives the state from colour component when item is changed 
     parentCallBackColor=(colorListData)=> {
-        // console.log(colorListData)
-        // console.log(this.state)
         this.setState({ colorList: colorListData })
     }
 
@@ -110,8 +101,7 @@ class Filter extends Component {
     }
     //clear All click Handler
     rightIconClickHandler=()=> {
-        alert("hellow")
-        console.log(this.state)
+        alert("test")
     }
 
     onItemClick=(key)=>()=>{
@@ -119,7 +109,6 @@ class Filter extends Component {
     }
 
     multiSliderValueHandler=(values)=>{
-        console.log("Caaled",values)
         this.setState({ multislideVal: values })
     }
 
@@ -127,24 +116,19 @@ class Filter extends Component {
           // To retrive value of colour and size not implement yet
         //   this.child.method()
        
-        // console.log("CALAED")
         this.callFilterAPI()
      
     }
     _renderHeader = section => {
-        // console.log(section)
         let colors = []
 
         if (section.title == "Color") {
-            // console.log(section.content)
             for (let i = 0; i < section.content.length; i++) {
-                // console.log(section.content[i])
                 colors.push(
                     <View key={i} style={{ width: 20, height: 20, backgroundColor: section.content[i], borderRadius: 10, marginRight: 5 }}></View>
                 )
             }
         }
-        // console.log("<<", colors)
 
         return (
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 13 }}>
@@ -208,7 +192,6 @@ class Filter extends Component {
 
                     <MultiSlider
                         values={[this.state.multislideVal[0], this.state.multislideVal[1]]}
-                        // onValuesChange={this.multiSliderValueHandler}
                         onValuesChangeFinish={this.multiSliderValueHandler}
                         min={0}
                         max={999}
@@ -236,18 +219,13 @@ class Filter extends Component {
     };
 
     _updateSections = activeSections => {
-        // console.log(activeSections)
         this.setState({ activeSections });
     };
     render() {
-        // let width = Dimensions.get('window').width;
-        // let height = Dimensions.get('window').height;
         let filterListItemsText = ["Most popular", "New items", "Price: High - Low", "Price: Low - High"]
-        // console.log(this.state)
         return (
             <SafeAreaView style={styles.mainContainer}>
                 <Header navigation={this.props.navigation} centerText="Filter" rightIcon="clear" rightIconClickHandler={this.rightIconClickHandler} />
-                {/*add justifyContent: 'space-between' */}
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.grownFlex}>
                     <View style={styles.twentyPad}>
                         {filterListItemsText.map((item, key) => (
@@ -279,11 +257,9 @@ class Filter extends Component {
                             renderHeader={this._renderHeader}
                             renderContent={this._renderContent}
                             onChange={this._updateSections}
-                            // touchableComponent={(props) => <TouchableOpacity {...props} />}
                             expandMultiple={true}
 
                         />
-                        {/* <AccordionReusable state={this.state} customSetState={(stateVal) => { this.customSetState(stateVal) }} /> */}
                     </View>
                     <View style={styles.allItemsView}>
                         <TouchableOpacity style={styles.allItemsTouch} onPress={this.handleViewAll}>

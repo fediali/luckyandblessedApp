@@ -13,9 +13,9 @@ import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
-const Globals = require('../Globals');
+import Globals from '../Globals';
 
-const STORAGE_DEFAULTS = GlobalStyles.STORAGE_DEFAULTS
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const baseUrl = Globals.baseUrl;
 
 export default class WalkThrough extends Component {

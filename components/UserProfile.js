@@ -19,8 +19,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
 import ThemeContext from '../reusableComponents/ThemeContext'
-const Globals = require('../Globals');
-
+import Globals from '../Globals';
+// TODO: GLOBALS NOT WORKING PROPERLY
 const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
 const STORAGE_USER = Globals.STORAGE_USER
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
@@ -104,8 +104,6 @@ export default class UserProfile extends Component {
 
   render() {
 
-    let Height = Dimensions.get('window').height;
-    let Width = Dimensions.get('window').width;
     if (!this.state.isReady) {
       return (
         <View style={GlobalStyles.loader}>
