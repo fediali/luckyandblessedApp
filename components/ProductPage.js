@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
-  Image,
   TouchableOpacity,
   Dimensions,
   ScrollView,
@@ -19,7 +18,6 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import {Icon} from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import GetData from '../reusableComponents/API/GetData';
-// import HTML from 'react-native-render-html';
 import HTMLView from 'react-native-htmlview';
 import Toast from 'react-native-simple-toast';
 import FastImage from 'react-native-fast-image';
@@ -33,7 +31,7 @@ const SIMILARPRODUCTS_CATEGORY_ID = -3;
 const SIMILARPRODUCTS_NAME = 'SIMILAR PRODUCTS';
 const STORAGE_DEFAULTS = 'defaults';
 
-const baseUrl = 'http://dev.landbw.co/';
+const baseUrl = Globals.baseUrl;
 let DEFAULTS_OBJ = [];
 
 export default class ProductPage extends Component {
@@ -74,7 +72,6 @@ export default class ProductPage extends Component {
   getData() {
     var promises = [];
 
-    console.log('abcd', this.state.pid);
     promises.push(GetData(baseUrl + `api/products/${this.state.pid}`));
     promises.push(GetData(baseUrl + `api/similarproducts/54578`)); //TODO: Change the 54578 to ${this.state.pid}
     Promise.all(promises)
@@ -84,17 +81,12 @@ export default class ProductPage extends Component {
             async function getArray() {
               const secondaryImagesArray = [];
               for (var key in response[0].image_pairs) {
-                console.log(response[0].image_pairs[key].detailed.image_path);
                 await secondaryImagesArray.push(
                   response[0].image_pairs[key].detailed.image_path,
                 );
               }
               return secondaryImagesArray;
             }
-            console.log('*********************');
-            console.log(response);
-
-            console.log('*********************');
             if (response[0].status == 404) {
               this.setState({
                 showZeroProductScreen: true,
@@ -113,7 +105,6 @@ export default class ProductPage extends Component {
 
                 // Stroing History of objects
                 RetrieveDataAsync('productHistoryList').then((value) => {
-                  console.log(';;;;;;;', response);
                   if (value == null) value = [];
                   else value = JSON.parse(value);
                   let historyObj = {
@@ -129,19 +120,12 @@ export default class ProductPage extends Component {
                     value.filter((obj) => obj.pid[0] === historyObj.pid[0])
                       .length == 0
                   ) {
-                    console.log(
-                      'ppppp',
-                      value.filter((obj) => obj.pid[0] === historyObj.pid[0]),
-                    );
-                    console.log(value);
-                    console.log(historyObj);
 
                     value.unshift(historyObj);
                     if (value.length >= 10) value.pop();
                     StoreDataAsync('productHistoryList', value);
                   }
                 });
-                // console.log(secondaryImagesArray)
 
                 this.setState({
                   isReady: true,
@@ -188,7 +172,6 @@ export default class ProductPage extends Component {
   }
 
   _updateSections = (activeSections) => {
-    // console.log(activeSections)
     this.setState({activeSections});
   };
   _renderHeader = (section) => {
@@ -214,7 +197,6 @@ export default class ProductPage extends Component {
     );
   };
   _renderContent = (section) => {
-    console.log(section);
     if (section.name == 'Description') {
       return (
         <View style={{paddingHorizontal: 20}}>
@@ -277,7 +259,6 @@ export default class ProductPage extends Component {
   };
 
   render() {
-    console.log(this.state.data.composition);
     var quantityOptionsArray = [];
     if (Number(this.state.data.min_qty) > 1) {
       for (
@@ -289,7 +270,6 @@ export default class ProductPage extends Component {
       }
     }
 
-    // console.log("_______"+this.state.data.mainImage)
     if (!this.state.isReady) {
       return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -442,7 +422,6 @@ export default class ProductPage extends Component {
                 renderHeader={this._renderHeader}
                 renderContent={this._renderContent}
                 onChange={this._updateSections}
-                // touchableComponent={(props) => <TouchableOpacity {...props} />}
                 expandMultiple={true}
               />
 
@@ -522,7 +501,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 20,
     marginTop: 14,
-    // marginBottom: 20
   },
   itemNameText: {
     fontFamily: 'Montserrat-Medium',
@@ -554,7 +532,6 @@ const styles = StyleSheet.create({
   headerView: {
     width: Width,
     height: Height * 0.06,
-    // backgroundColor: '#344565',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15,
