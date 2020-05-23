@@ -22,7 +22,6 @@ const STORAGE_DEFAULTS = 'defaults';
 let DEFAULTS_OBJ = [];
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 
-//TODO: Add text view if no products found
 export default class SearchResults extends Component {
   constructor(props) {
     super(props);
@@ -75,8 +74,7 @@ export default class SearchResults extends Component {
       promises.push(
         GetData(
           baseUrl +
-          `api/products?q=${this.state.searchText}&search_app=Y&page=` +
-          this.state.iteratedPage,
+          `api/products?q=${this.state.searchText}&search_app=Y&page=${this.state.iteratedPage}&status=A`,
         ),
       );
       let itr = this.state.iteratedPage;
@@ -121,7 +119,7 @@ export default class SearchResults extends Component {
                         responses[0].products[i].main_pair.detailed.image_path,
                       product_brand: responses[0].products[i].brand
                         ? responses[0].products[i].brand
-                        : DEFAULTS_OBJ.brand, //TODO: should come from defaults
+                        : DEFAULTS_OBJ.brand, 
                     });
                   }
                 }

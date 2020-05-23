@@ -120,7 +120,7 @@ class SignUp extends Component {
 
       var data = {
         email: this.state.email,
-        password: md5.hex_md5(this.state.password), //TODO MD5 password
+        password: md5.hex_md5(this.state.password), 
         firstname: fullName[0],
         lastname: fullName[1],
         company_id: DEFAULTS_OBJ.store_id.toString(),
