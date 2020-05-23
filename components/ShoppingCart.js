@@ -32,7 +32,6 @@ YellowBox.ignoreWarnings([
     'Warning: componentWillUpdate is deprecated',
 ]);
 
-//TODO: Too long file. FlatListItem should be separated
 class FlatListItem extends Component {
     constructor(props) {
         super(props);
@@ -128,7 +127,6 @@ class FlatListItem extends Component {
                                 <View style={innerStyles.modalView}>
 
                                     <ModalDropdown
-                                        // onSelect={(index) => { console.log(index) }}
                                         options={this.props.item.availableSizes}
                                         defaultValue={this.props.item.unknownNum}
                                         style={innerStyles.modalStyle}
@@ -144,14 +142,6 @@ class FlatListItem extends Component {
                             </TouchableOpacity>
                             <TouchableOpacity style={[innerStyles.bottomSelectors, innerStyles.colorModalTouch]}>
                                 <View style={innerStyles.modalView}>
-                                    {/* <View style={{ width: 25, height: 25, marginStart: 15, borderRadius: 25, backgroundColor: this.props.item.hexColor, alignSelf: "center" }} />
-                                    <Image
-                                        style={{
-                                            height: 10,
-                                            width: 10,
-                                            paddingRight: 50
-                                        }} resizeMode='contain' source={require("../static/arrow_down.png")}
-                                    /> */}
 
                                     <ModalDropdown
                                         hexCode={this.state.currentSelectedColor}
@@ -275,8 +265,6 @@ class ShoppingCart extends Component {
 
     render() {
 
-        const Width = Dimensions.get('window').width;
-        //TODO: Did not refactor it coz it will surely be changed later with lazy loader..
         if (!this.state.isReady) {
             return (
                 <View style={styles.loader}>
@@ -287,7 +275,6 @@ class ShoppingCart extends Component {
             )
 
         }
-        const Height = Dimensions.get('window').height;
 
         return (
             <SafeAreaView style={innerStyles.itemView}>
