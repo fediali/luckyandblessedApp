@@ -73,8 +73,7 @@ class Filter extends Component {
     }
 
     callFilterAPI=()=>{
-        let BASE_URL=Globals.baseUrl
-        let url=BASE_URL
+        let url = '';
         if(this.state.selected==2){
             url+="&sort_by=price&sort_order=desc"
         }
@@ -84,9 +83,8 @@ class Filter extends Component {
         if(this.state.multislideVal[0]!=0 || this.state.multislideVal[1]!=1000){
             url+=`&price_from=${this.state.multislideVal[0]}&price_to=${this.state.multislideVal[1]}`
         }
-        GetData(url).then((res)=>res.json()).then((result)=>{
-            // TODO: RESULT is obtained from Filters now show them in products page
-        })
+        this.props.navigation.navigate('CategoriesProduct', {url});
+        
     }
 
     //This function Receives the state from colour component when item is changed 
