@@ -15,10 +15,11 @@ import { Icon } from 'react-native-elements';
 import SearchResultListItem from '../reusableComponents/SearchResultListItem';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import Globals from "../Globals"
-const baseUrl = Globals.baseUrl;
-const STORAGE_DEFAULTS = 'defaults';
-let DEFAULTS_OBJ = [];
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+
+const baseUrl = Globals.baseUrl;
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
+let DEFAULTS_OBJ = [];
 
 export default class SearchResults extends Component {
   constructor(props) {

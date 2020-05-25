@@ -56,6 +56,12 @@ class MainPage extends Component {
 
     componentDidMount() {
 
+        this.onComponentFocus = this.props.navigation.addListener('focus', () => {
+            RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then(value => {
+                this.setState({history: JSON.parse(value)})
+            })
+        })
+
         InteractionManager.runAfterInteractions(() => {
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
@@ -66,19 +72,17 @@ class MainPage extends Component {
 
                     //Adding "All" to categories response
                     responses[1].categories.unshift({ category_id: "-1", category: "All" })
-                    RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then(value => {
 
-                        this.setState({
-                            collections: responses[0].home.logged.sliders,
-                            newArrivals: responses[0].home.logged.new_arrivals.products,
-                            newArrivals_cid: responses[0].home.logged.new_arrivals.category_id,
-                            trending: responses[0].home.logged.trending.products,
-                            trending_cid: responses[0].home.logged.trending.category_id,
-                            defaults: responses[0].defaults,
-                            categoryList: responses[1].categories,
-                            history: JSON.parse(value)
-                        }, () => { this.mapTrendingList(this.state.trending, 3) })
-                    });
+                    this.setState({
+                        collections: responses[0].home.logged.sliders,
+                        newArrivals: responses[0].home.logged.new_arrivals.products,
+                        newArrivals_cid: responses[0].home.logged.new_arrivals.category_id,
+                        trending: responses[0].home.logged.trending.products,
+                        trending_cid: responses[0].home.logged.trending.category_id,
+                        defaults: responses[0].defaults,
+                        categoryList: responses[1].categories,
+                    }, () => { this.mapTrendingList(this.state.trending, 3) })
+
                     //Storing defaults obtained through API
                     StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
                     )

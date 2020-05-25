@@ -29,7 +29,7 @@ import Globals from '../Globals';
 
 const SIMILARPRODUCTS_CATEGORY_ID = -3;
 const SIMILARPRODUCTS_NAME = 'SIMILAR PRODUCTS';
-const STORAGE_DEFAULTS = 'defaults';
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 
 const baseUrl = Globals.baseUrl;
 let DEFAULTS_OBJ = [];
