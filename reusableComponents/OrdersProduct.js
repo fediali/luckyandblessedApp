@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
   Text,
   View,
@@ -9,7 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import OrderProductListItem from './OrderProductListItem';
 const Globals = require('../Globals');
 
@@ -27,12 +27,13 @@ export default class ordersProduct extends PureComponent {
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
       showZeroProductScreen: false,
+      trackingNumber: ""
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: false});
+      this.setState({ isReady: false });
       this.getData(this.props.orderId);
     });
   }
@@ -42,7 +43,7 @@ export default class ordersProduct extends PureComponent {
     promises.push(
       GetData(
         baseUrl +
-          `api/orders/${orderId}`,
+        `api/orders/${orderId}`,
       ),
     );
 
@@ -50,14 +51,32 @@ export default class ordersProduct extends PureComponent {
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
           .then((responses) => {
-            let product = [],
-            keys = Object.keys(responses[0].products);
-            for(var i=0,n=keys.length;i<n;i++){
-              var key  = keys[i];
-              product[key] = responses[0].products[key];
+            
+            productGroupKeys = Object.keys(responses[0].product_groups[0].products)
+            let productArray = []
+            let jsonProducts = {}
+            //TODO: No Size attribute in response.
+            //TODO: No Color attribute in response.
+            for (var i = 0; i < productGroupKeys.length; i++) {
+              jsonProducts['itemNum'] = productGroupKeys[i].toString()
+              jsonProducts['totalPrice'] = responses[0].product_groups[0].products[productGroupKeys[i]].price * responses[0].product_groups[0].products[productGroupKeys[i]].amount
+              jsonProducts['itemName'] = responses[0].product_groups[0].products[productGroupKeys[i]].product
+              jsonProducts['size'] = "Not available"
+              jsonProducts['color'] = "Not available"
+              jsonProducts['quantity'] = responses[0].product_groups[0].products[productGroupKeys[i]].amount
+              jsonProducts['unitPrice'] = responses[0].product_groups[0].products[productGroupKeys[i]].price
+              if ('detailed' in responses[0].product_groups[0].products[productGroupKeys[i]].main_pair) {
+                jsonProducts['imageUrl'] = responses[0].product_groups[0].products[productGroupKeys[i]].main_pair.detailed.image_path
+              }else{
+                jsonProducts['imageUrl'] = '../static/item_cart1.png'
+              }
+              jsonProducts['trackingnumber'] = res
+              productArray[i] = jsonProducts
+              jsonProducts = {}
+              
             }
 
-            this.setState({orders: product})
+            this.setState({ orders: productArray, isReady: true })
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
@@ -76,7 +95,7 @@ export default class ordersProduct extends PureComponent {
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
-    if (!this.state.isReady){
+    if (!this.state.isReady) {
       return (
         <View style={styles.loader}><ActivityIndicator size="large" /></View>
       )
@@ -85,9 +104,9 @@ export default class ordersProduct extends PureComponent {
       <View>
         <FlatList
           style={styles.flatlistStyle}
-          data={this.props.orders}
+          data={this.state.orders}
           keyExtractor={(item, index) => item.itemNum}
-          renderItem={({item}) => <OrderProductListItem data={item} />}
+          renderItem={({ item }) => <OrderProductListItem data={item} />}
           ItemSeparatorComponent={this.renderSeparator}
         />
         <View style={styles.dividerLine}></View>
@@ -95,7 +114,7 @@ export default class ordersProduct extends PureComponent {
         <TouchableOpacity style={styles.trackingStyle}>
           <Text style={styles.orderIdText}>
             {/* TODO: Get trackingNumberNumber */}
-            Track: {this.props.trackingNumber}
+            Track: {this.state.trackingNumber}
           </Text>
           <View style={styles.mar19}>
             <Icon size={20} name="right" type="antdesign" />
@@ -139,13 +158,13 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     marginVertical: 19,
   },
-  seperator: {paddingBottom: 20},
-  flatlistStyle: {marginTop: 13},
-  dividerLine: {backgroundColor: '#f6f6f6', paddingTop: 1},
+  seperator: { paddingBottom: 20 },
+  flatlistStyle: { marginTop: 13 },
+  dividerLine: { backgroundColor: '#f6f6f6', paddingTop: 1 },
   trackingStyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 20,
   },
-  mar19: {marginTop: 19},
+  mar19: { marginTop: 19 },
 });

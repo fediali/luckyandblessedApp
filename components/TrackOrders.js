@@ -11,7 +11,7 @@ import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Icon} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import OrderProducts from '../reusableComponents/OrdersProduct';
 import Accordion from 'react-native-collapsible/Accordion';
 import Shimmer from 'react-native-shimmer';
@@ -187,7 +187,6 @@ export default class TrackOrders extends Component {
   _renderContent = (section) => {
     return (
       <OrderProducts
-        // trackingNumber={section.trackingNumber}
         orderId={section.order_id}
       />
     );
@@ -222,7 +221,7 @@ export default class TrackOrders extends Component {
             navigation={this.props.navigation}
           />
 
-          <View style={styles.accordionStart}>
+          <ScrollView style={styles.accordionStart}>
             <Accordion
               underlayColor="#fff"
               sections={this.state.orders}
@@ -232,7 +231,7 @@ export default class TrackOrders extends Component {
               onChange={this._updateSections}
               expandMultiple={true}
             />
-          </View>
+          </ScrollView>
 
           <View style={styles.bottomContainer}></View>
 
