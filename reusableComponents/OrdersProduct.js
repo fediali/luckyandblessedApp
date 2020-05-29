@@ -14,7 +14,9 @@ import OrderProductListItem from './OrderProductListItem';
 const Globals = require('../Globals');
 
 const baseUrl = Globals.baseUrl;
-
+//TODO: image from imageurl is not getting rendered. So currently hard coded image is presenter
+//TODO: allignment is out for name and price of products
+//TODO: IDK how to set tracking number for each list because that is seperate API
 export default class ordersProduct extends PureComponent {
   constructor(props) {
     super(props);
@@ -23,11 +25,11 @@ export default class ordersProduct extends PureComponent {
       iteratedPage: 1,
       orders: [],
       isReady: false,
+      isTrackingReady: false,
       totalOrders: 0,
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
       showZeroProductScreen: false,
-      trackingNumber: ""
     };
   }
 
@@ -36,6 +38,33 @@ export default class ordersProduct extends PureComponent {
       this.setState({ isReady: false });
       this.getData(this.props.orderId);
     });
+  }
+
+  getTrackingData = (shipmentID, index) => {
+    var promises = [];
+    promises.push(
+      GetData(
+        baseUrl +
+        `api/shipments/${shipmentID}`,
+      ),
+    );
+    Promise.all(promises)
+      .then((promiseResponses) => {
+        Promise.all(promiseResponses.map((res) => res.json()))
+          .then((responses) => {
+            console.log(responses)
+            let newOrder = this.state.orders
+            newOrder[index]['trackingNumber'] = responses[0].tracking_number
+            this.setState({ orders: newOrder, isTrackingReady: true })
+          })
+          .catch((ex) => {
+            console.log('Inner Promise', ex);
+          });
+      })
+      .catch((ex) => {
+        console.log('Outer Promise', ex);
+        alert(ex);
+      });
   }
 
   getData = (orderId) => {
@@ -51,7 +80,7 @@ export default class ordersProduct extends PureComponent {
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
           .then((responses) => {
-            
+
             productGroupKeys = Object.keys(responses[0].product_groups[0].products)
             let productArray = []
             let jsonProducts = {}
@@ -67,13 +96,20 @@ export default class ordersProduct extends PureComponent {
               jsonProducts['unitPrice'] = responses[0].product_groups[0].products[productGroupKeys[i]].price
               if ('detailed' in responses[0].product_groups[0].products[productGroupKeys[i]].main_pair) {
                 jsonProducts['imageUrl'] = responses[0].product_groups[0].products[productGroupKeys[i]].main_pair.detailed.image_path
-              }else{
+              } else {
                 jsonProducts['imageUrl'] = '../static/item_cart1.png'
               }
-              jsonProducts['trackingnumber'] = res
+              if (responses[0].shipment_ids.length > 0) {
+                jsonProducts['shipment_id'] = responses[0].shipment_ids
+                this.setState({ isTrackingReady: false })
+                this.getTrackingData(jsonProducts['shipment_id'], i)
+              } else {
+                this.setState({ isTrackingReady: true })
+              }
               productArray[i] = jsonProducts
               jsonProducts = {}
-              
+
+
             }
 
             this.setState({ orders: productArray, isReady: true })
@@ -92,6 +128,20 @@ export default class ordersProduct extends PureComponent {
     return <View style={styles.seperator} />;
   };
 
+  renderFlatListFooter = (item) => {
+    var listFooter = (
+      <TouchableOpacity style={styles.trackingStyle}>
+        <Text style={styles.orderIdText}>
+          {/* TODO: Get trackingNumberNumber(not working currently) */}
+        Track: {item.trackingNumber}
+        </Text>
+        <View style={styles.mar19}>
+          <Icon size={20} name="right" type="antdesign" />
+        </View>
+      </TouchableOpacity>
+    );
+    return listFooter;
+  }
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
@@ -108,18 +158,12 @@ export default class ordersProduct extends PureComponent {
           keyExtractor={(item, index) => item.itemNum}
           renderItem={({ item }) => <OrderProductListItem data={item} />}
           ItemSeparatorComponent={this.renderSeparator}
+          ListFooterComponent={(item)=>this.renderFlatListFooter(item)}
+
         />
         <View style={styles.dividerLine}></View>
 
-        <TouchableOpacity style={styles.trackingStyle}>
-          <Text style={styles.orderIdText}>
-            {/* TODO: Get trackingNumberNumber */}
-            Track: {this.state.trackingNumber}
-          </Text>
-          <View style={styles.mar19}>
-            <Icon size={20} name="right" type="antdesign" />
-          </View>
-        </TouchableOpacity>
+
         <View style={styles.dividerLine}></View>
 
         <View style={styles.divider}></View>
