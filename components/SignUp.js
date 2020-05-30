@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -14,11 +14,12 @@ import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import LogoSmall from './Styles/LogoSmall';
 import FastImage from 'react-native-fast-image';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
+var RNFS = require('react-native-fs');
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 const baseUrl = Globals.baseUrl;
@@ -63,7 +64,12 @@ class SignUp extends Component {
         // DocumentPicker.types.pdf
       });
 
-      this.setState({fileSelectText: res.name, salesTaxIdFile: res.uri});
+      RNFS.readFile(res.uri, 'base64').then(fileBase64 => {
+        // console.log(fileBase64)
+        this.setState({ fileSelectText: res.name, salesTaxIdFile: res.uri, fileBase64: fileBase64 });
+      }
+
+      )
 
     } catch (err) {
       //Handling any exception (If any)
@@ -82,7 +88,7 @@ class SignUp extends Component {
     /////////////////////////   Image Picker   ////////////////////////////
     const options = {
       title: 'Upload from..',
-      customButtons: [{name: 'document', title: 'Upload document'}],
+      customButtons: [{ name: 'document', title: 'Upload document' }],
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -96,31 +102,45 @@ class SignUp extends Component {
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
       } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
         this.selectOneFile();
-      } else {
+
+      }
+      else {
         // const source = { uri: response.uri };
 
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+        // this.getBase64(idCard, (result) => {
+        //   // idCardBase64 = result;
+        //   console.log(result)
+        // });
 
-        this.setState({
-          fileSelectText: response.fileName,
-          salesTaxIdFile: response.uri,
+        RNFS.readFile(response.uri, 'base64').then(fileBase64 => {
+          // console.log(fileBase64)
+          this.setState({
+            fileSelectText: response.fileName,
+            salesTaxIdFile: response.uri,
+            fileBase64: fileBase64
+          });
         });
+        
       }
     });
   }
 
+
   signUpClick() {
     if (this.isValid()) {
-      this.setState({emailError: ''});
+      this.setState({ emailError: '' });
       //call signup API here
       //Splitting name to first and last name
       var fullName = this.state.fullName.split(' ');
 
       var data = {
         email: this.state.email,
-        password: md5.hex_md5(this.state.password), 
+        password: md5.hex_md5(this.state.password),
         firstname: fullName[0],
         lastname: fullName[1],
         company_id: DEFAULTS_OBJ.store_id.toString(),
@@ -151,7 +171,7 @@ class SignUp extends Component {
           .then((res) => res.json())
           .then((response) => {
             if (response.users.length == 0) {
-              console.log(data)
+              // console.log(data)
               this.props.navigation.navigate('TaxID', {
                 url: baseUrl + 'api/users',
                 data,
@@ -174,32 +194,32 @@ class SignUp extends Component {
   isValid() {
     let validFlag = true;
     if (this.state.fullName == '') {
-      this.setState({fullNameError: 'Full name is required.'});
+      this.setState({ fullNameError: 'Full name is required.' });
       validFlag = false;
     } else {
-      this.setState({fullNameError: ''});
+      this.setState({ fullNameError: '' });
     }
 
     if (this.state.email == '') {
-      this.setState({emailError: 'Email is required.'});
+      this.setState({ emailError: 'Email is required.' });
       validFlag = false;
     } else {
       let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
       if (emailRegex.test(this.state.email) === false) {
-        this.setState({emailError: 'Email is invalid.'});
+        this.setState({ emailError: 'Email is invalid.' });
         validFlag = false;
       } else {
-        this.setState({emailError: ''});
+        this.setState({ emailError: '' });
       }
     }
     if (this.state.password != this.state.confirmPassword) {
-      this.setState({nonMatchingPasswordError: 'Passwords do not match.'});
+      this.setState({ nonMatchingPasswordError: 'Passwords do not match.' });
       validFlag = false;
     } else {
-      this.setState({nonMatchingPasswordError: ''});
+      this.setState({ nonMatchingPasswordError: '' });
     }
     if (this.state.password == '') {
-      this.setState({passwordError: 'Password is required.'});
+      this.setState({ passwordError: 'Password is required.' });
       validFlag = false;
     } else {
       let passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{7,}$/;
@@ -210,15 +230,15 @@ class SignUp extends Component {
         });
         validFlag = false;
       } else {
-        this.setState({passwordError: ''});
+        this.setState({ passwordError: '' });
       }
     }
 
     if (this.state.confirmPassword == '') {
-      this.setState({confirmPasswordError: 'Confirm password is required.'});
+      this.setState({ confirmPasswordError: 'Confirm password is required.' });
       validFlag = false;
     } else {
-      this.setState({confirmPasswordError: ''});
+      this.setState({ confirmPasswordError: '' });
     }
 
     //TODO: Uncomment this
@@ -273,7 +293,7 @@ class SignUp extends Component {
                 placeholder="Full Name"
                 autoCapitalize="words"
                 onChangeText={(text) => {
-                  this.setState({fullName: text});
+                  this.setState({ fullName: text });
                 }}
               />
             </View>
@@ -284,10 +304,10 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 textContentType={'emailAddress'}
-                autoCapitalize="none" 
+                autoCapitalize="none"
                 placeholder="Email"
                 onChangeText={(text) => {
-                  this.setState({email: text});
+                  this.setState({ email: text });
                 }}
               />
             </View>
@@ -299,10 +319,10 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 secureTextEntry={true}
-                autoCapitalize="none" 
+                autoCapitalize="none"
                 placeholder="Password"
                 onChangeText={(text) => {
-                  this.setState({password: text});
+                  this.setState({ password: text });
                 }}
               />
             </View>
@@ -314,10 +334,10 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 secureTextEntry={true}
-                autoCapitalize="none" 
+                autoCapitalize="none"
                 placeholder="Confirm password"
                 onChangeText={(text) => {
-                  this.setState({confirmPassword: text});
+                  this.setState({ confirmPassword: text });
                 }}
               />
             </View>
@@ -444,19 +464,19 @@ const innerStyles = StyleSheet.create({
     color: '#2d2d2f',
     fontFamily: 'Montserrat',
   },
-  arrowButton: {width: 10, height: 17, alignSelf: 'center'},
-  fillTaxView: {width: '100%', flexDirection: 'row'},
+  arrowButton: { width: 10, height: 17, alignSelf: 'center' },
+  fillTaxView: { width: '100%', flexDirection: 'row' },
   fillTaxID: {
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  buttonPadding: {paddingHorizontal: 15},
-  marginView: {marginTop: 10},
-  uploadFileImage: {width: 35, height: 47},
-  uploadFile: {alignItems: 'center', justifyContent: 'center'},
-  uploadFileView: {flexDirection: 'row'},
-  errorMessageText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
+  buttonPadding: { paddingHorizontal: 15 },
+  marginView: { marginTop: 10 },
+  uploadFileImage: { width: 35, height: 47 },
+  uploadFile: { alignItems: 'center', justifyContent: 'center' },
+  uploadFileView: { flexDirection: 'row' },
+  errorMessageText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
   buttonSignUp: {
     width: '100%',
     backgroundColor: '#2d2d2f',
