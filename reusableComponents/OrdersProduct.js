@@ -151,7 +151,12 @@ export default class ordersProduct extends PureComponent {
     }
     return (
       <View>
-        <FlatList
+        {this.state.orders.map((item,index)=>{
+          return(
+            <OrderProductListItem key={index.toString()} data={item}/>
+          )
+        })}
+        {/* <FlatList
           style={styles.flatlistStyle}
           data={this.state.orders}
           keyExtractor={(item, index) => item.itemNum}
@@ -160,7 +165,7 @@ export default class ordersProduct extends PureComponent {
           ListFooterComponent={(item)=>this.renderFlatListFooter(item)}
           scrollEnabled={false}
 
-        />
+        /> */}
         <View style={styles.dividerLine}></View>
 
 
