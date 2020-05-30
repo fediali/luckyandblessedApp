@@ -50,7 +50,6 @@ class ColorPicker extends PureComponent {
                 colorList: this.props.colorPickerList
             }
         }
-        // console.log("Called");
 
     }
 
@@ -101,7 +100,6 @@ class ColorPickerItem extends Component {
         return false
     }
     render() {
-        console.log(this.props.item)
         return (
 
             <View style={[innerStyles.colorView, { backgroundColor: this.props.item.color }]}>

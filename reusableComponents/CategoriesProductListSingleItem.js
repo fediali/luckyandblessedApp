@@ -3,12 +3,9 @@ import {
     View,
     Text,
     StyleSheet,
-    TextInput,
     TouchableOpacity,
-    ScrollView,
     Dimensions
 } from 'react-native';
-import { Icon } from 'react-native-elements'
 import FastImage from 'react-native-fast-image'
 
 
@@ -19,13 +16,11 @@ class CategoriesProductListSingleItem extends PureComponent {
     }
     
     render() {
-        // console.log("nnnn",this.props)
         return (
             <TouchableOpacity activeOpacity={0.9} onPress={this.navigateToProductPage}>
                 <View style={styles.imageView}>
                     <FastImage source={this.props.imageUrl} style={styles.image} resizeMode="contain" />
                 </View>
-                {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
                 <View style={styles.textContainer}>
                     <Text style={[styles.mainText, styles.limitWidth]}>{this.props.name1}</Text>
                     <Text style={styles.mainText}>{this.props.price1}</Text>

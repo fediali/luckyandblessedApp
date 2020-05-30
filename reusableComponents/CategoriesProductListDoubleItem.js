@@ -1,15 +1,10 @@
 import React, { PureComponent } from 'react';
 import {
-    View,
     Text,
     StyleSheet,
-    TextInput,
     TouchableOpacity,
-    ScrollView,
     Dimensions
 } from 'react-native';
-import { Icon } from 'react-native-elements'
-
 import FastImage from 'react-native-fast-image'
 
 class CategoriesProductListDoubleItem extends PureComponent {
