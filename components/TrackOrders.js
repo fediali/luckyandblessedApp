@@ -23,7 +23,6 @@ const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
 
 //FIXME: Accordian ScrollView
-//FIXME: Accordian loads content as well at the time of rendering. Should we avoid this?
 export default class TrackOrders extends Component {
   constructor(props) {
     super(props);
@@ -45,25 +44,29 @@ export default class TrackOrders extends Component {
 
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
-        this.getData(user);
+        this.getData(JSON.parse(user));
       });
     });
   }
 
   getData = (user) => {
     var promises = [];
+    console.log(user.user_id)
     promises.push(
       GetData(
         baseUrl +
           `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`,
       ),
+      
     ); 
-
+    console.log(baseUrl +
+      `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`);
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
           .then((responses) => {
             //Converting to required date format
+            console.log(responses)
             parseProducts = async () => {
               const tempOrders = [];
               if (responses[0].orders.length == 0) {
@@ -184,12 +187,15 @@ export default class TrackOrders extends Component {
     this.setState({activeSections});
   };
 
-  _renderContent = (section) => {
-    return (
-      <OrderProducts
-        orderId={section.order_id}
-      />
-    );
+  _renderContent = (section, index) => {
+    if (this.state.activeSections.includes(index)){
+      return (
+        <OrderProducts
+          orderId={section.order_id}
+        />
+      );
+    }
+    
   };
 
   render() {

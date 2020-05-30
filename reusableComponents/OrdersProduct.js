@@ -8,6 +8,7 @@ import {
   Dimensions,
   FlatList,
   TouchableOpacity,
+  Linking
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import OrderProductListItem from './OrderProductListItem';
@@ -15,8 +16,6 @@ const Globals = require('../Globals');
 
 const baseUrl = Globals.baseUrl;
 //TODO: image from imageurl is not getting rendered. So currently hard coded image is presenter
-//TODO: allignment is out for name and price of products
-//TODO: IDK how to set tracking number for each list because that is seperate API
 export default class ordersProduct extends PureComponent {
   constructor(props) {
     super(props);
@@ -30,6 +29,8 @@ export default class ordersProduct extends PureComponent {
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
       showZeroProductScreen: false,
+      trackingNumber: null,
+      trackingURL: null
     };
   }
 
@@ -52,10 +53,8 @@ export default class ordersProduct extends PureComponent {
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
           .then((responses) => {
-            console.log(responses)
-            let newOrder = this.state.orders
-            newOrder[index]['trackingNumber'] = responses[0].tracking_number
-            this.setState({ orders: newOrder, isTrackingReady: true })
+           
+            this.setState({trackingNumber: responses[0].tracking_number, trackingURL: responses[0].carrier_info.tracking_url});
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
@@ -97,7 +96,7 @@ export default class ordersProduct extends PureComponent {
               if ('detailed' in responses[0].product_groups[0].products[productGroupKeys[i]].main_pair) {
                 jsonProducts['imageUrl'] = responses[0].product_groups[0].products[productGroupKeys[i]].main_pair.detailed.image_path
               } else {
-                jsonProducts['imageUrl'] = '../static/item_cart1.png'
+                jsonProducts['imageUrl'] = 'https://picsum.photos/200'
               }
               if (responses[0].shipment_ids.length > 0) {
                 jsonProducts['shipment_id'] = responses[0].shipment_ids
@@ -130,10 +129,10 @@ export default class ordersProduct extends PureComponent {
 
   renderFlatListFooter = (item) => {
     var listFooter = (
-      <TouchableOpacity style={styles.trackingStyle}>
+      <TouchableOpacity style={styles.trackingStyle}
+      onPress={ ()=>{ Linking.openURL(this.state.trackingURL)}}>
         <Text style={styles.orderIdText}>
-          {/* TODO: Get trackingNumberNumber(not working currently) */}
-        Track: {item.trackingNumber}
+        Track: {this.state.trackingNumber}
         </Text>
         <View style={styles.mar19}>
           <Icon size={20} name="right" type="antdesign" />

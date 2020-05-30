@@ -9,19 +9,22 @@ export default class OrderProductListItem extends PureComponent {
       <View
         style={styles.topLevelView}>
         <View style={styles.fdRow}>
+          <View style={styles.thumbnailView}>
           <FastImage
             style={[styles.thumbnailImage]}
             resizeMode="contain"
-            source={require('../static/item_cart1.png')}
+            source={{uri: this.props.data.imageUrl}}
           />
+          </View>
+         
           <View style={[styles.priceTextView]}>
             <View style={[styles.fdRow]}>
-              <Text style={[styles.itemNameText, styles.leftAligned]}>{this.props.data.itemName}</Text>
-              <Text style={[styles.itemNameText, styles.rightAligned]}>{this.props.data.totalPrice}</Text>
+              <Text style={[styles.itemNameText]}>{this.props.data.itemName}</Text>
+              <Text style={[styles.itemNameText]}>${this.props.data.totalPrice}</Text>
             </View>
             <View style={[styles.fdRow]}>
-              <Text style={[styles.itemUnitPriceText, styles.leftAligned]}>Unit price</Text>
-              <Text style={[styles.lightText, styles.mart4, styles.rightAligned]}>{this.props.data.unitPrice}</Text>
+              <Text style={[styles.itemUnitPriceText]}>Unit price</Text>
+              <Text style={[styles.lightText, styles.mart4]}>${this.props.data.unitPrice}</Text>
             </View>
             <Text style={styles.lightText}>SIZE: {this.props.data.size}</Text>
             <Text style={styles.lightText}>Color: {this.props.data.color}</Text>
@@ -74,10 +77,14 @@ const styles = StyleSheet.create({
   thumbnailImage: {
     height: 100,
     width: 100,
+  },
+  thumbnailView: {
+    backgroundColor: "#f6f6f6",
     borderRadius: 6,
+    justifyContent: "center"
   },
   topLevelView: { flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 },
-  fdRow: { flexDirection: 'row' },
+  fdRow: { flexDirection: 'row', justifyContent: "space-between" },
   priceTextView: { flexDirection: 'column', marginLeft: 20 },
   marb20: { marginBottom: 20 },
   mart4: { marginTop: 4 },
