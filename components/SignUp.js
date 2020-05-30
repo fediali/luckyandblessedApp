@@ -282,6 +282,7 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 textContentType={'emailAddress'}
+                autoCapitalize="none" 
                 placeholder="Email"
                 onChangeText={(text) => {
                   this.setState({email: text});
@@ -296,6 +297,7 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 secureTextEntry={true}
+                autoCapitalize="none" 
                 placeholder="Password"
                 onChangeText={(text) => {
                   this.setState({password: text});
@@ -310,6 +312,7 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 secureTextEntry={true}
+                autoCapitalize="none" 
                 placeholder="Confirm password"
                 onChangeText={(text) => {
                   this.setState({confirmPassword: text});
