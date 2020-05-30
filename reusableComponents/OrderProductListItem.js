@@ -81,11 +81,11 @@ const styles = StyleSheet.create({
   thumbnailView: {
     backgroundColor: "#f6f6f6",
     borderRadius: 6,
-    justifyContent: "center"
+    justifyContent: "center",
   },
-  topLevelView: { flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 },
-  fdRow: { flexDirection: 'row', justifyContent: "space-between" },
-  priceTextView: { flexDirection: 'column', marginLeft: 20 },
+  topLevelView: { flexDirection: 'row', justifyContent: 'space-between',alignItems: 'center', marginHorizontal: 20},
+  fdRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  priceTextView: { flexDirection: 'column' , paddingHorizontal:10},
   marb20: { marginBottom: 20 },
   mart4: { marginTop: 4 },
 
