@@ -151,6 +151,7 @@ class SignUp extends Component {
           .then((res) => res.json())
           .then((response) => {
             if (response.users.length == 0) {
+              console.log(data)
               this.props.navigation.navigate('TaxID', {
                 url: baseUrl + 'api/users',
                 data,
@@ -270,6 +271,7 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 placeholder="Full Name"
+                autoCapitalize="words"
                 onChangeText={(text) => {
                   this.setState({fullName: text});
                 }}
