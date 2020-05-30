@@ -111,12 +111,13 @@ class App extends Component {
 
                 :
                 <>
+                  <Stack.Screen name="Delivery" component={Delivery} />
 
                   <Stack.Screen name="MainPage" component={MainPage} />
                   <Stack.Screen name="CompanyProfile" component={CompanyProfile} />
                   <Stack.Screen name="UserProfile" component={UserProfile} />
                   <Stack.Screen name="ProductPage" component={ProductPage} />
-                  <Stack.Screen name="Delivery" component={Delivery} />
+                  {/* <Stack.Screen name="Delivery" component={Delivery} /> */}
                   <Stack.Screen name="ShoppingCart" component={ShoppingCart} />
                   <Stack.Screen name="TrackOrders" component={TrackOrders} />
                   <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} />
