@@ -111,6 +111,7 @@ class App extends Component {
 
                 :
                 <>
+                  {/* <Stack.Screen name="Delivery" component={Delivery} /> */}
 
                   <Stack.Screen name="MainPage" component={MainPage} />
                   <Stack.Screen name="CompanyProfile" component={CompanyProfile} />

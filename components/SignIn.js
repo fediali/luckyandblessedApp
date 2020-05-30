@@ -95,9 +95,9 @@ class SignIn extends Component {
 
     showErrorMessage(errorMessage) {
         return (
-            <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 15 }}>
+            <View style={styles.errorTextMainView}>
                 <Icon size={30} name='md-information-circle-outline' type='ionicon' color='#FF0000' />
-                <Text style={{ paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' }}>{errorMessage}</Text>
+                <Text style={styles.errorTextText}>{errorMessage}</Text>
             </View>
         )
     }
@@ -145,6 +145,8 @@ class SignIn extends Component {
     }
 }
 const styles = StyleSheet.create({
+    errorTextMainView:{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 15 },
+    errorTextText:{ paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
     mainContainer: {
         flex: 1,
         backgroundColor: "#ffffff"
