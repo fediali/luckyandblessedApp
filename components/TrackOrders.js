@@ -11,7 +11,7 @@ import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Icon} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
 import OrderProducts from '../reusableComponents/OrdersProduct';
 import Accordion from 'react-native-collapsible/Accordion';
 import Shimmer from 'react-native-shimmer';
@@ -23,7 +23,6 @@ const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
 
 //FIXME: Accordian ScrollView
-//FIXME: Accordian loads content as well at the time of rendering. Should we avoid this?
 export default class TrackOrders extends Component {
   constructor(props) {
     super(props);
@@ -45,25 +44,29 @@ export default class TrackOrders extends Component {
 
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
-        this.getData(user);
+        this.getData(JSON.parse(user));
       });
     });
   }
 
   getData = (user) => {
     var promises = [];
+    console.log(user.user_id)
     promises.push(
       GetData(
         baseUrl +
           `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`,
       ),
+      
     ); 
-
+    console.log(baseUrl +
+      `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`);
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
           .then((responses) => {
             //Converting to required date format
+            console.log(responses)
             parseProducts = async () => {
               const tempOrders = [];
               if (responses[0].orders.length == 0) {
@@ -184,13 +187,15 @@ export default class TrackOrders extends Component {
     this.setState({activeSections});
   };
 
-  _renderContent = (section) => {
-    return (
-      <OrderProducts
-        // trackingNumber={section.trackingNumber}
-        orderId={section.order_id}
-      />
-    );
+  _renderContent = (section, index) => {
+    if (this.state.activeSections.includes(index)){
+      return (
+        <OrderProducts
+          orderId={section.order_id}
+        />
+      );
+    }
+    
   };
 
   render() {
@@ -222,7 +227,7 @@ export default class TrackOrders extends Component {
             navigation={this.props.navigation}
           />
 
-          <View style={styles.accordionStart}>
+          <ScrollView style={styles.accordionStart}>
             <Accordion
               underlayColor="#fff"
               sections={this.state.orders}
@@ -232,7 +237,7 @@ export default class TrackOrders extends Component {
               onChange={this._updateSections}
               expandMultiple={true}
             />
-          </View>
+          </ScrollView>
 
           <View style={styles.bottomContainer}></View>
 

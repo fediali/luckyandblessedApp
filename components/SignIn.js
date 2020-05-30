@@ -55,8 +55,8 @@ class SignIn extends Component {
                             user_id: responses[1].users[0].user_id,
                             name: fullName
                         }
+                        
                         this._storeData(user)
-
 
                         this.context.setAuthenticated(fullName)
                         this.setState({requested:false})
@@ -115,11 +115,11 @@ class SignIn extends Component {
                     
                     }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                     <View style={styles.emailInputView}>
-                        <TextInput style={styles.input} placeholder="Email" onChangeText={(text) => { this.setState({ email: text }) }} />
+                        <TextInput style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => { this.setState({ email: text }) }} />
                     </View>
                     {this.state.emailError != "" ? this.showErrorMessage(this.state.emailError) : <View></View>}
                     <View style={styles.passwordInputView}>
-                        <TextInput style={styles.input} secureTextEntry={true} placeholder="Password" onChangeText={(text) => { this.setState({ password: text }) }} />
+                        <TextInput style={styles.input} autoCapitalize="none" secureTextEntry={true} placeholder="Password" onChangeText={(text) => { this.setState({ password: text }) }} />
                     </View>
                     {this.state.passwordError != "" ? this.showErrorMessage(this.state.passwordError) : <View></View>}
 
