@@ -10,10 +10,8 @@ import {
     SafeAreaView,
     InteractionManager
 } from 'react-native';
-import { Icon } from 'react-native-elements'
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
-import LogoSmall from "./Styles/LogoSmall"
 import Shimmer from 'react-native-shimmer';
 import FastImage from 'react-native-fast-image'
 
@@ -74,8 +72,6 @@ class Payment extends Component {
                                         <FastImage style={styles.imagePaypalLogo} source={require("../static/paypalLogo.png")} />
                                     </View>
                                 </TouchableOpacity>
-                                {/* <Text style={{ fontFamily: "Montserrat-SemiBold", fontSize: 18, lineHeight: 22, color: "#2967ff" }}>Credit Card</Text> */}
-                                {/* <Text style={styles.heading}>Paypal</Text> */}
                             </View>
                             <View>
                                 <Text style={[styles.heading, styles.deliveryDetailText]}>Delivery details:</Text>

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
-  Text,
   View,
   FlatList,
-  Image,
   StyleSheet,
   TextInput,
   Dimensions,
@@ -14,15 +12,15 @@ import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icon } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import SearchResultListItem from '../reusableComponents/SearchResultListItem';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
-const baseUrl = 'http://dev.landbw.co/';
-const STORAGE_DEFAULTS = 'defaults';
-let DEFAULTS_OBJ = [];
+import Globals from "../Globals"
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 
-//TODO: Add text view if no products found
+const baseUrl = Globals.baseUrl;
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
+let DEFAULTS_OBJ = [];
+
 export default class SearchResults extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +38,6 @@ export default class SearchResults extends Component {
 
   componentDidMount() {
 
-    // console.log("We here")
 
     this.onComponentFocus = this.props.navigation.addListener('focus', () => {
       if (this.props.route.params){
@@ -75,8 +72,7 @@ export default class SearchResults extends Component {
       promises.push(
         GetData(
           baseUrl +
-          `api/products?q=${this.state.searchText}&search_app=Y&page=` +
-          this.state.iteratedPage,
+          `api/products?q=${this.state.searchText}&search_app=Y&page=${this.state.iteratedPage}&status=A`,
         ),
       );
       let itr = this.state.iteratedPage;
@@ -84,7 +80,6 @@ export default class SearchResults extends Component {
         .then((promiseResponses) => {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
-              console.log(responses[0].products.length, 'length of');
               let parseProducts = async () => {
                 const tempProducts = [];
                 if (responses[0].products.length == 0) {
@@ -103,10 +98,8 @@ export default class SearchResults extends Component {
                   );
                   for (let i = 0; i < responses[0].products.length; i++) {
                     if (responses[0].products[i].main_pair == null) {
-                      console.log('Tabahi');
                       continue;
                     }
-                    // console.log("Itr=> " + itr + "   PID=> " + responses[0].products[i].product_id)
   
                     await tempProducts.push({
                       product: responses[0].products[i].product,
@@ -121,7 +114,7 @@ export default class SearchResults extends Component {
                         responses[0].products[i].main_pair.detailed.image_path,
                       product_brand: responses[0].products[i].brand
                         ? responses[0].products[i].brand
-                        : DEFAULTS_OBJ.brand, //TODO: should come from defaults
+                        : DEFAULTS_OBJ.brand, 
                     });
                   }
                 }
@@ -129,7 +122,6 @@ export default class SearchResults extends Component {
                 return tempProducts;
               };
               parseProducts().then((prod) => {
-                console.log('PPP', prod.length);
                 this.setState({
                   totalProducts: parseFloat(
                     responses[0].params.total_items,
@@ -167,7 +159,6 @@ export default class SearchResults extends Component {
         this.state.iteratedPage <
         Math.ceil(this.state.totalProducts / this.state.totalItemsPerRequest)
       ) {
-        //59/10 = 5.9~6
         console.log('Getting more data');
         this.setState(
           {
@@ -193,7 +184,6 @@ export default class SearchResults extends Component {
 
   render() {
     if (this.state.showZeroProductScreen) {
-      console.log('Zero zero zero');
     }
 
     return (
@@ -285,7 +275,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginTop: 4,
     marginBottom: 8,
-    // height: Height * 0.044
   },
   thumbnailImage: {
     height: 110,

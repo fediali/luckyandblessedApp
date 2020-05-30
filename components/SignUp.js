@@ -120,7 +120,7 @@ class SignUp extends Component {
 
       var data = {
         email: this.state.email,
-        password: md5.hex_md5(this.state.password), //TODO MD5 password
+        password: md5.hex_md5(this.state.password), 
         firstname: fullName[0],
         lastname: fullName[1],
         company_id: DEFAULTS_OBJ.store_id.toString(),
@@ -151,6 +151,7 @@ class SignUp extends Component {
           .then((res) => res.json())
           .then((response) => {
             if (response.users.length == 0) {
+              console.log(data)
               this.props.navigation.navigate('TaxID', {
                 url: baseUrl + 'api/users',
                 data,
@@ -270,6 +271,7 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 placeholder="Full Name"
+                autoCapitalize="words"
                 onChangeText={(text) => {
                   this.setState({fullName: text});
                 }}
@@ -282,6 +284,7 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 textContentType={'emailAddress'}
+                autoCapitalize="none" 
                 placeholder="Email"
                 onChangeText={(text) => {
                   this.setState({email: text});
@@ -296,6 +299,7 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 secureTextEntry={true}
+                autoCapitalize="none" 
                 placeholder="Password"
                 onChangeText={(text) => {
                   this.setState({password: text});
@@ -310,6 +314,7 @@ class SignUp extends Component {
               <TextInput
                 style={styles.input}
                 secureTextEntry={true}
+                autoCapitalize="none" 
                 placeholder="Confirm password"
                 onChangeText={(text) => {
                   this.setState({confirmPassword: text});
