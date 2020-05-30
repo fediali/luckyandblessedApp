@@ -110,7 +110,7 @@ class MainPage extends Component {
                 setTimeout(() => { this.setState({ isReady: true }) }, 1000)
 
             }
-        ).catch(ex => { console.log("abcd Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
+        ).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
 
     }
 
