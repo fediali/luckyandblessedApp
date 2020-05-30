@@ -7,4 +7,5 @@ module.exports = {
   STORAGE_PRODUCT_HISTORY_CATEGORY: 'productHistoryList',
   STORAGE_USER: 'user',
   STORAGE_DEFAULTS: 'defaults',
+  STORAGE_AUTH: 'auth'
 };
