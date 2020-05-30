@@ -158,6 +158,7 @@ export default class ordersProduct extends PureComponent {
           renderItem={({ item }) => <OrderProductListItem data={item} />}
           ItemSeparatorComponent={this.renderSeparator}
           ListFooterComponent={(item)=>this.renderFlatListFooter(item)}
+          scrollEnabled={false}
 
         />
         <View style={styles.dividerLine}></View>
