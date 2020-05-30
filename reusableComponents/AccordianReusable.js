@@ -1,11 +1,8 @@
 import React, { useState, PureComponent } from 'react';
 import {
-    FlatList,
     StyleSheet,
     View,
     Dimensions,
-    Image,
-    TouchableOpacity,
     Text
 } from 'react-native'
 import Accordion from 'react-native-collapsible/Accordion';
@@ -14,14 +11,11 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import ColorPicker from "../reusableComponents/ColorPicker"
 import SizePicker from "../reusableComponents/SizePicker"
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-// import console = require('console');
 
 class AccordianReusable extends PureComponent {
 
 
     parentCallBackColor(colorListData) {
-        // console.log(colorListData)
-        // console.log(this.state)
         this.customSetState({ colorList: colorListData })
     }
 
@@ -31,24 +25,19 @@ class AccordianReusable extends PureComponent {
 
     }
     customSetState(stateVal){
-        // console.log("I am called",stateVal)
         this.props.customSetState(stateVal)
     }
     
     _renderHeader = section => {
-        // console.log(section)
         let colors = []
 
         if (section.title == "Color") {
-            // console.log(section.content)
             for (let i = 0; i < section.content.length; i++) {
-                // console.log(section.content[i])
                 colors.push(
                     <View key={i} style={{ width: 20, height: 20, backgroundColor: section.content[i], borderRadius: 10, marginRight: 5 }}></View>
                 )
             }
         }
-        // console.log("<<", colors)
 
         return (
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 13 }}>
@@ -93,40 +82,6 @@ class AccordianReusable extends PureComponent {
                         }}
                     />
 
-                    {/* <RNPickerSelect
-                        useNativeAndroidPickerStyle={false}
-
-                        placeholder={{
-                            label: 'Select Gender',
-                            value: 'Both',
-                            color: "#C7C7CD"
-
-                        }}
-                        Icon={() => {
-                            return < Icon
-                                size={20}
-                                name='ios-arrow-down'
-                                type='ionicon'
-                                color='#2d2d2f'
-                            />;
-                        }}
-                        style={{
-                            headlessAndroidPicker: {},
-                            inputAndroid: { borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
-                            iconContainer: {
-                                top: 9,
-                                right: 15,
-                            },
-                            inputIOS: {
-                                backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24,
-                            }
-                        }}
-                        onValueChange={(value) => console.log(value)}
-                        items={[
-                            { label: 'Women', value: 'Women' },
-                            { label: 'Men', value: 'Men' },
-                        ]}
-                    /> */}
                 </View>
             )
         }
@@ -143,34 +98,6 @@ class AccordianReusable extends PureComponent {
                             )
                         }}
                     />
-                    {/* <RNPickerSelect
-                        placeholder={{
-                        }}
-                        Icon={() => {
-                            return < Icon
-                                size={26}
-                                name='ios-arrow-down'
-                                type='ionicon'
-                                color='#2d2d2f'
-                            />;
-                        }}
-                        useNativeAndroidPickerStyle={false}
-                        style={{
-                            inputAndroid: { backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
-                            iconContainer: {
-                                top: 9,
-                                right: 15,
-                            },
-                            inputIOS: {
-                                inputAndroid: { backgroundColor: "#f6f6f6", borderRadius: 10, alignItems: "center", fontSize: 18, fontFamily: "Avenir-Book", paddingLeft: 15, color: "#2d2d2f", lineHeight: 24 },
-                            }
-                        }}
-                        onValueChange={(value) => console.log(value)}
-                        items={[
-                            { label: 'Sneaker', value: 'Sneaker' },
-                            { label: 'Jackets', value: 'Jackets' },
-                        ]}
-                    /> */}
 
                 </View>
 
@@ -214,11 +141,9 @@ class AccordianReusable extends PureComponent {
     };
 
     _updateSections = activeSections => {
-        // console.log(activeSections)
         this.customSetState({ activeSections });
     };
     render() {
-        console.log("ZZZZZZZZ",this.props.state)
         return (
 
             <Accordion
@@ -229,7 +154,6 @@ class AccordianReusable extends PureComponent {
                 renderHeader={this._renderHeader}
                 renderContent={this._renderContent}
                 onChange={this._updateSections}
-                // touchableComponent={(props) => <TouchableOpacity {...props} />}
                 expandMultiple={true}
 
             />
