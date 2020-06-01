@@ -20,7 +20,8 @@ class Payment extends Component {
     constructor(props) {
         super(props)
         this.state = {
-             isReady: false
+             isReady: false,
+             deliveryDetails: this.props.route.params.deliveryDetails
         }
     }
     
@@ -28,6 +29,7 @@ class Payment extends Component {
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this.setState({isReady: true})
+            console.log(this.state.deliveryDetails)
         })
       };
 
