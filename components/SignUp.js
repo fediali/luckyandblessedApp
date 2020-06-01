@@ -143,6 +143,7 @@ class SignUp extends Component {
         firstname: fullName[0],
         lastname: fullName[1],
         company_id: DEFAULTS_OBJ.store_id.toString(),
+        company_name: "Mediagate",
         is_root: 'N',
         user_type: 'C',
         status: 'A',
