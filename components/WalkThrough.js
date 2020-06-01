@@ -14,6 +14,8 @@ import GlobalStyles from './Styles/Style';
 import FastImage from 'react-native-fast-image'
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import Globals from '../Globals';
+import firebase from 'react-native-firebase';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const baseUrl = Globals.baseUrl;
@@ -28,6 +30,40 @@ export default class WalkThrough extends Component {
       error: null,
       isReady: false,
     };
+  }
+
+    //1
+  async checkPermission() {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+        this.getToken();
+    } else {
+        this.requestPermission();
+    }
+  }
+  
+    //3
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
+        fcmToken = await firebase.messaging().getToken();
+        if (fcmToken) {
+            // user has a device token
+            await AsyncStorage.setItem('fcmToken', fcmToken);
+        }
+    }
+  }
+  
+    //2
+  async requestPermission() {
+    try {
+        await firebase.messaging().requestPermission();
+        // User has authorised
+        this.getToken();
+    } catch (error) {
+        // User has rejected permissions
+        console.log('permission rejected');
+    }
   }
 
   navigateScreen=(screen)=>()=>{
@@ -47,6 +83,7 @@ export default class WalkThrough extends Component {
                 headerText: responses[0].home.not_logged.header
               });
 
+              this.checkPermission();
               StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
             )
             })
