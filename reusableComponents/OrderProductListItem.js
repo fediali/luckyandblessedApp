@@ -1,5 +1,5 @@
-import React, {PureComponent} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import React, { PureComponent } from 'react';
+import { Text, View, StyleSheet, Dimensions, } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 export default class OrderProductListItem extends PureComponent {
@@ -8,12 +8,12 @@ export default class OrderProductListItem extends PureComponent {
     return (
       <View style={styles.padBottom20}>
         <View style={styles.topLevelView}>
-          <View style={styles.fdRow}>
+          <View style={styles.mainfdRow}>
             <View style={styles.thumbnailView}>
               <FastImage
                 style={[styles.thumbnailImage]}
                 resizeMode="contain"
-                source={{uri: this.props.data.imageUrl}}
+                source={{ uri: this.props.data.imageUrl }}
               />
             </View>
 
@@ -48,6 +48,8 @@ export default class OrderProductListItem extends PureComponent {
   }
 }
 
+let Height = Dimensions.get('window').height;
+let Width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   itemNameText: {
     fontFamily: 'Montserrat-Medium',
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     color: '#8d8d8e',
   },
-  padBottom20: {paddingBottom: 20},
+  padBottom20: { paddingBottom: 20 },
   leftAligned: {
     textAlign: 'left',
   },
@@ -98,9 +100,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 20,
+    width: "100%",
+
   },
-  fdRow: {flexDirection: 'row', justifyContent: 'space-between'},
-  priceTextView: {flexDirection: 'column', paddingHorizontal: 10},
-  marb20: {marginBottom: 20},
-  mart4: {marginTop: 4},
+  fdRow: { flexDirection: 'row', justifyContent: 'space-between',  width: Width * 0.65 },
+  mainfdRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  priceTextView: { flexDirection: 'column', paddingHorizontal: 10 },
+  marb20: { marginBottom: 20 },
+  mart4: { marginTop: 4 },
 });
