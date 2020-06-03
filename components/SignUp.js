@@ -454,7 +454,7 @@ class SignUp extends Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[innerStyles.buttonAlreadyHaveAccount]}
-                onPress={() => this.navigateScreen('SignIn')}>
+                onPress={() => this.navigateToSignIn()}>
                 <Text style={[styles.buttonText, innerStyles.buttonText]}>
                   I have an account
                 </Text>
