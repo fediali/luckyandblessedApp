@@ -20,15 +20,90 @@ import {TextInput} from 'react-native-gesture-handler';
 import Shimmer from 'react-native-shimmer';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+import ModalDropdown from 'react-native-modal-dropdown';
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
+import OrderFooter from '../reusableComponents/OrderFooter';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
-
+const usStates = [
+  'AL',
+  'AK',
+  'AS',
+  'AZ',
+  'AR',
+  'CA',
+  'CO',
+  'CT',
+  'DE',
+  'DC',
+  'FM',
+  'FL',
+  'GA',
+  'GU',
+  'HI',
+  'ID',
+  'IL',
+  'IN',
+  'IA',
+  'KS',
+  'KY',
+  'LA',
+  'ME',
+  'MH',
+  'MD',
+  'MA',
+  'MI',
+  'MN',
+  'MS',
+  'MO',
+  'MT',
+  'NE',
+  'NV',
+  'NH',
+  'NJ',
+  'NM',
+  'NY',
+  'NC',
+  'ND',
+  'MP',
+  'OH',
+  'OK',
+  'OR',
+  'PW',
+  'PA',
+  'PR',
+  'RI',
+  'SC',
+  'SD',
+  'TN',
+  'TX',
+  'UT',
+  'VT',
+  'VI',
+  'VA',
+  'WA',
+  'WV',
+  'WI',
+  'WY',
+];
+let gUser;
+var radio_props = [
+  {label: 'Yes', value: true},
+  {label: 'No', value: false},
+];
 class Delivery extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      profiles: [],
       isReady: false,
+      newUser: true,
+      sameShipping: true,
       fullName: '',
       fullNameError: '',
       streetAddress: '',
@@ -43,6 +118,21 @@ class Delivery extends Component {
       emailError: '',
       phoneNumber: '',
       phoneNumberError: '',
+      selectedProfile: 'Main',
+      s_fullName: '',
+      s_fullNameError: '',
+      s_streetAddress: '',
+      s_streetAddressError: '',
+      s_cityTown: '',
+      s_cityTownError: '',
+      s_stateText: '',
+      s_stateTextError: '',
+      s_zipCode: '',
+      s_zipCodeError: '',
+      s_email: '',
+      s_emailError: '',
+      s_phoneNumber: '',
+      s_phoneNumberError: '',
     };
   }
 
@@ -51,73 +141,111 @@ class Delivery extends Component {
       this.setState({isReady: false});
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
-        this.getData(JSON.parse(user));
+        gUser = JSON.parse(user);
+        this.getData();
       });
     });
   }
 
-  getData = (user) => {
+  getData = (user, profile_id = null) => {
     var promises = [];
-    promises.push(
-      GetData(baseUrl + `api/userprofiles?user_id=${user.user_id}`),
-    );
-
-    Promise.all(promises)
-      .then((promiseResponses) => {
-        Promise.all(promiseResponses.map((res) => res.json()))
-          .then((responses) => {
-            console.log(responses[0]);
-            if (
-              'firstname' in responses[0].users[0] &&
-              'lastname' in responses[0].users[0]
-            )
+    if (profile_id) {
+      promises.push(
+        GetData(baseUrl + `api/userprofilesnew/4773&profile_id=${profile_id}`),
+      );
+      Promise.all(promises)
+        .then((promiseResponses) => {
+          Promise.all(promiseResponses.map((res) => res.json()))
+            .then((responses) => {
+              let main_profile = responses[0][0];
+              let sameShipping = false;
+              let newUser = true;
+              if (
+                main_profile.b_address ||
+                main_profile.b_address_2 ||
+                main_profile.s_address ||
+                main_profile.s_address_2
+              ) {
+                newUser = false;
+              }
+              if (
+                main_profile.b_address == main_profile.s_address &&
+                main_profile.b_address_2 == main_profile.s_address_2
+              )
+                sameShipping = true;
               this.setState({
+                isReady: true,
+                newUser: false,
+                sameShipping: sameShipping,
                 fullName:
-                  responses[0].users[0].firstname +
-                  ' ' +
-                  responses[0].users[0].lastname,
+                  main_profile.b_firstname + ' ' + main_profile.b_lastname,
+                streetAddress:
+                  main_profile.b_address + ' ' + main_profile.s_address_2,
+                cityTown: main_profile.b_city,
+                stateText: main_profile.b_state,
+                zipCode: main_profile.b_zipcode,
+                email: 'demo@gmail.com',
+                phoneNumber: main_profile.b_phone,
               });
+            })
+            .catch((ex) => {
+              console.log('Inner Promise', ex);
+            });
+        })
+        .catch((ex) => {
+          console.log('Outer Promise', ex);
+          alert(ex);
+        });
+    }
 
-            if ('email' in responses[0].users[0])
+    //TODO: change user id to ${user.user_id}
+    else {
+      promises.push(GetData(baseUrl + `api/userprofilesnew/4773`));
+      Promise.all(promises)
+        .then((promiseResponses) => {
+          Promise.all(promiseResponses.map((res) => res.json()))
+            .then((responses) => {
+              let main_profile = responses[0].main_profile[0];
+              let sameShipping = false;
+              let newUser = true;
+              if (
+                main_profile.b_address ||
+                main_profile.b_address_2 ||
+                main_profile.s_address ||
+                main_profile.s_address_2
+              ) {
+                newUser = false;
+              }
+              if (
+                main_profile.b_address == main_profile.s_address &&
+                main_profile.b_address_2 == main_profile.s_address_2
+              )
+                sameShipping = true;
               this.setState({
-                email: responses[0].users[0].email,
+                profiles: responses[0].profiles,
+                isReady: true,
+                newUser: newUser,
+                sameShipping: sameShipping,
+                fullName:
+                  main_profile.b_firstname + ' ' + main_profile.b_lastname,
+                streetAddress:
+                  main_profile.b_address + ' ' + main_profile.s_address_2,
+                cityTown: main_profile.b_city,
+                stateText: main_profile.b_state,
+                zipCode: main_profile.b_zipcode,
+                email: 'demo@gmail.com', //TODO: Check for email
+                phoneNumber: main_profile.b_phone,
               });
-
-            if ('street_address' in responses[0].users[0])
-              this.setState({
-                streetAddress: responses[0].users[0].street_address,
-              });
-
-            if ('zip' in responses[0].users[0])
-              this.setState({
-                zipCode: responses[0].users[0].zip,
-              });
-
-            if ('state' in responses[0].users[0])
-              this.setState({
-                stateText: responses[0].users[0].state,
-              });
-
-            if ('city' in responses[0].users[0])
-              this.setState({
-                cityTown: responses[0].users[0].city,
-              });
-
-            if ('phone_number' in responses[0].users[0])
-              this.setState({
-                phoneNumber: responses[0].users[0].phone_number,
-              });
-
-            this.setState({isReady: true});
-          })
-          .catch((ex) => {
-            console.log('Inner Promise', ex);
-          });
-      })
-      .catch((ex) => {
-        console.log('Outer Promise', ex);
-        alert(ex);
-      });
+            })
+            .catch((ex) => {
+              console.log('Inner Promise', ex);
+            });
+        })
+        .catch((ex) => {
+          console.log('Outer Promise', ex);
+          alert(ex);
+        });
+    }
   };
 
   validateAndRedirect = () => {
@@ -125,6 +253,10 @@ class Delivery extends Component {
       //TODO: Call post userdetails API here. All input data is stored in state
       this.props.navigation.navigate('Payment', {deliveryDetails: this.state});
     }
+  };
+
+  onRadioPress = (value) => {
+    this.setState({sameShipping: value});
   };
 
   isValid() {
@@ -196,6 +328,18 @@ class Delivery extends Component {
     );
   }
 
+  onStateModalSelect = (index) => {
+    this.setState({stateText: usStates[index]});
+  };
+  onShipStateModalSelect = (index) => {
+    this.setState({s_stateText: usStates[index]});
+  };
+
+  selectProfile = (profile_id) => () => {
+    this.setState({isReady: false});
+    this.getData(gUser, profile_id);
+  };
+
   render() {
     if (!this.state.isReady) {
       return (
@@ -217,65 +361,64 @@ class Delivery extends Component {
         <ScrollView contentContainerStyle={innerStyles.scrollView}>
           <View styles={innerStyles.parentContainer}>
             <View style={innerStyles.paddingHorizontal}>
-              <Text style={innerStyles.mainTextBold}>Delivery</Text>
-              <Text style={[innerStyles.lightText, innerStyles.textAlignLeft]}>
-                Order number is 4839200012
-              </Text>
+              <Text style={innerStyles.mainTextBold}>Billing and Shipping</Text>
+              <Text style={[innerStyles.profileHeading]}>Select Profile:</Text>
 
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={[styles.buttonContainer, styles.buttonContainerAdd]}>
-                <Text style={innerStyles.buttonTextContainer}>
-                  Shipping will be added later{' '}
-                </Text>
-              </TouchableOpacity>
+              {!this.state.newUser && (
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}>
+                  {this.state.profiles.map((item, index) => {
+                    return (
+                      <View>
+                        <TouchableOpacity
+                          onPress={this.selectProfile(item.profile_id)}
+                          activeOpacity={0.5}
+                          style={innerStyles.squareBoxButtons}>
+                          <View style={innerStyles.checkIcon}>
+                            <Icon
+                              size={44}
+                              name="checkcircle"
+                              type="antdesign"
+                              color="#5dd136"
+                            />
+                            <Text style={[innerStyles.lightText]}>
+                              {item.profile_name.toUpperCase()}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                        <View style={innerStyles.padRight15}></View>
+                      </View>
+                    );
+                  })}
 
-              <View style={innerStyles.horizontalView}>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  style={innerStyles.squareBoxButtons}>
-                  <Image
-                    style={innerStyles.iconDoneStyle}
-                    resizeMode="contain"
-                    source={require('../static/icon_done.png')}
-                  />
-                  <Text
+                  <TouchableOpacity
+                    activeOpacity={0.5}
                     style={[
-                      innerStyles.lightText,
-                      innerStyles.textAlignCenter,
+                      innerStyles.squareBoxButtons,
+                      innerStyles.marginStart,
                     ]}>
-                    Billing and delivery info are the same
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.5}
-                  style={[
-                    innerStyles.squareBoxButtons,
-                    innerStyles.marginStart,
-                  ]}>
-                  <ImageBackground
-                    style={innerStyles.iconDoneStyle}
-                    resizeMode="contain"
-                    source={require('../static/icon_empty_round.png')}>
-                    <View style={innerStyles.alignCenter}>
-                      <Image
-                        style={innerStyles.plusIconStyle}
-                        resizeMode="contain"
-                        source={require('../static/icon_plus.png')}
+                    <View style={innerStyles.checkIcon}>
+                      <Icon
+                        size={44}
+                        name="ios-add-circle"
+                        type="ionicon"
+                        color="#f6f6f6"
                       />
                     </View>
-                  </ImageBackground>
-                  <Text
-                    style={[
-                      innerStyles.lightText,
-                      innerStyles.textAlignCenter,
-                    ]}>
-                    Create a new profile
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                    <Text
+                      style={[
+                        innerStyles.lightText,
+                        innerStyles.textAlignCenter,
+                      ]}>
+                      Create a new profile
+                    </Text>
+                  </TouchableOpacity>
+                </ScrollView>
+              )}
 
-              <View style={styles.inputView}>
+              <Text style={innerStyles.shippingAddress}>Billing Address</Text>
+              <View style={innerStyles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="Full name"
@@ -291,7 +434,7 @@ class Delivery extends Component {
                 <View></View>
               )}
 
-              <View style={styles.inputView}>
+              <View style={innerStyles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="Street address"
@@ -307,7 +450,7 @@ class Delivery extends Component {
                 <View></View>
               )}
 
-              <View style={styles.inputView}>
+              <View style={innerStyles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="City / Town"
@@ -323,15 +466,26 @@ class Delivery extends Component {
                 <View></View>
               )}
 
-              <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="State"
-                  value={this.state.stateText}
-                  onChangeText={(text) => {
-                    this.setState({stateText: text});
-                  }}
-                />
+              <View style={innerStyles.inputView}>
+                <View style={innerStyles.modalView}>
+                  <ModalDropdown
+                    options={usStates}
+                    defaultValue={
+                      this.state.stateText ? this.state.stateText : 'State'
+                    }
+                    style={styles.input}
+                    dropdownStyle={innerStyles.modalDropdownStyle}
+                    textStyle={innerStyles.modalTextStyle}
+                    onSelect={(index) => {
+                      this.onStateModalSelect(index);
+                    }}
+                    renderRow={(option, index, isSelected) => {
+                      return (
+                        <Text style={[innerStyles.numText]}>{option}</Text>
+                      );
+                    }}
+                  />
+                </View>
                 <TextInput
                   style={[styles.input, innerStyles.marginStart]}
                   keyboardType={'number-pad'}
@@ -352,7 +506,7 @@ class Delivery extends Component {
               ) : (
                 <View></View>
               )}
-              <View style={styles.inputView}>
+              <View style={innerStyles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="Phone number"
@@ -369,7 +523,7 @@ class Delivery extends Component {
                 <View></View>
               )}
 
-              <View style={styles.inputView}>
+              <View style={innerStyles.inputView}>
                 <TextInput
                   style={styles.input}
                   placeholder="Email address"
@@ -384,40 +538,154 @@ class Delivery extends Component {
               ) : (
                 <View></View>
               )}
+
+              <Text style={innerStyles.sameShipping}>
+                Billing and shipping addresses same
+              </Text>
+              <RadioForm
+                radio_props={radio_props}
+                initial={0}
+                onPress={this.onRadioPress}
+                formHorizontal={true}
+                style={innerStyles.radioButton}
+                labelStyle={innerStyles.labelStyle}
+              />
+
+              {!this.state.sameShipping && (
+                <View>
+                  <Text style={innerStyles.shippingAddress}>
+                    Shipping Address
+                  </Text>
+                  <View style={innerStyles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Full name"
+                      value={this.state.s_fullName}
+                      onChangeText={(text) => {
+                        this.setState({s_fullName: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.s_fullNameError != '' ? (
+                    this.showErrorMessage(this.state.s_fullNameError)
+                  ) : (
+                    <View></View>
+                  )}
+
+                  <View style={innerStyles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Street address"
+                      value={this.state.s_streetAddress}
+                      onChangeText={(text) => {
+                        this.setState({s_streetAddress: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.s_streetAddressError != '' ? (
+                    this.showErrorMessage(this.state.s_streetAddressError)
+                  ) : (
+                    <View></View>
+                  )}
+
+                  <View style={innerStyles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="City / Town"
+                      value={this.state.s_cityTown}
+                      onChangeText={(text) => {
+                        this.setState({s_cityTown: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.s_cityTownError != '' ? (
+                    this.showErrorMessage(this.state.s_cityTownError)
+                  ) : (
+                    <View></View>
+                  )}
+
+                  <View style={innerStyles.inputView}>
+                    <View style={innerStyles.modalView}>
+                      <ModalDropdown
+                        options={usStates}
+                        defaultValue={
+                          this.state.s_stateText
+                            ? this.state.s_stateText
+                            : 'State'
+                        }
+                        style={styles.input}
+                        dropdownStyle={innerStyles.modalDropdownStyle}
+                        textStyle={innerStyles.modalTextStyle}
+                        onSelect={(index) => {
+                          this.onShipStateModalSelect(index);
+                        }}
+                        renderRow={(option, index, isSelected) => {
+                          return (
+                            <Text style={[innerStyles.numText]}>{option}</Text>
+                          );
+                        }}
+                      />
+                    </View>
+                    <TextInput
+                      style={[styles.input, innerStyles.marginStart]}
+                      keyboardType={'number-pad'}
+                      placeholder="Zip code"
+                      value={this.state.s_zipCode}
+                      onChangeText={(text) => {
+                        this.setState({s_zipCode: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.s_stateTextError != '' ? (
+                    this.showErrorMessage(this.state.s_stateTextError)
+                  ) : (
+                    <View></View>
+                  )}
+                  {this.state.s_zipCodeError != '' ? (
+                    this.showErrorMessage(this.state.s_zipCodeError)
+                  ) : (
+                    <View></View>
+                  )}
+                  <View style={innerStyles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Phone number"
+                      keyboardType={'number-pad'}
+                      value={this.state.s_phoneNumber}
+                      onChangeText={(text) => {
+                        this.setState({s_phoneNumber: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.s_phoneNumberError != '' ? (
+                    this.showErrorMessage(this.state.s_phoneNumberError)
+                  ) : (
+                    <View></View>
+                  )}
+
+                  <View style={innerStyles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Email address"
+                      value={this.state.s_email}
+                      onChangeText={(text) => {
+                        this.setState({s_email: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.s_emailError != '' ? (
+                    this.showErrorMessage(this.state.s_emailError)
+                  ) : (
+                    <View></View>
+                  )}
+                </View>
+              )}
             </View>
-            <View style={innerStyles.showOrderView}>
-              <View style={innerStyles.orderViewNested}>
-                <Text style={[styles.buttonText, innerStyles.textBold]}>
-                  Order amount:{' '}
-                </Text>
-                <Text
-                  style={[
-                    styles.buttonText,
-                    innerStyles.textBold,
-                    innerStyles.alignRight,
-                  ]}>
-                  $103.88
-                </Text>
-              </View>
-              <View style={innerStyles.orderViewNested}>
-                <Text style={innerStyles.lightText}>
-                  Your total amount of discount:
-                </Text>
-                <Text style={[innerStyles.lightText, innerStyles.priceText]}>
-                  -$55.02
-                </Text>
-              </View>
-            </View>
-            <View style={[styles.buttonContainer, innerStyles.buttonStyles]}>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={[innerStyles.buttonPaymentMethod]}
-                onPress={() => this.validateAndRedirect()}>
-                <Text style={[styles.buttonText, innerStyles.paymentText]}>
-                  Payment method
-                </Text>
-              </TouchableOpacity>
-            </View>
+
+            <OrderFooter
+              buttonText="Continue"
+              navigation={this.props.navigation}
+            />
           </View>
         </ScrollView>
         <Footer navigation={this.props.navigation} />
@@ -437,20 +705,74 @@ const innerStyles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   errorTextText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
-
+  labelStyle: {
+    marginRight: 10,
+    fontFamily: 'Avenir-Medium',
+    color: '#2d2d2f',
+  },
   paymentText: {
     color: '#ffffff',
     fontSize: 18,
     lineHeight: 22,
   },
+  checkIcon: {
+    marginTop: 20,
+  },
+  inputView: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+  },
+  padRight15: {marginRight: 15},
   buttonStyles: {
     paddingHorizontal: 30,
     width: '100%',
     backgroundColor: '#f6f6f6',
     paddingBottom: 20,
   },
+  profileHeading: {
+    marginTop: 14,
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 18,
+    lineHeight: 22,
+    color: '#454547',
+    marginBottom: 8,
+  },
+  modalView: {
+    flexDirection: 'row',
+    width: '42.7%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  modalStyle: {
+    flex: 1,
+    padding: 5,
+    borderRadius: 6,
+    backgroundColor: '#f6f6f6',
+  },
+  modalDropdownStyle: {
+    width: '30%',
+    height: '50%',
+  },
+  modalTextStyle: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 18,
+    lineHeight: 24,
+    color: '#2d2d2f',
+    paddingRight: 10,
+  },
+  modalInnerView: {
+    width: 25,
+    height: 25,
+    alignSelf: 'center',
+    marginVertical: 10,
+    borderRadius: 25,
+    alignSelf: 'center',
+  },
+  radioButton: {
+    alignSelf: 'center',
+  },
   priceText: {flex: 1, lineHeight: 30, textAlign: 'right'},
-  marginStart: {marginStart: 20},
+  marginStart: {marginStart: 15},
   alignRight: {flex: 1, textAlign: 'right'},
   textBold: {fontSize: 18, lineHeight: 30},
   orderViewNested: {flexDirection: 'row', paddingHorizontal: 20},
@@ -480,8 +802,9 @@ const innerStyles = StyleSheet.create({
     lineHeight: 45,
     letterSpacing: 0,
     textAlign: 'left',
-    color: '#2d2d2f',
+    color: '#454547',
     marginTop: 10,
+    paddingBottom: 26,
   },
   lightText: {
     fontFamily: 'Avenir-Book',
@@ -492,6 +815,14 @@ const innerStyles = StyleSheet.create({
     letterSpacing: 1,
     color: '#8d8d8e',
     lineHeight: 30,
+  },
+  profileName: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 14,
+    lineHeight: 18,
+    letterSpacing: 1,
+    color: '#010101',
+    marginTop: 15,
   },
   buttonTextContainer: {
     width: '100%',
@@ -518,6 +849,33 @@ const innerStyles = StyleSheet.create({
     borderColor: '#e6e6e7',
     alignItems: 'center',
     flex: 0.5,
+    width: width * 0.4,
+  },
+  numText: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 18,
+    lineHeight: 24,
+    color: '#454547',
+    textAlign: 'left',
+    marginStart: 20,
+    marginVertical: 10,
+  },
+  shippingAddress: {
+    marginTop: 49,
+    marginBottom: 12,
+    fontFamily: 'Avenir-Medium',
+    fontSize: 21,
+    lineHeight: 24,
+    color: '#2d2d2f',
+  },
+  sameShipping: {
+    marginTop: 24,
+    marginBottom: 10,
+    marginLeft: 20,
+    fontFamily: 'Avenir-Medium',
+    fontSize: 21,
+    lineHeight: 24,
+    color: '#2d2d2f',
   },
   showOrderView: {
     paddingTop: 15,
