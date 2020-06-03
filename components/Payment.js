@@ -13,7 +13,7 @@ import {
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import Shimmer from 'react-native-shimmer';
-import FastImage from 'react-native-fast-image';
+import {Image as FastImage} from 'react-native';
 
 class Payment extends Component {
   constructor(props) {

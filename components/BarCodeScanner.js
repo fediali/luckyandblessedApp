@@ -4,8 +4,6 @@ import {
   View,
   StyleSheet,
   Alert,
-  TouchableOpacity,
-  Image,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 

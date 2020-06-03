@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet, Dimensions, } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import {Image as FastImage} from 'react-native';
 
 export default class OrderProductListItem extends PureComponent {
   render() {

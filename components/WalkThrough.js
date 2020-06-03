@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
-import FastImage from 'react-native-fast-image'
+import {Image as FastImage} from 'react-native';
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import Globals from '../Globals';
 
