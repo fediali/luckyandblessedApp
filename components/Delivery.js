@@ -7,9 +7,9 @@ import {
   StyleSheet,
   Dimensions,
   ImageBackground,
+  Image,
   InteractionManager,
 } from 'react-native';
-import {Image as FastImage} from 'react-native';
 import {Icon} from 'react-native-elements';
 import styles from './Styles/Style';
 import {SafeAreaView} from 'react-native-safe-area-context';

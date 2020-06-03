@@ -16,7 +16,6 @@ import {
     SafeAreaView
 } from 'react-native-safe-area-context'
 
-import itemList from '../data/ShoppingCartData';
 import Shimmer from 'react-native-shimmer';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Swipeout from 'react-native-swipeout';
@@ -25,6 +24,11 @@ import Footer from "../reusableComponents/Footer"
 import styles from './Styles/Style'
 import OrderFooter from "../reusableComponents/OrderFooter"
 
+import Globals from '../Globals';
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+
+const STORAGE_USER = Globals.STORAGE_USER;
+const baseUrl = Globals.baseUrl;
 
 YellowBox.ignoreWarnings([
     'Warning: componentWillMount is deprecated',
@@ -70,7 +74,7 @@ class FlatListItem extends Component {
         );
     }
 
-    onColorModalSelect=(index)=>{
+    onColorModalSelect = (index) => {
         this.setState({ currentSelectedColor: this.props.item.availableColors[index] })
     }
 
@@ -146,12 +150,12 @@ class FlatListItem extends Component {
 
                                     <ModalDropdown
                                         hexCode={this.state.currentSelectedColor}
-                                        onSelect={(index) => {this.onColorModalSelect(index) }}
+                                        onSelect={(index) => { this.onColorModalSelect(index) }}
                                         options={this.props.item.availableColors}
                                         defaultValue={this.props.item.selectedColor}
                                         style={innerStyles.modalStyle}
                                         dropdownStyle={innerStyles.modalDropdownStyle}
-                                        textStyle={innerStyles.modalTextStyle}
+                                        textStyle={innerStyles.modalColorTextStyle}
                                         renderRow={(option, index, isSelected) => {
                                             return (
                                                 <View>
@@ -179,16 +183,87 @@ class ShoppingCart extends Component {
         super(props);
         this.state = {
             deletedRowKey: null,
-            itemList: itemList,
+            itemList: [],
+            totalCost: -1,
+            totalCartProducts: -1,
+            userAddress: "",
             isReady: false
         }
     }
 
     componentDidMount() {
+
         InteractionManager.runAfterInteractions(() => {
-            this.setState({ isReady: true })
-        })
+            this.setState({ isReady: false });
+            // Retriving the user_id
+            RetrieveDataAsync(STORAGE_USER).then((user) => {
+                gUser = JSON.parse(user);
+                this.getData(gUser);
+            });
+        });
+    }
+
+    getData = (user) => {
+        var promises = [];
+        console.log(user.user_id)
+        promises.push(
+            GetData(
+                baseUrl +
+                `api/carts/${user.user_id}`,
+            ),
+
+        );
+        console.log(baseUrl +
+            `api/carts/${user.user_id}`);
+        Promise.all(promises).then((promiseResponses) => {
+            Promise.all(promiseResponses.map((res) => res.json())).then((responses) => {
+
+                console.log(responses);
+                let cartData = []
+                let productsLength = responses[0].products.length
+
+                for (let i = 0; i < productsLength; i++) {
+                    let singleProduct = {}
+                    singleProduct = {
+                        itemNum: responses[0].products[i].item_id,
+                        name: responses[0].products[i].product,
+                        price: responses[0].products[i].amount * responses[0].products[i].price,
+                        unitPrice: responses[0].products[i].price,
+                        sizes: 'Not available',
+                        selectedColor: 'Turquoise',//
+                        availableColors: ['#eb4034', '#05c2bd', '#f4f719', '#0caac9', '#e629df'],//
+                        availableSizes: [4, 5, 6, 7, 8],//
+                        quantity: responses[0].products[i].amount,
+                        unknownNum: 6,//
+                        hexColor: '#05c2bd',//
+                    }
+                    if ('detailed' in responses[0].products[i].extra.main_pair) {
+                        singleProduct.path = responses[0].products[i].extra.main_pair.detailed.image_path
+                    } else {
+                        singleProduct.path = 'https://picsum.photos/200';
+                    }
+                    cartData[i] = singleProduct;
+
+                    this.setState({
+                        totalCost: responses[0].total,
+                        totalCartProducts: responses[0].cart_products,
+                        itemList: cartData,
+                        userAddress: responses[0].user_data.b_address,//FIXME: there are other address in API also.
+                        isReady: true
+                    })
+                }
+
+            }).catch((ex) => {
+                console.log('Inner Promise', ex);
+            });
+        }).catch((ex) => {
+            console.log('Outer Promise', ex);
+            alert(ex);
+        });
     };
+
+
+
     refreshFlatList = (deletedKey) => {
         this.setState((prevState) => {
             return {
@@ -203,7 +278,7 @@ class ShoppingCart extends Component {
             <View>
                 <View style={innerStyles.listHeaderPad}>
                     <Text style={innerStyles.mainTextBold}>Your bag</Text>
-                    <Text style={innerStyles.lightText}>You have 3 items in your bag</Text>
+                    <Text style={innerStyles.lightText}>You have {this.state.totalCartProducts} items in your bag</Text>
                 </View>
                 <View style={[styles.line, innerStyles.viewMargin]} />
             </View>
@@ -231,16 +306,16 @@ class ShoppingCart extends Component {
 
                 <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
-                <OrderFooter/>
+                <OrderFooter totalCost={this.state.totalCost} discount={0} shipAddress={this.state.userAddress==""?"Shipping will be added later": this.state.userAddress}/>
                 <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
                     <TouchableOpacity
                         activeOpacity={0.5}
                         style={[innerStyles.buttonPaymentMethod]}
                         onPress={() => {
-                        this.navigateToNextScreen("Delivery");
+                            this.navigateToNextScreen("Delivery");
                         }}>
                         <Text style={[styles.buttonText, innerStyles.orderButtonText]}>
-                        Continue
+                            Continue
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -250,7 +325,7 @@ class ShoppingCart extends Component {
         return listFooter;
     }
 
-    navigateToNextScreen=(screenName)=>{
+    navigateToNextScreen = (screenName) => {
         this.props.navigation.navigate(screenName)
     }
 
@@ -453,6 +528,9 @@ const innerStyles = StyleSheet.create({
     modalDropdownStyle: {
         width: "30%", height: 110
     },
+    modalColorTextStyle: {
+        fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingRight: 10, maxWidth: '65%'
+    },
     modalTextStyle: {
         fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingRight: 10
     },
@@ -485,7 +563,7 @@ const innerStyles = StyleSheet.create({
     orderAmountValueText: {
         flex: 1, fontSize: 18, lineHeight: 30, textAlign: 'right'
     },
-    shippingText: {fontFamily: "Avenir-Medium", fontSize: 16},
+    shippingText: { fontFamily: "Avenir-Medium", fontSize: 16 },
     orderGiftText: {
         lineHeight: 30
     },
