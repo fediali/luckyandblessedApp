@@ -23,6 +23,7 @@ import Swipeout from 'react-native-swipeout';
 import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import styles from './Styles/Style'
+import OrderFooter from "../reusableComponents/OrderFooter"
 
 
 YellowBox.ignoreWarnings([
@@ -230,29 +231,8 @@ class ShoppingCart extends Component {
 
                 <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
+                <OrderFooter buttonText="Continue"  navigation={this.props.navigation}/>
 
-
-
-                <View style={innerStyles.showOrderView}>
-                    <View style={innerStyles.orderRowView}>
-                        <Text style={[styles.buttonText, innerStyles.orderAmountText]}>Order amount: </Text>
-                        <Text style={[styles.buttonText, innerStyles.orderAmountValueText]}>$103.88</Text>
-                    </View>
-                    <View style={innerStyles.orderRowView}>
-                        <Text style={[innerStyles.lightText, innerStyles.orderGiftText]}>Gift card / Promo applied:</Text>
-                        <Text style={[innerStyles.lightText, innerStyles.orderAmountValueText]}>-$55.02</Text>
-                    </View>
-                </View>
-                <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
-                    <TouchableOpacity activeOpacity={0.5} style={[innerStyles.buttonPaymentMethod]} onPress={() => {this.navigateToNextScreen("Delivery")}}>
-                        <Text
-                            style={[
-                                styles.buttonText, innerStyles.orderButtonText
-                            ]}>
-                            Checkout
-                        </Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         )
 
@@ -463,7 +443,7 @@ const innerStyles = StyleSheet.create({
         width: "30%", height: 110
     },
     modalTextStyle: {
-        fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f"
+        fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingRight: 10
     },
     modalInnerView: {
         width: 25, height: 25, alignSelf: "center", marginVertical: 10, borderRadius: 25, alignSelf: "center"
@@ -486,7 +466,7 @@ const innerStyles = StyleSheet.create({
         paddingBottom: 60
     },
     orderRowView: {
-        flexDirection: 'row', paddingHorizontal: 20
+        flexDirection: 'row', paddingHorizontal: 20, justifyContent: "space-between"
     },
     orderAmountText: {
         fontSize: 18, lineHeight: 30
@@ -494,6 +474,7 @@ const innerStyles = StyleSheet.create({
     orderAmountValueText: {
         flex: 1, fontSize: 18, lineHeight: 30, textAlign: 'right'
     },
+    shippingText: {fontFamily: "Avenir-Medium", fontSize: 16},
     orderGiftText: {
         lineHeight: 30
     },
