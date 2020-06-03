@@ -231,8 +231,19 @@ class ShoppingCart extends Component {
 
                 <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
-                <OrderFooter buttonText="Continue"  navigation={this.props.navigation}/>
-
+                <OrderFooter/>
+                <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
+                    <TouchableOpacity
+                        activeOpacity={0.5}
+                        style={[innerStyles.buttonPaymentMethod]}
+                        onPress={() => {
+                        this.navigateToNextScreen("Delivery");
+                        }}>
+                        <Text style={[styles.buttonText, innerStyles.orderButtonText]}>
+                        Continue
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
 
