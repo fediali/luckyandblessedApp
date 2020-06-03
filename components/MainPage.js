@@ -22,7 +22,7 @@ import MainPageHistoryListItem from "../reusableComponents/MainPageHistoryListIt
 import MainPageTrendingListItem from "../reusableComponents/MainPageTrendingListItem"
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
-import FastImage from 'react-native-fast-image'
+import {Image as FastImage} from 'react-native'
 import ThemeContext from '../reusableComponents/ThemeContext'
 import Globals from "../Globals"
 

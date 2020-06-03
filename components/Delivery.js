@@ -137,12 +137,13 @@ class Delivery extends Component {
   }
 
   componentDidMount() {
+   
     InteractionManager.runAfterInteractions(() => {
       this.setState({isReady: false});
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);
-        this.getData();
+        this.getData(gUser);
       });
     });
   }
@@ -151,7 +152,10 @@ class Delivery extends Component {
     var promises = [];
     if (profile_id) {
       promises.push(
-        GetData(baseUrl + `api/userprofilesnew/4773&profile_id=${profile_id}`),
+        GetData(
+          baseUrl +
+            `api/userprofilesnew/${user.user_id}&profile_id=${profile_id}`,
+        ),
       );
       Promise.all(promises)
         .then((promiseResponses) => {
@@ -186,6 +190,15 @@ class Delivery extends Component {
                 zipCode: main_profile.b_zipcode,
                 email: 'demo@gmail.com',
                 phoneNumber: main_profile.b_phone,
+                s_fullName:
+                  main_profile.s_firstname + ' ' + main_profile.s_lastname,
+                s_streetAddress:
+                  main_profile.s_address + ' ' + main_profile.s_address_2,
+                s_cityTown: main_profile.s_city,
+                s_stateText: main_profile.s_state,
+                s_zipCode: main_profile.s_zipcode,
+                s_email: 'demo@gmail.com', //TODO: Check for email
+                s_phoneNumber: main_profile.s_phone,
               });
             })
             .catch((ex) => {
@@ -198,9 +211,9 @@ class Delivery extends Component {
         });
     }
 
-    //TODO: change user id to ${user.user_id}
+    //TODO: change user id to
     else {
-      promises.push(GetData(baseUrl + `api/userprofilesnew/4773`));
+      promises.push(GetData(baseUrl + `api/userprofilesnew/${user.user_id}`));
       Promise.all(promises)
         .then((promiseResponses) => {
           Promise.all(promiseResponses.map((res) => res.json()))
@@ -229,12 +242,21 @@ class Delivery extends Component {
                 fullName:
                   main_profile.b_firstname + ' ' + main_profile.b_lastname,
                 streetAddress:
-                  main_profile.b_address + ' ' + main_profile.s_address_2,
+                  main_profile.b_address + ' ' + main_profile.b_address_2,
                 cityTown: main_profile.b_city,
                 stateText: main_profile.b_state,
                 zipCode: main_profile.b_zipcode,
                 email: 'demo@gmail.com', //TODO: Check for email
                 phoneNumber: main_profile.b_phone,
+                s_fullName:
+                  main_profile.s_firstname + ' ' + main_profile.s_lastname,
+                s_streetAddress:
+                  main_profile.s_address + ' ' + main_profile.s_address_2,
+                s_cityTown: main_profile.s_city,
+                s_stateText: main_profile.s_state,
+                s_zipCode: main_profile.s_zipcode,
+                s_email: 'demo@gmail.com', //TODO: Check for email
+                s_phoneNumber: main_profile.s_phone,
               });
             })
             .catch((ex) => {
@@ -249,9 +271,11 @@ class Delivery extends Component {
   };
 
   validateAndRedirect = () => {
+    this.setState({isReady: false})
     if (this.isValid()) {
       //TODO: Call post userdetails API here. All input data is stored in state
       this.props.navigation.navigate('Payment', {deliveryDetails: this.state});
+      setTimeout(() => { this.setState({ isReady: true }) }, 1000)
     }
   };
 
@@ -542,14 +566,25 @@ class Delivery extends Component {
               <Text style={innerStyles.sameShipping}>
                 Billing and shipping addresses same
               </Text>
-              <RadioForm
-                radio_props={radio_props}
-                initial={0}
-                onPress={this.onRadioPress}
-                formHorizontal={true}
-                style={innerStyles.radioButton}
-                labelStyle={innerStyles.labelStyle}
-              />
+              {this.state.sameShipping ? (
+                <RadioForm
+                  radio_props={radio_props}
+                  initial={0}
+                  onPress={this.onRadioPress}
+                  formHorizontal={true}
+                  style={innerStyles.radioButton}
+                  labelStyle={innerStyles.labelStyle}
+                />
+              ) : (
+                <RadioForm
+                  radio_props={radio_props}
+                  initial={1}
+                  onPress={this.onRadioPress}
+                  formHorizontal={true}
+                  style={innerStyles.radioButton}
+                  labelStyle={innerStyles.labelStyle}
+                />
+              )}
 
               {!this.state.sameShipping && (
                 <View>
@@ -682,10 +717,17 @@ class Delivery extends Component {
               )}
             </View>
 
-            <OrderFooter
-              buttonText="Continue"
-              navigation={this.props.navigation}
-            />
+            <OrderFooter/>
+            <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={[innerStyles.buttonPaymentMethod]}
+                onPress={() => {this.validateAndRedirect()}}>
+                <Text style={[styles.buttonText, innerStyles.orderButtonText]}>
+                  Continue
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
         <Footer navigation={this.props.navigation} />
@@ -722,6 +764,11 @@ const innerStyles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 10,
   },
+  orderButtonView: {
+    paddingHorizontal: 30, width: '100%',
+    backgroundColor: '#f6f6f6',
+    paddingBottom: 20
+},
   padRight15: {marginRight: 15},
   buttonStyles: {
     paddingHorizontal: 30,
@@ -736,6 +783,11 @@ const innerStyles = StyleSheet.create({
     lineHeight: 22,
     color: '#454547',
     marginBottom: 8,
+  },
+  orderButtonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    lineHeight: 22,
   },
   modalView: {
     flexDirection: 'row',
@@ -861,7 +913,7 @@ const innerStyles = StyleSheet.create({
     marginVertical: 10,
   },
   shippingAddress: {
-    marginTop: 49,
+    marginTop: 25,
     marginBottom: 12,
     fontFamily: 'Avenir-Medium',
     fontSize: 21,

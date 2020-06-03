@@ -4,9 +4,6 @@ import styles from '../components/Styles/Style';
 
 export default class OrderFooter extends PureComponent {
 
-navigateToNextScreen=(screenName)=>{
-    this.props.navigation.navigate(screenName)
-}
   render() {
     return (
       <View>
@@ -45,18 +42,7 @@ navigateToNextScreen=(screenName)=>{
             </Text>
           </View>
         </View>
-        <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            style={[innerStyles.buttonPaymentMethod]}
-            onPress={() => {
-              this.navigateToNextScreen('Delivery');
-            }}>
-            <Text style={[styles.buttonText, innerStyles.orderButtonText]}>
-              {this.props.buttonText}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        
       </View>
     );
   }
