@@ -17,7 +17,7 @@ import { Icon } from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
-import FastImage from 'react-native-fast-image'
+import {Image as FastImage} from 'react-native';
 import ThemeContext from '../reusableComponents/ThemeContext'
 import Globals from '../Globals';
 // TODO: GLOBALS NOT WORKING PROPERLY

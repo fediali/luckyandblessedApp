@@ -14,7 +14,7 @@ import Footer from '../reusableComponents/Footer';
 import {Icon} from 'react-native-elements';
 import CategoriesProductListSingleItem from '../reusableComponents/CategoriesProductListSingleItem';
 import CategoriesProductListDoubleItem from '../reusableComponents/CategoriesProductListDoubleItem';
-import FastImage from 'react-native-fast-image';
+import {Image as FastImage} from 'react-native';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import Globals from '../Globals';

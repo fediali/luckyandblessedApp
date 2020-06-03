@@ -20,7 +20,7 @@ import Shimmer from 'react-native-shimmer';
 import GetData from '../reusableComponents/API/GetData';
 import HTMLView from 'react-native-htmlview';
 import Toast from 'react-native-simple-toast';
-import FastImage from 'react-native-fast-image';
+import {Image as FastImage} from 'react-native';
 import ProductPageSimilarListItem from '../reusableComponents/ProductPageSimilarListItem';
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';

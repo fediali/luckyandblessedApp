@@ -5,7 +5,7 @@ import {
     View,
     TouchableOpacity
 } from 'react-native'
-import FastImage from 'react-native-fast-image'
+import {Image as FastImage} from 'react-native';
 import styles from '../components/Styles/Style'
 
 export default class ZeroDataScreen extends PureComponent {
