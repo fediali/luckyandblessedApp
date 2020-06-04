@@ -17,7 +17,8 @@ export default class ZeroDataScreen extends PureComponent {
                         style={innerStyles.emptyImage}
                         source={require("../static/empty_product.png")}
                     />
-                    <Text style={innerStyles.customText}>Oops.. No Product Found. We will provide this soon.</Text>
+                    
+                    <Text style={innerStyles.customText}>Oops.. No Product Found.</Text>
                     
                 </View>
             </View>
