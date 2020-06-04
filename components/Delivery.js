@@ -175,10 +175,7 @@ class Delivery extends Component {
               ) {
                 newUser = false;
               }
-              if (
-                main_profile.b_address == main_profile.s_address &&
-                main_profile.b_address_2 == main_profile.s_address_2
-              )
+              if (main_profile.same_shipping)
                 sameShipping = true;
               this.setState({
                 isReady: true,
@@ -234,10 +231,7 @@ class Delivery extends Component {
               ) {
                 newUser = false;
               }
-              if (
-                main_profile.b_address == main_profile.s_address &&
-                main_profile.b_address_2 == main_profile.s_address_2
-              )
+              if (main_profile.same_shipping)
                 sameShipping = true;
               this.setState({
                 profiles: responses[0].profiles,
@@ -297,17 +291,23 @@ class Delivery extends Component {
         (data.b_firstname = fullName[0]),
           (data.b_lastname = fullName[1]),
           (data.b_address = this.state.streetAddress),
+          (data.b_address_2 = ''),
+          (data.b_county = ''),
+          (data.b_country = 'US'),
           (data.b_city = this.state.cityTown),
           (data.b_state = this.state.stateText),
           (data.b_zipcode = this.state.zipCode),
           (data.b_phone = this.state.phoneNumber),
-          (data.sameShipping = 'Y');
+          (data.is_same_shipping = 'Y');
       } else {
         let s_fullName = this.state.s_fullName.split(' ');
 
         (data.b_firstname = fullName[0]),
           (data.b_lastname = fullName[1]),
           (data.b_address = this.state.streetAddress),
+          (data.b_address_2 = ''),
+          (data.b_county = ''),
+          (data.b_country = 'US'),
           (data.b_city = this.state.cityTown),
           (data.b_state = this.state.stateText),
           (data.b_zipcode = this.state.zipCode),
@@ -315,11 +315,14 @@ class Delivery extends Component {
           (data.s_firstname = s_fullName[0]),
           (data.s_lastname = s_fullName[1]),
           (data.s_address = this.state.s_streetAddress),
+          (data.s_address_2 = ''),
+          (data.s_county = ''),
+          (data.s_country = 'US'),
           (data.s_city = this.state.s_cityTown),
           (data.s_state = this.state.s_stateText),
           (data.s_zipcode = this.state.s_zipCode),
           (data.s_phone = this.state.s_phoneNumber),
-          (data.sameShipping = 'N');
+          (data.is_same_shipping = 'N');
       }
 
       if (this.state.createNewProfile) {
@@ -336,13 +339,13 @@ class Delivery extends Component {
             // }, 1000);
           });
       } else {
-
+        console.log("Old User")
         PutData(baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`, data) //FIXME: Check put data
           .then((res) => res.json())
           .then((response) => {
             console.log("URL", baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`)
             console.log("Data", data)
-            console.log('Res', response);
+            // console.log('Res', response);
             this.props.navigation.navigate('Payment', {
               deliveryDetails: this.state,
             });

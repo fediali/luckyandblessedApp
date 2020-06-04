@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LBShoppingApp</string>
+    <string name="app_name">Lucky and Blessed</string>
     <string moduleConfig="true" name="CodePushDeploymentKey">e9agS8_sCG0W7-pLiczpYjQ7Lh8jg84hTPnWY</string> //Staging
     <!-- <string moduleConfig="true" name="CodePushDeploymentKey">7glnrNbXgTC0sRIuuD7Gqt_fCkLOQzoxlFmVm</string> //Production -->
     

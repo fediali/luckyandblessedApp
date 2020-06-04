@@ -127,7 +127,7 @@ export default class UserProfile extends Component {
           <View style={styles.subContainer}>
             <FastImage
               style={styles.displayPicture}
-              source={require('../static/dp-userProfile.png')}></FastImage>
+              source={require('../static/item_cart1.png')}></FastImage>
             <Text style={styles.userNameText}>Monika Willems</Text>
             <Text style={styles.userAddress}>455 Larkspur Dr. California</Text>
             <Text style={styles.userAddress}>Springs, CA 92926, USA</Text>
