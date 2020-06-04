@@ -38,7 +38,7 @@ export default class OrderFooter extends PureComponent {
               Order Total:{' '}
             </Text>
             <Text style={[styles.buttonText, innerStyles.orderAmountValueText]}>
-              ${this.props.totalCost - this.props.discount}
+              ${this.props.finalCost}
             </Text>
           </View>
         </View>

@@ -23,6 +23,7 @@ import Header from "../reusableComponents/Header"
 import Footer from "../reusableComponents/Footer"
 import styles from './Styles/Style'
 import OrderFooter from "../reusableComponents/OrderFooter"
+import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
@@ -115,7 +116,8 @@ class FlatListItem extends Component {
                     <View style={innerStyles.listMainView}>
                         <View style={innerStyles.listInnerView}>
                             <Image style={[innerStyles.itemImage]}
-                                resizeMode='contain' source={require("../static/item_cart1.png")}
+
+                                resizeMode='contain' source={{ uri: this.props.item.path }}
                             />
                             <View style={innerStyles.listTextsContainerView}>
                                 <View style={innerStyles.listRowView}>
@@ -190,8 +192,12 @@ class ShoppingCart extends Component {
             deletedRowKey: null,
             itemList: [],
             totalCost: -1,
+            finalCost: -1,
             totalCartProducts: -1,
             userAddress: "",
+            showZeroProductScreen: false,
+            promocode: "",
+            discount: 0,
             isReady: false
         }
     }
@@ -208,6 +214,46 @@ class ShoppingCart extends Component {
         });
     }
 
+    applyPromo=()=>{
+        //TODO: Apply promo 
+        // {
+        //     "user_id":4751,
+        //     "coupon_codes":"dummy" //dummy is the coupon code
+        // }
+
+        // http://dev.landbw.co/api/coupon
+
+        RetrieveDataAsync(STORAGE_USER).then((user) => {
+            gUser = JSON.parse(user);
+            this.postPromoData(gUser);
+        });
+
+    }
+
+    postPromoData = (user) => {
+        data = {
+            "user_id": user.user_id,
+            "coupen_codes": this.state.promocode
+        }
+        PostData(baseUrl + 'api/coupon', data)
+            .then((res) => res.json())
+            .then((responses) => {
+                if(responses.status =="Success"){
+                    this.setState({
+                        discount: parseFloat(responses.discount).toFixed(2),
+                        finalCost: parseFloat(responses.total).toFixed(2)
+                    })
+                    alert("Promocode Successfully Added!!")
+                }else{
+                    alert("Invalid Promocode")
+                }
+            })
+            .catch((ex) => {
+                console.log('Promise exception', ex);
+                alert(ex);
+            });
+    }
+
     getData = (user) => {
         var promises = [];
         promises.push(
@@ -217,7 +263,6 @@ class ShoppingCart extends Component {
             ),
 
         );
-        
         Promise.all(promises).then((promiseResponses) => {
             Promise.all(promiseResponses.map((res) => res.json())).then((responses) => {
 
@@ -229,14 +274,14 @@ class ShoppingCart extends Component {
                     singleProduct = {
                         itemNum: responses[0].products[i].item_id,
                         name: responses[0].products[i].product,
-                        price: responses[0].products[i].amount * responses[0].products[i].price,
-                        unitPrice: responses[0].products[i].price,
+                        price: (parseFloat(responses[0].products[i].amount) * parseFloat(responses[0].products[i].price)).toFixed(2),
+                        unitPrice: parseFloat(responses[0].products[i].price).toFixed(2),
                         sizes: 'Not available',
                         selectedColor: 'Turquoise',//
                         availableColors: ['#eb4034', '#05c2bd', '#f4f719', '#0caac9', '#e629df'],//
                         availableSizes: [4, 5, 6, 7, 8],//
                         quantity: responses[0].products[i].amount,
-                        unknownNum: 6,//
+                        unknownNum: responses[0].products[i].amount,
                         hexColor: '#05c2bd',//
                     }
                     if ('detailed' in responses[0].products[i].extra.main_pair) {
@@ -245,13 +290,18 @@ class ShoppingCart extends Component {
                         singleProduct.path = 'https://picsum.photos/200';
                     }
                     cartData[i] = singleProduct;
-
+                    if (productsLength == 0) {
+                        this.setState({
+                            showZeroProductScreen: true
+                        })
+                    }
                     this.setState({
                         totalCost: responses[0].total,
+                        finalCost: responses[0].total,
                         totalCartProducts: responses[0].cart_products,
                         itemList: cartData,
                         userAddress: responses[0].user_data.b_address,//FIXME: there are other address in API also.
-                        isReady: true
+                        isReady: true,
                     })
                 }
 
@@ -263,8 +313,6 @@ class ShoppingCart extends Component {
             alert(ex);
         });
     };
-
-
 
     refreshFlatList = (deletedKey) => {
         this.setState((prevState) => {
@@ -293,8 +341,8 @@ class ShoppingCart extends Component {
             <View style={innerStyles.listFooterPad}>
                 <View style={innerStyles.promoView}>
                     <View style={styles.inputView}>
-                        <TextInput style={[styles.input]} placeholder="Gift Or Promo code" />
-                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]} onPress={this.applyPromo}>
+                        <TextInput style={[styles.input]} placeholder="Gift Or Promo code" onChangeText={(text) => { this.setState({ promocode: text }) }} />
+                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]} onPress={()=>{this.applyPromo()}}>
                             <Text
                                 style={[
                                     styles.buttonText,
@@ -308,7 +356,7 @@ class ShoppingCart extends Component {
 
                 <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
-                <OrderFooter totalCost={this.state.totalCost} discount={0} shipAddress={"Shipping will be added later"}/> 
+                <OrderFooter totalCost={this.state.totalCost} finalCost={this.state.finalCost} discount={this.state.discount} shipAddress={this.state.userAddress == "" ? "Shipping will be added later" : this.state.userAddress} />
                 <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
                     <TouchableOpacity
                         activeOpacity={0.5}
@@ -331,15 +379,6 @@ class ShoppingCart extends Component {
         this.props.navigation.navigate(screenName)
     }
 
-    applyPromo(){
-        //TODO: Apply promo 
-        // {
-        //     "user_id":4751,
-        //     "coupon_codes":"dummy" //dummy is the coupon code
-        // }
-
-        // http://dev.landbw.co/api/coupon
-    }
 
 
     render() {
@@ -358,22 +397,25 @@ class ShoppingCart extends Component {
         return (
             <SafeAreaView style={innerStyles.itemView}>
                 <Header navigation={this.props.navigation} />
-                <View style={styles.parentContainer}>
-                    <FlatList
-                        keyExtractor={(item) => item.itemNum.toString()}
-                        data={this.state.itemList}
-                        numColumns={1}
-                        renderItem={({ item, index }) => {
-                            return (
-                                <FlatListItem item={item} index={index} parentFlatList={this}>
+                {this.state.showZeroProductScreen ?
+                    <ZeroDataScreen /> :
+                    <View style={styles.parentContainer}>
+                        <FlatList
+                            keyExtractor={(item) => item.itemNum.toString()}
+                            data={this.state.itemList}
+                            numColumns={1}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <FlatListItem item={item} index={index} parentFlatList={this}>
 
-                                </FlatListItem>
-                            )
-                        }}
-                        ListHeaderComponent={this.renderFlatListHeader}
-                        ListFooterComponent={this.renderFlatListFooter}
-                    />
-                </View>
+                                    </FlatListItem>
+                                )
+                            }}
+                            ListHeaderComponent={this.renderFlatListHeader}
+                            ListFooterComponent={this.renderFlatListFooter}
+                        />
+                    </View>
+                }
                 <Footer selected="Shop" navigation={this.props.navigation} />
             </SafeAreaView>
         )
