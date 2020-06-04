@@ -20,6 +20,9 @@ import Shimmer from 'react-native-shimmer';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ModalDropdown from 'react-native-modal-dropdown';
+import PutData from '../reusableComponents/API/PutData'
+import PostData from '../reusableComponents/API/PostData';
+import GetData from '../reusableComponents/API/GetData';
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
@@ -103,6 +106,9 @@ class Delivery extends Component {
       isReady: false,
       newUser: true,
       sameShipping: true,
+      createNewProfile: false,
+      selectedProfileName: null,
+      selectedProfileId: null,
       fullName: '',
       fullNameError: '',
       streetAddress: '',
@@ -117,7 +123,6 @@ class Delivery extends Component {
       emailError: '',
       phoneNumber: '',
       phoneNumberError: '',
-      selectedProfile: 'Main',
       s_fullName: '',
       s_fullNameError: '',
       s_streetAddress: '',
@@ -136,7 +141,6 @@ class Delivery extends Component {
   }
 
   componentDidMount() {
-   
     InteractionManager.runAfterInteractions(() => {
       this.setState({isReady: false});
       // Retriving the user_id
@@ -180,6 +184,8 @@ class Delivery extends Component {
                 isReady: true,
                 newUser: false,
                 sameShipping: sameShipping,
+                selectedProfileName: main_profile.profile_name,
+                selectedProfileId: main_profile.profile_id,
                 fullName:
                   main_profile.b_firstname + ' ' + main_profile.b_lastname,
                 streetAddress:
@@ -238,6 +244,8 @@ class Delivery extends Component {
                 isReady: true,
                 newUser: newUser,
                 sameShipping: sameShipping,
+                selectedProfileName: main_profile.profile_name,
+                selectedProfileId: main_profile.profile_id,
                 fullName:
                   main_profile.b_firstname + ' ' + main_profile.b_lastname,
                 streetAddress:
@@ -270,11 +278,79 @@ class Delivery extends Component {
   };
 
   validateAndRedirect = () => {
-    this.setState({isReady: false})
+    this.setState({isReady: false});
     if (this.isValid()) {
-      //TODO: Call post userdetails API here. All input data is stored in state
-      this.props.navigation.navigate('Payment', {deliveryDetails: this.state});
-      setTimeout(() => { this.setState({ isReady: true }) }, 1000)
+      let data = {
+        user_id: gUser.user_id,
+      };
+
+      if (!this.state.createNewProfile) {
+        (data.profile_name = this.state.selectedProfileName),
+          (data.profile_id = this.state.selectedProfileId);
+      } else {
+        data.profile_name = this.state.selectedProfileName;
+      }
+
+      let fullName = this.state.fullName.split(' ');
+
+      if (this.state.sameShipping) {
+        (data.b_firstname = fullName[0]),
+          (data.b_lastname = fullName[1]),
+          (data.b_address = this.state.streetAddress),
+          (data.b_city = this.state.cityTown),
+          (data.b_state = this.state.stateText),
+          (data.b_zipcode = this.state.zipCode),
+          (data.b_phone = this.state.phoneNumber),
+          (data.sameShipping = 'Y');
+      } else {
+        let s_fullName = this.state.s_fullName.split(' ');
+
+        (data.b_firstname = fullName[0]),
+          (data.b_lastname = fullName[1]),
+          (data.b_address = this.state.streetAddress),
+          (data.b_city = this.state.cityTown),
+          (data.b_state = this.state.stateText),
+          (data.b_zipcode = this.state.zipCode),
+          (data.b_phone = this.state.phoneNumber),
+          (data.s_firstname = s_fullName[0]),
+          (data.s_lastname = s_fullName[1]),
+          (data.s_address = this.state.s_streetAddress),
+          (data.s_city = this.state.s_cityTown),
+          (data.s_state = this.state.s_stateText),
+          (data.s_zipcode = this.state.s_zipCode),
+          (data.s_phone = this.state.s_phoneNumber),
+          (data.sameShipping = 'N');
+      }
+
+      if (this.state.createNewProfile) {
+        console.log("New User")
+        PostData(baseUrl + `api/userprofilesnew`, data)
+          .then((res) => res.json())
+          .then((response) => {
+            console.log(response);
+            // this.props.navigation.navigate('Payment', {
+            //   deliveryDetails: this.state,
+            // });
+            // setTimeout(() => {
+            //   this.setState({isReady: true});
+            // }, 1000);
+          });
+      } else {
+
+        PutData(baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`, data) //FIXME: Check put data
+          .then((res) => res.json())
+          .then((response) => {
+            console.log("URL", baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`)
+            console.log("Data", data)
+            console.log('Res', response);
+            this.props.navigation.navigate('Payment', {
+              deliveryDetails: this.state,
+            });
+            setTimeout(() => {
+              this.setState({isReady: true});
+            }, 1000);
+          });
+      }
     }
   };
 
@@ -285,6 +361,7 @@ class Delivery extends Component {
   isValid() {
     let validFlag = true;
 
+    //Billing address
     if (this.state.fullName == '') {
       this.setState({fullNameError: 'Full Name is required.'});
       validFlag = false;
@@ -334,6 +411,57 @@ class Delivery extends Component {
       this.setState({phoneNumberError: ''});
     }
 
+    //Shipping address
+    if (!this.state.sameShipping) {
+      if (this.state.s_fullName == '') {
+        this.setState({s_fullNameError: 'Full Name is required.'});
+        validFlag = false;
+      } else {
+        this.setState({s_fullNameError: ''});
+      }
+
+      if (this.state.s_streetAddress == '') {
+        this.setState({s_streetAddressError: 'Street address is required.'});
+        validFlag = false;
+      } else {
+        this.setState({s_streetAddressError: ''});
+      }
+
+      if (this.state.s_cityTown == '') {
+        this.setState({s_cityTownError: 'City/Town is required.'});
+        validFlag = false;
+      } else {
+        this.setState({s_cityTownError: ''});
+      }
+
+      if (this.state.s_stateText == '') {
+        this.setState({s_stateTextError: 'State is required.'});
+        validFlag = false;
+      } else {
+        this.setState({s_stateTextError: ''});
+      }
+
+      if (this.state.s_zipCode == '') {
+        this.setState({s_zipCodeError: 'Zip code is required.'});
+        validFlag = false;
+      } else {
+        this.setState({s_zipCodeError: ''});
+      }
+
+      if (this.state.s_email == '') {
+        this.setState({s_emailError: 'Email is required.'});
+        validFlag = false;
+      } else {
+        this.setState({s_emailError: ''});
+      }
+
+      if (this.state.s_phoneNumber == '') {
+        this.setState({s_phoneNumberError: 'Phone number is required.'});
+        validFlag = false;
+      } else {
+        this.setState({s_phoneNumberError: ''});
+      }
+    }
     return validFlag;
   }
 
@@ -358,8 +486,13 @@ class Delivery extends Component {
     this.setState({s_stateText: usStates[index]});
   };
 
-  selectProfile = (profile_id) => () => {
-    this.setState({isReady: false});
+  selectProfile = (profile_id, profile_name) => () => {
+    this.setState({
+      isReady: false,
+      selectedProfileName: profile_name,
+      selectedProfileId: profile_id,
+      createNewProfile: false,
+    });
     this.getData(gUser, profile_id);
   };
 
@@ -385,59 +518,78 @@ class Delivery extends Component {
           <View styles={innerStyles.parentContainer}>
             <View style={innerStyles.paddingHorizontal}>
               <Text style={innerStyles.mainTextBold}>Billing and Shipping</Text>
-              <Text style={[innerStyles.profileHeading]}>Select Profile:</Text>
 
               {!this.state.newUser && (
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}>
-                  {this.state.profiles.map((item, index) => {
-                    return (
-                      <View>
-                        <TouchableOpacity
-                          onPress={this.selectProfile(item.profile_id)}
-                          activeOpacity={0.5}
-                          style={innerStyles.squareBoxButtons}>
-                          <View style={innerStyles.checkIcon}>
-                            <Icon
-                              size={44}
-                              name="checkcircle"
-                              type="antdesign"
-                              color="#5dd136"
-                            />
-                            <Text style={[innerStyles.lightText]}>
-                              {item.profile_name.toUpperCase()}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                        <View style={innerStyles.padRight15}></View>
-                      </View>
-                    );
-                  })}
+                <View>
+                  <Text style={[innerStyles.profileHeading]}>
+                    Select Profile:
+                  </Text>
 
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    style={[
-                      innerStyles.squareBoxButtons,
-                      innerStyles.marginStart,
-                    ]}>
-                    <View style={innerStyles.checkIcon}>
-                      <Icon
-                        size={44}
-                        name="ios-add-circle"
-                        type="ionicon"
-                        color="#f6f6f6"
-                      />
-                    </View>
-                    <Text
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}>
+                    {this.state.profiles.map((item, index) => {
+                      return (
+                        <View key={item.profile_id}>
+                          <TouchableOpacity
+                            onPress={this.selectProfile(
+                              item.profile_id,
+                              item.profileName,
+                            )}
+                            activeOpacity={0.5}
+                            style={innerStyles.squareBoxButtons}>
+                            <View style={innerStyles.checkIcon}>
+                              {this.state.selectedProfileName.toUpperCase() ===
+                              item.profile_name.toUpperCase() ? (
+                                <Icon
+                                  size={48}
+                                  name="checkcircle"
+                                  type="antdesign"
+                                  color="#5dd136"
+                                />
+                              ) : (
+                                <Icon
+                                  size={44}
+                                  name="checkcircle"
+                                  type="antdesign"
+                                  color="#f6f6f6"
+                                />
+                              )}
+
+                              <Text style={[innerStyles.lightText]}>
+                                {item.profile_name.toUpperCase()}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                          <View style={innerStyles.padRight15}></View>
+                        </View>
+                      );
+                    })}
+
+                    <TouchableOpacity
+                      activeOpacity={0.5}
                       style={[
-                        innerStyles.lightText,
-                        innerStyles.textAlignCenter,
+                        innerStyles.squareBoxButtons,
+                        innerStyles.marginStart,
                       ]}>
-                      Create a new profile
-                    </Text>
-                  </TouchableOpacity>
-                </ScrollView>
+                      <View style={innerStyles.checkIcon}>
+                        <Icon
+                          size={44}
+                          name="ios-add-circle"
+                          type="ionicon"
+                          color="#f6f6f6"
+                        />
+                      </View>
+                      <Text
+                        style={[
+                          innerStyles.lightText,
+                          innerStyles.textAlignCenter,
+                        ]}>
+                        Create a new profile
+                      </Text>
+                    </TouchableOpacity>
+                  </ScrollView>
+                </View>
               )}
 
               <Text style={innerStyles.shippingAddress}>Billing Address</Text>
@@ -716,12 +868,14 @@ class Delivery extends Component {
               )}
             </View>
 
-            <OrderFooter/>
+            <OrderFooter />
             <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={[innerStyles.buttonPaymentMethod]}
-                onPress={() => {this.validateAndRedirect()}}>
+                onPress={() => {
+                  this.validateAndRedirect();
+                }}>
                 <Text style={[styles.buttonText, innerStyles.orderButtonText]}>
                   Continue
                 </Text>
@@ -764,10 +918,11 @@ const innerStyles = StyleSheet.create({
     paddingVertical: 10,
   },
   orderButtonView: {
-    paddingHorizontal: 30, width: '100%',
+    paddingHorizontal: 30,
+    width: '100%',
     backgroundColor: '#f6f6f6',
-    paddingBottom: 20
-},
+    paddingBottom: 20,
+  },
   padRight15: {marginRight: 15},
   buttonStyles: {
     paddingHorizontal: 30,
