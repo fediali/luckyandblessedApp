@@ -249,7 +249,7 @@ export default class ProductPage extends Component {
           user_id: user.user_id,
         },
       };
-      PostData(baseUrl + `api/40/SraCartContent`, order)
+      PostData(baseUrl + `api/addcart`, order)
         .then((res) => res.json())
         .then((response) => {
           Toast.show('Product added to cart');

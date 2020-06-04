@@ -58,6 +58,11 @@ class FlatListItem extends Component {
 
     onDeletePress = () => {
         const deletingRow = this.state.activeRowKey;
+        // http://dev.landbw.co/api/removecart
+        // {
+        //     "user_id": 4751,
+        //     "cart_id": 2478863224 //cart_id is the item_id returned through GET API
+        // }
         Alert.alert(
             'Alert',
             'Are you sure you want to delete ?',
@@ -295,7 +300,7 @@ class ShoppingCart extends Component {
                 <View style={innerStyles.promoView}>
                     <View style={styles.inputView}>
                         <TextInput style={[styles.input]} placeholder="Gift Or Promo code" />
-                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]}>
+                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]} onPress={this.applyPromo}>
                             <Text
                                 style={[
                                     styles.buttonText,
@@ -331,6 +336,17 @@ class ShoppingCart extends Component {
     navigateToNextScreen = (screenName) => {
         this.props.navigation.navigate(screenName)
     }
+
+    applyPromo(){
+        //TODO: Apply promo 
+        // {
+        //     "user_id":4751,
+        //     "coupon_codes":"dummy" //dummy is the coupon code
+        // }
+
+        // http://dev.landbw.co/api/coupon
+    }
+
 
     render() {
 
