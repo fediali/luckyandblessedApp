@@ -1,5 +1,6 @@
 export default PutData = (url,jsonObj) => {
-    
+    console.log("PUT DATA", jsonObj);
+    console.log("URL", url)
     let h = new Headers();
     h.append(
         'Authorization',

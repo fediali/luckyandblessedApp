@@ -21,8 +21,8 @@ def flipper_post_install(installer)
   end
 end
 
-target 'LBShoppingApp' do
-  # Pods for LBShoppingApp
+target 'LuckyandBlessed' do
+  # Pods for LuckyandBlessed
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -62,7 +62,7 @@ target 'LBShoppingApp' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
-  target 'LBShoppingAppTests' do
+  target 'LuckyandBlessedTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -79,10 +79,10 @@ target 'LBShoppingApp' do
   end
 end
 
-target 'LBShoppingApp-tvOS' do
-  # Pods for LBShoppingApp-tvOS
+target 'LuckyandBlessed-tvOS' do
+  # Pods for LuckyandBlessed-tvOS
 
-  target 'LBShoppingApp-tvOSTests' do
+  target 'LuckyandBlessed-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
