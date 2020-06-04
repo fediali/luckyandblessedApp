@@ -116,8 +116,8 @@ class FlatListItem extends Component {
                     <View style={innerStyles.listMainView}>
                         <View style={innerStyles.listInnerView}>
                             <Image style={[innerStyles.itemImage]}
-                            
-                                resizeMode='contain' source={{uri: this.props.item.path}}
+
+                                resizeMode='contain' source={{ uri: this.props.item.path }}
                             />
                             <View style={innerStyles.listTextsContainerView}>
                                 <View style={innerStyles.listRowView}>
@@ -192,9 +192,12 @@ class ShoppingCart extends Component {
             deletedRowKey: null,
             itemList: [],
             totalCost: -1,
+            finalCost: -1,
             totalCartProducts: -1,
             userAddress: "",
             showZeroProductScreen: false,
+            promocode: "",
+            discount: 0,
             isReady: false
         }
     }
@@ -209,6 +212,46 @@ class ShoppingCart extends Component {
                 this.getData(gUser);
             });
         });
+    }
+
+    applyPromo=()=>{
+        //TODO: Apply promo 
+        // {
+        //     "user_id":4751,
+        //     "coupon_codes":"dummy" //dummy is the coupon code
+        // }
+
+        // http://dev.landbw.co/api/coupon
+
+        RetrieveDataAsync(STORAGE_USER).then((user) => {
+            gUser = JSON.parse(user);
+            this.postPromoData(gUser);
+        });
+
+    }
+
+    postPromoData = (user) => {
+        data = {
+            "user_id": user.user_id,
+            "coupen_codes": this.state.promocode
+        }
+        PostData(baseUrl + 'api/coupon', data)
+            .then((res) => res.json())
+            .then((responses) => {
+                if(responses.status =="Success"){
+                    this.setState({
+                        discount: parseFloat(responses.discount).toFixed(2),
+                        finalCost: parseFloat(responses.total).toFixed(2)
+                    })
+                    alert("Promocode Successfully Added!!")
+                }else{
+                    alert("Invalid Promocode")
+                }
+            })
+            .catch((ex) => {
+                console.log('Promise exception', ex);
+                alert(ex);
+            });
     }
 
     getData = (user) => {
@@ -254,6 +297,7 @@ class ShoppingCart extends Component {
                     }
                     this.setState({
                         totalCost: responses[0].total,
+                        finalCost: responses[0].total,
                         totalCartProducts: responses[0].cart_products,
                         itemList: cartData,
                         userAddress: responses[0].user_data.b_address,//FIXME: there are other address in API also.
@@ -269,8 +313,6 @@ class ShoppingCart extends Component {
             alert(ex);
         });
     };
-
-
 
     refreshFlatList = (deletedKey) => {
         this.setState((prevState) => {
@@ -299,8 +341,8 @@ class ShoppingCart extends Component {
             <View style={innerStyles.listFooterPad}>
                 <View style={innerStyles.promoView}>
                     <View style={styles.inputView}>
-                        <TextInput style={[styles.input]} placeholder="Gift Or Promo code" />
-                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]} onPress={this.applyPromo}>
+                        <TextInput style={[styles.input]} placeholder="Gift Or Promo code" onChangeText={(text) => { this.setState({ promocode: text }) }} />
+                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]} onPress={()=>{this.applyPromo()}}>
                             <Text
                                 style={[
                                     styles.buttonText,
@@ -314,7 +356,7 @@ class ShoppingCart extends Component {
 
                 <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
-                <OrderFooter totalCost={this.state.totalCost} discount={0} shipAddress={this.state.userAddress == "" ? "Shipping will be added later" : this.state.userAddress} />
+                <OrderFooter totalCost={this.state.totalCost} finalCost={this.state.finalCost} discount={this.state.discount} shipAddress={this.state.userAddress == "" ? "Shipping will be added later" : this.state.userAddress} />
                 <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
                     <TouchableOpacity
                         activeOpacity={0.5}
@@ -337,15 +379,6 @@ class ShoppingCart extends Component {
         this.props.navigation.navigate(screenName)
     }
 
-    applyPromo(){
-        //TODO: Apply promo 
-        // {
-        //     "user_id":4751,
-        //     "coupon_codes":"dummy" //dummy is the coupon code
-        // }
-
-        // http://dev.landbw.co/api/coupon
-    }
 
 
     render() {
