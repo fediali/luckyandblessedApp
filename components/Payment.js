@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import Shimmer from 'react-native-shimmer';
-import {Image as FastImage} from 'react-native';
+import { Image as FastImage } from 'react-native';
 
 class Payment extends Component {
   constructor(props) {
@@ -21,6 +21,7 @@ class Payment extends Component {
     let deliveryDetails = this.props.route.params.deliveryDetails;
     this.state = {
       isReady: false,
+      dDetails: deliveryDetails,
       shippingDetails:
         deliveryDetails.s_fullname +
         ' ' +
@@ -51,10 +52,83 @@ class Payment extends Component {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: true});
+      this.setState({ isReady: true });
       console.log(this.state.deliveryDetails);
     });
   }
+
+  /*
+  https://apitest.authorize.net/xml/v1/request.api
+  POST
+
+  {
+    "createTransactionRequest": {
+        "merchantAuthentication": {
+            "name": "9Lw9PY5KCZkz",
+            "transactionKey": "9hG2Em8ZD6y64aCJ"
+        },
+        
+        "transactionRequest": {
+            "transactionType": "authCaptureTransaction",
+            "amount": "5",
+            "currencyCode":"USD",
+            "payment": {
+                "creditCard": {
+                    "cardNumber": "5424000000000015",
+                    "expirationDate": "2020-12",
+                    "cardCode": "999"
+                }
+            },
+            "lineItems": {
+                "lineItem": {
+                    "itemId": "54588",
+                    "name": "Sleeveless dress",
+                    "quantity": "18",
+                    "unitPrice": "45.00"
+                }
+            },
+           "customer": {
+                "id": "4713",
+                "email": "zayantharani@gmail.com"
+               },
+            "billTo": {
+                "firstName": "Ellen",
+                "lastName": "Johnson",
+                "company": "Souveniropolis",
+                "address": "14 Main Street",
+                "city": "Pecan Springs",
+                "state": "TX",
+                "zip": "44628",
+                "country": "USA"
+            },
+            "shipTo": {
+                "firstName": "China",
+                "lastName": "Bayles",
+                "company": "Thyme for Tea",
+                "address": "12 Main Street",
+                "city": "Pecan Springs",
+                "state": "TX",
+                "zip": "44628",
+                "country": "USA"
+            },
+            "transactionSettings": {
+                "setting": {
+                    "settingName": "emailCustomer",
+                    "settingValue": true
+                }
+            },
+            "userFields": {
+                "userField": [
+                    {
+                        "name": "OrderFrom",
+                        "value": "MobileApp"
+                    }
+                ]
+            }
+        }
+    }
+}
+  */
 
   render() {
     let width = Dimensions.get('window').width;
@@ -82,7 +156,7 @@ class Payment extends Component {
             flexGrow: 1,
             justifyContent: 'space-between',
           }}>
-          <View style={{marginBottom: 50}}>
+          <View style={{ marginBottom: 50 }}>
             <View style={styles.subContainer}>
               <View style={styles.paymentAndSecureView}>
                 <View>
@@ -132,16 +206,16 @@ class Payment extends Component {
                     </Text>
                   </View>
                 ) : (
-                  <View>
-                    <View style={styles.shippingAddressView}>
-                      <Text style={styles.heading}>billing address:</Text>
-                      <Text style={styles.textButton}>Edit</Text>
+                    <View>
+                      <View style={styles.shippingAddressView}>
+                        <Text style={styles.heading}>billing address:</Text>
+                        <Text style={styles.textButton}>Edit</Text>
+                      </View>
+                      <Text style={styles.monikaWillemsText}>
+                        {this.state.billingDetails}
+                      </Text>
                     </View>
-                    <Text style={styles.monikaWillemsText}>
-                      {this.state.billingDetails}
-                    </Text>
-                  </View>
-                )}
+                  )}
 
                 <View style={styles.promoAndCreditCardView}>
                   <Text style={styles.heading}>
