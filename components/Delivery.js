@@ -158,7 +158,10 @@ class Delivery extends Component {
 
   getData = (user, profile_id = null) => {
     var promises = [];
+    
     if (profile_id) {
+    console.log(":::::::::::::",profile_id)
+    console.log(user.user_id)
       promises.push(
         GetData(
           baseUrl +
@@ -513,6 +516,7 @@ class Delivery extends Component {
       selectedProfileId: profile_id,
       createNewProfile: false,
     });
+    console.log("}}}}}}}}",profile_id)
     this.getData(gUser, profile_id);
   };
 
