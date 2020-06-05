@@ -20,9 +20,12 @@ import Shimmer from 'react-native-shimmer';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ModalDropdown from 'react-native-modal-dropdown';
-import PutData from '../reusableComponents/API/PutData'
+import PutData from '../reusableComponents/API/PutData';
 import PostData from '../reusableComponents/API/PostData';
 import GetData from '../reusableComponents/API/GetData';
+import DialogInput from 'react-native-dialog-input';
+import Toast from 'react-native-simple-toast';
+
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
@@ -107,8 +110,10 @@ class Delivery extends Component {
       newUser: true,
       sameShipping: true,
       createNewProfile: false,
-      selectedProfileName: null,
-      selectedProfileId: null,
+      newProfileName: '',
+      isDialogVisible: false,
+      selectedProfileName: '',
+      selectedProfileId: '',
       fullName: '',
       fullNameError: '',
       streetAddress: '',
@@ -165,7 +170,7 @@ class Delivery extends Component {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
               let main_profile = responses[0][0];
-              let sameShipping = false;
+              let sameShipping = main_profile.is_same_shipping;
               let newUser = true;
               if (
                 main_profile.b_address ||
@@ -175,8 +180,7 @@ class Delivery extends Component {
               ) {
                 newUser = false;
               }
-              if (main_profile.same_shipping)
-                sameShipping = true;
+
               this.setState({
                 isReady: true,
                 newUser: false,
@@ -221,7 +225,7 @@ class Delivery extends Component {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
               let main_profile = responses[0].main_profile[0];
-              let sameShipping = false;
+              let sameShipping = main_profile.is_same_shipping;
               let newUser = true;
               if (
                 main_profile.b_address ||
@@ -231,8 +235,7 @@ class Delivery extends Component {
               ) {
                 newUser = false;
               }
-              if (main_profile.same_shipping)
-                sameShipping = true;
+
               this.setState({
                 profiles: responses[0].profiles,
                 isReady: true,
@@ -272,15 +275,16 @@ class Delivery extends Component {
   };
 
   validateAndRedirect = () => {
-    this.setState({isReady: false});
     if (this.isValid()) {
+      this.setState({isReady: false});
+
       let data = {
-        user_id: gUser.user_id,
+        user_id: parseInt(gUser.user_id),
       };
 
       if (!this.state.createNewProfile) {
         (data.profile_name = this.state.selectedProfileName),
-          (data.profile_id = this.state.selectedProfileId);
+          (data.profile_id = parseInt(this.state.selectedProfileId));
       } else {
         data.profile_name = this.state.selectedProfileName;
       }
@@ -326,33 +330,46 @@ class Delivery extends Component {
       }
 
       if (this.state.createNewProfile) {
-        console.log("New User")
+        console.log('New User');
         PostData(baseUrl + `api/userprofilesnew`, data)
           .then((res) => res.json())
           .then((response) => {
             console.log(response);
+            if (!response.message) {
+              Toast.show(`${data.profile_name} profile created successfully`);
+              this.props.navigation.navigate('Payment', {
+                deliveryDetails: this.state,
+              });
+              setTimeout(() => {
+                this.setState({isReady: true});
+              }, 1000);
+            } else {
+              Toast.show(response.message);
+            }
+          })
+          .catch((e) => console.log(e));
+      } else {
+        console.log('Old User');
+        PutData(
+          baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
+          data,
+        ) //FIXME: Check put data
+          .then((res) => res.text()) //FIXME: Solve this please.
+          .then((response) => {
+            console.log(
+              'URL',
+              baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
+            );
+            console.log('Data', data);
+            console.log('Res', response);
             // this.props.navigation.navigate('Payment', {
             //   deliveryDetails: this.state,
             // });
             // setTimeout(() => {
             //   this.setState({isReady: true});
             // }, 1000);
-          });
-      } else {
-        console.log("Old User")
-        PutData(baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`, data) //FIXME: Check put data
-          .then((res) => res.json())
-          .then((response) => {
-            console.log("URL", baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`)
-            console.log("Data", data)
-            // console.log('Res', response);
-            this.props.navigation.navigate('Payment', {
-              deliveryDetails: this.state,
-            });
-            setTimeout(() => {
-              this.setState({isReady: true});
-            }, 1000);
-          });
+          })
+          .catch((e) => console.log(e));
       }
     }
   };
@@ -499,6 +516,52 @@ class Delivery extends Component {
     this.getData(gUser, profile_id);
   };
 
+  makeNewProfile = (profileName) => {
+    let profileAllowed = true;
+    this.state.profiles.forEach((profile) => {
+      if (profile.profile_name.toUpperCase() == profileName.toUpperCase()) {
+        Toast.show('Profile name already exists');
+        profileAllowed = false;
+      }
+    });
+
+    if (profileAllowed) {
+      this.setState({
+        profiles: [...this.state.profiles, {profile_name: profileName}],
+        selectedProfileName: profileName,
+        isDialogVisible: false,
+        fullName: '',
+        fullNameError: '',
+        streetAddress: '',
+        streetAddressError: '',
+        cityTown: '',
+        cityTownError: '',
+        stateText: '',
+        stateTextError: '',
+        zipCode: '',
+        zipCodeError: '',
+        email: '',
+        emailError: '',
+        phoneNumber: '',
+        phoneNumberError: '',
+        s_fullName: '',
+        s_fullNameError: '',
+        s_streetAddress: '',
+        s_streetAddressError: '',
+        s_cityTown: '',
+        s_cityTownError: '',
+        s_stateText: '',
+        s_stateTextError: '',
+        s_zipCode: '',
+        s_zipCodeError: '',
+        s_email: '',
+        s_emailError: '',
+        s_phoneNumber: '',
+        s_phoneNumberError: '',
+      });
+    }
+  };
+
   render() {
     if (!this.state.isReady) {
       return (
@@ -533,7 +596,9 @@ class Delivery extends Component {
                     showsHorizontalScrollIndicator={false}>
                     {this.state.profiles.map((item, index) => {
                       return (
-                        <View key={item.profile_id}>
+                        <View
+                          key={item.profile_id}
+                          style={innerStyles.padRight15}>
                           <TouchableOpacity
                             onPress={this.selectProfile(
                               item.profile_id,
@@ -545,7 +610,7 @@ class Delivery extends Component {
                               {this.state.selectedProfileName.toUpperCase() ===
                               item.profile_name.toUpperCase() ? (
                                 <Icon
-                                  size={48}
+                                  size={44}
                                   name="checkcircle"
                                   type="antdesign"
                                   color="#5dd136"
@@ -564,17 +629,19 @@ class Delivery extends Component {
                               </Text>
                             </View>
                           </TouchableOpacity>
-                          <View style={innerStyles.padRight15}></View>
                         </View>
                       );
                     })}
 
                     <TouchableOpacity
+                      onPress={() =>
+                        this.setState({
+                          createNewProfile: true,
+                          isDialogVisible: true,
+                        })
+                      }
                       activeOpacity={0.5}
-                      style={[
-                        innerStyles.squareBoxButtons,
-                        innerStyles.marginStart,
-                      ]}>
+                      style={[innerStyles.squareBoxButtons]}>
                       <View style={innerStyles.checkIcon}>
                         <Icon
                           size={44}
@@ -594,6 +661,21 @@ class Delivery extends Component {
                   </ScrollView>
                 </View>
               )}
+
+              <DialogInput
+                isDialogVisible={this.state.isDialogVisible}
+                title={'New profile'}
+                message={'Please enter name of new profile'}
+                hintInput={'Profile Name'}
+                submitInput={(inputText) => {
+                  this.makeNewProfile(inputText);
+                }}
+                closeDialog={() => {
+                  this.setState({
+                    createNewProfile: false,
+                    isDialogVisible: false,
+                  });
+                }}></DialogInput>
 
               <Text style={innerStyles.shippingAddress}>Billing Address</Text>
               <View style={innerStyles.inputView}>
@@ -960,7 +1042,7 @@ const innerStyles = StyleSheet.create({
   },
   modalDropdownStyle: {
     width: '30%',
-    height: '50%',
+    height: '30%',
   },
   modalTextStyle: {
     fontFamily: 'Avenir-Book',
