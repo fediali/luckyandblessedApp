@@ -7,6 +7,7 @@ export default PutData = (url,jsonObj) => {
         'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
     );
     h.append('Accept', 'application/json');
+    h.append('Content-Type', 'application/json')
 
     let req = new Request(url, {
         headers: h,
