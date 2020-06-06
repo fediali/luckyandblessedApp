@@ -15,12 +15,23 @@ import Footer from '../reusableComponents/Footer';
 import Shimmer from 'react-native-shimmer';
 import { Image as FastImage } from 'react-native';
 
+import Globals from '../Globals';
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+
+const STORAGE_USER = Globals.STORAGE_USER;
+const baseUrl = Globals.baseUrl;
+
 class Payment extends Component {
   constructor(props) {
     super(props);
     let deliveryDetails = this.props.route.params.deliveryDetails;
     this.state = {
       isReady: false,
+      cardNumber: '5424000000000015',
+      expMonth: '12',
+      expYear: '2020',
+      cardCode: '999',
+      email: '',
       dDetails: deliveryDetails,
       shippingDetails:
         deliveryDetails.s_fullname +
@@ -53,80 +64,119 @@ class Payment extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({ isReady: true });
-      console.log(this.state.deliveryDetails);
+      RetrieveDataAsync(STORAGE_USER).then((user) => {
+        this.setState({ email: user.email })
+      });
     });
+  }
+
+  performTransaction = () => {
+    RetrieveDataAsync(STORAGE_USER).then((user) => {
+      gUser = JSON.parse(user);
+      this.postTransaction(gUser);
+    });
+  }
+
+  postTransaction = (user) => {
+    let data = {
+      "createTransactionRequest": {
+        "merchantAuthentication": {
+          "name": "9Lw9PY5KCZkz",
+          "transactionKey": "9hG2Em8ZD6y64aCJ"
+        },
+
+        "transactionRequest": {
+          "transactionType": "authOnlyTransaction",
+          "amount": this.props.route.params.finalCost,
+          "currencyCode": "USD",
+          "payment": {
+            "creditCard": {
+              "cardNumber": this.state.cardNumber,
+              "expirationDate": this.state.expYear + "-" + this.state.expMonth,
+              "cardCode": this.state.cardCode
+            }
+          },
+          "lineItems": this.props.route.params.paymentLineItems,
+          // [
+          //   {
+          //     "itemId": "1",
+          //     "name": "vase",
+          //     "description": "Cannes logo",
+          //     "quantity": "18",
+          //     "unitPrice": "45.00"
+          //   },
+          //   {
+          //     "itemId": "2",
+          //     "name": "vasesdad",
+          //     "description": "Cannes logo",
+          //     "quantity": "18",
+          //     "unitPrice": "45.00"
+          //   },
+          // ],
+          "customer": {
+            "id": user.user_id,
+            "email": "zayantharani@gmail.com"
+          },
+          "billTo": {
+            "firstName": this.props.route.params.deliveryDetails.b_firstName,
+            "lastName": this.props.route.params.deliveryDetails.b_lastName,
+            "company": "n/a",
+            "address": this.props.route.params.deliveryDetails.b_address,
+            "city": this.props.route.params.deliveryDetails.cityTown,
+            "state": this.props.route.params.deliveryDetails.stateText,
+            "zip": this.props.route.params.deliveryDetails.zipCode,
+            "country": this.props.route.params.deliveryDetails.b_country
+          },
+          "shipTo": {
+            "firstName": this.props.route.params.deliveryDetails.s_firstName,
+            "lastName": this.props.route.params.deliveryDetails.s_lastName,
+            "company": "n/a",
+            "address": this.props.route.params.deliveryDetails.s_address,
+            "city": this.props.route.params.deliveryDetails.s_cityTown,
+            "state": this.props.route.params.deliveryDetails.stateText,
+            "zip": this.props.route.params.deliveryDetails.zipCode,
+            "country": this.props.route.params.deliveryDetails.b_country
+          },
+          "transactionSettings": {
+            "setting": {
+              "settingName": "emailCustomer",
+              "settingValue": true
+            }
+          },
+          "userFields": {
+            "userField": [
+              {
+                "name": "OrderFrom",
+                "value": "MobileApp"
+              }
+            ]
+          }
+        }
+      }
+    };
+
+
+
+    console.log("DARAAAAAAAAAAA::: ",JSON.stringify(data))
+    PostData("https://apitest.authorize.net/xml/v1/request.api", data)
+      .then((res) => res.json())
+      .then((responses) => {
+        console.log("RRRRRRRRRRRRR::: ", responses)
+      })
+      .catch((ex) => {
+        console.log('Promise exception', ex);
+        alert(ex);
+      });
+
+
+
   }
 
   /*
   https://apitest.authorize.net/xml/v1/request.api
   POST
-
-  {
-    "createTransactionRequest": {
-        "merchantAuthentication": {
-            "name": "9Lw9PY5KCZkz",
-            "transactionKey": "9hG2Em8ZD6y64aCJ"
-        },
-        
-        "transactionRequest": {
-            "transactionType": "authCaptureTransaction",
-            "amount": "5",
-            "currencyCode":"USD",
-            "payment": {
-                "creditCard": {
-                    "cardNumber": "5424000000000015",
-                    "expirationDate": "2020-12",
-                    "cardCode": "999"
-                }
-            },
-            "lineItems": {
-                "lineItem": {
-                    "itemId": "54588",
-                    "name": "Sleeveless dress",
-                    "quantity": "18",
-                    "unitPrice": "45.00"
-                }
-            },
-           "customer": {
-                "id": "4713",
-                "email": "zayantharani@gmail.com"
-               },
-            "billTo": {
-                "firstName": "Ellen",
-                "lastName": "Johnson",
-                "company": "Souveniropolis",
-                "address": "14 Main Street",
-                "city": "Pecan Springs",
-                "state": "TX",
-                "zip": "44628",
-                "country": "USA"
-            },
-            "shipTo": {
-                "firstName": "China",
-                "lastName": "Bayles",
-                "company": "Thyme for Tea",
-                "address": "12 Main Street",
-                "city": "Pecan Springs",
-                "state": "TX",
-                "zip": "44628",
-                "country": "USA"
-            },
-            "transactionSettings": {
-                "setting": {
-                    "settingName": "emailCustomer",
-                    "settingValue": true
-                }
-            },
-            "userFields": {
-                "userField": [
-                    {
-                        "name": "OrderFrom",
-                        "value": "MobileApp"
-                    }
-                ]
-            }
-        }
-    }
+ 
+  
 }
   */
 
@@ -164,37 +214,9 @@ class Payment extends Component {
                   <Text style={styles.secureCheckoutText}>Secure Checkout</Text>
                 </View>
               </View>
-              <View style={styles.cardSelectorView}>
-                <TouchableOpacity activeOpacity={0.5}>
-                  <View style={styles.cardSelectorTouchView}>
-                    <FastImage
-                      style={styles.imageDone}
-                      source={require('../static/icon_done.png')}
-                    />
-                    <FastImage
-                      style={styles.imageVisaLogo}
-                      source={require('../static/visaLogo.png')}
-                    />
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.5}>
-                  <View style={styles.cardSelectorTouchView}>
-                    <FastImage
-                      style={styles.imageDone}
-                      source={require('../static/icon_done.png')}
-                    />
-                    <FastImage
-                      style={styles.imagePaypalLogo}
-                      source={require('../static/paypalLogo.png')}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
+
               <View>
-                <Text style={[styles.heading, styles.deliveryDetailText]}>
-                  Delivery details:
-                </Text>
-                <Text>UPS Shipping - shipping will be added later</Text>
+
                 {this.state.sameShipping ? (
                   <View>
                     <View style={styles.shippingAddressView}>
@@ -208,7 +230,7 @@ class Payment extends Component {
                 ) : (
                     <View>
                       <View style={styles.shippingAddressView}>
-                        <Text style={styles.heading}>billing address:</Text>
+                        <Text style={styles.heading}>Billing address:</Text>
                         <Text style={styles.textButton}>Edit</Text>
                       </View>
                       <Text style={styles.monikaWillemsText}>
@@ -216,16 +238,51 @@ class Payment extends Component {
                       </Text>
                     </View>
                   )}
+                <Text style={[styles.heading, styles.deliveryDetailText]}>
+                  Billing address:
+                </Text>
+                <Text>UPS Shipping - shipping will be added later</Text>
 
                 <View style={styles.promoAndCreditCardView}>
                   <Text style={styles.heading}>
-                    Gift Certificate Or Promo Code:
+                    Shipping charges
                   </Text>
-                  <Text style={styles.textButton}>Edit</Text>
                 </View>
                 <Text style={styles.smallGreyText}>
-                  123456576785857 - $200 added
+                  UPS Shipping - shipping will be added later
                 </Text>
+                <View style={styles.cardSelectorView}>
+                  <TouchableOpacity activeOpacity={0.5}>
+                    <View style={styles.cardSelectorTouchView}>
+                      <FastImage
+                        style={styles.imageDone}
+                        source={require('../static/icon_done.png')}
+                      />
+                      <Text style={styles.paymentSelectorText}>Credit Card</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity activeOpacity={0.5}>
+                    <View style={styles.cardSelectorTouchView}>
+                      <FastImage
+                        style={styles.imageDone}
+                        source={require('../static/icon_done.png')}
+                      />
+                      <FastImage
+                        style={styles.imagePaypalLogo}
+                        source={require('../static/paypalLogo.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity activeOpacity={0.5}>
+                    <View style={styles.cardSelectorTouchView}>
+                      <FastImage
+                        style={styles.imageDone}
+                        source={require('../static/icon_done.png')}
+                      />
+                      <Text style={styles.paymentSelectorText}>COD</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
                 <View style={styles.promoAndCreditCardView}>
                   <Text style={styles.heading}>Credit card</Text>
                   <Text style={styles.textButton}>Clear All</Text>
@@ -237,19 +294,25 @@ class Payment extends Component {
                 <TextInput
                   style={[styles.textInput, styles.cardNumTextInput]}
                   placeholder="Card number"
+                  onChangeText={(text) => { this.setState({ cardNumber: text }) }}
                 />
                 <View style={styles.cardInfoView}>
                   <TextInput
                     style={[styles.textInput, styles.dateTextInput]}
                     placeholder="mm"
+                    onChangeText={(text) => { this.setState({ expMonth: text }) }}
+
                   />
                   <TextInput
                     style={[styles.textInput, styles.dateTextInput]}
                     placeholder="yyyy"
+                    onChangeText={(text) => { this.setState({ expYear: text }) }}
+
                   />
                   <TextInput
                     style={[styles.textInput, styles.cvvTextInput]}
                     placeholder="CVV"
+                    onChangeText={(text) => { this.setState({ cardCode: text }) }}
                   />
                 </View>
               </View>
@@ -274,7 +337,10 @@ class Payment extends Component {
                 </Text>
                 <Text style={styles.smallGreyText}>-$55.02</Text>
               </View>
-              <TouchableOpacity style={styles.orderTouch}>
+              <TouchableOpacity
+                style={styles.orderTouch}
+                onPress={()=>{this.performTransaction()}}
+              >
                 <Text style={styles.orderTouchText}>Place Order</Text>
               </TouchableOpacity>
             </View>
@@ -340,6 +406,7 @@ const styles = StyleSheet.create({
   paymentAndSecureView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center'
   },
   paymentText: {
     fontFamily: 'Montserrat-Bold',
@@ -363,8 +430,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageDone: {
-    height: 25,
-    width: 25,
+    height: 18,
+    width: 18,
     marginRight: 5,
   },
   imageVisaLogo: {
@@ -445,6 +512,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     paddingVertical: 11,
   },
+  paymentSelectorText: {
+    fontFamily: "Avenir-Heavy",
+    fontSize: 14,
+    fontWeight: "900",
+    fontStyle: "normal",
+    lineHeight: 18,
+    letterSpacing: 0,
+    textAlign: "left",
+    color: "#000000"
+  }
 });
 
 export default Payment;

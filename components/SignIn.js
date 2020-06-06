@@ -53,7 +53,8 @@ class SignIn extends Component {
                         var fullName = responses[1].users[0].firstname + " " + responses[1].users[0].lastname;
                         var user={
                             user_id: responses[1].users[0].user_id,
-                            name: fullName
+                            name: fullName,
+                            email: this.state.email
                         }
                         
                         this._storeData(user)

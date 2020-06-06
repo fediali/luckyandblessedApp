@@ -194,10 +194,12 @@ class ShoppingCart extends Component {
             totalCost: -1,
             finalCost: -1,
             totalCartProducts: -1,
-            userAddress: "",
+            s_userAddress: "",
+            b_userAddress: "",
             showZeroProductScreen: false,
             promocode: "",
             discount: 0,
+            paymentLineItems: [],
             isReady: false
         }
     }
@@ -214,7 +216,7 @@ class ShoppingCart extends Component {
         });
     }
 
-    applyPromo=()=>{
+    applyPromo = () => {
         //TODO: Apply promo 
         // {
         //     "user_id":4751,
@@ -231,20 +233,20 @@ class ShoppingCart extends Component {
     }
 
     postPromoData = (user) => {
-        data = {
+        let data = {
             "user_id": user.user_id,
             "coupen_codes": this.state.promocode
         }
         PostData(baseUrl + 'api/coupon', data)
             .then((res) => res.json())
             .then((responses) => {
-                if(responses.status =="Success"){
+                if (responses.status == "Success") {
                     this.setState({
                         discount: parseFloat(responses.discount).toFixed(2),
                         finalCost: parseFloat(responses.total).toFixed(2)
                     })
                     alert("Promocode Successfully Added!!")
-                }else{
+                } else {
                     alert("Invalid Promocode")
                 }
             })
@@ -263,14 +265,16 @@ class ShoppingCart extends Component {
             ),
 
         );
+
         Promise.all(promises).then((promiseResponses) => {
             Promise.all(promiseResponses.map((res) => res.json())).then((responses) => {
 
-                let cartData = []
+                let cartData = [];
                 let productsLength = responses[0].products.length
-
+                let lineItems = [];
                 for (let i = 0; i < productsLength; i++) {
-                    let singleProduct = {}
+                    let singleProduct = {};
+                    let singleLineITem = {};
                     singleProduct = {
                         itemNum: responses[0].products[i].item_id,
                         name: responses[0].products[i].product,
@@ -289,21 +293,32 @@ class ShoppingCart extends Component {
                     } else {
                         singleProduct.path = 'https://picsum.photos/200';
                     }
-                    cartData[i] = singleProduct;
-                    if (productsLength == 0) {
-                        this.setState({
-                            showZeroProductScreen: true
-                        })
+                    singleLineITem = {
+                        "itemId": responses[0].products[i].product_id,
+                        "name": responses[0].products[i].product,
+                        "description": "n/a",
+                        "quantity": responses[0].products[i].amount,
+                        "unitPrice":  parseFloat(responses[0].products[i].price).toFixed(2),
                     }
+                    lineItems[i] = singleLineITem;
+                    cartData[i] = singleProduct;
+                }
+                if (productsLength == 0) {
                     this.setState({
-                        totalCost: responses[0].total,
-                        finalCost: responses[0].total,
-                        totalCartProducts: responses[0].cart_products,
-                        itemList: cartData,
-                        userAddress: responses[0].user_data.b_address,//FIXME: there are other address in API also.
-                        isReady: true,
+                        showZeroProductScreen: true
                     })
                 }
+                this.setState({
+                    totalCost: responses[0].total,
+                    finalCost: responses[0].total,
+                    totalCartProducts: responses[0].cart_products,
+                    itemList: cartData,
+                    s_userAddress: responses[0].user_data.s_address + responses[0].user_data.s_address_2,
+                    b_userAddress: responses[0].user_data.b_address + responses[0].user_data.b_address_2,
+                    paymentLineItems: lineItems,
+                    isReady: true,
+                })
+
 
             }).catch((ex) => {
                 console.log('Inner Promise', ex);
@@ -342,7 +357,7 @@ class ShoppingCart extends Component {
                 <View style={innerStyles.promoView}>
                     <View style={styles.inputView}>
                         <TextInput style={[styles.input]} placeholder="Gift Or Promo code" onChangeText={(text) => { this.setState({ promocode: text }) }} />
-                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]} onPress={()=>{this.applyPromo()}}>
+                        <TouchableOpacity activeOpacity={0.5} style={[innerStyles.giftButton]} onPress={() => { this.applyPromo() }}>
                             <Text
                                 style={[
                                     styles.buttonText,
@@ -356,13 +371,15 @@ class ShoppingCart extends Component {
 
                 <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
-                <OrderFooter totalCost={this.state.totalCost} finalCost={this.state.finalCost} discount={this.state.discount} shipAddress={this.state.userAddress == "" ? "Shipping will be added later" : this.state.userAddress} />
+                <OrderFooter totalCost={this.state.totalCost} finalCost={this.state.finalCost} discount={this.state.discount} shipAddress={this.state.s_userAddress == "" ? "Shipping will be added later" : this.state.s_userAddress} />
                 <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
                     <TouchableOpacity
                         activeOpacity={0.5}
                         style={[innerStyles.buttonPaymentMethod]}
                         onPress={() => {
-                            this.navigateToNextScreen("Delivery");
+                            this.navigateToNextScreen(
+                                "Delivery",
+                            );
                         }}>
                         <Text style={[styles.buttonText, innerStyles.orderButtonText]}>
                             Continue
@@ -374,9 +391,18 @@ class ShoppingCart extends Component {
 
         return listFooter;
     }
-
+    //Receive and forward lineitems to payment screen.. from delivery to payment.
     navigateToNextScreen = (screenName) => {
-        this.props.navigation.navigate(screenName)
+        this.props.navigation.navigate(
+            screenName,
+            {//sending props to delivery screen to reuse values
+                totalCost: this.state.totalCost,
+                finalCost: this.state.finalCost,
+                s_userAddress: this.state.s_userAddress,
+                b_userAddress: this.state.b_userAddress,
+                discount: this.state.discount,
+                paymentLineItems: this.state.paymentLineItems,
+            })
     }
 
 
