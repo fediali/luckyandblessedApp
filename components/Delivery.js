@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,12 @@ import {
   Image,
   InteractionManager,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import styles from './Styles/Style';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {TextInput} from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import Shimmer from 'react-native-shimmer';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
@@ -98,8 +98,8 @@ const usStates = [
 ];
 let gUser;
 var radio_props = [
-  {label: 'Yes', value: true},
-  {label: 'No', value: false},
+  { label: 'Yes', value: true },
+  { label: 'No', value: false },
 ];
 class Delivery extends Component {
   constructor(props) {
@@ -118,11 +118,8 @@ class Delivery extends Component {
       fullNameError: '',
       streetAddress: '',
       streetAddressError: '',
-      cityTown: '',
       cityTownError: '',
-      stateText: '',
       stateTextError: '',
-      zipCode: '',
       zipCodeError: '',
       email: '',
       emailError: '',
@@ -132,22 +129,40 @@ class Delivery extends Component {
       s_fullNameError: '',
       s_streetAddress: '',
       s_streetAddressError: '',
-      s_cityTown: '',
       s_cityTownError: '',
-      s_stateText: '',
       s_stateTextError: '',
-      s_zipCode: '',
       s_zipCodeError: '',
       s_email: '',
       s_emailError: '',
       s_phoneNumber: '',
       s_phoneNumberError: '',
+      //below are values for payment screen api
+      s_firstName: '',
+      s_lastName: '',
+      b_firstName: '',
+      b_lastName: '',
+      s_address: '',
+      b_address: '',
+      zipCode: '',
+      s_zipCode: '',
+      stateText: '',
+      s_stateText: '',
+      cityTown: '',
+      s_cityTown: '',
+      b_country: 'AL',//because it's on first index so will be auto selected.. if user change it, then this will also be changed
+      s_country: 'AL',
+      totalCost: this.props.route.params.totalCost,
+      finalCost: this.props.route.params.finalCost,
+      s_userAddress: this.props.route.params.s_userAddress,
+      b_userAddress: this.props.route.params.b_userAddress,
+      discount: this.props.route.params.discount,
+      paymentLineItems: this.props.route.params.paymentLineItems,
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: false});
+      this.setState({ isReady: false });
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);
@@ -158,20 +173,21 @@ class Delivery extends Component {
 
   getData = (user, profile_id = null) => {
     var promises = [];
-    
+
     if (profile_id) {
-    console.log(":::::::::::::",profile_id)
-    console.log(user.user_id)
+      console.log(":::::::::::::", profile_id)
+      console.log(user.user_id)
       promises.push(
         GetData(
           baseUrl +
-            `api/userprofilesnew/${user.user_id}&profile_id=${profile_id}`,
+          `api/userprofilesnew/${user.user_id}&profile_id=${profile_id}`,
         ),
       );
       Promise.all(promises)
         .then((promiseResponses) => {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
+              console.log("*****************************", responses)
               let main_profile = responses[0][0];
               let sameShipping = main_profile.is_same_shipping;
               let newUser = true;
@@ -190,19 +206,21 @@ class Delivery extends Component {
                 sameShipping: sameShipping,
                 selectedProfileName: main_profile.profile_name,
                 selectedProfileId: main_profile.profile_id,
-                fullName:
-                  main_profile.b_firstname + ' ' + main_profile.b_lastname,
-                streetAddress:
-                  main_profile.b_address + ' ' + main_profile.s_address_2,
+                fullName: main_profile.b_firstname + ' ' + main_profile.b_lastname,
+                b_firstName: main_profile.b_firstname,
+                b_lastName: main_profile.b_lastname,
+                b_address: main_profile.b_address + ' ' + main_profile.b_address_2,
+                s_address: main_profile.s_address + ' ' + main_profile.s_address_2,
+                streetAddress: main_profile.b_address + ' ' + main_profile.s_address_2,
                 cityTown: main_profile.b_city,
                 stateText: main_profile.b_state,
                 zipCode: main_profile.b_zipcode,
                 email: 'demo@gmail.com',
                 phoneNumber: main_profile.b_phone,
-                s_fullName:
-                  main_profile.s_firstname + ' ' + main_profile.s_lastname,
-                s_streetAddress:
-                  main_profile.s_address + ' ' + main_profile.s_address_2,
+                s_fullName: main_profile.s_firstname + ' ' + main_profile.s_lastname,
+                s_firstName: main_profile.s_firstname,
+                s_lastName: main_profile.s_lastname,
+                s_streetAddress: main_profile.s_address + ' ' + main_profile.s_address_2,
                 s_cityTown: main_profile.s_city,
                 s_stateText: main_profile.s_state,
                 s_zipCode: main_profile.s_zipcode,
@@ -246,6 +264,10 @@ class Delivery extends Component {
                 sameShipping: sameShipping,
                 selectedProfileName: main_profile.profile_name,
                 selectedProfileId: main_profile.profile_id,
+                b_firstName: main_profile.b_firstname,
+                b_lastName: main_profile.b_lastname,
+                b_address: main_profile.b_address + ' ' + main_profile.b_address_2,
+                s_address: main_profile.s_address + ' ' + main_profile.s_address_2,
                 fullName:
                   main_profile.b_firstname + ' ' + main_profile.b_lastname,
                 streetAddress:
@@ -279,7 +301,7 @@ class Delivery extends Component {
 
   validateAndRedirect = () => {
     if (this.isValid()) {
-      this.setState({isReady: false});
+      this.setState({ isReady: false });
 
       let data = {
         user_id: parseInt(gUser.user_id),
@@ -342,9 +364,15 @@ class Delivery extends Component {
               Toast.show(`${data.profile_name} profile created successfully`);
               this.props.navigation.navigate('Payment', {
                 deliveryDetails: this.state,
+                totalCost: this.props.route.params.totalCost,
+                finalCost: this.props.route.params.finalCost,
+                s_userAddress: this.props.route.params.s_userAddress,
+                b_userAddress: this.props.route.params.b_userAddress,
+                discount: this.props.route.params.discount,
+                paymentLineItems: this.props.route.params.paymentLineItems,
               });
               setTimeout(() => {
-                this.setState({isReady: true});
+                this.setState({ isReady: true });
               }, 1000);
             } else {
               Toast.show(response.message);
@@ -357,7 +385,7 @@ class Delivery extends Component {
           baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
           data,
         ) //FIXME: Check put data
-          .then((res) => res.text()) //FIXME: Solve this please.
+          .then((res) => res.json()) //FIXME: Solve this please.
           .then((response) => {
             console.log(
               'URL',
@@ -365,12 +393,20 @@ class Delivery extends Component {
             );
             console.log('Data', data);
             console.log('Res', response);
-            // this.props.navigation.navigate('Payment', {
-            //   deliveryDetails: this.state,
-            // });
-            // setTimeout(() => {
-            //   this.setState({isReady: true});
-            // }, 1000);
+            if (response.profile_id) {
+              this.props.navigation.navigate('Payment', {
+                deliveryDetails: this.state,
+                totalCost: this.props.route.params.totalCost,
+                finalCost: this.props.route.params.finalCost,
+                s_userAddress: this.props.route.params.s_userAddress,
+                b_userAddress: this.props.route.params.b_userAddress,
+                discount: this.props.route.params.discount,
+                paymentLineItems: this.props.route.params.paymentLineItems,
+              });
+              setTimeout(() => {
+                this.setState({ isReady: true });
+              }, 1000);
+            }
           })
           .catch((e) => console.log(e));
       }
@@ -378,7 +414,7 @@ class Delivery extends Component {
   };
 
   onRadioPress = (value) => {
-    this.setState({sameShipping: value});
+    this.setState({ sameShipping: value });
   };
 
   isValid() {
@@ -386,103 +422,103 @@ class Delivery extends Component {
 
     //Billing address
     if (this.state.fullName == '') {
-      this.setState({fullNameError: 'Full Name is required.'});
+      this.setState({ fullNameError: 'Full Name is required.' });
       validFlag = false;
     } else {
-      this.setState({fullNameError: ''});
+      this.setState({ fullNameError: '' });
     }
 
     if (this.state.streetAddress == '') {
-      this.setState({streetAddressError: 'Street address is required.'});
+      this.setState({ streetAddressError: 'Street address is required.' });
       validFlag = false;
     } else {
-      this.setState({streetAddressError: ''});
+      this.setState({ streetAddressError: '' });
     }
 
     if (this.state.cityTown == '') {
-      this.setState({cityTownError: 'City/Town is required.'});
+      this.setState({ cityTownError: 'City/Town is required.' });
       validFlag = false;
     } else {
-      this.setState({cityTownError: ''});
+      this.setState({ cityTownError: '' });
     }
 
     if (this.state.stateText == '') {
-      this.setState({stateTextError: 'State is required.'});
+      this.setState({ stateTextError: 'State is required.' });
       validFlag = false;
     } else {
-      this.setState({stateTextError: ''});
+      this.setState({ stateTextError: '' });
     }
 
     if (this.state.zipCode == '') {
-      this.setState({zipCodeError: 'Zip code is required.'});
+      this.setState({ zipCodeError: 'Zip code is required.' });
       validFlag = false;
     } else {
-      this.setState({zipCodeError: ''});
+      this.setState({ zipCodeError: '' });
     }
 
     if (this.state.email == '') {
-      this.setState({emailError: 'Email is required.'});
+      this.setState({ emailError: 'Email is required.' });
       validFlag = false;
     } else {
-      this.setState({emailError: ''});
+      this.setState({ emailError: '' });
     }
 
     if (this.state.phoneNumber == '') {
-      this.setState({phoneNumberError: 'Phone number is required.'});
+      this.setState({ phoneNumberError: 'Phone number is required.' });
       validFlag = false;
     } else {
-      this.setState({phoneNumberError: ''});
+      this.setState({ phoneNumberError: '' });
     }
 
     //Shipping address
     if (!this.state.sameShipping) {
       if (this.state.s_fullName == '') {
-        this.setState({s_fullNameError: 'Full Name is required.'});
+        this.setState({ s_fullNameError: 'Full Name is required.' });
         validFlag = false;
       } else {
-        this.setState({s_fullNameError: ''});
+        this.setState({ s_fullNameError: '' });
       }
 
       if (this.state.s_streetAddress == '') {
-        this.setState({s_streetAddressError: 'Street address is required.'});
+        this.setState({ s_streetAddressError: 'Street address is required.' });
         validFlag = false;
       } else {
-        this.setState({s_streetAddressError: ''});
+        this.setState({ s_streetAddressError: '' });
       }
 
       if (this.state.s_cityTown == '') {
-        this.setState({s_cityTownError: 'City/Town is required.'});
+        this.setState({ s_cityTownError: 'City/Town is required.' });
         validFlag = false;
       } else {
-        this.setState({s_cityTownError: ''});
+        this.setState({ s_cityTownError: '' });
       }
 
       if (this.state.s_stateText == '') {
-        this.setState({s_stateTextError: 'State is required.'});
+        this.setState({ s_stateTextError: 'State is required.' });
         validFlag = false;
       } else {
-        this.setState({s_stateTextError: ''});
+        this.setState({ s_stateTextError: '' });
       }
 
       if (this.state.s_zipCode == '') {
-        this.setState({s_zipCodeError: 'Zip code is required.'});
+        this.setState({ s_zipCodeError: 'Zip code is required.' });
         validFlag = false;
       } else {
-        this.setState({s_zipCodeError: ''});
+        this.setState({ s_zipCodeError: '' });
       }
 
       if (this.state.s_email == '') {
-        this.setState({s_emailError: 'Email is required.'});
+        this.setState({ s_emailError: 'Email is required.' });
         validFlag = false;
       } else {
-        this.setState({s_emailError: ''});
+        this.setState({ s_emailError: '' });
       }
 
       if (this.state.s_phoneNumber == '') {
-        this.setState({s_phoneNumberError: 'Phone number is required.'});
+        this.setState({ s_phoneNumberError: 'Phone number is required.' });
         validFlag = false;
       } else {
-        this.setState({s_phoneNumberError: ''});
+        this.setState({ s_phoneNumberError: '' });
       }
     }
     return validFlag;
@@ -503,10 +539,10 @@ class Delivery extends Component {
   }
 
   onStateModalSelect = (index) => {
-    this.setState({stateText: usStates[index]});
+    this.setState({ stateText: usStates[index] , s_country: usStates[index], b_country: usStates[index]});
   };
   onShipStateModalSelect = (index) => {
-    this.setState({s_stateText: usStates[index]});
+    this.setState({ s_stateText: usStates[index] });
   };
 
   selectProfile = (profile_id, profile_name) => () => {
@@ -516,7 +552,7 @@ class Delivery extends Component {
       selectedProfileId: profile_id,
       createNewProfile: false,
     });
-    console.log("}}}}}}}}",profile_id)
+    console.log("}}}}}}}}", profile_id)
     this.getData(gUser, profile_id);
   };
 
@@ -531,7 +567,7 @@ class Delivery extends Component {
 
     if (profileAllowed) {
       this.setState({
-        profiles: [...this.state.profiles, {profile_name: profileName}],
+        profiles: [...this.state.profiles, { profile_name: profileName }],
         selectedProfileName: profileName,
         isDialogVisible: false,
         fullName: '',
@@ -612,21 +648,21 @@ class Delivery extends Component {
                             style={innerStyles.squareBoxButtons}>
                             <View style={innerStyles.checkIcon}>
                               {this.state.selectedProfileName.toUpperCase() ===
-                              item.profile_name.toUpperCase() ? (
-                                <Icon
-                                  size={44}
-                                  name="checkcircle"
-                                  type="antdesign"
-                                  color="#5dd136"
-                                />
-                              ) : (
-                                <Icon
-                                  size={44}
-                                  name="checkcircle"
-                                  type="antdesign"
-                                  color="#f6f6f6"
-                                />
-                              )}
+                                item.profile_name.toUpperCase() ? (
+                                  <Icon
+                                    size={44}
+                                    name="checkcircle"
+                                    type="antdesign"
+                                    color="#5dd136"
+                                  />
+                                ) : (
+                                  <Icon
+                                    size={44}
+                                    name="checkcircle"
+                                    type="antdesign"
+                                    color="#f6f6f6"
+                                  />
+                                )}
 
                               <Text style={[innerStyles.lightText]}>
                                 {item.profile_name.toUpperCase()}
@@ -688,15 +724,15 @@ class Delivery extends Component {
                   placeholder="Full name"
                   value={this.state.fullName}
                   onChangeText={(text) => {
-                    this.setState({fullName: text});
+                    this.setState({ fullName: text });
                   }}
                 />
               </View>
               {this.state.fullNameError != '' ? (
                 this.showErrorMessage(this.state.fullNameError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={innerStyles.inputView}>
                 <TextInput
@@ -704,15 +740,15 @@ class Delivery extends Component {
                   placeholder="Street address"
                   value={this.state.streetAddress}
                   onChangeText={(text) => {
-                    this.setState({streetAddress: text});
+                    this.setState({ streetAddress: text });
                   }}
                 />
               </View>
               {this.state.streetAddressError != '' ? (
                 this.showErrorMessage(this.state.streetAddressError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={innerStyles.inputView}>
                 <TextInput
@@ -720,15 +756,15 @@ class Delivery extends Component {
                   placeholder="City / Town"
                   value={this.state.cityTown}
                   onChangeText={(text) => {
-                    this.setState({cityTown: text});
+                    this.setState({ cityTown: text });
                   }}
                 />
               </View>
               {this.state.cityTownError != '' ? (
                 this.showErrorMessage(this.state.cityTownError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={innerStyles.inputView}>
                 <View style={innerStyles.modalView}>
@@ -756,20 +792,20 @@ class Delivery extends Component {
                   placeholder="Zip code"
                   value={this.state.zipCode}
                   onChangeText={(text) => {
-                    this.setState({zipCode: text});
+                    this.setState({ zipCode: text });
                   }}
                 />
               </View>
               {this.state.stateTextError != '' ? (
                 this.showErrorMessage(this.state.stateTextError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
               {this.state.zipCodeError != '' ? (
                 this.showErrorMessage(this.state.zipCodeError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
               <View style={innerStyles.inputView}>
                 <TextInput
                   style={styles.input}
@@ -777,15 +813,15 @@ class Delivery extends Component {
                   keyboardType={'number-pad'}
                   value={this.state.phoneNumber}
                   onChangeText={(text) => {
-                    this.setState({phoneNumber: text});
+                    this.setState({ phoneNumber: text });
                   }}
                 />
               </View>
               {this.state.phoneNumberError != '' ? (
                 this.showErrorMessage(this.state.phoneNumberError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <View style={innerStyles.inputView}>
                 <TextInput
@@ -793,15 +829,15 @@ class Delivery extends Component {
                   placeholder="Email address"
                   value={this.state.email}
                   onChangeText={(text) => {
-                    this.setState({email: text});
+                    this.setState({ email: text });
                   }}
                 />
               </View>
               {this.state.emailError != '' ? (
                 this.showErrorMessage(this.state.emailError)
               ) : (
-                <View></View>
-              )}
+                  <View></View>
+                )}
 
               <Text style={innerStyles.sameShipping}>
                 Billing and shipping addresses same
@@ -816,15 +852,15 @@ class Delivery extends Component {
                   labelStyle={innerStyles.labelStyle}
                 />
               ) : (
-                <RadioForm
-                  radio_props={radio_props}
-                  initial={1}
-                  onPress={this.onRadioPress}
-                  formHorizontal={true}
-                  style={innerStyles.radioButton}
-                  labelStyle={innerStyles.labelStyle}
-                />
-              )}
+                  <RadioForm
+                    radio_props={radio_props}
+                    initial={1}
+                    onPress={this.onRadioPress}
+                    formHorizontal={true}
+                    style={innerStyles.radioButton}
+                    labelStyle={innerStyles.labelStyle}
+                  />
+                )}
 
               {!this.state.sameShipping && (
                 <View>
@@ -837,15 +873,15 @@ class Delivery extends Component {
                       placeholder="Full name"
                       value={this.state.s_fullName}
                       onChangeText={(text) => {
-                        this.setState({s_fullName: text});
+                        this.setState({ s_fullName: text });
                       }}
                     />
                   </View>
                   {this.state.s_fullNameError != '' ? (
                     this.showErrorMessage(this.state.s_fullNameError)
                   ) : (
-                    <View></View>
-                  )}
+                      <View></View>
+                    )}
 
                   <View style={innerStyles.inputView}>
                     <TextInput
@@ -853,15 +889,15 @@ class Delivery extends Component {
                       placeholder="Street address"
                       value={this.state.s_streetAddress}
                       onChangeText={(text) => {
-                        this.setState({s_streetAddress: text});
+                        this.setState({ s_streetAddress: text });
                       }}
                     />
                   </View>
                   {this.state.s_streetAddressError != '' ? (
                     this.showErrorMessage(this.state.s_streetAddressError)
                   ) : (
-                    <View></View>
-                  )}
+                      <View></View>
+                    )}
 
                   <View style={innerStyles.inputView}>
                     <TextInput
@@ -869,15 +905,15 @@ class Delivery extends Component {
                       placeholder="City / Town"
                       value={this.state.s_cityTown}
                       onChangeText={(text) => {
-                        this.setState({s_cityTown: text});
+                        this.setState({ s_cityTown: text });
                       }}
                     />
                   </View>
                   {this.state.s_cityTownError != '' ? (
                     this.showErrorMessage(this.state.s_cityTownError)
                   ) : (
-                    <View></View>
-                  )}
+                      <View></View>
+                    )}
 
                   <View style={innerStyles.inputView}>
                     <View style={innerStyles.modalView}>
@@ -907,20 +943,20 @@ class Delivery extends Component {
                       placeholder="Zip code"
                       value={this.state.s_zipCode}
                       onChangeText={(text) => {
-                        this.setState({s_zipCode: text});
+                        this.setState({ s_zipCode: text });
                       }}
                     />
                   </View>
                   {this.state.s_stateTextError != '' ? (
                     this.showErrorMessage(this.state.s_stateTextError)
                   ) : (
-                    <View></View>
-                  )}
+                      <View></View>
+                    )}
                   {this.state.s_zipCodeError != '' ? (
                     this.showErrorMessage(this.state.s_zipCodeError)
                   ) : (
-                    <View></View>
-                  )}
+                      <View></View>
+                    )}
                   <View style={innerStyles.inputView}>
                     <TextInput
                       style={styles.input}
@@ -928,15 +964,15 @@ class Delivery extends Component {
                       keyboardType={'number-pad'}
                       value={this.state.s_phoneNumber}
                       onChangeText={(text) => {
-                        this.setState({s_phoneNumber: text});
+                        this.setState({ s_phoneNumber: text });
                       }}
                     />
                   </View>
                   {this.state.s_phoneNumberError != '' ? (
                     this.showErrorMessage(this.state.s_phoneNumberError)
                   ) : (
-                    <View></View>
-                  )}
+                      <View></View>
+                    )}
 
                   <View style={innerStyles.inputView}>
                     <TextInput
@@ -944,20 +980,20 @@ class Delivery extends Component {
                       placeholder="Email address"
                       value={this.state.s_email}
                       onChangeText={(text) => {
-                        this.setState({s_email: text});
+                        this.setState({ s_email: text });
                       }}
                     />
                   </View>
                   {this.state.s_emailError != '' ? (
                     this.showErrorMessage(this.state.s_emailError)
                   ) : (
-                    <View></View>
-                  )}
+                      <View></View>
+                    )}
                 </View>
               )}
             </View>
 
-            <OrderFooter />
+            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount} shipAddress={this.props.route.params.userAddress == "" ? "Shipping will be added later" : this.state.userAddress} />
             <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
               <TouchableOpacity
                 activeOpacity={0.5}
@@ -988,7 +1024,7 @@ const innerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 15,
   },
-  errorTextText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
+  errorTextText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
   labelStyle: {
     marginRight: 10,
     fontFamily: 'Avenir-Medium',
@@ -1012,7 +1048,7 @@ const innerStyles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
     paddingBottom: 20,
   },
-  padRight15: {marginRight: 15},
+  padRight15: { marginRight: 15 },
   buttonStyles: {
     paddingHorizontal: 30,
     width: '100%',
@@ -1066,24 +1102,24 @@ const innerStyles = StyleSheet.create({
   radioButton: {
     alignSelf: 'center',
   },
-  priceText: {flex: 1, lineHeight: 30, textAlign: 'right'},
-  marginStart: {marginStart: 15},
-  alignRight: {flex: 1, textAlign: 'right'},
-  textBold: {fontSize: 18, lineHeight: 30},
-  orderViewNested: {flexDirection: 'row', paddingHorizontal: 20},
+  priceText: { flex: 1, lineHeight: 30, textAlign: 'right' },
+  marginStart: { marginStart: 15 },
+  alignRight: { flex: 1, textAlign: 'right' },
+  textBold: { fontSize: 18, lineHeight: 30 },
+  orderViewNested: { flexDirection: 'row', paddingHorizontal: 20 },
   plusIconStyle: {
     width: width * 0.08,
     height: height * 0.08,
   },
-  paddingHorizontal: {paddingHorizontal: 20},
+  paddingHorizontal: { paddingHorizontal: 20 },
   iconDoneStyle: {
     width: width * 0.12,
     height: height * 0.12,
     justifyContent: 'center',
   },
-  marginStart: {marginStart: 20},
-  buttonContainerAdd: {marginTop: 20, width: '100%'},
-  maincontainer: {flex: 1, backgroundColor: '#fff'},
+  marginStart: { marginStart: 20 },
+  buttonContainerAdd: { marginTop: 20, width: '100%' },
+  maincontainer: { flex: 1, backgroundColor: '#fff' },
   scrollView: {
     backgroundColor: '#fff',
     flexGrow: 1,
@@ -1188,10 +1224,10 @@ const innerStyles = StyleSheet.create({
     paddingHorizontal: 30,
     marginTop: 15,
   },
-  loader: {flex: 1, alignItems: 'center', justifyContent: 'center'},
-  loaderImage: {height: 200, width: 200},
-  textAlignLeft: {textAlign: 'left'},
-  textAlignCenter: {textAlign: 'center'},
+  loader: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  loaderImage: { height: 200, width: 200 },
+  textAlignLeft: { textAlign: 'left' },
+  textAlignCenter: { textAlign: 'center' },
   alignCenter: {
     alignItems: 'center',
   },
