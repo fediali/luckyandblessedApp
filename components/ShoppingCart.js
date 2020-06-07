@@ -191,6 +191,7 @@ class ShoppingCart extends Component {
         this.state = {
             deletedRowKey: null,
             itemList: [],
+            orderItems: [],
             totalCost: -1,
             finalCost: -1,
             totalCartProducts: -1,
@@ -272,6 +273,7 @@ class ShoppingCart extends Component {
                 let cartData = [];
                 let productsLength = responses[0].products.length
                 let lineItems = [];
+                let orderItems = [];
                 for (let i = 0; i < productsLength; i++) {
                     let singleProduct = {};
                     let singleLineITem = {};
@@ -300,8 +302,16 @@ class ShoppingCart extends Component {
                         "quantity": responses[0].products[i].amount,
                         "unitPrice":  parseFloat(responses[0].products[i].price).toFixed(2),
                     }
+
+                    let singleOrderItem = {
+                        [responses[0].products[i].product_id]: {
+                            "amount": responses[0].products[i].amount
+                        }
+                        
+                    }
                     lineItems[i] = singleLineITem;
                     cartData[i] = singleProduct;
+                    orderItems[i] = singleOrderItem;
                 }
                 if (productsLength == 0) {
                     this.setState({
@@ -313,6 +323,7 @@ class ShoppingCart extends Component {
                     finalCost: responses[0].total,
                     totalCartProducts: responses[0].cart_products,
                     itemList: cartData,
+                    orderItems: orderItems,
                     s_userAddress: responses[0].user_data.s_address + responses[0].user_data.s_address_2,
                     b_userAddress: responses[0].user_data.b_address + responses[0].user_data.b_address_2,
                     paymentLineItems: lineItems,
@@ -371,7 +382,7 @@ class ShoppingCart extends Component {
 
                 <View style={[styles.line, innerStyles.viewMargin]} />
                 <Text style={innerStyles.checkoutInfoText}>After this screen you will get another screen before you place your order</Text>
-                <OrderFooter totalCost={this.state.totalCost} finalCost={this.state.finalCost} discount={this.state.discount} shipAddress={this.state.s_userAddress == "" ? "Shipping will be added later" : this.state.s_userAddress} />
+                <OrderFooter totalCost={this.state.totalCost} finalCost={this.state.finalCost} discount={this.state.discount}  />
                 <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
                     <TouchableOpacity
                         activeOpacity={0.5}
@@ -393,6 +404,8 @@ class ShoppingCart extends Component {
     }
     //Receive and forward lineitems to payment screen.. from delivery to payment.
     navigateToNextScreen = (screenName) => {
+        console.log(this.state.orderItems[0])
+        
         this.props.navigation.navigate(
             screenName,
             {//sending props to delivery screen to reuse values
@@ -402,6 +415,7 @@ class ShoppingCart extends Component {
                 b_userAddress: this.state.b_userAddress,
                 discount: this.state.discount,
                 paymentLineItems: this.state.paymentLineItems,
+                orderItems: this.state.orderItems 
             })
     }
 

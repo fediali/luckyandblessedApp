@@ -370,6 +370,7 @@ class Delivery extends Component {
                 b_userAddress: this.props.route.params.b_userAddress,
                 discount: this.props.route.params.discount,
                 paymentLineItems: this.props.route.params.paymentLineItems,
+                orderItems: this.props.route.params.orderItems
               });
               setTimeout(() => {
                 this.setState({ isReady: true });
@@ -402,6 +403,7 @@ class Delivery extends Component {
                 b_userAddress: this.props.route.params.b_userAddress,
                 discount: this.props.route.params.discount,
                 paymentLineItems: this.props.route.params.paymentLineItems,
+                orderItems: this.props.route.params.orderItems
               });
               setTimeout(() => {
                 this.setState({ isReady: true });
@@ -993,7 +995,7 @@ class Delivery extends Component {
               )}
             </View>
 
-            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount} shipAddress={this.props.route.params.userAddress == "" ? "Shipping will be added later" : this.state.userAddress} />
+            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount}  />
             <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
               <TouchableOpacity
                 activeOpacity={0.5}
