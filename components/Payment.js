@@ -142,7 +142,7 @@ class Payment extends Component {
       }
     };
 
-    console.log("DAtAAAAAAAAAAA::: ",JSON.(data))
+    console.log("DAtAAAAAAAAAAA::: ",JSON.stringify(data))
 
     let cartOrderItems = [...this.props.route.params.orderItems]
     let orderData =  {
@@ -150,19 +150,24 @@ class Payment extends Component {
       shipping_id: "15", //UPS Shipping
       payment_id: "34", //Authorize.Net - DEV
       // payment_info: responses,
-      products: {
-         cartOrderItems //TODO: How to get all objects from array and append here?
-      }
+      products: {...this.props.route.params.orderItems}
     }
 
     console.log("ORder Data", orderData);
     console.log("OrderItems",this.props.route.params.orderItems)
     // PostData("https://apitest.authorize.net/xml/v1/request.api", data) //FIXME: How to handle empty values?
-    //   .then((res) => res.json())
+    //   .then((res) => res.text())
     //   .then((responses) => {
-    //     console.log("RRRRRRRRRRRRR::: ", responses)
+    //     console.log("RRRRRRRRRRRRR::: ", JSON.parse(JSON.stringify(responses)));
+    //     let transactionResponse = JSON.parse(JSON.stringify(responses));
     //     if (responses.transactionResponse.responseCode == 1){
-          
+    //       let orderData =  {
+    //         user_id:  user.user_id,
+    //         shipping_id: "15", //UPS Shipping
+    //         payment_id: "34", //Authorize.Net - DEV
+    //         // payment_info: responses,
+    //         products: {...this.props.route.params.orderItems}
+    //       }
     //       PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
     //       .then(res => res.json())
     //       .then(response => {
@@ -172,10 +177,10 @@ class Payment extends Component {
     //       })
     //     }
     //   })
-    //   .catch((ex) => {
-    //     console.log('Promise exception', ex);
-    //     alert(ex);
-    //   });
+      // .catch((ex) => {
+      //   console.log('Promise exception', ex);
+      //   alert(ex);
+      // });
 
 
 
