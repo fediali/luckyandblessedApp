@@ -1084,7 +1084,6 @@ const innerStyles = StyleSheet.create({
   },
   modalDropdownStyle: {
     width: '30%',
-    height: '30%',
   },
   modalTextStyle: {
     fontFamily: 'Avenir-Book',

@@ -145,6 +145,19 @@ class Payment extends Component {
     console.log("DAtAAAAAAAAAAA::: ",JSON.stringify(data))
 
     let cartOrderItems = [...this.props.route.params.orderItems]
+    console.log(this.props.route.params.orderItems)
+
+    // changing orderitems array format to supported ones
+    let mproduct={}
+    for(let i=0;i<this.props.route.params.orderItems.length;i++){
+      let e=this.props.route.params.orderItems[i]
+      // console.log("PP",e)
+      let mkey=Object.keys(e)[0]
+      mproduct[mkey]=e[mkey]
+    }
+    console.log("PPP",mproduct)
+
+
     let orderData =  {
       user_id:  user.user_id,
       shipping_id: "15", //UPS Shipping
