@@ -30,7 +30,8 @@ export default class OrderFooter extends PureComponent {
               Shipping:{' '}
             </Text>
             <Text style={[innerStyles.shippingText]}>
-              {this.props.shipAddress}
+            {/* HARD CODED TEXT */}
+              {"Shipping will be added later"} 
             </Text>
           </View>
           <View style={innerStyles.orderRowView}>

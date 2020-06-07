@@ -96,26 +96,13 @@ class Payment extends Component {
               "cardCode": this.state.cardCode
             }
           },
-          "lineItems": this.props.route.params.paymentLineItems,
-          // [
-          //   {
-          //     "itemId": "1",
-          //     "name": "vase",
-          //     "description": "Cannes logo",
-          //     "quantity": "18",
-          //     "unitPrice": "45.00"
-          //   },
-          //   {
-          //     "itemId": "2",
-          //     "name": "vasesdad",
-          //     "description": "Cannes logo",
-          //     "quantity": "18",
-          //     "unitPrice": "45.00"
-          //   },
-          // ],
+          "lineItems":{
+             "lineItem": this.props.route.params.paymentLineItems
+            },
+  
           "customer": {
             "id": user.user_id,
-            "email": "zayantharani@gmail.com"
+            "email": user.email
           },
           "billTo": {
             "firstName": this.props.route.params.deliveryDetails.b_firstName,
@@ -155,18 +142,40 @@ class Payment extends Component {
       }
     };
 
+    console.log("DAtAAAAAAAAAAA::: ",JSON.(data))
 
+    let cartOrderItems = [...this.props.route.params.orderItems]
+    let orderData =  {
+      user_id:  user.user_id,
+      shipping_id: "15", //UPS Shipping
+      payment_id: "34", //Authorize.Net - DEV
+      // payment_info: responses,
+      products: {
+         cartOrderItems //TODO: How to get all objects from array and append here?
+      }
+    }
 
-    console.log("DARAAAAAAAAAAA::: ",JSON.stringify(data))
-    PostData("https://apitest.authorize.net/xml/v1/request.api", data)
-      .then((res) => res.json())
-      .then((responses) => {
-        console.log("RRRRRRRRRRRRR::: ", responses)
-      })
-      .catch((ex) => {
-        console.log('Promise exception', ex);
-        alert(ex);
-      });
+    console.log("ORder Data", orderData);
+    console.log("OrderItems",this.props.route.params.orderItems)
+    // PostData("https://apitest.authorize.net/xml/v1/request.api", data) //FIXME: How to handle empty values?
+    //   .then((res) => res.json())
+    //   .then((responses) => {
+    //     console.log("RRRRRRRRRRRRR::: ", responses)
+    //     if (responses.transactionResponse.responseCode == 1){
+          
+    //       PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
+    //       .then(res => res.json())
+    //       .then(response => {
+    //         if (response.order_id){
+
+    //         }
+    //       })
+    //     }
+    //   })
+    //   .catch((ex) => {
+    //     console.log('Promise exception', ex);
+    //     alert(ex);
+    //   });
 
 
 
