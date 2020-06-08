@@ -70,7 +70,7 @@ class FlatListItem extends Component {
                 { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
                 {
                     text: 'Yes', onPress: () => {
-                        itemList.splice(this.props.index, 1);
+                        this,state,itemList.splice(this.props.index, 1);
                         //Refresh FlatList ! 
                         this.props.parentFlatList.refreshFlatList(deletingRow);
                     }
@@ -152,7 +152,8 @@ class FlatListItem extends Component {
                                     />
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={[innerStyles.bottomSelectors, innerStyles.colorModalTouch]}>
+                            {/* Product colour not available rn */}
+                            {/* <TouchableOpacity style={[innerStyles.bottomSelectors, innerStyles.colorModalTouch]}>
                                 <View style={innerStyles.modalView}>
 
                                     <ModalDropdown
@@ -173,7 +174,7 @@ class FlatListItem extends Component {
                                         }}
                                     />
                                 </View>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
                     </View>
@@ -621,7 +622,7 @@ const innerStyles = StyleSheet.create({
         flex: 1, padding: 5, borderRadius: 6
     },
     modalDropdownStyle: {
-        width: "30%", height: 110
+        width: "30%",
     },
     modalColorTextStyle: {
         fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingRight: 10, maxWidth: '65%'

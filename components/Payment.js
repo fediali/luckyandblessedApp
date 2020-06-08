@@ -9,14 +9,17 @@ import {
   Dimensions,
   SafeAreaView,
   InteractionManager,
+  
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import Shimmer from 'react-native-shimmer';
 import { Image as FastImage } from 'react-native';
-
+import Toast from 'react-native-simple-toast';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+import OrderFooter from '../reusableComponents/OrderFooter';
+import GetData from '../reusableComponents/API/GetData';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
@@ -66,6 +69,8 @@ class Payment extends Component {
       this.setState({ isReady: true });
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         this.setState({ email: user.email })
+
+        GetData() //TODO: Get user details
       });
     });
   }
@@ -160,28 +165,36 @@ class Payment extends Component {
     PostData("https://apitest.authorize.net/xml/v1/request.api", data) //FIXME: How to handle empty values?
       .then((res) => res.text())
       .then((responses) => {
-        console.log("RRRRRRRRRRRRR::: ", JSON.parse(JSON.stringify(responses)));
-        let transResponse = JSON.parse(JSON.stringify(responses));
-        console.log("Keysss", responses.headers)
-        console.log("Valuee", transResponse)
+        console.log("RRRRRRRRRRRRR::: ", JSON.parse(responses.trim()));
+        let transResponse = JSON.parse((responses.trim()));
+        
 
-        // if (transResponse.transactionResponse.responseCode == 1){
-        //   let orderData =  {
-        //     user_id:  user.user_id,
-        //     shipping_id: "15", //UPS Shipping
-        //     payment_id: "34", //Authorize.Net - DEV
-        //     payment_info: responses,
-        //     products: {mproduct}
-        //   }
-        //   PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
-        //   .then(res => res.json())
-        //   .then(response => {
-        //     console.log("Order response", response)
-        //     if (response.order_id){
-        //       this.props.navigation.navigate('ConfirmationSuccess', {orderId: response.orderId})
-        //     }
-        //   })
-        // }
+        if (transResponse.transactionResponse.responseCode == 1){
+          let orderData =  {
+            user_id:  user.user_id,
+            shipping_id: "15", //UPS Shipping
+            payment_id: "34", //Authorize.Net - DEV
+            payment_info: transResponse,
+            products: mproduct
+          }
+          console.log("Order data", orderData)
+          PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
+          .then(res => res.json())
+          .then(response => {
+            console.log("Order response", response)
+            if (response.order_id){
+              this.props.navigation.navigate('ConfirmationSuccess', {orderId: response.order_id})
+            }
+            else {
+              Toast.show("Something went wrong")
+            }
+          })
+        }
+        else {
+          console.log(transResponse.messages.rrors)
+          Toast.show(transResponse.transactionResponse.errors[0].errorText)
+
+        }
       })
       .catch((ex) => {
         console.log('Promise exception', ex);
@@ -338,22 +351,17 @@ class Payment extends Component {
                 placeholder="You can leave us a comment here"
               />
             </View>
-            <View style={styles.orderView}>
-              <View style={styles.orderRowView}>
-                <Text style={styles.heading}>Order Amount</Text>
-                <Text style={styles.heading}>$103.88</Text>
-              </View>
-              <View style={styles.orderRowView}>
-                <Text style={styles.smallGreyText}>
-                  Gift card/Promo applied:
-                </Text>
-                <Text style={styles.smallGreyText}>-$55.02</Text>
-              </View>
+            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount}  />
+            <View style={[styles.buttonContainer, styles.orderButtonView]}>
               <TouchableOpacity
-                style={styles.orderTouch}
-                onPress={()=>{this.performTransaction()}}
-              >
-                <Text style={styles.orderTouchText}>Place Order</Text>
+                activeOpacity={0.5}
+                style={[styles.buttonPaymentMethod]}
+                onPress={() => {
+                  this.performTransaction();
+                }}>
+                <Text style={[styles.buttonText, styles.orderButtonText]}>
+                  Place Order
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -419,6 +427,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  orderButtonView: {
+    paddingHorizontal: 30,
+    width: '100%',
+    backgroundColor: '#f6f6f6',
+    paddingBottom: 20,
+  },
+  orderButtonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    width: '100%'
+  },
+  buttonText: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 18,
+    fontStyle: 'normal',
+    lineHeight: 22,
+    letterSpacing: 0,
+    textAlign: 'center',
+  },
+  buttonPaymentMethod: {
+    width: '100%',
+    backgroundColor: '#2967ff',
+    borderRadius: 6,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    marginTop: 15,
   },
   paymentText: {
     fontFamily: 'Montserrat-Bold',
@@ -513,9 +552,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   orderTouch: {
-    backgroundColor: '#2967ff',
-    alignItems: 'center',
-    borderRadius: 6,
+      width: '100%',
+      backgroundColor: '#2967ff',
+      borderRadius: 6,
+      paddingVertical: 15,
+      paddingHorizontal: 30,
+      marginTop: 15,
   },
   orderTouchText: {
     fontFamily: 'Montserrat-SemiBold',
