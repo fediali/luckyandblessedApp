@@ -17,8 +17,7 @@ export default class MainPageTrendingListItem extends PureComponent {
     }
 
     render() {
-        // console.log(("-------------------------------------------------------"))
-        // console.log(this.props.listItem)
+    
         return (
             <View style={innerStyles.mainItemView}>
 
@@ -29,16 +28,16 @@ export default class MainPageTrendingListItem extends PureComponent {
                         <View style={innerStyles.innerTrendingView}>
                             <FastImage
                                 style={innerStyles.trendingImage}
-                                source={{ uri: val.image }}
+                                source={{ uri: val.main_pair.detailed.image_path }}
                                 // resizeMode='contain'
                             />
                             <View style={innerStyles.innerInnerTrendingView}>
                                 <Text style={innerStyles.gridItemNameAndPriceText}>{val.product}</Text>
-                                <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{val.brand}</Text>
+                                <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                             </View>
                         </View>
                         <View style={innerStyles.trendingViewPriceView}>
-                            <Text style={innerStyles.trendingPriceText}>${val.price}</Text>
+                            <Text style={innerStyles.trendingPriceText}>${parseFloat(val.price).toFixed(2)}</Text>
                         </View>
                     </TouchableOpacity>
                 ))}
@@ -53,12 +52,10 @@ const Height = Dimensions.get('window').height;
 const innerStyles = StyleSheet.create({
     mainItemView: {
         alignItems: 'center',
-        // justifyContent: 'center',
-        flexDirection: 'column'
     },
     trendingView: {
         width: Width * 0.88,
-        height: Height * 0.1,
+        height: Height * 0.10,
         flexDirection: 'row',
         paddingHorizontal: 10,
         marginEnd: 15,
@@ -76,7 +73,7 @@ const innerStyles = StyleSheet.create({
         lineHeight: 18,
         letterSpacing: 0,
         textAlign: "center",
-        color: "#ffffff"
+        color: "#ffffff",
     },
     innerInnerTrendingView: {
         height: '100%',
@@ -106,7 +103,8 @@ const innerStyles = StyleSheet.create({
         lineHeight: 20,
         letterSpacing: 0,
         textAlign: "left",
-        color: '#2d2d2f'
+        color: '#2d2d2f',
+        width: Width * 0.427
     },
     showAllText: {
         fontFamily: "Avenir-Book",

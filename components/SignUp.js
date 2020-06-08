@@ -168,6 +168,23 @@ class SignUp extends Component {
                   if (response.tax_id) {
                     Toast.show('Registered Successfully');
                     this.props.navigation.navigate('SignIn'); //Passing user Name
+<<<<<<< HEAD
+=======
+                    let subsData = {
+                      "email": data.email,
+                      "name": data.firstname + " " + data.lastname,
+                      "company_id": data.company_id
+                    }
+                    console.log("SubsData");
+                    PostData(baseUrl + "api/subscribe", subsData)
+                    .then(res => res.json())
+                    .then((response => {
+                      console.log(response)
+                      if(response.subscriber_id){
+                        console.log("Subscribed to newsletter Successfully")
+                      }
+                    }))
+>>>>>>> 105e5d6ec0768fbb8a8130493828fd0ceb3ee42c
                   } else {
                     //TODO: Incase of an error in taxId file, delete user.
                   }

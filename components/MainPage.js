@@ -39,7 +39,7 @@ class MainPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showNewsletter: true,
+            showNewsletter: false,
             selectedCategory: SELECTED_CATEGORY_ALL,
             categoryList: null,
             collections: null,
@@ -66,28 +66,41 @@ class MainPage extends Component {
             var promises = []
             promises.push(GetData(baseUrl + 'api/mobile'))
             promises.push(GetData(baseUrl + 'api/categories?visible=1&category_id=33&status=A')) //Category id for store.
-            
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
 
+                    var promisesNew = []
+                    promisesNew.push(GetData(baseUrl + `api/products?cid=${responses[0].home.logged.new_arrivals.category_id}&status=A&items_per_page=4`))
+                    promisesNew.push(GetData(baseUrl + `api/products?cid=${responses[0].home.logged.trending.category_id}&status=A&items_per_page=6`)) //Category id for store.
+                    Promise.all(promisesNew).then((promiseResponsesNew) => {
+                        Promise.all(promiseResponsesNew.map(res => res.json())).then((responsesNew) => {
+
+                            responses[1].categories.unshift({ category_id: "-1", category: "All" })
+
+                            this.setState({
+                                collections: responses[0].home.logged.sliders,
+                                newArrivals: responsesNew[0].products,
+                                newArrivals_cid: responses[0].home.logged.new_arrivals.category_id,
+                                trending: responsesNew[1].products,
+                                trending_cid: responses[0].home.logged.trending.category_id,
+                                defaults: responses[0].defaults,
+                                categoryList: responses[1].categories,
+                            }, () => { this.mapTrendingList(this.state.trending, 3) })
+        
+        
+        
+                            //Storing defaults obtained through API
+                            StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
+                            )
+                           
+        
+
+                        })
+                    }).catch(ex => { console.log("Nested Promise", ex) })
+
+
                     //Adding "All" to categories response
-                    responses[1].categories.unshift({ category_id: "-1", category: "All" })
-
-                    this.setState({
-                        collections: responses[0].home.logged.sliders,
-                        newArrivals: responses[0].home.logged.new_arrivals.products,
-                        newArrivals_cid: responses[0].home.logged.new_arrivals.category_id,
-                        trending: responses[0].home.logged.trending.products,
-                        trending_cid: responses[0].home.logged.trending.category_id,
-                        defaults: responses[0].defaults,
-                        categoryList: responses[1].categories,
-                    }, () => { this.mapTrendingList(this.state.trending, 3) })
-
-                    //Storing defaults obtained through API
-                    StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
-                    )
                    
-
                 }).catch(ex => { console.log("Inner Promise", ex) })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.props.navigation.navigate("SignIn") })
 
@@ -203,11 +216,11 @@ class MainPage extends Component {
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         // resizeMode='contain'
-                                        source={{ uri: this.state.newArrivals[0].image }}
+                                        source={{ uri: this.state.newArrivals[0].main_pair.detailed.image_path }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].product}</Text>
-                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.state.newArrivals[0].brand}</Text>
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[0].price}</Text>
+                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
@@ -215,11 +228,11 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        source={{ uri: this.state.newArrivals[1].image }}
+                                        source={{ uri: this.state.newArrivals[1].main_pair.detailed.image_path }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
-                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.state.newArrivals[1].brand}</Text>
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[1].price}</Text>
+                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={innerStyles.gridCell}>
@@ -228,11 +241,11 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        source={{ uri: this.state.newArrivals[2].image }}
+                                        source={{ uri: this.state.newArrivals[2].main_pair.detailed.image_path }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
-                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.state.newArrivals[2].brand}</Text>
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[2].price}</Text>
+                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
@@ -240,23 +253,24 @@ class MainPage extends Component {
                                     >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        source={{ uri: this.state.newArrivals[3].image }}
+                                        source={{ uri: this.state.newArrivals[3].main_pair.detailed.image_path }}
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
-                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.state.newArrivals[3].brand}</Text>
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>${this.state.newArrivals[3].price}</Text>
+                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
 
 
                         {/*trending header*/}
-                        <View style={innerStyles.headerView}>
+                        <View style={innerStyles.headerViewTrending}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>What’s trending</Text>
-                            <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
+                            <TouchableOpacity 
                                 onPress={this.navigateToCategoryScreen ([this.state.trending_cid], TRENDING_NAME )} >
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
+                            
                         </View>
 
                         <FlatList
@@ -371,6 +385,15 @@ const innerStyles = StyleSheet.create({
         paddingHorizontal: 15,
         marginTop: 5,
     },
+    headerViewTrending: {
+        width: Width,
+        // height: Height * 0.06,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: "space-between",
+        paddingHorizontal: 15,
+        marginTop: 40,
+    },
     showAllText: {
         fontFamily: "Avenir-Book",
         fontSize: 18,
@@ -456,7 +479,8 @@ const innerStyles = StyleSheet.create({
         lineHeight: 20,
         letterSpacing: 0,
         textAlign: "left",
-        color: '#2d2d2f'
+        color: '#2d2d2f',
+        width: Width * 0.427
     },
     buttonSubmit: {
         width: '100%',
