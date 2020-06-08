@@ -103,6 +103,7 @@ export default class ProductPage extends Component {
                   response[0].main_pair.detailed.image_path,
                 );
 
+                console.log("AAA",response[0].qty_content)
                 // Stroing History of objects
                 RetrieveDataAsync('productHistoryList').then((value) => {
                   if (value == null) value = [];
@@ -139,6 +140,7 @@ export default class ProductPage extends Component {
                     qty_step: Number(response[0].qty_step),
                     full_description: response[0].full_description,
                     composition: response[0].composition,
+                    qty_content:response[0].qty_content
                   },
                   similarProducts: response[1].products,
                   selectedQuantity: Number(response[0].min_qty),
@@ -229,8 +231,8 @@ export default class ProductPage extends Component {
     this.setState({selectedQuantity: text});
   };
 
-  onQuantityModalChange = (quantityOptionsArray, index) => {
-    this.setState({selectedQuantity: quantityOptionsArray[index]});
+  onQuantityModalChange = ( index) => {
+    this.setState({selectedQuantity: this.state.data.qty_content[index]});
   };
 
   addToCart = async () => {
@@ -259,16 +261,6 @@ export default class ProductPage extends Component {
   };
 
   render() {
-    var quantityOptionsArray = [];
-    if (Number(this.state.data.min_qty) > 1) {
-      for (
-        let i = this.state.data.qty_step;
-        i <= this.state.data.max_qty;
-        i += this.state.data.qty_step
-      ) {
-        quantityOptionsArray.push(i.toString());
-      }
-    }
 
     if (!this.state.isReady) {
       return (
@@ -352,7 +344,7 @@ export default class ProductPage extends Component {
               <View style={styles.productOptionsView}>
                 <View style={styles.rowView}>
                   <View style={styles.flexOneView}>
-                    {this.state.data.min_qty == 1 ? (
+                    {!this.state.data.qty_content || this.state.data.qty_content.length  == 1 ? (
                       <TextInput
                         style={styles.valueText}
                         placeholder={'Quantity'}
@@ -364,12 +356,12 @@ export default class ProductPage extends Component {
                       <ModalDropdown
                         onSelect={(index) => {
                           this.onQuantityModalChange(
-                            quantityOptionsArray,
+                            
                             index,
                           );
                         }}
-                        options={quantityOptionsArray}
-                        defaultValue={this.state.data.min_qty}
+                        options={this.state.data.qty_content}
+                        defaultValue={this.state.data.qty_content[0]}
                         style={styles.quantityModalStyle}
                         dropdownStyle={styles.quantityModalDropdownStyle}
                         textStyle={styles.quantityModalTextStyle}
