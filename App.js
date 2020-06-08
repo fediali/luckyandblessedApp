@@ -46,33 +46,15 @@ class App extends Component {
     this.notificationOpenedListener();
   }
 
+ 
   async createNotificationListeners() {
-
-    // firebase.notifications().onNotificationOpenedApp(remoteMessage => {
-    //   console.log(
-    //     'Notification caused app to open from background state:',
-    //     remoteMessage.notification,
-    //   );
-    //   navigation.navigate(remoteMessage.data.type);
-    // });
-
-    // firebase.messaging()
-    //   .getInitialNotification()
-    //   .then(remoteMessage => {
-    //     if (remoteMessage) {
-    //       console.log(
-    //         'Notification caused app to open from quit state:',
-    //         remoteMessage.notification,
-    //       );
-    //       setInitialRoute(remoteMessage.data.type); // e.g. "Settings"
-    //     }
-    //     setLoading(false);
-    //   });
+    const token = await firebase.messaging().getToken();
+    console.log(token)
     /*
     * Triggered when a particular notification has been received in foreground
     * */
     this.notificationListener = firebase.notifications().onNotification((notification) => {
-        console.log("))))))))))))))))__________________________________()((((((((((((((")
+        console.log("")
         const { title, body } = notification;
         this.showAlert(title, body);
     });
@@ -81,8 +63,11 @@ class App extends Component {
     * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
     * */
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-        const { title, body } = notificationOpen.notification;
-        this.showAlert(title, body);
+      const { title, body } = notificationOpen.notification;
+
+      console.log("PPPP",title,body)
+
+        // this.showAlert(title, body);
     });
   
     /*
@@ -90,18 +75,22 @@ class App extends Component {
     * */
     const notificationOpen = await firebase.notifications().getInitialNotification();
     if (notificationOpen) {
-        const { title, body } = notificationOpen.notification;
-        this.showAlert(title, body);
+      console.log("ZZ",notificationOpen.notification)
+
+        // const { title, body } = notificationOpen.notification;
+        // console.log("zzPPPP",title,body)
+
+        this.showAlert("Notification", "You received a notification");
     }
     /*
     * Triggered for data only payload in foreground
     * */
-    this.messageListener = firebase.messaging().onMessage(async (message) => {
-      //process data message
-      Alert.alert('A new FCM message arrived!', JSON.stringify(message));
+    // this.messageListener = firebase.messaging().onMessage(async (message) => {
+    //   //process data message
+    //   Alert.alert('A new FCM message arrived!', JSON.stringify(message));
 
-      console.log(JSON.stringify(message));
-    });
+    //   console.log(JSON.stringify(message));
+    // });
   }
   
   showAlert(title, body) {
