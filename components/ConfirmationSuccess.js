@@ -28,7 +28,7 @@ export default class ConfirmationSuccess extends Component {
           <Text style={styles.yourItemsText}>Your items are on the way and</Text>
           <Text style={styles.yourItemsText}>should arrive shortly</Text>
           <View style={styles.marginTopView3}></View>
-          <Text style={styles.orderText}>Order number: 4839200012</Text>
+          <Text style={styles.orderText}>Order number: {this.props.route.params.orderId}</Text>
         </View>
 
         <Footer  navigation={this.props.navigation}/>

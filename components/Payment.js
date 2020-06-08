@@ -157,55 +157,40 @@ class Payment extends Component {
     }
     console.log("PPP",mproduct)
 
+    PostData("https://apitest.authorize.net/xml/v1/request.api", data) //FIXME: How to handle empty values?
+      .then((res) => res.text())
+      .then((responses) => {
+        console.log("RRRRRRRRRRRRR::: ", JSON.parse(JSON.stringify(responses)));
+        let transResponse = JSON.parse(JSON.stringify(responses));
+        console.log("Keysss", responses.headers)
+        console.log("Valuee", transResponse)
 
-    let orderData =  {
-      user_id:  user.user_id,
-      shipping_id: "15", //UPS Shipping
-      payment_id: "34", //Authorize.Net - DEV
-      // payment_info: responses,
-      products: {...this.props.route.params.orderItems}
-    }
-
-    console.log("ORder Data", orderData);
-    console.log("OrderItems",this.props.route.params.orderItems)
-    // PostData("https://apitest.authorize.net/xml/v1/request.api", data) //FIXME: How to handle empty values?
-    //   .then((res) => res.text())
-    //   .then((responses) => {
-    //     console.log("RRRRRRRRRRRRR::: ", JSON.parse(JSON.stringify(responses)));
-    //     let transactionResponse = JSON.parse(JSON.stringify(responses));
-    //     if (responses.transactionResponse.responseCode == 1){
-    //       let orderData =  {
-    //         user_id:  user.user_id,
-    //         shipping_id: "15", //UPS Shipping
-    //         payment_id: "34", //Authorize.Net - DEV
-    //         // payment_info: responses,
-    //         products: {...this.props.route.params.orderItems}
-    //       }
-    //       PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
-    //       .then(res => res.json())
-    //       .then(response => {
-    //         if (response.order_id){
-
-    //         }
-    //       })
-    //     }
-    //   })
-      // .catch((ex) => {
-      //   console.log('Promise exception', ex);
-      //   alert(ex);
-      // });
+        // if (transResponse.transactionResponse.responseCode == 1){
+        //   let orderData =  {
+        //     user_id:  user.user_id,
+        //     shipping_id: "15", //UPS Shipping
+        //     payment_id: "34", //Authorize.Net - DEV
+        //     payment_info: responses,
+        //     products: {mproduct}
+        //   }
+        //   PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
+        //   .then(res => res.json())
+        //   .then(response => {
+        //     console.log("Order response", response)
+        //     if (response.order_id){
+        //       this.props.navigation.navigate('ConfirmationSuccess', {orderId: response.orderId})
+        //     }
+        //   })
+        // }
+      })
+      .catch((ex) => {
+        console.log('Promise exception', ex);
+        alert(ex);
+      });
 
 
 
   }
-
-  /*
-  https://apitest.authorize.net/xml/v1/request.api
-  POST
- 
-  
-}
-  */
 
   render() {
     let width = Dimensions.get('window').width;
