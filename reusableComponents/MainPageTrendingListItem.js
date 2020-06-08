@@ -52,6 +52,7 @@ const Height = Dimensions.get('window').height;
 const innerStyles = StyleSheet.create({
     mainItemView: {
         alignItems: 'center',
+        paddingVertical:15
     },
     trendingView: {
         width: Width * 0.88,
