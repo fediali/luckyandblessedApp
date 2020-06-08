@@ -14,6 +14,7 @@ import {
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import Shimmer from 'react-native-shimmer';
+import { Icon } from 'react-native-elements';
 import { Image as FastImage } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import Globals from '../Globals';
@@ -23,61 +24,66 @@ import GetData from '../reusableComponents/API/GetData';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
-
+let deliveryDetails = null;
 class Payment extends Component {
   constructor(props) {
     super(props);
-    let deliveryDetails = this.props.route.params.deliveryDetails;
+    //PaymentMode => 1 = CreditCard, 2 = paypal, 3 = COD
     this.state = {
       isReady: false,
       cardNumber: '5424000000000015',
       expMonth: '12',
       expYear: '2020',
-      cardCode: '999',
-      email: '',
-      dDetails: deliveryDetails,
-      shippingDetails:
-        deliveryDetails.s_fullname +
-        ' ' +
-        deliveryDetails.s_streetAddress +
-        ' ' +
-        deliveryDetails.s_cityTown +
-        ' ' +
-        deliveryDetails.s_stateText +
-        ' ' +
-        deliveryDetails.s_zipCode +
-        ' ' +
-        deliveryDetails.s_phoneNumber,
-      billingDetails:
-        deliveryDetails.fullname +
-        ' ' +
-        deliveryDetails.streetAddress +
-        ' ' +
-        deliveryDetails.cityTown +
-        ' ' +
-        deliveryDetails.stateText +
-        ' ' +
-        deliveryDetails.zipCode +
-        ' ' +
-        deliveryDetails.phoneNumber,
-      sameShipping: deliveryDetails.sameShipping,
+      cardCode: '999',     
+      profile_id: this.props.route.params.profile_id,
+      paymentMode: 1,   
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({ isReady: true });
       RetrieveDataAsync(STORAGE_USER).then((user) => {
+        user = JSON.parse(user);
         this.setState({ email: user.email })
 
-        GetData() //TODO: Get user details
+        GetData(baseUrl + `api/userprofilesnew/${user.user_id}&profile_id=${this.state.profile_id}`) //TODO: Get user details
+        .then(res => res.json())
+        .then(response => {
+          console.log(response[0])
+          deliveryDetails = response[0];
+          this.setState({ 
+            isReady: true,
+            dDetails: deliveryDetails,
+            shippingDetails:
+              deliveryDetails.s_firstname + ' ' + deliveryDetails.s_lastname +
+              ', ' +
+              deliveryDetails.s_address + ' ' + deliveryDetails.s_address_2 + 
+              ', ' +
+              deliveryDetails.s_city +
+              ', ' +
+              deliveryDetails.s_state +
+              ' ' +
+              deliveryDetails.s_zipcode +  ', ' + deliveryDetails.s_country,
+            billingDetails:
+              deliveryDetails.b_firstname + ' ' + deliveryDetails.b_lastname +
+              ', ' +
+              deliveryDetails.b_address + ' ' + deliveryDetails.b_address_2 + 
+              ', ' +
+              deliveryDetails.b_city +
+              ', ' +
+              deliveryDetails.b_state +
+              ' ' +
+              deliveryDetails.b_zipcode +  ', ' + deliveryDetails.b_country,
+            sameShipping: deliveryDetails.is_same_shipping,
+           });
+        })
       });
     });
   }
 
   performTransaction = () => {
     RetrieveDataAsync(STORAGE_USER).then((user) => {
-      gUser = JSON.parse(user);
+      let gUser = JSON.parse(user);
       this.postTransaction(gUser);
     });
   }
@@ -110,29 +116,27 @@ class Payment extends Component {
             "email": user.email
           },
           "billTo": {
-            "firstName": this.props.route.params.deliveryDetails.b_firstName,
-            "lastName": this.props.route.params.deliveryDetails.b_lastName,
-            "company": "n/a",
-            "address": this.props.route.params.deliveryDetails.b_address,
-            "city": this.props.route.params.deliveryDetails.cityTown,
-            "state": this.props.route.params.deliveryDetails.stateText,
-            "zip": this.props.route.params.deliveryDetails.zipCode,
-            "country": this.props.route.params.deliveryDetails.b_country
+            "firstName": deliveryDetails.b_firstname,
+            "lastName": deliveryDetails.b_lastname,
+            "address": deliveryDetails.b_address,
+            "city": deliveryDetails.b_city,
+            "state": deliveryDetails.b_state,
+            "zip": deliveryDetails.b_zipcode,
+            "country": deliveryDetails.b_country
           },
           "shipTo": {
-            "firstName": this.props.route.params.deliveryDetails.s_firstName,
-            "lastName": this.props.route.params.deliveryDetails.s_lastName,
-            "company": "n/a",
-            "address": this.props.route.params.deliveryDetails.s_address,
-            "city": this.props.route.params.deliveryDetails.s_cityTown,
-            "state": this.props.route.params.deliveryDetails.stateText,
-            "zip": this.props.route.params.deliveryDetails.zipCode,
-            "country": this.props.route.params.deliveryDetails.b_country
+            "firstName": deliveryDetails.s_firstname,
+            "lastName": deliveryDetails.s_lastname,
+            "address": deliveryDetails.s_address,
+            "city": deliveryDetails.s_city,
+            "state": deliveryDetails.s_state,
+            "zip": deliveryDetails.s_zipCode,
+            "country": deliveryDetails.s_country
           },
           "transactionSettings": {
             "setting": {
               "settingName": "emailCustomer",
-              "settingValue": true
+              "settingValue": false //TODO: Confirm
             }
           },
           "userFields": {
@@ -147,41 +151,38 @@ class Payment extends Component {
       }
     };
 
-    console.log("DAtAAAAAAAAAAA::: ",JSON.stringify(data))
 
-    let cartOrderItems = [...this.props.route.params.orderItems]
-    console.log(this.props.route.params.orderItems)
-
+    console.log(data)
     // changing orderitems array format to supported ones
     let mproduct={}
     for(let i=0;i<this.props.route.params.orderItems.length;i++){
       let e=this.props.route.params.orderItems[i]
-      // console.log("PP",e)
       let mkey=Object.keys(e)[0]
       mproduct[mkey]=e[mkey]
     }
-    console.log("PPP",mproduct)
 
-    PostData("https://apitest.authorize.net/xml/v1/request.api", data) //FIXME: How to handle empty values?
+    PostData("https://apitest.authorize.net/xml/v1/request.api", data) 
       .then((res) => res.text())
       .then((responses) => {
-        console.log("RRRRRRRRRRRRR::: ", JSON.parse(responses.trim()));
         let transResponse = JSON.parse((responses.trim()));
         
 
         if (transResponse.transactionResponse.responseCode == 1){
+          let payment_id = null; //Authorize.Net - DEV
+          if (this.state.paymentMode == 1) payment_id = 34
+          else  if (this.state.paymentMode == 2) payment_id = 20 //PayPal
+          else  if (this.state.paymentMode == 2) payment_id = 17 //C.O.D
+
           let orderData =  {
             user_id:  user.user_id,
             shipping_id: "15", //UPS Shipping
-            payment_id: "34", //Authorize.Net - DEV
+            payment_id, 
             payment_info: transResponse,
             products: mproduct
           }
-          console.log("Order data", orderData)
           PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
           .then(res => res.json())
           .then(response => {
-            console.log("Order response", response)
             if (response.order_id){
               this.props.navigation.navigate('ConfirmationSuccess', {orderId: response.order_id})
             }
@@ -191,7 +192,6 @@ class Payment extends Component {
           })
         }
         else {
-          console.log(transResponse.messages.rrors)
           Toast.show(transResponse.transactionResponse.errors[0].errorText)
 
         }
@@ -203,6 +203,23 @@ class Payment extends Component {
 
 
 
+  }
+
+  navigateToDeliveryScreen = () => {
+    this.props.navigation.navigate(
+      "Delivery",
+      {//sending props to delivery screen to reuse values
+          totalCost: this.props.route.params.totalCost,
+          finalCost: this.props.route.params.finalCost,
+          discount: this.props.route.params.discount,
+          paymentLineItems: this.state.paymentLineItems,
+          orderItems: this.state.orderItems,
+      })
+  }
+
+  changePaymentMode = (paymentMode) => () => {
+    console.log(paymentMode)
+    this.setState({paymentMode})
   }
 
   render() {
@@ -242,30 +259,43 @@ class Payment extends Component {
 
               <View>
 
-                {this.state.sameShipping ? (
+                {this.state.sameShipping == 'Y' ? (
                   <View>
                     <View style={styles.shippingAddressView}>
                       <Text style={styles.heading}>Shipping address:</Text>
-                      <Text style={styles.textButton}>Edit</Text>
+                      <TouchableOpacity onPress={this.navigateToDeliveryScreen} >
+                        <Text style={styles.textButton}>Edit</Text>
+                      </TouchableOpacity>
                     </View>
                     <Text style={styles.monikaWillemsText}>
                       {this.state.shippingDetails}
                     </Text>
                   </View>
                 ) : (
+                  <View>
+                    <View>
+                    <View style={styles.shippingAddressView}>
+                      <Text style={styles.heading}>Shipping address:</Text>
+                      <TouchableOpacity onPress={this.navigateToDeliveryScreen} >
+                        <Text style={styles.textButton}>Edit</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Text style={styles.monikaWillemsText}>
+                      {this.state.shippingDetails}
+                    </Text>
+                  </View>
                     <View>
                       <View style={styles.shippingAddressView}>
                         <Text style={styles.heading}>Billing address:</Text>
-                        <Text style={styles.textButton}>Edit</Text>
                       </View>
                       <Text style={styles.monikaWillemsText}>
                         {this.state.billingDetails}
                       </Text>
                     </View>
+                  </View>
+                  
                   )}
-                <Text style={[styles.heading, styles.deliveryDetailText]}>
-                  Billing address:
-                </Text>
+               
                 <Text>UPS Shipping - shipping will be added later</Text>
 
                 <View style={styles.promoAndCreditCardView}>
@@ -277,38 +307,73 @@ class Payment extends Component {
                   UPS Shipping - shipping will be added later
                 </Text>
                 <View style={styles.cardSelectorView}>
-                  <TouchableOpacity activeOpacity={0.5}>
+                  <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(1)}>
                     <View style={styles.cardSelectorTouchView}>
-                      <FastImage
-                        style={styles.imageDone}
-                        source={require('../static/icon_done.png')}
-                      />
+                     {this.state.paymentMode == 1 ? (
+                       <Icon
+                       size={20}
+                       name="checkcircle"
+                       type="antdesign"
+                       color="#5dd136"
+                     />
+                      ) : (
+                        <Icon
+                          size={20}
+                          name="checkcircle"
+                          type="antdesign"
+                          color="#f6f6f6"
+                        />
+                      )}
                       <Text style={styles.paymentSelectorText}>Credit Card</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.5}>
+                  <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(2)}>
                     <View style={styles.cardSelectorTouchView}>
-                      <FastImage
-                        style={styles.imageDone}
-                        source={require('../static/icon_done.png')}
-                      />
+                    {this.state.paymentMode == 2 ? (
+                       <Icon
+                       size={20}
+                       name="checkcircle"
+                       type="antdesign"
+                       color="#5dd136"
+                     />
+                      ) : (
+                        <Icon
+                          size={20}
+                          name="checkcircle"
+                          type="antdesign"
+                          color="#f6f6f6"
+                        />
+                      )}
                       <FastImage
                         style={styles.imagePaypalLogo}
                         source={require('../static/paypalLogo.png')}
                       />
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.5}>
+                  <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(3)}>
                     <View style={styles.cardSelectorTouchView}>
-                      <FastImage
-                        style={styles.imageDone}
-                        source={require('../static/icon_done.png')}
-                      />
+                    {this.state.paymentMode == 3 ? (
+                       <Icon
+                       size={20}
+                       name="checkcircle"
+                       type="antdesign"
+                       color="#5dd136"
+                     />
+                      ) : (
+                        <Icon
+                          size={20}
+                          name="checkcircle"
+                          type="antdesign"
+                          color="#f6f6f6"
+                        />
+                      )}
                       <Text style={styles.paymentSelectorText}>COD</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
-                <View style={styles.promoAndCreditCardView}>
+                {this.state.paymentMode == 1 && (
+                  <View>
+                    <View style={styles.promoAndCreditCardView}>
                   <Text style={styles.heading}>Credit card</Text>
                   <Text style={styles.textButton}>Clear All</Text>
                 </View>
@@ -340,9 +405,13 @@ class Payment extends Component {
                     onChangeText={(text) => { this.setState({ cardCode: text }) }}
                   />
                 </View>
+                {/* <View style={styles.divider}></View> */}
+
+                  </View>
+                )}
+                
               </View>
             </View>
-            <View style={styles.divider}></View>
             <View style={styles.commentView}>
               <TextInput
                 style={[styles.textInput, styles.commentTextInput]}
@@ -405,7 +474,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 0.009 * height,
-    width: width,
+    width,
     backgroundColor: '#f6f6f6',
   },
   smallGreyText: {
@@ -492,6 +561,7 @@ const styles = StyleSheet.create({
   imagePaypalLogo: {
     height: 21,
     width: 89,
+    marginStart: 5
   },
   deliveryDetailText: {
     marginTop: 29,
@@ -568,13 +638,14 @@ const styles = StyleSheet.create({
   },
   paymentSelectorText: {
     fontFamily: "Avenir-Heavy",
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "900",
     fontStyle: "normal",
     lineHeight: 18,
     letterSpacing: 0,
     textAlign: "left",
-    color: "#000000"
+    color: "#000000",
+    marginLeft: 5
   }
 });
 

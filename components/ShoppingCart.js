@@ -202,7 +202,8 @@ class ShoppingCart extends Component {
             promocode: "",
             discount: 0,
             paymentLineItems: [],
-            isReady: false
+            isReady: false,
+            profile_id: null
         }
     }
 
@@ -212,7 +213,7 @@ class ShoppingCart extends Component {
             this.setState({ isReady: false });
             // Retriving the user_id
             RetrieveDataAsync(STORAGE_USER).then((user) => {
-                gUser = JSON.parse(user);
+                let gUser = JSON.parse(user);
                 this.getData(gUser);
             });
         });
@@ -327,9 +328,11 @@ class ShoppingCart extends Component {
                     orderItems: orderItems,
                     s_userAddress: responses[0].user_data.s_address + responses[0].user_data.s_address_2,
                     b_userAddress: responses[0].user_data.b_address + responses[0].user_data.b_address_2,
+                    profile_id:  responses[0].user_data.profile_id,
                     paymentLineItems: lineItems,
                     isReady: true,
                 })
+
 
 
             }).catch((ex) => {
@@ -388,11 +391,7 @@ class ShoppingCart extends Component {
                     <TouchableOpacity
                         activeOpacity={0.5}
                         style={[innerStyles.buttonPaymentMethod]}
-                        onPress={() => {
-                            this.navigateToNextScreen(
-                                "Delivery",
-                            );
-                        }}>
+                        onPress={this.navigateToNextScreen}>
                         <Text style={[styles.buttonText, innerStyles.orderButtonText]}>
                             Continue
                         </Text>
@@ -404,20 +403,33 @@ class ShoppingCart extends Component {
         return listFooter;
     }
     //Receive and forward lineitems to payment screen.. from delivery to payment.
-    navigateToNextScreen = (screenName) => {
-        console.log(this.state.orderItems[0])
+    navigateToNextScreen = () => {
+        console.log(this.state.s_userAddress + "," + this.state.s_userAddress)
+        if (this.state.s_userAddress || this.state.s_userAddress){
+            this.props.navigation.navigate(
+                "Payment",
+                {//sending props to delivery screen to reuse values
+                    totalCost: this.state.totalCost,
+                    finalCost: this.state.finalCost,
+                    discount: this.state.discount,
+                    paymentLineItems: this.state.paymentLineItems,
+                    orderItems: this.state.orderItems,
+                    profile_id: this.state.profile_id
+                })
+        }
+        else {
+            this.props.navigation.navigate(
+                "Delivery",
+                {//sending props to delivery screen to reuse values
+                    totalCost: this.state.totalCost,
+                    finalCost: this.state.finalCost,
+                    discount: this.state.discount,
+                    paymentLineItems: this.state.paymentLineItems,
+                    orderItems: this.state.orderItems,
+                    profile_id: this.state.profile_id
+                })
+        }
         
-        this.props.navigation.navigate(
-            screenName,
-            {//sending props to delivery screen to reuse values
-                totalCost: this.state.totalCost,
-                finalCost: this.state.finalCost,
-                s_userAddress: this.state.s_userAddress,
-                b_userAddress: this.state.b_userAddress,
-                discount: this.state.discount,
-                paymentLineItems: this.state.paymentLineItems,
-                orderItems: this.state.orderItems 
-            })
     }
 
 

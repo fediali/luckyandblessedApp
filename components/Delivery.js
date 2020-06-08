@@ -93,8 +93,6 @@ class Delivery extends Component {
       s_country: 'AL',
       totalCost: this.props.route.params.totalCost,
       finalCost: this.props.route.params.finalCost,
-      s_userAddress: this.props.route.params.s_userAddress,
-      b_userAddress: this.props.route.params.b_userAddress,
       discount: this.props.route.params.discount,
       paymentLineItems: this.props.route.params.paymentLineItems,
     };
@@ -115,8 +113,6 @@ class Delivery extends Component {
     var promises = [];
 
     if (profile_id) {
-      console.log(":::::::::::::", profile_id)
-      console.log(user.user_id)
       promises.push(
         GetData(
           baseUrl +
@@ -127,7 +123,6 @@ class Delivery extends Component {
         .then((promiseResponses) => {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
-              console.log("*****************************", responses)
               let main_profile = responses[0][0];
               let sameShipping = main_profile.is_same_shipping;
               let newUser = true;
@@ -295,22 +290,20 @@ class Delivery extends Component {
       }
 
       if (this.state.createNewProfile) {
-        console.log('New User');
         PostData(baseUrl + `api/userprofilesnew`, data)
           .then((res) => res.json())
           .then((response) => {
-            console.log(response);
+            console.log("Res Delivery New User",response);
             if (!response.message) {
               Toast.show(`${data.profile_name} profile created successfully`);
-              this.props.navigation.navigate('Payment', {
+              this.props.navigation.push('Payment', {
                 deliveryDetails: this.state,
                 totalCost: this.props.route.params.totalCost,
                 finalCost: this.props.route.params.finalCost,
-                s_userAddress: this.props.route.params.s_userAddress,
-                b_userAddress: this.props.route.params.b_userAddress,
                 discount: this.props.route.params.discount,
                 paymentLineItems: this.props.route.params.paymentLineItems,
-                orderItems: this.props.route.params.orderItems
+                orderItems: this.props.route.params.orderItems,
+                profile_id: response.profile_id
               });
               setTimeout(() => {
                 this.setState({ isReady: true });
@@ -321,29 +314,22 @@ class Delivery extends Component {
           })
           .catch((e) => console.log(e));
       } else {
-        console.log('Old User');
         PutData(
           baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
           data,
-        ) //FIXME: Check put data
-          .then((res) => res.json()) //FIXME: Solve this please.
+        ) 
+          .then((res) => res.json()) 
           .then((response) => {
-            console.log(
-              'URL',
-              baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
-            );
-            console.log('Data', data);
-            console.log('Res', response);
+          
+            console.log('Res Delivery Old User', response);
             if (response.profile_id) {
-              this.props.navigation.navigate('Payment', {
-                deliveryDetails: this.state,
+              this.props.navigation.push('Payment', {
                 totalCost: this.props.route.params.totalCost,
                 finalCost: this.props.route.params.finalCost,
-                s_userAddress: this.props.route.params.s_userAddress,
-                b_userAddress: this.props.route.params.b_userAddress,
                 discount: this.props.route.params.discount,
                 paymentLineItems: this.props.route.params.paymentLineItems,
-                orderItems: this.props.route.params.orderItems
+                orderItems: this.props.route.params.orderItems,
+                profile_id: response.profile_id
               });
               setTimeout(() => {
                 this.setState({ isReady: true });
@@ -494,7 +480,6 @@ class Delivery extends Component {
       selectedProfileId: profile_id,
       createNewProfile: false,
     });
-    console.log("}}}}}}}}", profile_id)
     this.getData(gUser, profile_id);
   };
 
