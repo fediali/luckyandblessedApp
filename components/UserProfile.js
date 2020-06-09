@@ -17,9 +17,10 @@ import { Icon } from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import AsyncStorage from '@react-native-community/async-storage';
 import GlobalStyles from './Styles/Style';
-import {Image as FastImage} from 'react-native';
+import { Image as FastImage } from 'react-native';
 import ThemeContext from '../reusableComponents/ThemeContext'
 import Globals from '../Globals';
+import GetData from "../reusableComponents/API/GetData"
 // TODO: GLOBALS NOT WORKING PROPERLY
 const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
 const STORAGE_USER = Globals.STORAGE_USER
@@ -55,6 +56,12 @@ export default class UserProfile extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({ isReady: true });
+      GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`)
+      .then(res => res.json())
+      .then((result)=>{
+        
+      })
+
     });
   }
   _updateSection1 = (activeSection1) => {
@@ -276,7 +283,7 @@ const styles = StyleSheet.create({
   bottomContainer: { paddingBottom: 60, backgroundColor: '#f6f6f6' },
   logOutButton: {
     height: Height * 0.074,
-    width: Width*0.9,
+    width: Width * 0.9,
     backgroundColor: '#2967ff',
     alignItems: 'center',
     borderRadius: 6,
