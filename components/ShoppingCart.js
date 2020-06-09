@@ -73,7 +73,7 @@ class FlatListItem extends Component {
         {
           text: 'Yes',
           onPress: () => {
-            this.props.parentFlatList.deleteItem(this.props.index)
+            this.props.parentFlatList.deleteItem(this.props.index);
             // this.state.itemList.splice(this.props.index, 1);
             //Refresh FlatList !
             this.props.parentFlatList.refreshFlatList(deletingRow);
@@ -265,10 +265,9 @@ class ShoppingCart extends Component {
     });
   };
 
-  deleteItem=(index)=>{
+  deleteItem = (index) => {
     this.state.itemList.splice(index, 1);
-
-  }
+  };
   postPromoData = (user) => {
     let data = {
       user_id: user.user_id,
@@ -295,32 +294,35 @@ class ShoppingCart extends Component {
 
   getData = (user) => {
     GetData(baseUrl + `api/carts/${user.user_id}`)
-    .then(res => res.json())
-    .then(responses => {
-
+      .then((res) => res.json())
+      .then((responses) => {
         let cartData = [];
-            let productsLength = responses.products.length;
-            let lineItems = [];
-            let orderItems = [];
+        let productsLength = responses.products.length;
+        let lineItems = [];
+        let orderItems = [];
+        console.log('Length of product', productsLength);
 
-            if (productsLength == 0) {
-              this.setState({
-                showZeroProductScreen: true,
-              });
-            } 
-            else {
-              for (let i = 0; i < productsLength; i++) {
-                let singleProduct = {};
-                let singleLineITem = {};
-                let product_id = responses.products[i].product_id;
-                console.log("Product Id", product_id);
+        if (productsLength == 0) {
+          this.setState({
+            showZeroProductScreen: true,
+          });
+        } else {
+          var promises = [];
 
-                GetData(baseUrl +`api/products/${product_id}`)
-                  .then(resProduct => resProduct.json())
-                  .then(prod => {
-                      // console.log("URL", baseUrl +`api/products/${product_id}`)
-                      // console.log(`api/products${product_id}`, + prod)
-                      console.log("+++",prod)
+          for (let i = 0; i < productsLength; i++) {
+            let product_id = responses.products[i].product_id;
+
+            promises.push(GetData(baseUrl + `api/products/${product_id}`));
+          }
+
+          Promise.all(promises).then((promiseResponses) => {
+            Promise.all(promiseResponses.map((res) => res.json()))
+              .then((prod) => {
+                for (let i = 0; i < productsLength; i++) {
+                    let singleProduct = {};
+                    let singleLineITem = {};
+                    console.log('PROD ' + i, prod[i].product_id);
+    
                     singleProduct = {
                       itemNum: responses.products[i].item_id,
                       name: responses.products[i].product,
@@ -328,9 +330,7 @@ class ShoppingCart extends Component {
                         parseFloat(responses.products[i].amount) *
                         parseFloat(responses.products[i].price)
                       ).toFixed(2),
-                      unitPrice: parseFloat(
-                        responses.products[i].price,
-                      ).toFixed(2),
+                      unitPrice: parseFloat(responses.products[i].price).toFixed(2),
                       sizes: 'Not available',
                       selectedColor: 'Turquoise', //
                       availableColors: [
@@ -340,31 +340,26 @@ class ShoppingCart extends Component {
                         '#0caac9',
                         '#e629df',
                       ], //
-                    //   availableSizes: res.qty_content, //
+                      availableSizes: prod[i].qty_content, //
                       quantity: responses.products[i].amount,
                       unknownNum: responses.products[i].amount,
                       hexColor: '#05c2bd', //
                     };
-                    if (
-                      'detailed' in responses.products[i].extra.main_pair
-                    ) {
+                    if ('detailed' in responses.products[i].extra.main_pair) {
                       singleProduct.path =
-                        responses.products[
-                          i
-                        ].extra.main_pair.detailed.image_path;
+                        responses.products[i].extra.main_pair.detailed.image_path;
                     } else {
                       singleProduct.path = 'https://picsum.photos/200';
                     }
+    
                     singleLineITem = {
                       itemId: responses.products[i].product_id,
                       name: responses.products[i].product,
                       description: 'n/a',
                       quantity: responses.products[i].amount,
-                      unitPrice: parseFloat(
-                        responses.products[i].price,
-                      ).toFixed(2),
+                      unitPrice: parseFloat(responses.products[i].price).toFixed(2),
                     };
-
+    
                     let singleOrderItem = {
                       [responses.products[i].product_id]: {
                         amount: responses.products[i].amount,
@@ -373,30 +368,37 @@ class ShoppingCart extends Component {
                     lineItems[i] = singleLineITem;
                     cartData[i] = singleProduct;
                     orderItems[i] = singleOrderItem;
-                  })
-                  .catch((ex) => console.log("Get Specific Product Ex" + ex));
-              }
+    
+                    console.log(`cart item ${i}`, cartData[i]);
+                 
+                }
 
-              this.setState({
-                totalCost: responses.total,
-                finalCost: responses.total,
-                totalCartProducts: responses.cart_products,
-                itemList: cartData,
-                orderItems: orderItems,
-                s_userAddress:
-                  responses.user_data.s_address +
-                  responses.user_data.s_address_2,
-                b_userAddress:
-                  responses.user_data.b_address +
-                  responses.user_data.b_address_2,
-                profile_id: responses.user_data.profile_id,
-                paymentLineItems: lineItems,
-                isReady: true,
-              });
-            }
+                console.log('Dataasdad', cartData);
 
-    })        
+          this.setState({
+            totalCost: responses.total,
+            finalCost: responses.total,
+            totalCartProducts: responses.cart_products,
+            itemList: cartData,
+            orderItems: orderItems,
+            s_userAddress:
+              responses.user_data.s_address + responses.user_data.s_address_2,
+            b_userAddress:
+              responses.user_data.b_address + responses.user_data.b_address_2,
+            profile_id: responses.user_data.profile_id,
+            paymentLineItems: lineItems,
+            isReady: true,
+          });
+
+                })
+              .catch((ex) =>
+                console.log('Get Specific Product Exception ' + ex),
+              );
+          });
+
           
+        }
+      });
   };
 
   refreshFlatList = (deletedKey) => {
