@@ -24,7 +24,11 @@ import GetData from '../reusableComponents/API/GetData';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
+const CODPAYMENTID =  17;
+const CREDITCARTPAYMENTID = 34;
+const PAYPALPAYMENTID = 20;
 let deliveryDetails = null;
+
 class Payment extends Component {
   constructor(props) {
     super(props);
@@ -84,11 +88,52 @@ class Payment extends Component {
   performTransaction = () => {
     RetrieveDataAsync(STORAGE_USER).then((user) => {
       let gUser = JSON.parse(user);
-      this.postTransaction(gUser);
+
+      if (this.state.paymentMode == 1) this.postCreditCardTransaction(gUser); //Handle Credit Cart payment
+      else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser) //PayPal
+      else if (this.state.paymentMode == 3) this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()) //Directly place order. 
     });
   }
 
-  postTransaction = (user) => {
+  handlePayPalTransaction =  (user) => {
+    console.log("Handling Paypal")
+
+  }
+
+  placeOrder = (user, payment_id, mproduct, transResponse = []) => {
+    let orderData =  {
+      user_id:  user.user_id,
+      shipping_id: "15", //UPS Shipping
+      payment_id, 
+      payment_info: transResponse,
+      products: mproduct
+    }
+    PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
+    .then(res => res.json())
+    .then(response => {
+      if (response.order_id){
+        this.props.navigation.navigate('ConfirmationSuccess', {orderId: response.order_id})
+      }
+      else {
+        Toast.show("Something went wrong")
+      }
+    })
+  }
+
+  modifyProductJson = () => {
+    console.log("We here")
+    let mproduct = {};
+
+    for(let i=0;i<this.props.route.params.orderItems.length;i++){
+      let e=this.props.route.params.orderItems[i]
+      let mkey=Object.keys(e)[0]
+      mproduct[mkey]=e[mkey]
+    }
+
+    return mproduct;
+  }
+
+  postCreditCardTransaction = (user) => {
     let data = {
       "createTransactionRequest": {
         "merchantAuthentication": {
@@ -152,14 +197,9 @@ class Payment extends Component {
     };
 
 
-    console.log(data)
     // changing orderitems array format to supported ones
-    let mproduct={}
-    for(let i=0;i<this.props.route.params.orderItems.length;i++){
-      let e=this.props.route.params.orderItems[i]
-      let mkey=Object.keys(e)[0]
-      mproduct[mkey]=e[mkey]
-    }
+    let mproduct = this.modifyProductJson();
+    
 
     PostData("https://apitest.authorize.net/xml/v1/request.api", data) 
       .then((res) => res.text())
@@ -168,28 +208,7 @@ class Payment extends Component {
         
 
         if (transResponse.transactionResponse.responseCode == 1){
-          let payment_id = null; //Authorize.Net - DEV
-          if (this.state.paymentMode == 1) payment_id = 34
-          else  if (this.state.paymentMode == 2) payment_id = 20 //PayPal
-          else  if (this.state.paymentMode == 2) payment_id = 17 //C.O.D
-
-          let orderData =  {
-            user_id:  user.user_id,
-            shipping_id: "15", //UPS Shipping
-            payment_id, 
-            payment_info: transResponse,
-            products: mproduct
-          }
-          PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
-          .then(res => res.json())
-          .then(response => {
-            if (response.order_id){
-              this.props.navigation.navigate('ConfirmationSuccess', {orderId: response.order_id})
-            }
-            else {
-              Toast.show("Something went wrong")
-            }
-          })
+          placeOrder(user, CREDITCARTPAYMENTID, mproduct, transResponse);
         }
         else {
           Toast.show(transResponse.transactionResponse.errors[0].errorText)

@@ -53,6 +53,7 @@ export default class ProductPage extends Component {
       selectedQuantity: 0,
       pid: this.props.route.params.pid,
       cname: this.props.route.params.cname,
+      product_stock: 0,
       data: {
         productName: '',
         price: 0,
@@ -73,7 +74,7 @@ export default class ProductPage extends Component {
     var promises = [];
 
     promises.push(GetData(baseUrl + `api/products/${this.state.pid}`));
-    promises.push(GetData(baseUrl + `api/similarproducts/54578`)); //TODO: Change the 54578 to ${this.state.pid}
+    promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid}`)); 
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
@@ -130,6 +131,7 @@ export default class ProductPage extends Component {
 
                 this.setState({
                   isReady: true,
+                  product_stock: parseInt(response[0].amount),
                   data: {
                     productName: response[0].product,
                     price: response[0].price,
@@ -224,7 +226,7 @@ export default class ProductPage extends Component {
   };
 
   navigateToCategoryScreen = (cid, cname) => () => {
-    this.props.navigation.push('CategoriesProduct', {cid, cname});
+    this.props.navigation.push('CategoriesProduct', {cid, cname, pid: this.state.pid});
   };
 
   onQuantityTextChange = (text) => {
@@ -237,27 +239,33 @@ export default class ProductPage extends Component {
 
   addToCart = async () => {
     // Retriving the user_id
-    RetrieveDataAsync(Globals.STORAGE_USER).then((user) => {
-      user = JSON.parse(user);
-
-      let order = {
-        products: {
-          [this.state.pid]: {
-            product_id: this.state.pid[0],
-            amount: this.state.selectedQuantity,
+    if (this.state.product_stock > 0){
+      RetrieveDataAsync(Globals.STORAGE_USER).then((user) => {
+        user = JSON.parse(user);
+  
+        let order = {
+          products: {
+            [this.state.pid]: {
+              product_id: this.state.pid[0],
+              amount: this.state.selectedQuantity,
+            },
           },
-        },
-        user_data: {
-          user_id: user.user_id,
-        },
-      };
-      PostData(baseUrl + `api/addcart`, order)
-        .then((res) => res.json())
-        .then((response) => {
-          Toast.show('Product added to cart');
-        })
-        .catch((err) => alert(err));
-    });
+          user_data: {
+            user_id: user.user_id,
+          },
+        };
+        PostData(baseUrl + `api/addcart`, order)
+          .then((res) => res.json())
+          .then((response) => {
+            Toast.show('Product added to cart');
+          })
+          .catch((err) => alert(err));
+      });
+    }
+    else {
+      Toast.show("Product is currently out of stock")
+    }
+    
   };
 
   render() {
