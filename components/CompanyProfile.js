@@ -15,7 +15,10 @@ import ProfileText from '../reusableComponents/CompanyProfileText';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Icon} from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
+import GetData from '../reusableComponents/API/GetData';
+import Globals from '../Globals';
 
+const baseUrl = Globals.baseUrl
 export default class CompanyProfile extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +26,9 @@ export default class CompanyProfile extends Component {
       activeSection1: [],
       activeSection2: [],
       isReady: false,
-
+      address_1: null,
+      address_2: null,
+      address_3: null,
       section1: [
         {
           id: 0,
@@ -65,24 +70,70 @@ export default class CompanyProfile extends Component {
           content: 'Addidas,Puma,Reebok',
         },
       ],
-
-      data: {
-        fullName: '972-243-7860',
-        email: 'support@landbapparel.com',
-        longAddress1: '455 Larkspur Dr. California',
-        longAddress2: 'Springs, CA 92926, USA',
-        shortAddress: '468.907.5567',
-        payment: 'Visa **** **** **** 6280',
-        wishList: 5,
-        myBag: 3,
-        myOrders: '1 in transit',
-      },
+      call: null,
+      email: null
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-        this.setState({isReady: true})
+
+        GetData(baseUrl + 'api/companyprofile')
+        .then(res => res.json())
+        .then(response => {
+          this.setState({
+            isReady: true,
+            address_1: response.address_1,
+            address_2: response.address_2,
+            address_3: response.address_3,
+            call: response.call,
+            email: response.email,
+            section1: [
+              {
+                id: 0,
+                title: 'Company',
+                content: response.about_us
+              },
+              {
+                  id: 2,
+                  title: 'Wholesale Info',
+                  content: response.wholesale_info,
+              },
+            ],
+              //TODO: Confitm
+              // {
+              //   id: 1,
+              //   title: 'Locations',
+              //   content: 'Jackets',
+              // },
+              // 
+              // {
+              //   id: 3,
+              //   title: 'Use and Sales TX ID form',
+              //   content: 'M,L',
+              // },
+              section2: [
+                {
+                  id: 0,
+                  title: 'Return Policy',
+                  content: response.return_policy,
+                },
+                {
+                  id: 1,
+                  title: 'FAQs',
+                  content: response.faq,
+                },
+                //TODO: Cnfirm
+                // {
+                //   id: 2,
+                //   title: 'Upcoming Tradeshows',
+                //   content: 'Addidas,Puma,Reebok',
+                // },
+              ],
+          })
+
+
+        })
     })
 }
 
@@ -173,10 +224,13 @@ export default class CompanyProfile extends Component {
               source={require('../static/logo-companyProfile.png')}></Image>
 
             <Text style={styles.userAddress}>
-              {this.state.data.longAddress1}
+              {this.state.address_1}
             </Text>
             <Text style={styles.userAddress}>
-              {this.state.data.longAddress2}
+              {this.state.address_2}
+            </Text>
+            <Text style={styles.userAddress}>
+              {this.state.address_3}
             </Text>
             <View style={styles.marginTop}></View>
             <View style={styles.divider}></View>
@@ -184,13 +238,13 @@ export default class CompanyProfile extends Component {
 
           <ProfileText
             keyText="Call"
-            valueText={this.state.data.fullName}></ProfileText>
+            valueText={this.state.call}></ProfileText>
           <ProfileText
             keyText="Email"
-            valueText={this.state.data.email}></ProfileText>
-          <ProfileText
+            valueText={this.state.email}></ProfileText>
+          {/* <ProfileText
             keyText="Online Orders"
-            valueText={this.state.data.shortAddress}></ProfileText>
+            valueText={this.state.shortAddress}></ProfileText> */}
 
           <View style={styles.divider}></View>
 
