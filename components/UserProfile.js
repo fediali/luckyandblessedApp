@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
   InteractionManager,
+  Clipboard 
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -40,29 +41,42 @@ export default class UserProfile extends Component {
         {
           id: 0,
           title: 'Referral Link',
-          content: 'thisisdemo.referallink.com',
+          content: 'http://dev.landbw.co/profiles-add.html?ref_code=',
         },
       ],
-      fullName: 'Monika Willems',
+      fullName: 'Monika',
       email: 'blackcherry@gmail.com',
       longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
       shortAddress: '455 Larkspur Dr. Califo...',
       payment: 'Visa **** **** **** 6280',
-      wishList: 5,
-      myBag: 3,
-      myOrders: '1 in transit',
     };
   }
   static contextType = ThemeContext
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({ isReady: true });
       RetrieveDataAsync(STORAGE_USER).then(user => {
-        GetData(baseUrl + `/api/usersnew/${user.user_id}`)
+        GetData(baseUrl + `/api/usersnew/${JSON.parse(user).user_id}`)
           .then(res => res.json())
           .then((result) => {
             console.log(result)
+            console.log("--------------------",JSON.parse(user).name)
+            this.setState({
+              fullName: JSON.parse(user).name,
+              email: result.email,
+              longAddress: result.b_address_2,
+              shortAddress: result.b_address,
+              payment: 'Visa **** **** **** 6280',
+              isReady:true,
+              section1: [
+                {
+                  id: 0,
+                  title: 'Referral Link',
+                  content: `http://dev.landbw.co/profiles-add.html?ref_code=${result.ref_link}`,
+                },
+              ],
+
+            })
           })
       })
 
@@ -72,13 +86,21 @@ export default class UserProfile extends Component {
     this.setState({ activeSection1 });
   };
 
+  copyToClipboard=(content)=()=>{
+    Clipboard.setString(content.toString())
+  }
   _renderContent = (section) => {
     return (
-      <View style={styles.descriptionTextView}>
+      <View style={[styles.descriptionTextView,{flexDirection:"row",marginRight:30}]} >
         {/* TODO: Justify Text to center */}
-        <Text style={styles.descriptionText}>
-          {section.content}
-        </Text>
+        <TouchableOpacity onLongPress={this.copyToClipboard(section.content)}>
+          <Text style={styles.descriptionText}>
+            {section.content}
+          </Text>
+        </TouchableOpacity>          
+        <Icon size={20} name="clipboard" type="font-awesome" />
+
+        
       </View>
     );
   };
@@ -139,9 +161,9 @@ export default class UserProfile extends Component {
             <FastImage
               style={styles.displayPicture}
               source={require('../static/item_cart1.png')}></FastImage>
-            <Text style={styles.userNameText}>Monika Willems</Text>
-            <Text style={styles.userAddress}>455 Larkspur Dr. California</Text>
-            <Text style={styles.userAddress}>Springs, CA 92926, USA</Text>
+            <Text style={styles.userNameText}>{this.state.fullName}</Text>
+            <Text style={styles.userAddress}>{this.state.shortAddress}</Text>
+            <Text style={styles.userAddress}>{this.state.longAddress}</Text>
             <View style={styles.divideProfile}></View>
             <View style={styles.divider}></View>
           </View>
@@ -167,11 +189,7 @@ export default class UserProfile extends Component {
             customSetState={(stateVal) => {
               this.customSetState(stateVal);
             }}></ProfileText>
-          <ProfileText
-            navigation={this.props.navigation}
-            keyText="Payment"
-            valueText={this.state.payment}
-            containIcon={true}></ProfileText>
+
           <View style={styles.divider}></View>
 
           <Accordion
