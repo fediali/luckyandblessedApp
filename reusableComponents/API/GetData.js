@@ -1,4 +1,5 @@
 export default GetData = (url) => {
+    console.log(">>>",url)
     let h = new Headers();
     h.append(
         'Authorization',

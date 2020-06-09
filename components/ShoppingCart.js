@@ -73,7 +73,8 @@ class FlatListItem extends Component {
         {
           text: 'Yes',
           onPress: () => {
-            this, state, itemList.splice(this.props.index, 1);
+            this.props.parentFlatList.deleteItem(this.props.index)
+            // this.state.itemList.splice(this.props.index, 1);
             //Refresh FlatList !
             this.props.parentFlatList.refreshFlatList(deletingRow);
           },
@@ -264,6 +265,10 @@ class ShoppingCart extends Component {
     });
   };
 
+  deleteItem=(index)=>{
+    this.state.itemList.splice(index, 1);
+
+  }
   postPromoData = (user) => {
     let data = {
       user_id: user.user_id,
@@ -313,8 +318,9 @@ class ShoppingCart extends Component {
                 GetData(baseUrl +`api/products/${product_id}`)
                   .then(resProduct => resProduct.json())
                   .then(prod => {
-                      console.log("URL", baseUrl +`api/products/${product_id}`)
-                      console.log(`api/products${product_id}`, + prod)
+                      // console.log("URL", baseUrl +`api/products/${product_id}`)
+                      // console.log(`api/products${product_id}`, + prod)
+                      console.log("+++",prod)
                     singleProduct = {
                       itemNum: responses.products[i].item_id,
                       name: responses.products[i].product,

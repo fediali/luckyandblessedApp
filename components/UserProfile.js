@@ -21,6 +21,8 @@ import { Image as FastImage } from 'react-native';
 import ThemeContext from '../reusableComponents/ThemeContext'
 import Globals from '../Globals';
 import GetData from "../reusableComponents/API/GetData"
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+
 // TODO: GLOBALS NOT WORKING PROPERLY
 const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
 const STORAGE_USER = Globals.STORAGE_USER
@@ -56,10 +58,12 @@ export default class UserProfile extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({ isReady: true });
-      GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`)
-      .then(res => res.json())
-      .then((result)=>{
-        
+      RetrieveDataAsync(STORAGE_USER).then(user => {
+        GetData(baseUrl + `/api/usersnew/${user.user_id}`)
+          .then(res => res.json())
+          .then((result) => {
+            console.log(result)
+          })
       })
 
     });
