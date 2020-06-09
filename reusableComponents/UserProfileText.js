@@ -15,7 +15,7 @@ class ProfileText extends PureComponent {
     this.setState({isEdit: true, [key]:this.props.valueText})
   }
 
-  checkButtonPressed=()=>{
+  checkButtonPressed=()=>{ //TODO: PUT API 
     this.setState({isEdit: false})
     var key = this.props.stateKey; //fullName
     this.props.customSetState({[key]:this.state[key]})  //fullName: "Updated Text"
