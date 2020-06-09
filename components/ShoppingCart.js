@@ -11,9 +11,10 @@ import {
   Dimensions,
   Alert,
   InteractionManager,
+  ToastAndroid,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
+import Toast from 'react-native-simple-toast';
 import Shimmer from 'react-native-shimmer';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Swipeout from 'react-native-swipeout';
@@ -28,7 +29,7 @@ import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAs
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
-
+let gUser = null
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
   'Warning: componentWillMount has been renamed',
@@ -56,11 +57,8 @@ class FlatListItem extends Component {
 
   onDeletePress = () => {
     const deletingRow = this.state.activeRowKey;
-    // http://dev.landbw.co/api/removecart
-    // {
-    //     "user_id": 4751,
-    //     "cart_id": 2478863224 //cart_id is the item_id returned through GET API
-    // }
+    console.log(deletingRow)
+    
     Alert.alert(
       'Alert',
       'Are you sure you want to delete ?',
@@ -75,8 +73,21 @@ class FlatListItem extends Component {
           onPress: () => {
             this.props.parentFlatList.deleteItem(this.props.index);
             // this.state.itemList.splice(this.props.index, 1);
-            //Refresh FlatList !
-            this.props.parentFlatList.refreshFlatList(deletingRow);
+            let deleteData = {
+                "user_id": gUser.user_id,
+                "cart_id": deletingRow //cart_id is the item_id returned through GET API
+            }
+
+            PostData(baseUrl + `api/removecart`, deleteData)
+            .then(res => res.json())
+            .then(response => {
+                console.log(response);
+                Toast.show(response.message)
+                 //Refresh FlatList !
+                this.props.parentFlatList.refreshFlatList(deletingRow);
+            })
+
+           
           },
         },
       ],
@@ -244,7 +255,7 @@ class ShoppingCart extends Component {
       this.setState({isReady: false});
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
-        let gUser = JSON.parse(user);
+        gUser = JSON.parse(user);
         this.getData(gUser);
       });
     });
@@ -297,17 +308,20 @@ class ShoppingCart extends Component {
       .then((res) => res.json())
       .then((responses) => {
         let cartData = [];
-        let productsLength = responses.products.length;
+        let productsLength = null;
         let lineItems = [];
         let orderItems = [];
-        console.log('Length of product', productsLength);
+     
 
-        if (productsLength == 0) {
+        if (responses.status == 404) {
+            console.log("No product found")
           this.setState({
             showZeroProductScreen: true,
+            isReady: true
           });
         } else {
           var promises = [];
+          productsLength = responses.products.length;
 
           for (let i = 0; i < productsLength; i++) {
             let product_id = responses.products[i].product_id;
@@ -321,7 +335,6 @@ class ShoppingCart extends Component {
                 for (let i = 0; i < productsLength; i++) {
                     let singleProduct = {};
                     let singleLineITem = {};
-                    console.log('PROD ' + i, prod[i].product_id);
     
                     singleProduct = {
                       itemNum: responses.products[i].item_id,
@@ -369,11 +382,9 @@ class ShoppingCart extends Component {
                     cartData[i] = singleProduct;
                     orderItems[i] = singleOrderItem;
     
-                    console.log(`cart item ${i}`, cartData[i]);
                  
                 }
 
-                console.log('Dataasdad', cartData);
 
           this.setState({
             totalCost: responses.total,
@@ -476,7 +487,6 @@ class ShoppingCart extends Component {
   };
   //Receive and forward lineitems to payment screen.. from delivery to payment.
   navigateToNextScreen = () => {
-    console.log(this.state.s_userAddress + ',' + this.state.s_userAddress);
     if (this.state.s_userAddress || this.state.s_userAddress) {
       this.props.navigation.navigate('Payment', {
         //sending props to delivery screen to reuse values

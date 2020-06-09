@@ -293,7 +293,6 @@ class Delivery extends Component {
         PostData(baseUrl + `api/userprofilesnew`, data)
           .then((res) => res.json())
           .then((response) => {
-            console.log("Res Delivery New User",response);
             if (!response.message) {
               Toast.show(`${data.profile_name} profile created successfully`);
               this.props.navigation.push('Payment', {
@@ -321,7 +320,6 @@ class Delivery extends Component {
           .then((res) => res.json()) 
           .then((response) => {
           
-            console.log('Res Delivery Old User', response);
             if (response.profile_id) {
               this.props.navigation.push('Payment', {
                 totalCost: this.props.route.params.totalCost,

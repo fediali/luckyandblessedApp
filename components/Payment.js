@@ -53,7 +53,6 @@ class Payment extends Component {
         GetData(baseUrl + `api/userprofilesnew/${user.user_id}&profile_id=${this.state.profile_id}`) //TODO: Get user details
         .then(res => res.json())
         .then(response => {
-          console.log(response[0])
           deliveryDetails = response[0];
           this.setState({ 
             isReady: true,
@@ -121,7 +120,6 @@ class Payment extends Component {
   }
 
   modifyProductJson = () => {
-    console.log("We here")
     let mproduct = {};
 
     for(let i=0;i<this.props.route.params.orderItems.length;i++){
@@ -237,7 +235,6 @@ class Payment extends Component {
   }
 
   changePaymentMode = (paymentMode) => () => {
-    console.log(paymentMode)
     this.setState({paymentMode})
   }
 
