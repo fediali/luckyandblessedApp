@@ -1,6 +1,13 @@
-import React, {PureComponent} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, TextInput, Dimensions} from 'react-native';
-import {Icon} from 'react-native-elements';
+import React, { PureComponent } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Dimensions } from 'react-native';
+import { Icon } from 'react-native-elements';
+import PutData from '../reusableComponents/API/PutData';
+import Toast from 'react-native-simple-toast';
+import Globals from '../Globals';
+import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+
+const baseUrl = Globals.baseUrl;
+const STORAGE_USER = Globals.STORAGE_USER
 
 class ProfileText extends PureComponent {
   constructor(props) {
@@ -10,44 +17,83 @@ class ProfileText extends PureComponent {
     };
   }
 
-  editButtonPressed=()=>{
+  editButtonPressed = () => {
     var key = this.props.stateKey; //fullName
-    this.setState({isEdit: true, [key]:this.props.valueText})
+    this.setState({ isEdit: true, [key]: this.props.valueText })
   }
 
-  checkButtonPressed=()=>{ //TODO: PUT API 
-    this.setState({isEdit: false})
+  checkButtonPressed = () => { //TODO: PUT API 
+    this.setState({ isEdit: false })
     var key = this.props.stateKey; //fullName
-    this.props.customSetState({[key]:this.state[key]})  //fullName: "Updated Text"
+    let data;
+    if (key == "address") {
+      data = {
+        b_address_2: this.state[key]
+      }
+
+    } else if (key == "fullName") {
+      if (this.state[key].split(' ').length > 1) {
+        let fname = this.state[key].split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
+        let lname = this.state[key].split(' ').slice(-1).join(' ');
+        data = {
+          b_firstname: fname,
+          b_lastname: lname
+        }
+      } else {
+        data = {
+          b_firstname: this.state[key],
+          b_lastname: ""
+        }
+      }
+    }else if (key == "email"){
+      data={
+        email:this.state[key]
+      }
+    }
+    this.props.customSetState({ [key]: this.state[key] })  //fullName: "Updated Text"
+
+    //no need for email
+    RetrieveDataAsync(STORAGE_USER).then(user => {
+      PutData(
+        baseUrl + `/api/usersnew/${JSON.parse(user).user_id}`,
+        data,
+      ).then((res) => res.json()).then((result) => {
+        if (result.message=="User updated successfully") {
+        }
+        else {
+          Toast.show('Failed to update');
+        }
+      })
+    })
   }
 
-  navigateScreen=()=>{
-    if(this.props.keyText=="TAX ID"){
+  navigateScreen = () => {
+    if (this.props.keyText == "TAX ID") {
       this.props.navigation.navigate("TaxID")
     }
-    else if(this.props.keyText=="Referral Link"){
+    else if (this.props.keyText == "Referral Link") {
       this.props.navigation.navigate("TaxID")
     }
-    else if(this.props.keyText=="My orders"){
+    else if (this.props.keyText == "My orders") {
       this.props.navigation.navigate("TrackOrders")
     }
 
-    else if(this.props.keyText=="Payment"){
+    else if (this.props.keyText == "Payment") {
       this.props.navigation.navigate("Payment")
     }
   }
 
-  customSetState(stateVal){
+  customSetState(stateVal) {
     this.props.customSetState(stateVal)
-}
+  }
 
-  textChanged(text){
+  textChanged(text) {
     var key = this.props.stateKey;
-    this.setState({[key]: text})
+    this.setState({ [key]: text })
   }
 
   render() {
- 
+
     return (
       <View>
         {/*If contains right arrow then it shouldn't be editable
@@ -59,7 +105,7 @@ class ProfileText extends PureComponent {
             </View>
             <View style={styles.flexRow}>
               <View style={styles.pad18}>
-                <Text style={[styles.valueText] }>
+                <Text style={[styles.valueText]}>
                   {this.props.valueText}
                 </Text>
               </View>
@@ -69,46 +115,46 @@ class ProfileText extends PureComponent {
               </View>
             </View>
           </TouchableOpacity>
-        ) : ( 
-          <View style={styles.userDetails}>
-            {!this.state.isEdit ? (
-              <View style={styles.pad4}>
-                <Text style={styles.keyText}>{this.props.keyText}</Text>
-                <Text
-                  style={[styles.valueText, styles.textView]}
-                  numberOfLines={1}>
-                  {this.props.valueText}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.pad4}>
-                <TextInput
-                  style={[styles.valueText, styles.textInput]}
-                  multiline={true}
-                  numberOfLines={4}
-                  returnKeyType="done" //FIXME: Check why done is not apperating on keyboard
-                  defaultValue={this.props.valueText}
-                  onChangeText={text => this.textChanged(text)}
-                  onEndEditing={this.checkButtonPressed}
-                />
-              </View>
-            )}
-
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.pad18}></View>
+        ) : (
+            <View style={styles.userDetails}>
               {!this.state.isEdit ? (
-              <TouchableOpacity
-                 onPress={this.editButtonPressed}
-                  style={styles.iconView}>
-                <Icon size={20} name="edit" type="feather" />
-              </TouchableOpacity>
+                <View style={styles.pad4}>
+                  <Text style={styles.keyText}>{this.props.keyText}</Text>
+                  <Text
+                    style={[styles.valueText, styles.textView]}
+                    numberOfLines={1}>
+                    {this.props.valueText}
+                  </Text>
+                </View>
               ) : (
-               <View style={styles.iconView}></View>
-              )
-              }
+                  <View style={styles.pad4}>
+                    <TextInput
+                      style={[styles.valueText, styles.textInput]}
+                      multiline={true}
+                      numberOfLines={4}
+                      returnKeyType="done" //FIXME: Check why done is not apperating on keyboard
+                      defaultValue={this.props.valueText}
+                      onChangeText={text => this.textChanged(text)}
+                      onEndEditing={this.checkButtonPressed}
+                    />
+                  </View>
+                )}
+
+              <View style={{ flexDirection: 'row' }}>
+                <View style={styles.pad18}></View>
+                {!this.state.isEdit ? (
+                  <TouchableOpacity
+                    onPress={this.editButtonPressed}
+                    style={styles.iconView}>
+                    <Icon size={20} name="edit" type="feather" />
+                  </TouchableOpacity>
+                ) : (
+                    <View style={styles.iconView}></View>
+                  )
+                }
+              </View>
             </View>
-          </View>
-        )}
+          )}
       </View>
     );
   }
@@ -136,17 +182,17 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#2d2d2f',
   },
-  pad19: {paddingVertical: 19},
-  pad18: {paddingVertical: 18},
-  flexRow: {flexDirection: 'row'},
+  pad19: { paddingVertical: 19 },
+  pad18: { paddingVertical: 18 },
+  flexRow: { flexDirection: 'row' },
   iconView: {
     marginVertical: 18,
     marginRight: 6,
     marginLeft: 19.5,
   },
-  pad4: {paddingTop: 4},
-  textView: {marginTop: 4, width: Width * 0.76},
-  textInput: {width: Width * 0.76, borderRadius: 6},
+  pad4: { paddingTop: 4 },
+  textView: { marginTop: 4, width: Width * 0.76 },
+  textInput: { width: Width * 0.76, borderRadius: 6 },
 });
 
 export default ProfileText;

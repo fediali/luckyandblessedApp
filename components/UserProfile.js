@@ -23,6 +23,7 @@ import ThemeContext from '../reusableComponents/ThemeContext'
 import Globals from '../Globals';
 import GetData from "../reusableComponents/API/GetData"
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
+import Toast from 'react-native-simple-toast';
 
 // TODO: GLOBALS NOT WORKING PROPERLY
 const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
@@ -48,7 +49,6 @@ export default class UserProfile extends Component {
       email: 'blackcherry@gmail.com',
       longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
       shortAddress: '455 Larkspur Dr. Califo...',
-      payment: 'Visa **** **** **** 6280',
     };
   }
   static contextType = ThemeContext
@@ -66,7 +66,6 @@ export default class UserProfile extends Component {
               email: result.email,
               longAddress: result.b_address_2,
               shortAddress: result.b_address,
-              payment: 'Visa **** **** **** 6280',
               isReady:true,
               section1: [
                 {
@@ -86,14 +85,16 @@ export default class UserProfile extends Component {
     this.setState({ activeSection1 });
   };
 
-  copyToClipboard=(content)=()=>{
+  copyToClipboard=(content)=>()=>{
     Clipboard.setString(content.toString())
+    Toast.show('Copied to clipboard');
   }
   _renderContent = (section) => {
     return (
       <View style={[styles.descriptionTextView,{flexDirection:"row",marginRight:30}]} >
         {/* TODO: Justify Text to center */}
-        <TouchableOpacity onLongPress={this.copyToClipboard(section.content)}>
+        <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
+          
           <Text style={styles.descriptionText}>
             {section.content}
           </Text>
