@@ -26,7 +26,7 @@ class ProfileText extends PureComponent {
     this.setState({ isEdit: false })
     var key = this.props.stateKey; //fullName
     let data;
-    if (key == "address") {
+    if (key == "address") { //TODO: Adress not updating by PUT request
       data = {
         b_address_2: this.state[key]
       }

@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Dimensions,
   InteractionManager,
-  Clipboard 
+  Clipboard,
+  ImageBackground
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -24,13 +25,15 @@ import Globals from '../Globals';
 import GetData from "../reusableComponents/API/GetData"
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
 import Toast from 'react-native-simple-toast';
+import ImagePicker from 'react-native-image-picker';
+var RNFS = require('react-native-fs');
 
 // TODO: GLOBALS NOT WORKING PROPERLY
 const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
 const STORAGE_USER = Globals.STORAGE_USER
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const baseUrl = Globals.baseUrl;
-
+//TODO: Image not coming and image not updating
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 export default class UserProfile extends Component {
   constructor(props) {
@@ -49,6 +52,7 @@ export default class UserProfile extends Component {
       email: 'blackcherry@gmail.com',
       longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
       shortAddress: '455 Larkspur Dr. Califo...',
+      imageb64:""
     };
   }
   static contextType = ThemeContext
@@ -60,13 +64,13 @@ export default class UserProfile extends Component {
           .then(res => res.json())
           .then((result) => {
             console.log(result)
-            console.log("--------------------",JSON.parse(user).name)
+            console.log("--------------------", JSON.parse(user).name)
             this.setState({
               fullName: JSON.parse(user).name,
               email: result.email,
               longAddress: result.b_address_2,
               shortAddress: result.b_address,
-              isReady:true,
+              isReady: true,
               section1: [
                 {
                   id: 0,
@@ -85,23 +89,23 @@ export default class UserProfile extends Component {
     this.setState({ activeSection1 });
   };
 
-  copyToClipboard=(content)=>()=>{
+  copyToClipboard = (content) => () => {
     Clipboard.setString(content.toString())
     Toast.show('Copied to clipboard');
   }
   _renderContent = (section) => {
     return (
-      <View style={[styles.descriptionTextView,{flexDirection:"row",marginRight:30}]} >
+      <View style={[styles.descriptionTextView, { flexDirection: "row", marginRight: 30 }]} >
         {/* TODO: Justify Text to center */}
         <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
-          
+
           <Text style={styles.descriptionText}>
             {section.content}
           </Text>
-        </TouchableOpacity>          
+        </TouchableOpacity>
         <Icon size={20} name="clipboard" type="font-awesome" />
 
-        
+
       </View>
     );
   };
@@ -135,7 +139,33 @@ export default class UserProfile extends Component {
     AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
     this.context.setAuthenticated("")
   }
+  onImageEditClick=()=>{
+    const options = {
+      title: 'Upload from..',
+      customButtons: [{name: 'remove', title: 'Remove Image'}],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
 
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        // this.selectOneFile();
+      } else {
+
+        RNFS.readFile(response.uri, 'base64').then((fileBase64) => {
+          // console.log(fileBase64)
+          this.setState({
+            imageb64: fileBase64,
+          });
+        });
+      }
+    });
+  }
   render() {
 
     if (!this.state.isReady) {
@@ -159,9 +189,14 @@ export default class UserProfile extends Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollViewStyles}>
           <View style={styles.subContainer}>
-            <FastImage
-              style={styles.displayPicture}
-              source={require('../static/item_cart1.png')}></FastImage>
+            <ImageBackground source={require('../static/item_cart1.png')} style={styles.displayPicture} imageStyle={{ borderRadius: 88 }}>
+              <TouchableOpacity onPress={this.onImageEditClick}>
+                <View style={{ marginTop: 60, marginLeft: 50 }}>
+                  <Icon reverse size={10} name="edit" type="entypo" color="#2967ff" />
+                </View>
+              </TouchableOpacity>
+            </ImageBackground>
+
             <Text style={styles.userNameText}>{this.state.fullName}</Text>
             <Text style={styles.userAddress}>{this.state.shortAddress}</Text>
             <Text style={styles.userAddress}>{this.state.longAddress}</Text>
@@ -302,7 +337,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
     marginLeft: 19.5,
   },
-  displayPicture: { height: 88, width: 88, borderRadius: 88 },
+  displayPicture: { height: 88, width: 88 },
   bottomContainer: { paddingBottom: 60, backgroundColor: '#f6f6f6' },
   logOutButton: {
     height: Height * 0.074,
