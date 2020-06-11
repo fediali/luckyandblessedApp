@@ -647,7 +647,7 @@ class Delivery extends Component {
                 <TextInput
                   style={styles.input}
                   placeholder="Full name"
-                  value={this.state.fullName}
+                  value={this.state.fullName.trim()}
                   onChangeText={(text) => {
                     this.setState({ fullName: text });
                   }}
@@ -663,7 +663,7 @@ class Delivery extends Component {
                 <TextInput
                   style={styles.input}
                   placeholder="Street address"
-                  value={this.state.streetAddress}
+                  value={this.state.streetAddress.trim()}
                   onChangeText={(text) => {
                     this.setState({ streetAddress: text });
                   }}
@@ -796,7 +796,7 @@ class Delivery extends Component {
                     <TextInput
                       style={styles.input}
                       placeholder="Full name"
-                      value={this.state.s_fullName}
+                      value={this.state.s_fullName.trim()}
                       onChangeText={(text) => {
                         this.setState({ s_fullName: text });
                       }}
@@ -812,7 +812,7 @@ class Delivery extends Component {
                     <TextInput
                       style={styles.input}
                       placeholder="Street address"
-                      value={this.state.s_streetAddress}
+                      value={this.state.s_streetAddress.trim()}
                       onChangeText={(text) => {
                         this.setState({ s_streetAddress: text });
                       }}

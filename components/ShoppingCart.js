@@ -23,7 +23,7 @@ import Footer from '../reusableComponents/Footer';
 import styles from './Styles/Style';
 import OrderFooter from '../reusableComponents/OrderFooter';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
-
+import PutData from '../reusableComponents/API/PutData'
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 
@@ -84,7 +84,7 @@ class FlatListItem extends Component {
                 console.log(response);
                 Toast.show(response.message)
                  //Refresh FlatList !
-                this.props.parentFlatList.refreshFlatList(deletingRow);
+                this.props.parentFlatList.refreshFlatList(deletingRow); //FIXME: Refresh Flatlist Header
             })
 
            
@@ -99,6 +99,30 @@ class FlatListItem extends Component {
     this.setState({
       currentSelectedColor: this.props.item.availableColors[index],
     });
+  };
+
+  onAvailableSizesModalSelect = (index, option, item) => {
+    console.log("Index",option)
+    console.log("Item", item)
+
+    var data = {
+      products: {
+        [item.product_id]:{
+          'product_id':item.product_id,
+          'amount':option
+        }
+      },
+      'user_data':{
+        'user_id': gUser.user_id
+      }
+    }
+    PutData(baseUrl + `api/addcart`, data)
+    .then(res => res.json())
+    .then(response => {
+      console.log(response)
+      Toast.show(`${item.name} quantity updated` );
+    })
+    // this.setState({ stateText: usStates[index] , s_country: usStates[index], b_country: usStates[index]});
   };
 
   render() {
@@ -189,6 +213,9 @@ class FlatListItem extends Component {
                     style={innerStyles.modalStyle}
                     dropdownStyle={innerStyles.modalDropdownStyle}
                     textStyle={innerStyles.modalTextStyle}
+                    onSelect={(index, option = this.props.item) => {
+                      this.onAvailableSizesModalSelect(index, option, this.props.item);
+                    }}
                     renderRow={(option, index, isSelected) => {
                       return (
                         <Text style={[innerStyles.numText]}>{option}</Text>
@@ -236,9 +263,9 @@ class ShoppingCart extends Component {
       deletedRowKey: null,
       itemList: [],
       orderItems: [],
-      totalCost: -1,
-      finalCost: -1,
-      totalCartProducts: -1,
+      totalCost: 0,
+      finalCost: 0,
+      totalCartProducts: 0,
       s_userAddress: '',
       b_userAddress: '',
       showZeroProductScreen: false,
@@ -316,7 +343,6 @@ class ShoppingCart extends Component {
         if (responses.status == 404) {
             console.log("No product found")
           this.setState({
-            showZeroProductScreen: true,
             isReady: true
           });
         } else {
@@ -338,6 +364,7 @@ class ShoppingCart extends Component {
     
                     singleProduct = {
                       itemNum: responses.products[i].item_id,
+                      product_id: responses.products[i].product_id,
                       name: responses.products[i].product,
                       price: (
                         parseFloat(responses.products[i].amount) *
@@ -614,6 +641,7 @@ const innerStyles = StyleSheet.create({
   },
   horizontalView: {
     flexDirection: 'row',
+    alignSelf: 'center',
     marginTop: 20,
     paddingHorizontal: 10,
   },

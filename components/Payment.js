@@ -96,6 +96,8 @@ class Payment extends Component {
 
   handlePayPalTransaction =  (user) => {
     console.log("Handling Paypal")
+    data
+    PostData('https://api.sandbox.paypal.com/v2/checkout/orders', )
 
   }
 
