@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   InteractionManager,
   ToastAndroid,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import Shimmer from 'react-native-shimmer';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -48,17 +48,17 @@ class FlatListItem extends Component {
 
   onDeleteClose = () => {
     if (this.state.activeRowKey != null) {
-      this.setState({activeRowKey: null});
+      this.setState({ activeRowKey: null });
     }
   };
   onDeleteOpen = () => {
-    this.setState({activeRowKey: this.props.item.itemNum});
+    this.setState({ activeRowKey: this.props.item.itemNum });
   };
 
   onDeletePress = () => {
     const deletingRow = this.state.activeRowKey;
     console.log(deletingRow)
-    
+
     Alert.alert(
       'Alert',
       'Are you sure you want to delete ?',
@@ -74,24 +74,24 @@ class FlatListItem extends Component {
             this.props.parentFlatList.deleteItem(this.props.index);
             // this.state.itemList.splice(this.props.index, 1);
             let deleteData = {
-                "user_id": gUser.user_id,
-                "cart_id": deletingRow //cart_id is the item_id returned through GET API
+              "user_id": gUser.user_id,
+              "cart_id": deletingRow //cart_id is the item_id returned through GET API
             }
 
             PostData(baseUrl + `api/removecart`, deleteData)
-            .then(res => res.json())
-            .then(response => {
+              .then(res => res.json())
+              .then(response => {
                 console.log(response);
                 Toast.show(response.message)
-                 //Refresh FlatList !
+                //Refresh FlatList !
                 this.props.parentFlatList.refreshFlatList(deletingRow); //FIXME: Refresh Flatlist Header
-            })
+              })
 
-           
+
           },
         },
       ],
-      {cancelable: true},
+      { cancelable: true },
     );
   };
 
@@ -102,26 +102,26 @@ class FlatListItem extends Component {
   };
 
   onAvailableSizesModalSelect = (index, option, item) => {
-    console.log("Index",option)
+    console.log("Index", option)
     console.log("Item", item)
 
     var data = {
       products: {
-        [item.product_id]:{
-          'product_id':item.product_id,
-          'amount':option
+        [item.product_id]: {
+          'product_id': item.product_id,
+          'amount': option
         }
       },
-      'user_data':{
+      'user_data': {
         'user_id': gUser.user_id
       }
     }
     PutData(baseUrl + `api/addcart`, data)
-    .then(res => res.json())
-    .then(response => {
-      console.log(response)
-      Toast.show(`${item.name} quantity updated` );
-    })
+      .then(res => res.json())
+      .then(response => {
+        console.log(response)
+        Toast.show(`${item.name} quantity updated`);
+      })
     // this.setState({ stateText: usStates[index] , s_country: usStates[index], b_country: usStates[index]});
   };
 
@@ -156,7 +156,7 @@ class FlatListItem extends Component {
               <Image
                 style={[innerStyles.itemImage]}
                 resizeMode="contain"
-                source={{uri: this.props.item.path}}
+                source={{ uri: this.props.item.path }}
               />
               <View style={innerStyles.listTextsContainerView}>
                 <View style={innerStyles.listRowView}>
@@ -268,6 +268,10 @@ class ShoppingCart extends Component {
       totalCartProducts: 0,
       s_userAddress: '',
       b_userAddress: '',
+      b_userAddress_1: '',//storing it seperate, as its needed by payment screen
+      b_userAddress_2: '',
+      b_zipCode: '',
+      b_country: '',
       showZeroProductScreen: false,
       promocode: '',
       discount: 0,
@@ -279,7 +283,7 @@ class ShoppingCart extends Component {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: false});
+      this.setState({ isReady: false });
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);
@@ -338,10 +342,10 @@ class ShoppingCart extends Component {
         let productsLength = null;
         let lineItems = [];
         let orderItems = [];
-     
+
 
         if (responses.status == 404) {
-            console.log("No product found")
+          console.log("No product found")
           this.setState({
             isReady: true
           });
@@ -359,82 +363,86 @@ class ShoppingCart extends Component {
             Promise.all(promiseResponses.map((res) => res.json()))
               .then((prod) => {
                 for (let i = 0; i < productsLength; i++) {
-                    let singleProduct = {};
-                    let singleLineITem = {};
-    
-                    singleProduct = {
-                      itemNum: responses.products[i].item_id,
-                      product_id: responses.products[i].product_id,
-                      name: responses.products[i].product,
-                      price: (
-                        parseFloat(responses.products[i].amount) *
-                        parseFloat(responses.products[i].price)
-                      ).toFixed(2),
-                      unitPrice: parseFloat(responses.products[i].price).toFixed(2),
-                      sizes: 'Not available',
-                      selectedColor: 'Turquoise', //
-                      availableColors: [
-                        '#eb4034',
-                        '#05c2bd',
-                        '#f4f719',
-                        '#0caac9',
-                        '#e629df',
-                      ], //
-                      availableSizes: prod[i].qty_content, //
-                      quantity: responses.products[i].amount,
-                      unknownNum: responses.products[i].amount,
-                      hexColor: '#05c2bd', //
-                    };
-                    if ('detailed' in responses.products[i].extra.main_pair) {
-                      singleProduct.path =
-                        responses.products[i].extra.main_pair.detailed.image_path;
-                    } else {
-                      singleProduct.path = 'https://picsum.photos/200';
-                    }
-    
-                    singleLineITem = {
-                      itemId: responses.products[i].product_id,
-                      name: responses.products[i].product,
-                      description: 'n/a',
-                      quantity: responses.products[i].amount,
-                      unitPrice: parseFloat(responses.products[i].price).toFixed(2),
-                    };
-    
-                    let singleOrderItem = {
-                      [responses.products[i].product_id]: {
-                        amount: responses.products[i].amount,
-                      },
-                    };
-                    lineItems[i] = singleLineITem;
-                    cartData[i] = singleProduct;
-                    orderItems[i] = singleOrderItem;
-    
-                 
+                  let singleProduct = {};
+                  let singleLineITem = {};
+
+                  singleProduct = {
+                    itemNum: responses.products[i].item_id,
+                    product_id: responses.products[i].product_id,
+                    name: responses.products[i].product,
+                    price: (
+                      parseFloat(responses.products[i].amount) *
+                      parseFloat(responses.products[i].price)
+                    ).toFixed(2),
+                    unitPrice: parseFloat(responses.products[i].price).toFixed(2),
+                    sizes: 'Not available',
+                    selectedColor: 'Turquoise', //
+                    availableColors: [
+                      '#eb4034',
+                      '#05c2bd',
+                      '#f4f719',
+                      '#0caac9',
+                      '#e629df',
+                    ], //
+                    availableSizes: prod[i].qty_content, //
+                    quantity: responses.products[i].amount,
+                    unknownNum: responses.products[i].amount,
+                    hexColor: '#05c2bd', //
+                  };
+                  if ('detailed' in responses.products[i].extra.main_pair) {
+                    singleProduct.path =
+                      responses.products[i].extra.main_pair.detailed.image_path;
+                  } else {
+                    singleProduct.path = 'https://picsum.photos/200';
+                  }
+
+                  singleLineITem = {
+                    itemId: responses.products[i].product_id,
+                    name: responses.products[i].product,
+                    description: 'n/a',
+                    quantity: responses.products[i].amount,
+                    unitPrice: parseFloat(responses.products[i].price).toFixed(2),
+                  };
+
+                  let singleOrderItem = {
+                    [responses.products[i].product_id]: {
+                      amount: responses.products[i].amount,
+                    },
+                  };
+                  lineItems[i] = singleLineITem;
+                  cartData[i] = singleProduct;
+                  orderItems[i] = singleOrderItem;
+
+
                 }
 
 
-          this.setState({
-            totalCost: responses.total,
-            finalCost: responses.total,
-            totalCartProducts: responses.cart_products,
-            itemList: cartData,
-            orderItems: orderItems,
-            s_userAddress:
-              responses.user_data.s_address + responses.user_data.s_address_2,
-            b_userAddress:
-              responses.user_data.b_address + responses.user_data.b_address_2,
-            profile_id: responses.user_data.profile_id,
-            paymentLineItems: lineItems,
-            isReady: true,
-          });
+                this.setState({
+                  totalCost: responses.total,
+                  finalCost: responses.total,
+                  totalCartProducts: responses.cart_products,
+                  itemList: cartData,
+                  orderItems: orderItems,
+                  s_userAddress:
+                    responses.user_data.s_address + responses.user_data.s_address_2,
+                  b_userAddress:
+                    responses.user_data.b_address + responses.user_data.b_address_2,
+                  b_userAddress_1: responses.user_data.b_address,
+                  b_userAddress_2: responses.user_data.b_address_2,
+                  b_zipCode: responses.user_data.b_zipcode,
+                  b_country: responses.user_data.b_country,
+                  profile_id: responses.user_data.profile_id,
+                  paymentLineItems: lineItems,
+                  isReady: true,
+                });
 
-                })
+              })
               .catch((ex) =>
                 console.log('Get Specific Product Exception ' + ex),
               );
           });
 
-          
+
         }
       });
   };
@@ -471,7 +479,7 @@ class ShoppingCart extends Component {
               style={[styles.input]}
               placeholder="Gift Or Promo code"
               onChangeText={(text) => {
-                this.setState({promocode: text});
+                this.setState({ promocode: text });
               }}
             />
             <TouchableOpacity
@@ -523,6 +531,10 @@ class ShoppingCart extends Component {
         paymentLineItems: this.state.paymentLineItems,
         orderItems: this.state.orderItems,
         profile_id: this.state.profile_id,
+        b_userAddress_1: this.state.b_userAddress_1,
+        b_userAddress_2: this.state.b_userAddress_2,
+        b_zipCode: this.state.b_zipCode,
+        b_country: this.state.b_country,
       });
     } else {
       this.props.navigation.navigate('Delivery', {
@@ -533,6 +545,10 @@ class ShoppingCart extends Component {
         paymentLineItems: this.state.paymentLineItems,
         orderItems: this.state.orderItems,
         profile_id: this.state.profile_id,
+        b_userAddress_1: this.state.b_userAddress_1,
+        b_userAddress_2: this.state.b_userAddress_2,
+        b_zipCode: this.state.b_zipCode,
+        b_country: this.state.b_country,
       });
     }
   };
@@ -558,24 +574,24 @@ class ShoppingCart extends Component {
         {this.state.showZeroProductScreen ? (
           <ZeroDataScreen />
         ) : (
-          <View style={styles.parentContainer}>
-            <FlatList
-              keyExtractor={(item) => item.itemNum.toString()}
-              data={this.state.itemList}
-              numColumns={1}
-              renderItem={({item, index}) => {
-                return (
-                  <FlatListItem
-                    item={item}
-                    index={index}
-                    parentFlatList={this}></FlatListItem>
-                );
-              }}
-              ListHeaderComponent={this.renderFlatListHeader}
-              ListFooterComponent={this.renderFlatListFooter}
-            />
-          </View>
-        )}
+            <View style={styles.parentContainer}>
+              <FlatList
+                keyExtractor={(item) => item.itemNum.toString()}
+                data={this.state.itemList}
+                numColumns={1}
+                renderItem={({ item, index }) => {
+                  return (
+                    <FlatListItem
+                      item={item}
+                      index={index}
+                      parentFlatList={this}></FlatListItem>
+                  );
+                }}
+                ListHeaderComponent={this.renderFlatListHeader}
+                ListFooterComponent={this.renderFlatListFooter}
+              />
+            </View>
+          )}
         <Footer selected="Shop" navigation={this.props.navigation} />
       </SafeAreaView>
     );
@@ -811,7 +827,7 @@ const innerStyles = StyleSheet.create({
     lineHeight: 30,
     textAlign: 'right',
   },
-  shippingText: {fontFamily: 'Avenir-Medium', fontSize: 16},
+  shippingText: { fontFamily: 'Avenir-Medium', fontSize: 16 },
   orderGiftText: {
     lineHeight: 30,
   },

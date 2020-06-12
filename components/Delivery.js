@@ -302,7 +302,11 @@ class Delivery extends Component {
                 discount: this.props.route.params.discount,
                 paymentLineItems: this.props.route.params.paymentLineItems,
                 orderItems: this.props.route.params.orderItems,
-                profile_id: response.profile_id
+                profile_id: response.profile_id,
+                b_userAddress_1: this.props.route.params.b_userAddress_1,
+                b_userAddress_2: this.props.route.params.b_userAddress_2,
+                b_zipCode: this.props.route.params.b_zipCode,
+                b_country: this.props.route.params.b_country,
               });
               setTimeout(() => {
                 this.setState({ isReady: true });
@@ -316,10 +320,10 @@ class Delivery extends Component {
         PutData(
           baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
           data,
-        ) 
-          .then((res) => res.json()) 
+        )
+          .then((res) => res.json())
           .then((response) => {
-          
+
             if (response.profile_id) {
               this.props.navigation.push('Payment', {
                 totalCost: this.props.route.params.totalCost,
@@ -465,7 +469,7 @@ class Delivery extends Component {
   }
 
   onStateModalSelect = (index) => {
-    this.setState({ stateText: usStates[index] , s_country: usStates[index], b_country: usStates[index]});
+    this.setState({ stateText: usStates[index], s_country: usStates[index], b_country: usStates[index] });
   };
   onShipStateModalSelect = (index) => {
     this.setState({ s_stateText: usStates[index] });
@@ -918,7 +922,7 @@ class Delivery extends Component {
               )}
             </View>
 
-            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount}  />
+            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount} />
             <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
               <TouchableOpacity
                 activeOpacity={0.5}

@@ -9,7 +9,7 @@ import {
   Dimensions,
   SafeAreaView,
   InteractionManager,
-  
+
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -25,7 +25,7 @@ import PostData from '../reusableComponents/API/PostData';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
-const CODPAYMENTID =  17;
+const CODPAYMENTID = 17;
 const CREDITCARTPAYMENTID = 34;
 const PAYPALPAYMENTID = 20;
 let deliveryDetails = null;
@@ -36,12 +36,12 @@ class Payment extends Component {
     //PaymentMode => 1 = CreditCard, 2 = paypal, 3 = COD
     this.state = {
       isReady: false,
-      cardNumber: '5424000000000015',
+      cardNumber: '5424000000000015',//TODO: for testing purpose, remove it when deploy
       expMonth: '12',
       expYear: '2020',
-      cardCode: '999',     
+      cardCode: '999',
       profile_id: this.props.route.params.profile_id,
-      paymentMode: 1,   
+      paymentMode: 1,
     };
   }
 
@@ -52,35 +52,35 @@ class Payment extends Component {
         this.setState({ email: user.email })
 
         GetData(baseUrl + `api/userprofilesnew/${user.user_id}&profile_id=${this.state.profile_id}`) //TODO: Get user details
-        .then(res => res.json())
-        .then(response => {
-          deliveryDetails = response[0];
-          this.setState({ 
-            isReady: true,
-            dDetails: deliveryDetails,
-            shippingDetails:
-              deliveryDetails.s_firstname + ' ' + deliveryDetails.s_lastname +
-              ', ' +
-              deliveryDetails.s_address + ' ' + deliveryDetails.s_address_2 + 
-              ', ' +
-              deliveryDetails.s_city +
-              ', ' +
-              deliveryDetails.s_state +
-              ' ' +
-              deliveryDetails.s_zipcode +  ', ' + deliveryDetails.s_country,
-            billingDetails:
-              deliveryDetails.b_firstname + ' ' + deliveryDetails.b_lastname +
-              ', ' +
-              deliveryDetails.b_address + ' ' + deliveryDetails.b_address_2 + 
-              ', ' +
-              deliveryDetails.b_city +
-              ', ' +
-              deliveryDetails.b_state +
-              ' ' +
-              deliveryDetails.b_zipcode +  ', ' + deliveryDetails.b_country,
-            sameShipping: deliveryDetails.is_same_shipping,
-           });
-        })
+          .then(res => res.json())
+          .then(response => {
+            deliveryDetails = response[0];
+            this.setState({
+              isReady: true,
+              dDetails: deliveryDetails,
+              shippingDetails:
+                deliveryDetails.s_firstname + ' ' + deliveryDetails.s_lastname +
+                ', ' +
+                deliveryDetails.s_address + ' ' + deliveryDetails.s_address_2 +
+                ', ' +
+                deliveryDetails.s_city +
+                ', ' +
+                deliveryDetails.s_state +
+                ' ' +
+                deliveryDetails.s_zipcode + ', ' + deliveryDetails.s_country,
+              billingDetails:
+                deliveryDetails.b_firstname + ' ' + deliveryDetails.b_lastname +
+                ', ' +
+                deliveryDetails.b_address + ' ' + deliveryDetails.b_address_2 +
+                ', ' +
+                deliveryDetails.b_city +
+                ', ' +
+                deliveryDetails.b_state +
+                ' ' +
+                deliveryDetails.b_zipcode + ', ' + deliveryDetails.b_country,
+              sameShipping: deliveryDetails.is_same_shipping,
+            });
+          })
       });
     });
   }
@@ -96,11 +96,47 @@ class Payment extends Component {
   }
 
   getPaypalAuth = () => {
-      let accessToken = null;
+    let accessToken = null;
+    let user = null;
+    let paymentItems = []
+    //mapping lineItems(from params) onto below details object
+    for (item in this.props.route.params.paymentLineItems) {
+      /*
+      JSON to be mapped is: 
+      "items": [
+            {
+              "name": "Sleeveless Dress",
+              "unit_amount": {
+                "currency_code": "USD",
+                "value": "10"
+              },
+              "quantity": "6",
+              "category": "PHYSICAL_GOODS"
+            }
+
+          ]
+      */
+      let singleItem = {
+        name: item.product,
+        "unit_amount": {
+          currency_code: "USD",
+          value: item.unitPrice,
+        },
+        quantity: item.amount,
+        category: 'n/a' //FIXME: no category attribute found anywhere
+      }
+      paymentItems.push(singleItem);
+    }
+
+
+    RetrieveDataAsync(STORAGE_USER).then((user) => {
+      user = JSON.parse(user);
+    });
+
     var details = {
-        'grant_type': 'client_credentials',
+      'grant_type': 'client_credentials',
     };
-    
+
     var formBody = [];
     for (var property in details) {
       var encodedKey = encodeURIComponent(property);
@@ -108,61 +144,112 @@ class Payment extends Component {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     formBody = formBody.join("&");
-    
+
     fetch('https://api.sandbox.paypal.com/v1/oauth2/token', {
       method: 'POST',
       headers: {
-        'Authorization':'Basic QVNZZ2toTTNRalN6OXN0UTBYV0pSbU1pTW5fUlljaVZ4UGxELXZSSWRRMHBoOTJDd3dnb0ZzMlV6LWI4STFMM0VQaGR1VV9vNjdRaWdiWVU6RVBTQllENHlleVYya0R2RmZqSGpPVUMta3JnLXZOY3hpcWoyOGVhUzVRWkhVbFRTbUwtQ3hqdmREX2pvN1ZmXzZocllqNVNrNURkTmowdlU=',
+        'Authorization': 'Basic QVNZZ2toTTNRalN6OXN0UTBYV0pSbU1pTW5fUlljaVZ4UGxELXZSSWRRMHBoOTJDd3dnb0ZzMlV6LWI4STFMM0VQaGR1VV9vNjdRaWdiWVU6RVBTQllENHlleVYya0R2RmZqSGpPVUMta3JnLXZOY3hpcWoyOGVhUzVRWkhVbFRTbUwtQ3hqdmREX2pvN1ZmXzZocllqNVNrNURkTmowdlU=',
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
       body: formBody
     })
-    .then (res => res.json())
-    .then(response => {
+      .then(res => res.json())
+      .then(response => {
         accessToken = response.access_token
-    })
-    .catch(e => console.log(e))
+        return accessToken
+      })
+      .catch(e => console.log(e))
   }
 
-  handlePayPalTransaction =  (user) => {
+  handlePayPalTransaction = (user) => {
 
-    
-    PostData('https://api.sandbox.paypal.com/v2/checkout/orders', user, this.getPaypalAuth) //To create Order
-    .then(res => res.json())
-    .then(response => {
-        console.log(response)
+    let data = {
+      "intent": "AUTHORIZE",
+      "payer": {
+        "name": {
+          "given_name": user.name
+        },
+        "email_address": user.email,
+        "address": {
+          "address_line_1": this.props.route.params.b_userAddress_1,
+          "address_line_2": this.props.route.params.b_userAddress_2,
+          "postal_code": this.props.route.params.b_zipCode,
+          "country_code": this.props.route.params.b_country,
+        }
+
+      },
+      "purchase_units": [
+        {
+          "amount": {
+            "currency_code": "USD",
+            "value": this.props.route.params.finalCost,
+            "breakdown": {
+              "item_total": {
+                "currency_code": "USD",
+                "value": this.props.route.params.totalCost
+
+              },
+              "discount": {
+                "currency_code": "USD",
+                "value": this.props.route.params.discount
+              }
+            }
+          },
+          "payee": {
+            "email_address": user.email
+          },
+          "items": paymentItems,
+        }
+      ],
+      "application_context": {
+        "brand_name": "Lucky and Blessed",
+        "user_action": "PAY_NOW",
+        "return_url": "http://dev.landbw.co/mobile_app/paypal_succes.html",
+        "cancel_url": "http://dev.landbw.co/mobile_app/paypal_cancel.html"
+      }
+    }
+
+    this.getPaypalAuth().then((res) => {
+      PostData('https://api.sandbox.paypal.com/v2/checkout/orders', data, res) //To create Order
+        .then(res => res.json())
+        .then(response => {
+          console.log(response)
+        })
+        .catch(e => console.log(e))
+
     })
-    .catch(e => console.log(e))
+
+
 
   }
 
   placeOrder = (user, payment_id, mproduct, transResponse = []) => {
-    let orderData =  {
-      user_id:  user.user_id,
+    let orderData = {
+      user_id: user.user_id,
       shipping_id: "15", //UPS Shipping
-      payment_id, 
+      payment_id,
       payment_info: transResponse,
       products: mproduct
     }
     PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
-    .then(res => res.json())
-    .then(response => {
-      if (response.order_id){
-        this.props.navigation.navigate('ConfirmationSuccess', {orderId: response.order_id})
-      }
-      else {
-        Toast.show("Something went wrong")
-      }
-    })
+      .then(res => res.json())
+      .then(response => {
+        if (response.order_id) {
+          this.props.navigation.navigate('ConfirmationSuccess', { orderId: response.order_id })
+        }
+        else {
+          Toast.show("Something went wrong")
+        }
+      })
   }
 
   modifyProductJson = () => {
     let mproduct = {};
 
-    for(let i=0;i<this.props.route.params.orderItems.length;i++){
-      let e=this.props.route.params.orderItems[i]
-      let mkey=Object.keys(e)[0]
-      mproduct[mkey]=e[mkey]
+    for (let i = 0; i < this.props.route.params.orderItems.length; i++) {
+      let e = this.props.route.params.orderItems[i]
+      let mkey = Object.keys(e)[0]
+      mproduct[mkey] = e[mkey]
     }
 
     return mproduct;
@@ -187,10 +274,10 @@ class Payment extends Component {
               "cardCode": this.state.cardCode
             }
           },
-          "lineItems":{
-             "lineItem": this.props.route.params.paymentLineItems
-            },
-  
+          "lineItems": {
+            "lineItem": this.props.route.params.paymentLineItems
+          },
+
           "customer": {
             "id": user.user_id,
             "email": user.email
@@ -234,16 +321,16 @@ class Payment extends Component {
 
     // changing orderitems array format to supported ones
     let mproduct = this.modifyProductJson();
-    
 
-    PostData("https://apitest.authorize.net/xml/v1/request.api", data) 
+
+    PostData("https://apitest.authorize.net/xml/v1/request.api", data)
       .then((res) => res.text())
       .then((responses) => {
         let transResponse = JSON.parse((responses.trim()));
-        
 
-        if (transResponse.transactionResponse.responseCode == 1){
-          placeOrder(user, CREDITCARTPAYMENTID, mproduct, transResponse);
+
+        if (transResponse.transactionResponse.responseCode == 1) {
+          this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transResponse);
         }
         else {
           Toast.show(transResponse.transactionResponse.errors[0].errorText)
@@ -263,16 +350,16 @@ class Payment extends Component {
     this.props.navigation.navigate(
       "Delivery",
       {//sending props to delivery screen to reuse values
-          totalCost: this.props.route.params.totalCost,
-          finalCost: this.props.route.params.finalCost,
-          discount: this.props.route.params.discount,
-          paymentLineItems: this.state.paymentLineItems,
-          orderItems: this.state.orderItems,
+        totalCost: this.props.route.params.totalCost,
+        finalCost: this.props.route.params.finalCost,
+        discount: this.props.route.params.discount,
+        paymentLineItems: this.state.paymentLineItems,
+        orderItems: this.state.orderItems,
       })
   }
 
   changePaymentMode = (paymentMode) => () => {
-    this.setState({paymentMode})
+    this.setState({ paymentMode })
   }
 
   render() {
@@ -325,30 +412,30 @@ class Payment extends Component {
                     </Text>
                   </View>
                 ) : (
-                  <View>
                     <View>
-                    <View style={styles.shippingAddressView}>
-                      <Text style={styles.heading}>Shipping address:</Text>
-                      <TouchableOpacity onPress={this.navigateToDeliveryScreen} >
-                        <Text style={styles.textButton}>Edit</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <Text style={styles.monikaWillemsText}>
-                      {this.state.shippingDetails}
-                    </Text>
-                  </View>
-                    <View>
-                      <View style={styles.shippingAddressView}>
-                        <Text style={styles.heading}>Billing address:</Text>
+                      <View>
+                        <View style={styles.shippingAddressView}>
+                          <Text style={styles.heading}>Shipping address:</Text>
+                          <TouchableOpacity onPress={this.navigateToDeliveryScreen} >
+                            <Text style={styles.textButton}>Edit</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <Text style={styles.monikaWillemsText}>
+                          {this.state.shippingDetails}
+                        </Text>
                       </View>
-                      <Text style={styles.monikaWillemsText}>
-                        {this.state.billingDetails}
-                      </Text>
+                      <View>
+                        <View style={styles.shippingAddressView}>
+                          <Text style={styles.heading}>Billing address:</Text>
+                        </View>
+                        <Text style={styles.monikaWillemsText}>
+                          {this.state.billingDetails}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                  
+
                   )}
-               
+
                 <Text>UPS Shipping - shipping will be added later</Text>
 
                 <View style={styles.promoAndCreditCardView}>
@@ -362,41 +449,41 @@ class Payment extends Component {
                 <View style={styles.cardSelectorView}>
                   <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(1)}>
                     <View style={styles.cardSelectorTouchView}>
-                     {this.state.paymentMode == 1 ? (
-                       <Icon
-                       size={20}
-                       name="checkcircle"
-                       type="antdesign"
-                       color="#5dd136"
-                     />
-                      ) : (
+                      {this.state.paymentMode == 1 ? (
                         <Icon
                           size={20}
                           name="checkcircle"
                           type="antdesign"
-                          color="#f6f6f6"
+                          color="#5dd136"
                         />
-                      )}
+                      ) : (
+                          <Icon
+                            size={20}
+                            name="checkcircle"
+                            type="antdesign"
+                            color="#f6f6f6"
+                          />
+                        )}
                       <Text style={styles.paymentSelectorText}>Credit Card</Text>
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(2)}>
                     <View style={styles.cardSelectorTouchView}>
-                    {this.state.paymentMode == 2 ? (
-                       <Icon
-                       size={20}
-                       name="checkcircle"
-                       type="antdesign"
-                       color="#5dd136"
-                     />
-                      ) : (
+                      {this.state.paymentMode == 2 ? (
                         <Icon
                           size={20}
                           name="checkcircle"
                           type="antdesign"
-                          color="#f6f6f6"
+                          color="#5dd136"
                         />
-                      )}
+                      ) : (
+                          <Icon
+                            size={20}
+                            name="checkcircle"
+                            type="antdesign"
+                            color="#f6f6f6"
+                          />
+                        )}
                       <FastImage
                         style={styles.imagePaypalLogo}
                         source={require('../static/paypalLogo.png')}
@@ -405,21 +492,21 @@ class Payment extends Component {
                   </TouchableOpacity>
                   <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(3)}>
                     <View style={styles.cardSelectorTouchView}>
-                    {this.state.paymentMode == 3 ? (
-                       <Icon
-                       size={20}
-                       name="checkcircle"
-                       type="antdesign"
-                       color="#5dd136"
-                     />
-                      ) : (
+                      {this.state.paymentMode == 3 ? (
                         <Icon
                           size={20}
                           name="checkcircle"
                           type="antdesign"
-                          color="#f6f6f6"
+                          color="#5dd136"
                         />
-                      )}
+                      ) : (
+                          <Icon
+                            size={20}
+                            name="checkcircle"
+                            type="antdesign"
+                            color="#f6f6f6"
+                          />
+                        )}
                       <Text style={styles.paymentSelectorText}>COD</Text>
                     </View>
                   </TouchableOpacity>
@@ -427,42 +514,42 @@ class Payment extends Component {
                 {this.state.paymentMode == 1 && (
                   <View>
                     <View style={styles.promoAndCreditCardView}>
-                  <Text style={styles.heading}>Credit card</Text>
-                  <Text style={styles.textButton}>Clear All</Text>
-                </View>
-                <TextInput
-                  style={[styles.textInput, styles.cardHolderTextInput]}
-                  placeholder="Card holder name"
-                />
-                <TextInput
-                  style={[styles.textInput, styles.cardNumTextInput]}
-                  placeholder="Card number"
-                  onChangeText={(text) => { this.setState({ cardNumber: text }) }}
-                />
-                <View style={styles.cardInfoView}>
-                  <TextInput
-                    style={[styles.textInput, styles.dateTextInput]}
-                    placeholder="mm"
-                    onChangeText={(text) => { this.setState({ expMonth: text }) }}
+                      <Text style={styles.heading}>Credit card</Text>
+                      <Text style={styles.textButton}>Clear All</Text>
+                    </View>
+                    <TextInput
+                      style={[styles.textInput, styles.cardHolderTextInput]}
+                      placeholder="Card holder name"
+                    />
+                    <TextInput
+                      style={[styles.textInput, styles.cardNumTextInput]}
+                      placeholder="Card number"
+                      onChangeText={(text) => { this.setState({ cardNumber: text }) }}
+                    />
+                    <View style={styles.cardInfoView}>
+                      <TextInput
+                        style={[styles.textInput, styles.dateTextInput]}
+                        placeholder="mm"
+                        onChangeText={(text) => { this.setState({ expMonth: text }) }}
 
-                  />
-                  <TextInput
-                    style={[styles.textInput, styles.dateTextInput]}
-                    placeholder="yyyy"
-                    onChangeText={(text) => { this.setState({ expYear: text }) }}
+                      />
+                      <TextInput
+                        style={[styles.textInput, styles.dateTextInput]}
+                        placeholder="yyyy"
+                        onChangeText={(text) => { this.setState({ expYear: text }) }}
 
-                  />
-                  <TextInput
-                    style={[styles.textInput, styles.cvvTextInput]}
-                    placeholder="CVV"
-                    onChangeText={(text) => { this.setState({ cardCode: text }) }}
-                  />
-                </View>
-                {/* <View style={styles.divider}></View> */}
+                      />
+                      <TextInput
+                        style={[styles.textInput, styles.cvvTextInput]}
+                        placeholder="CVV"
+                        onChangeText={(text) => { this.setState({ cardCode: text }) }}
+                      />
+                    </View>
+                    {/* <View style={styles.divider}></View> */}
 
                   </View>
                 )}
-                
+
               </View>
             </View>
             <View style={styles.commentView}>
@@ -473,7 +560,7 @@ class Payment extends Component {
                 placeholder="You can leave us a comment here"
               />
             </View>
-            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount}  />
+            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount} />
             <View style={[styles.buttonContainer, styles.orderButtonView]}>
               <TouchableOpacity
                 activeOpacity={0.5}
@@ -675,12 +762,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   orderTouch: {
-      width: '100%',
-      backgroundColor: '#2967ff',
-      borderRadius: 6,
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-      marginTop: 15,
+    width: '100%',
+    backgroundColor: '#2967ff',
+    borderRadius: 6,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    marginTop: 15,
   },
   orderTouchText: {
     fontFamily: 'Montserrat-SemiBold',
