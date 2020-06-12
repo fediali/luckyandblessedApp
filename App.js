@@ -38,6 +38,7 @@ class App extends Component {
 
   
   componentDidMount(){
+    this.checkPermission();
     this.createNotificationListeners(); //add this line
 
   }
@@ -46,6 +47,37 @@ class App extends Component {
     this.notificationOpenedListener();
   }
 
+
+  async checkPermission() {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+        this.getToken();
+    } else {
+        this.requestPermission();
+    }
+  }
+
+  async requestPermission() {
+    try {
+        await firebase.messaging().requestPermission();
+        // User has authorised
+        this.getToken();
+    } catch (error) {
+        // User has rejected permissions
+        console.log('permission rejected');
+    }
+  }
+
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
+        fcmToken = await firebase.messaging().getToken();
+        if (fcmToken) {
+            // user has a device token
+            await AsyncStorage.setItem('fcmToken', fcmToken);
+        }
+    }
+  }
  
   async createNotificationListeners() {
     const token = await firebase.messaging().getToken();
