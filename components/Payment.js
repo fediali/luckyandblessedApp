@@ -97,41 +97,6 @@ class Payment extends Component {
 
   getPaypalAuth = () => {
     let accessToken = null;
-    let user = null;
-    let paymentItems = []
-    //mapping lineItems(from params) onto below details object
-    for (item in this.props.route.params.paymentLineItems) {
-      /*
-      JSON to be mapped is: 
-      "items": [
-            {
-              "name": "Sleeveless Dress",
-              "unit_amount": {
-                "currency_code": "USD",
-                "value": "10"
-              },
-              "quantity": "6",
-              "category": "PHYSICAL_GOODS"
-            }
-
-          ]
-      */
-      let singleItem = {
-        name: item.product,
-        "unit_amount": {
-          currency_code: "USD",
-          value: item.unitPrice,
-        },
-        quantity: item.amount,
-        category: 'n/a' //FIXME: no category attribute found anywhere
-      }
-      paymentItems.push(singleItem);
-    }
-
-
-    RetrieveDataAsync(STORAGE_USER).then((user) => {
-      user = JSON.parse(user);
-    });
 
     var details = {
       'grant_type': 'client_credentials',
@@ -156,12 +121,30 @@ class Payment extends Component {
       .then(res => res.json())
       .then(response => {
         accessToken = response.access_token
+        console.log(accessToken)
         return accessToken
       })
       .catch(e => console.log(e))
   }
 
   handlePayPalTransaction = (user) => {
+    let paymentItems = []
+    //mapping lineItems(from params) onto below details object
+    let item = this.props.route.params.paymentLineItems;
+    for (let i=0;i<item.length;i++) {
+     console.log("******************** ",item[i])
+      let singleItem = {
+        name: item[i].product,
+        "unit_amount": {
+          currency_code: "USD",
+          value: item[i].unitPrice,
+        },
+        quantity: item[i].amount,
+        category: 'n/a' //FIXME: no category attribute found anywhere
+      }
+      paymentItems.push(singleItem);
+    }
+
 
     let data = {
       "intent": "AUTHORIZE",
