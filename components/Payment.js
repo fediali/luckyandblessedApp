@@ -21,6 +21,7 @@ import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import OrderFooter from '../reusableComponents/OrderFooter';
 import GetData from '../reusableComponents/API/GetData';
+import PostData from '../reusableComponents/API/PostData';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
@@ -94,10 +95,44 @@ class Payment extends Component {
     });
   }
 
+  getPaypalAuth = () => {
+      let accessToken = null;
+    var details = {
+        'grant_type': 'client_credentials',
+    };
+    
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+    
+    fetch('https://api.sandbox.paypal.com/v1/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Authorization':'Basic QVNZZ2toTTNRalN6OXN0UTBYV0pSbU1pTW5fUlljaVZ4UGxELXZSSWRRMHBoOTJDd3dnb0ZzMlV6LWI4STFMM0VQaGR1VV9vNjdRaWdiWVU6RVBTQllENHlleVYya0R2RmZqSGpPVUMta3JnLXZOY3hpcWoyOGVhUzVRWkhVbFRTbUwtQ3hqdmREX2pvN1ZmXzZocllqNVNrNURkTmowdlU=',
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+      body: formBody
+    })
+    .then (res => res.json())
+    .then(response => {
+        accessToken = response.access_token
+    })
+    .catch(e => console.log(e))
+  }
+
   handlePayPalTransaction =  (user) => {
-    console.log("Handling Paypal")
-    data
-    PostData('https://api.sandbox.paypal.com/v2/checkout/orders', )
+
+    
+    PostData('https://api.sandbox.paypal.com/v2/checkout/orders', user, this.getPaypalAuth) //To create Order
+    .then(res => res.json())
+    .then(response => {
+        console.log(response)
+    })
+    .catch(e => console.log(e))
 
   }
 

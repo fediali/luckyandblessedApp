@@ -1,11 +1,20 @@
-export default PostData = (url,jsonObj) => {
+export default PostData = (url,jsonObj, paypalOrder = null) => {
     // console.log(jsonObj)
     
     let h = new Headers();
-    h.append(
-        'Authorization',
-        'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
-    );
+    if (paypalOrder){
+        h.append(
+                    'Authorization',
+                    'Bearer ' + paypalOrder 
+                );
+    }
+    else {
+        h.append(
+            'Authorization',
+            'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
+        );
+    }
+    
     h.append('Accept', 'application/json');
     h.append('Content-Type', 'application/json')
     // const formData = new FormData();
