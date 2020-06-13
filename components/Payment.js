@@ -143,7 +143,7 @@ class Payment extends Component {
   };
 
   handlePayPalTransaction = (user) => {
-   
+   this.setState({showCircleLoader:true})
     let paymentItems = [];
     //mapping lineItems(from params) onto below payment items object
     let item = this.props.route.params.paymentLineItems;
