@@ -795,6 +795,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginLeft: 5,
   },
+
 });
 
 export default Payment;
