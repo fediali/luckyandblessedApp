@@ -22,18 +22,19 @@ import MainPageHistoryListItem from "../reusableComponents/MainPageHistoryListIt
 import MainPageTrendingListItem from "../reusableComponents/MainPageTrendingListItem"
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
-import {Image as FastImage} from 'react-native'
+import { Image as FastImage } from 'react-native'
 import ThemeContext from '../reusableComponents/ThemeContext'
 import Globals from "../Globals"
 
 const baseUrl = Globals.baseUrl;
 const SELECTED_CATEGORY_ALL = -1
-const STORAGE_PRODUCT_HISTORY_CATEGORY=Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
-const STORAGE_DEFAULTS=Globals.STORAGE_DEFAULTS
+const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const NEW_ARRIVAL_NAME = "New Arrivals"
 const TRENDING_NAME = "Trending"
 const HISTORY_NAME = "History"
 const HISTORY_CATEGORY_ID = -2
+const STORAGE_USER = Globals.STORAGE_USER;
 
 class MainPage extends Component {
     constructor(props) {
@@ -58,7 +59,7 @@ class MainPage extends Component {
 
         this.onComponentFocus = this.props.navigation.addListener('focus', () => {
             RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then(value => {
-                this.setState({history: JSON.parse(value)})
+                this.setState({ history: JSON.parse(value) })
             })
         })
 
@@ -86,21 +87,32 @@ class MainPage extends Component {
                                 defaults: responses[0].defaults,
                                 categoryList: responses[1].categories,
                             }, () => { this.mapTrendingList(this.state.trending, 3) })
-        
-        
-        
+
+
+
                             //Storing defaults obtained through API
-                            StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
-                            )
-                           
-        
+                            StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then()
+                            RetrieveDataAsync(STORAGE_USER).then((user) => {
+                                console.log("____________",JSON.parse(user).user_id)
+
+                            GetData(baseUrl + `api/carts/${JSON.parse(user).user_id}`)
+                                .then((res) => res.json())
+                                .then((responses) => {
+                                    if (responses.status == 404) {
+                                        Globals.cartCount=0
+                                    }else{
+                                        Globals.cartCount=Number(responses.cart_products)
+                                    }
+                                    this.setState({isReady: true})
+                                })
+                            })
 
                         })
                     }).catch(ex => { console.log("Nested Promise", ex) })
 
 
                     //Adding "All" to categories response
-                   
+
                 }).catch(ex => { console.log("Inner Promise", ex) })
             }).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.props.navigation.navigate("SignIn") })
 
@@ -108,7 +120,7 @@ class MainPage extends Component {
     }
     onCategorySelect = (cid, cname) => {
         this.setState({ isReady: false })
-        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`).then(res =>res.json()).then(
+        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`).then(res => res.json()).then(
             (responses) => {
 
                 if (responses.categories.length > 0) {
@@ -127,24 +139,24 @@ class MainPage extends Component {
 
     }
 
-    onShowAllPressed(cid, cname){
+    onShowAllPressed(cid, cname) {
         this.props.onShowAllPressed(cid, cname);
     }
 
-    enableNewsLetter=(flag)=>()=>{
+    enableNewsLetter = (flag) => () => {
         this.setState({ showNewsletter: flag })
     }
 
-    navigateToCategoryScreen=(cid, cname)=>()=>{
+    navigateToCategoryScreen = (cid, cname) => () => {
         this.props.navigation.navigate("CategoriesProduct", { cid, cname })
     }
 
-    navigateToHistoryCategoryScreen=(cid, cname, items)=>()=>{
+    navigateToHistoryCategoryScreen = (cid, cname, items) => () => {
         this.props.navigation.navigate("CategoriesProduct", { cid, cname, items })
     }
 
-    navigateToProductScreen=(pid, cname)=>()=>{
-        this.props.navigation.navigate("ProductPage", {pid, cname})
+    navigateToProductScreen = (pid, cname) => () => {
+        this.props.navigation.navigate("ProductPage", { pid, cname })
     }
 
     mapTrendingList(tList, sliceValue) {
@@ -153,7 +165,7 @@ class MainPage extends Component {
         for (var i = 0; i < tList.length / sliceValue; i++) {
             tempList.push(tList.slice(i * sliceValue, i * sliceValue + sliceValue));
         }
-        this.setState({ trending: tempList, isReady: true, })
+        this.setState({ trending: tempList, })
     }
 
     render() {
@@ -204,14 +216,14 @@ class MainPage extends Component {
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>New Arrivals</Text>
                             <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
                                 onPress={this.navigateToCategoryScreen([this.state.newArrivals_cid], NEW_ARRIVAL_NAME)} >
-                            
+
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={innerStyles.gridView}>
                             <View style={innerStyles.gridCell}>
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
-                                    onPress={this.navigateToProductScreen([this.state.newArrivals[0].product_id],NEW_ARRIVAL_NAME)}
+                                    onPress={this.navigateToProductScreen([this.state.newArrivals[0].product_id], NEW_ARRIVAL_NAME)}
                                 >
                                     <FastImage
                                         style={innerStyles.gridImage}
@@ -224,8 +236,8 @@ class MainPage extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
-                                    onPress={this.navigateToProductScreen([this.state.newArrivals[1].product_id],NEW_ARRIVAL_NAME)}
-                                    >
+                                    onPress={this.navigateToProductScreen([this.state.newArrivals[1].product_id], NEW_ARRIVAL_NAME)}
+                                >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         source={{ uri: this.state.newArrivals[1].main_pair.detailed.image_path }}
@@ -237,8 +249,8 @@ class MainPage extends Component {
                             </View>
                             <View style={innerStyles.gridCell}>
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
-                                    onPress={this.navigateToProductScreen([this.state.newArrivals[2].product_id],NEW_ARRIVAL_NAME)}
-                                    >
+                                    onPress={this.navigateToProductScreen([this.state.newArrivals[2].product_id], NEW_ARRIVAL_NAME)}
+                                >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         source={{ uri: this.state.newArrivals[2].main_pair.detailed.image_path }}
@@ -249,8 +261,8 @@ class MainPage extends Component {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
-                                    onPress={this.navigateToProductScreen([this.state.newArrivals[3].product_id],NEW_ARRIVAL_NAME)}
-                                    >
+                                    onPress={this.navigateToProductScreen([this.state.newArrivals[3].product_id], NEW_ARRIVAL_NAME)}
+                                >
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         source={{ uri: this.state.newArrivals[3].main_pair.detailed.image_path }}
@@ -266,11 +278,11 @@ class MainPage extends Component {
                         {/*trending header*/}
                         <View style={innerStyles.headerViewTrending}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>What’s trending</Text>
-                            <TouchableOpacity 
-                                onPress={this.navigateToCategoryScreen ([this.state.trending_cid], TRENDING_NAME )} >
+                            <TouchableOpacity
+                                onPress={this.navigateToCategoryScreen([this.state.trending_cid], TRENDING_NAME)} >
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
-                            
+
                         </View>
 
                         <FlatList
@@ -280,7 +292,7 @@ class MainPage extends Component {
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => {
                                 return (
-                                    <MainPageTrendingListItem listItem={item} 
+                                    <MainPageTrendingListItem listItem={item}
                                         navigation={this.props.navigation}
                                     />
                                 )
@@ -292,7 +304,7 @@ class MainPage extends Component {
                         <View style={innerStyles.headerView}>
                             <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>History</Text>
                             <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
-                                onPress={ this.navigateToHistoryCategoryScreen(HISTORY_CATEGORY_ID, HISTORY_NAME,this.state.history )} >
+                                onPress={this.navigateToHistoryCategoryScreen(HISTORY_CATEGORY_ID, HISTORY_NAME, this.state.history)} >
                                 <Text style={[innerStyles.showAllText]}>Show All</Text>
                             </TouchableOpacity>
                         </View>
@@ -301,23 +313,23 @@ class MainPage extends Component {
                             data={this.state.history}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => ( 
-                                    <MainPageHistoryListItem
+                            renderItem={({ item, index }) => (
+                                <MainPageHistoryListItem
                                     pid={item.pid[0]}
                                     cname={item.cname}
                                     imageUrl={item.mainImage}
                                     name={item.productName}
-                                    type= { item.brand ? item.brand : this.state.defaults.brand}
+                                    type={item.brand ? item.brand : this.state.defaults.brand}
                                     price={Number(item.price).toFixed(2)}
                                     navigation={this.props.navigation}
-                                />  
+                                />
                             )}
                         />
                         {this.state.showNewsletter == true ?
                             <View style={innerStyles.newsLetterMainView}>
                                 <View style={innerStyles.newsLetterInnerView}>
                                     <Text style={[styles.buttonText, innerStyles.newsLetterText]}>Newsletter</Text>
-                                    <TouchableOpacity onPress={this.enableNewsLetter(false) }>
+                                    <TouchableOpacity onPress={this.enableNewsLetter(false)}>
                                         <FastImage
                                             style={innerStyles.newsLetterCloseButtonImage}
                                             resizeMode='contain'
@@ -351,7 +363,7 @@ class MainPage extends Component {
                     </View>
 
                 </ScrollView>
-                <Footer selected="Home" navigation={this.props.navigation} />
+                <Footer Key={Math.random()} selected="Home" navigation={this.props.navigation} />
             </SafeAreaView>
         )
     }

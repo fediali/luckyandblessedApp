@@ -1,14 +1,16 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Image,
     StyleSheet,
     TouchableOpacity,
-    Platform
+    Platform,
+    ImageBackground,
+    Text
 } from 'react-native';
 import { Icon } from 'react-native-elements'
-
-class Footer extends PureComponent {
+import Globals from "../Globals"
+class Footer extends Component {
     /* How to use Custom footer
     
     Name of options corresponding to Icons:
@@ -20,7 +22,7 @@ class Footer extends PureComponent {
     constructor(props) {
         super(props)
         if (this.props.selected != null) {
-            this.state={
+            this.state = {
                 selected: this.props.selected
             }
         } else {
@@ -30,17 +32,17 @@ class Footer extends PureComponent {
         }
     }
 
-    navigateToScreen=(screenName)=>{
+    navigateToScreen = (screenName) => {
         this.props.navigation.navigate(screenName)
     }
-    
+
 
     render() {
         return (
             <View style={innerStyles.mainViewStyle}>
                 <View style={innerStyles.subViewStyle}>
 
-                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("MainPage")}}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("MainPage") }}>
                         {this.state.selected == "Home" ?
                             <Icon
                                 size={32}
@@ -56,20 +58,32 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("ShoppingCart") }}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("ShoppingCart") }}>
                         {this.state.selected == "Shop" ?
-                            <Image style={innerStyles.imageStyle} source={require('../static/cartSelected.png')}></Image>
+                            <ImageBackground style={innerStyles.imageStyle} source={require('../static/cartSelected.png')}>
+                                <View style={{ height: 16, width: 28, backgroundColor: "#000", borderRadius: 8, marginLeft: 10, marginTop: -5, alignItems: "center", justifyContent: "center" }}>
+                                    <Text style={{ fontFamily: "Avenir-Medium", color: "#fff", fontSize: 12, lineHeight: 16 }}>
+                                    {Globals.cartCount}
+                                </Text>
+                                </View>
+                            </ImageBackground>
                             :
-                            <Image style={innerStyles.imageStyle} source={require('../static/cart.png')}></Image>
+                            <ImageBackground style={innerStyles.imageStyle} source={require('../static/cart.png')}>
+                                <View style={{ height: 15, width: 25, backgroundColor: "#000", borderRadius: 8, marginLeft: 10, marginTop: -5, alignItems: "center", justifyContent: "center" }}>
+                                    <Text style={{ fontFamily: "Avenir-Medium", color: "#fff", fontSize: 12, lineHeight: 16 }}>
+                                        {Globals.cartCount}
+                                </Text>
+                                </View>
+                            </ImageBackground>
                         }
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("TrackOrders")}}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("TrackOrders") }}>
                         {this.state.selected == "Van" ?
                             <Icon
                                 size={35}
                                 name='truck'
-                                type='material-community' 
+                                type='material-community'
                                 color="#2967ff"
                             />
                             :
@@ -80,7 +94,7 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("UserProfile") }}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("UserProfile") }}>
                         {this.state.selected == "Person" ?
                             <Icon
                                 size={35}
@@ -96,7 +110,7 @@ class Footer extends PureComponent {
                                 color="#d0d0d0"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => {this.navigateToScreen("CompanyProfile") }}>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("CompanyProfile") }}>
                         {this.state.selected == "Info" ?
                             <Icon
                                 size={35}
@@ -120,25 +134,25 @@ class Footer extends PureComponent {
 }
 
 const innerStyles = StyleSheet.create({
-    mainViewStyle:{
-        backgroundColor:"#fff",
+    mainViewStyle: {
+        backgroundColor: "#fff",
         position: "absolute",
         bottom: 0,
         height: 50,
         width: "100%",
-        marginBottom: (Platform.OS === 'ios') ? 25:0 
+        marginBottom: (Platform.OS === 'ios') ? 25 : 0
     },
-    subViewStyle:{
+    subViewStyle: {
         flex: 1,
         justifyContent: "space-around",
         flexDirection: "row",
         alignItems: "center"
     },
-    touchPad:{
-        paddingHorizontal: 8 
+    touchPad: {
+        paddingHorizontal: 8
     },
-    imageStyle:{
-        width:30,height:30
+    imageStyle: {
+        width: 30, height: 30
     }
 
 })

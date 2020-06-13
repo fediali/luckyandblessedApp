@@ -257,6 +257,9 @@ export default class ProductPage extends Component {
         PostData(baseUrl + `api/addcart`, order)
           .then((res) => res.json())
           .then((response) => {
+            console.log("}}}}}}}}}}}",this.state.selectedQuantity)
+            Globals.cartCount+=this.state.selectedQuantity
+            this.setState(this.state) //To trigger rerender
             Toast.show('Product added to cart');
           })
           .catch((err) => alert(err));
@@ -471,7 +474,7 @@ export default class ProductPage extends Component {
             </View>
           </ScrollView>
         )}
-        <Footer navigation={this.props.navigation} />
+        <Footer Key={Math.random()}  navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }

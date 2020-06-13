@@ -8,6 +8,7 @@ module.exports = {
   STORAGE_USER: 'user',
   STORAGE_DEFAULTS: 'defaults',
   STORAGE_AUTH: 'auth',
+  cartCount:0,
   usStates: [
     'AL',
     'AK',
