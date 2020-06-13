@@ -523,7 +523,7 @@ class ShoppingCart extends Component {
   };
   //Receive and forward lineitems to payment screen.. from delivery to payment.
   navigateToNextScreen = () => {
-    if (this.stata.finalCost < 100) Toast.show('Minimum order in $100');
+    if (this.state.finalCost < 100) Toast.show('Minimum order in $100');
     else {
       if (this.state.s_userAddress || this.state.s_userAddress) {
         this.props.navigation.navigate('Payment', {

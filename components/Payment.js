@@ -370,8 +370,13 @@ class Payment extends Component {
     }
     return (
       <SafeAreaView style={styles.mainContainer}>
+        {this.state.paypalLink != null ? (
+          <WebView style={{flex: 1}} source={{uri: this.state.paypalLink}} />
+        ) : (
+          <Text>NO link</Text>
+        )}
+
         <Header navigation={this.props.navigation} />
-        {(this.state.paypalLink) != null ? <WebView style={{flex: 1}} source={{ uri: this.state.paypalLink }} /> : <Text>NO link</Text>}
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
