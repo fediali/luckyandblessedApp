@@ -145,7 +145,7 @@ class Payment extends Component {
   handlePayPalTransaction = (user) => {
    
     let paymentItems = [];
-    //mapping lineItems(from params) onto below details object
+    //mapping lineItems(from params) onto below payment items object
     let item = this.props.route.params.paymentLineItems;
     for (let i = 0; i < item.length; i++) {
       console.log('******************** ', item[i]);
