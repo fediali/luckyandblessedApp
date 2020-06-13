@@ -14,7 +14,6 @@ export default class ConfirmationSuccess extends Component {
               style={styles.successText}>
               Success
             </Text>
-            <Icon size={30} name="cross" type="entypo" color="#2d2d2f" />
           </View>
         </View>
         <View style={styles.subContainer}>

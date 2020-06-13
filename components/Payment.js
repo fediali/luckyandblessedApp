@@ -30,7 +30,7 @@ const CODPAYMENTID = 17;
 const CREDITCARTPAYMENTID = 34;
 const PAYPALPAYMENTID = 20;
 let deliveryDetails = null;
-
+let gUser = null;
 class Payment extends Component {
   constructor(props) {
     super(props);
@@ -105,12 +105,12 @@ class Payment extends Component {
 
   performTransaction = () => {
     RetrieveDataAsync(STORAGE_USER).then((user) => {
-      let gUser = JSON.parse(user);
+      gUser = JSON.parse(user);
 
-      if (this.state.paymentMode == 1) this.postCreditCardTransaction(gUser);
       //Handle Credit Cart payment
-      else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
+      if (this.state.paymentMode == 1) this.postCreditCardTransaction(gUser);
       //PayPal
+      else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
       else if (this.state.paymentMode == 3)
         this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()); //Directly place order.
     });
@@ -143,7 +143,7 @@ class Payment extends Component {
   };
 
   handlePayPalTransaction = (user) => {
-    this.setState({ showCircleLoader: true })
+   
     let paymentItems = [];
     //mapping lineItems(from params) onto below details object
     let item = this.props.route.params.paymentLineItems;
@@ -360,10 +360,13 @@ class Payment extends Component {
       this.setState(
         { paypalLink: null }
         , () => {
-          Toast.show('Your payment was Sucessfull, Order has been placed');
+          this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson()); 
         })
     } else if (data.title == "Cancel") {
-      Toast.show('Your payment was not Sucessfull');
+      {
+        this.setState({paypalLink: null})
+        Toast.show('Your payment was not Sucessful');
+      }
     }
   }
   hideSpinner=()=>{
