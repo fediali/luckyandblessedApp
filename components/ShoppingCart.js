@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   InteractionManager,
   ToastAndroid,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import Shimmer from 'react-native-shimmer';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -23,13 +23,13 @@ import Footer from '../reusableComponents/Footer';
 import styles from './Styles/Style';
 import OrderFooter from '../reusableComponents/OrderFooter';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
-import PutData from '../reusableComponents/API/PutData'
+import PutData from '../reusableComponents/API/PutData';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
-let gUser = null
+let gUser = null;
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
   'Warning: componentWillMount has been renamed',
@@ -48,16 +48,16 @@ class FlatListItem extends Component {
 
   onDeleteClose = () => {
     if (this.state.activeRowKey != null) {
-      this.setState({ activeRowKey: null });
+      this.setState({activeRowKey: null});
     }
   };
   onDeleteOpen = () => {
-    this.setState({ activeRowKey: this.props.item.itemNum });
+    this.setState({activeRowKey: this.props.item.itemNum});
   };
 
   onDeletePress = () => {
     const deletingRow = this.state.activeRowKey;
-    console.log(deletingRow)
+    console.log(deletingRow);
 
     Alert.alert(
       'Alert',
@@ -74,24 +74,22 @@ class FlatListItem extends Component {
             this.props.parentFlatList.deleteItem(this.props.index);
             // this.state.itemList.splice(this.props.index, 1);
             let deleteData = {
-              "user_id": gUser.user_id,
-              "cart_id": deletingRow //cart_id is the item_id returned through GET API
-            }
+              user_id: gUser.user_id,
+              cart_id: deletingRow, //cart_id is the item_id returned through GET API
+            };
 
             PostData(baseUrl + `api/removecart`, deleteData)
-              .then(res => res.json())
-              .then(response => {
+              .then((res) => res.json())
+              .then((response) => {
                 console.log(response);
-                Toast.show(response.message)
+                Toast.show(response.message);
                 //Refresh FlatList !
                 this.props.parentFlatList.refreshFlatList(deletingRow); //FIXME: Refresh Flatlist Header
-              })
-
-
+              });
           },
         },
       ],
-      { cancelable: true },
+      {cancelable: true},
     );
   };
 
@@ -102,26 +100,26 @@ class FlatListItem extends Component {
   };
 
   onAvailableSizesModalSelect = (index, option, item) => {
-    console.log("Index", option)
-    console.log("Item", item)
+    console.log('Index', option);
+    console.log('Item', item);
 
     var data = {
       products: {
         [item.product_id]: {
-          'product_id': item.product_id,
-          'amount': option
-        }
+          product_id: item.product_id,
+          amount: option,
+        },
       },
-      'user_data': {
-        'user_id': gUser.user_id
-      }
-    }
+      user_data: {
+        user_id: gUser.user_id,
+      },
+    };
     PutData(baseUrl + `api/addcart`, data)
-      .then(res => res.json())
-      .then(response => {
-        console.log(response)
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
         Toast.show(`${item.name} quantity updated`);
-      })
+      });
     // this.setState({ stateText: usStates[index] , s_country: usStates[index], b_country: usStates[index]});
   };
 
@@ -156,7 +154,7 @@ class FlatListItem extends Component {
               <Image
                 style={[innerStyles.itemImage]}
                 resizeMode="contain"
-                source={{ uri: this.props.item.path }}
+                source={{uri: this.props.item.path}}
               />
               <View style={innerStyles.listTextsContainerView}>
                 <View style={innerStyles.listRowView}>
@@ -214,7 +212,11 @@ class FlatListItem extends Component {
                     dropdownStyle={innerStyles.modalDropdownStyle}
                     textStyle={innerStyles.modalTextStyle}
                     onSelect={(index, option = this.props.item) => {
-                      this.onAvailableSizesModalSelect(index, option, this.props.item);
+                      this.onAvailableSizesModalSelect(
+                        index,
+                        option,
+                        this.props.item,
+                      );
                     }}
                     renderRow={(option, index, isSelected) => {
                       return (
@@ -268,7 +270,7 @@ class ShoppingCart extends Component {
       totalCartProducts: 0,
       s_userAddress: '',
       b_userAddress: '',
-      b_userAddress_1: '',//storing it seperate, as its needed by payment screen
+      b_userAddress_1: '', //storing it seperate, as its needed by payment screen
       b_userAddress_2: '',
       b_zipCode: '',
       b_country: '',
@@ -283,7 +285,7 @@ class ShoppingCart extends Component {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({ isReady: false });
+      this.setState({isReady: false});
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);
@@ -343,11 +345,10 @@ class ShoppingCart extends Component {
         let lineItems = [];
         let orderItems = [];
 
-
         if (responses.status == 404) {
-          console.log("No product found")
+          console.log('No product found');
           this.setState({
-            isReady: true
+            isReady: true,
           });
         } else {
           var promises = [];
@@ -374,7 +375,9 @@ class ShoppingCart extends Component {
                       parseFloat(responses.products[i].amount) *
                       parseFloat(responses.products[i].price)
                     ).toFixed(2),
-                    unitPrice: parseFloat(responses.products[i].price).toFixed(2),
+                    unitPrice: parseFloat(responses.products[i].price).toFixed(
+                      2,
+                    ),
                     sizes: 'Not available',
                     selectedColor: 'Turquoise', //
                     availableColors: [
@@ -401,7 +404,9 @@ class ShoppingCart extends Component {
                     name: responses.products[i].product,
                     description: 'n/a',
                     quantity: responses.products[i].amount,
-                    unitPrice: parseFloat(responses.products[i].price).toFixed(2),
+                    unitPrice: parseFloat(responses.products[i].price).toFixed(
+                      2,
+                    ),
                   };
 
                   let singleOrderItem = {
@@ -412,10 +417,7 @@ class ShoppingCart extends Component {
                   lineItems[i] = singleLineITem;
                   cartData[i] = singleProduct;
                   orderItems[i] = singleOrderItem;
-
-
                 }
-
 
                 this.setState({
                   totalCost: responses.total,
@@ -424,9 +426,11 @@ class ShoppingCart extends Component {
                   itemList: cartData,
                   orderItems: orderItems,
                   s_userAddress:
-                    responses.user_data.s_address + responses.user_data.s_address_2,
+                    responses.user_data.s_address +
+                    responses.user_data.s_address_2,
                   b_userAddress:
-                    responses.user_data.b_address + responses.user_data.b_address_2,
+                    responses.user_data.b_address +
+                    responses.user_data.b_address_2,
                   b_userAddress_1: responses.user_data.b_address,
                   b_userAddress_2: responses.user_data.b_address_2,
                   b_zipCode: responses.user_data.b_zipcode,
@@ -435,14 +439,11 @@ class ShoppingCart extends Component {
                   paymentLineItems: lineItems,
                   isReady: true,
                 });
-
               })
               .catch((ex) =>
                 console.log('Get Specific Product Exception ' + ex),
               );
           });
-
-
         }
       });
   };
@@ -479,7 +480,7 @@ class ShoppingCart extends Component {
               style={[styles.input]}
               placeholder="Gift Or Promo code"
               onChangeText={(text) => {
-                this.setState({ promocode: text });
+                this.setState({promocode: text});
               }}
             />
             <TouchableOpacity
@@ -522,34 +523,37 @@ class ShoppingCart extends Component {
   };
   //Receive and forward lineitems to payment screen.. from delivery to payment.
   navigateToNextScreen = () => {
-    if (this.state.s_userAddress || this.state.s_userAddress) {
-      this.props.navigation.navigate('Payment', {
-        //sending props to delivery screen to reuse values
-        totalCost: this.state.totalCost,
-        finalCost: this.state.finalCost,
-        discount: this.state.discount,
-        paymentLineItems: this.state.paymentLineItems,
-        orderItems: this.state.orderItems,
-        profile_id: this.state.profile_id,
-        b_userAddress_1: this.state.b_userAddress_1,
-        b_userAddress_2: this.state.b_userAddress_2,
-        b_zipCode: this.state.b_zipCode,
-        b_country: this.state.b_country,
-      });
-    } else {
-      this.props.navigation.navigate('Delivery', {
-        //sending props to delivery screen to reuse values
-        totalCost: this.state.totalCost,
-        finalCost: this.state.finalCost,
-        discount: this.state.discount,
-        paymentLineItems: this.state.paymentLineItems,
-        orderItems: this.state.orderItems,
-        profile_id: this.state.profile_id,
-        b_userAddress_1: this.state.b_userAddress_1,
-        b_userAddress_2: this.state.b_userAddress_2,
-        b_zipCode: this.state.b_zipCode,
-        b_country: this.state.b_country,
-      });
+    if (this.state.finalCost < 100) Toast.show('Minimum order in $100');
+    else {
+      if (this.state.s_userAddress || this.state.s_userAddress) {
+        this.props.navigation.navigate('Payment', {
+          //sending props to delivery screen to reuse values
+          totalCost: this.state.totalCost,
+          finalCost: this.state.finalCost,
+          discount: this.state.discount,
+          paymentLineItems: this.state.paymentLineItems,
+          orderItems: this.state.orderItems,
+          profile_id: this.state.profile_id,
+          b_userAddress_1: this.state.b_userAddress_1,
+          b_userAddress_2: this.state.b_userAddress_2,
+          b_zipCode: this.state.b_zipCode,
+          b_country: this.state.b_country,
+        });
+      } else {
+        this.props.navigation.navigate('Delivery', {
+          //sending props to delivery screen to reuse values
+          totalCost: this.state.totalCost,
+          finalCost: this.state.finalCost,
+          discount: this.state.discount,
+          paymentLineItems: this.state.paymentLineItems,
+          orderItems: this.state.orderItems,
+          profile_id: this.state.profile_id,
+          b_userAddress_1: this.state.b_userAddress_1,
+          b_userAddress_2: this.state.b_userAddress_2,
+          b_zipCode: this.state.b_zipCode,
+          b_country: this.state.b_country,
+        });
+      }
     }
   };
 
@@ -574,24 +578,24 @@ class ShoppingCart extends Component {
         {this.state.showZeroProductScreen ? (
           <ZeroDataScreen />
         ) : (
-            <View style={styles.parentContainer}>
-              <FlatList
-                keyExtractor={(item) => item.itemNum.toString()}
-                data={this.state.itemList}
-                numColumns={1}
-                renderItem={({ item, index }) => {
-                  return (
-                    <FlatListItem
-                      item={item}
-                      index={index}
-                      parentFlatList={this}></FlatListItem>
-                  );
-                }}
-                ListHeaderComponent={this.renderFlatListHeader}
-                ListFooterComponent={this.renderFlatListFooter}
-              />
-            </View>
-          )}
+          <View style={styles.parentContainer}>
+            <FlatList
+              keyExtractor={(item) => item.itemNum.toString()}
+              data={this.state.itemList}
+              numColumns={1}
+              renderItem={({item, index}) => {
+                return (
+                  <FlatListItem
+                    item={item}
+                    index={index}
+                    parentFlatList={this}></FlatListItem>
+                );
+              }}
+              ListHeaderComponent={this.renderFlatListHeader}
+              ListFooterComponent={this.renderFlatListFooter}
+            />
+          </View>
+        )}
         <Footer selected="Shop" navigation={this.props.navigation} />
       </SafeAreaView>
     );
@@ -827,7 +831,7 @@ const innerStyles = StyleSheet.create({
     lineHeight: 30,
     textAlign: 'right',
   },
-  shippingText: { fontFamily: 'Avenir-Medium', fontSize: 16 },
+  shippingText: {fontFamily: 'Avenir-Medium', fontSize: 16},
   orderGiftText: {
     lineHeight: 30,
   },

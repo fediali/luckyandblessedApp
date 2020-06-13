@@ -272,7 +272,7 @@ PODS:
   - react-native-simple-toast (1.1.2):
     - React
     - Toast (~> 4.0.0)
-  - react-native-webview (9.2.1):
+  - react-native-webview (9.4.0):
     - React
   - React-RCTActionSheet (0.62.0):
     - React-Core/RCTActionSheetHeaders (= 0.62.0)
@@ -562,7 +562,7 @@ SPEC CHECKSUMS:
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
   react-native-signature-capture: 6dae6c8c9f085536d4ba305e15c01f0a3a49373e
   react-native-simple-toast: a3a8e9033a549c11741debe875e54698cc4c0dd7
-  react-native-webview: ac2927a8a5e48fabb738b393b289bd996e14ed32
+  react-native-webview: 0e2881d2e3e72ad52a82445c1a116c43205fd471
   React-RCTActionSheet: 674afbc8b9c76e0a83520e0a51da29a70802c03f
   React-RCTAnimation: f5f24330d09ee677fb49e0782f8321868f4df431
   React-RCTBlob: b773ce6138ab0d172ebd8a455fd4efd200a92549

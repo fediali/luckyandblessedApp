@@ -23,7 +23,7 @@ class SignIn extends Component {
             password: "",
             emailError: "",
             passwordError: "",
-            requested:false
+            requested: false
         }
 
     }
@@ -41,8 +41,8 @@ class SignIn extends Component {
     signInClick = () => {
         if (this.isValid()) {
             var promises = []
-            this.setState({requested:true})
-            promises.push(PostData(baseUrl + 'api/usertoken', {email: this.state.email, password: this.state.password}))
+            this.setState({ requested: true })
+            promises.push(PostData(baseUrl + 'api/usertoken', { email: this.state.email, password: this.state.password }))
             promises.push(GetData(baseUrl + `api/users?email=${this.state.email}`))
             Promise.all(promises).then((promiseResponses) => {
                 Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
@@ -51,21 +51,21 @@ class SignIn extends Component {
                     if (responses[0].token) {
                         Toast.show('Login Successful');
                         var fullName = responses[1].users[0].firstname + " " + responses[1].users[0].lastname;
-                        var user={
+                        var user = {
                             user_id: responses[1].users[0].user_id,
                             name: fullName,
                             email: this.state.email
                         }
-                        
+
                         this._storeData(user)
 
                         this.context.setAuthenticated(fullName)
-                        this.setState({requested:false})
+                        this.setState({ requested: false })
 
                     }
                     else {
                         Toast.show('Username or password incorrect', Toast.LONG);
-                        this.setState({requested:false})
+                        this.setState({ requested: false })
                     }
 
                 }).catch(ex => { console.log("Inner Promise", ex); alert(ex); })
@@ -103,17 +103,34 @@ class SignIn extends Component {
         )
     }
 
+    callForgetPasswordApi = () => {
+        if (this.state.email) {
+            Toast.show("Processing request..",Toast.LONG)
+            data = {
+                email: this.state.email
+            }
+            PostData(baseUrl + `api/resetpasswordnew`, data)
+                .then((res) => res.text())
+                .then((response) => {
+                    console.log(response);
+                    Toast.show("Check you email inbox to set new password.")
+                });
+        }else{
+            Toast.show("Input your email in email box.");
+        }
+    }
+
     render() {
 
         return (
             <SafeAreaView style={styles.mainContainer}>
-            
+
                 <View style={styles.subContainer}>
                     <Image style={{
                         width: "53%",
                         height: "35%",
-                        marginBottom:20
-                    
+                        marginBottom: 20
+
                     }} resizeMode="contain" source={require("../static/logo-signIn.png")} />
                     <View style={styles.emailInputView}>
                         <TextInput style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => { this.setState({ email: text }) }} />
@@ -132,12 +149,14 @@ class SignIn extends Component {
                             <Text style={styles.buttonText}>Sign in</Text>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => { this.callForgetPasswordApi() }}
+                    >
                         <Text style={styles.forgotPassword}>Forgot Password?</Text>
                     </TouchableOpacity>
                     {
-                        this.state.requested?<ActivityIndicator style={{marginTop:30}}size="large" color="#2967ff"/>
-                        :null
+                        this.state.requested ? <ActivityIndicator style={{ marginTop: 30 }} size="large" color="#2967ff" />
+                            : null
                     }
                 </View>
 
@@ -146,8 +165,8 @@ class SignIn extends Component {
     }
 }
 const styles = StyleSheet.create({
-    errorTextMainView:{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 15 },
-    errorTextText:{ paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
+    errorTextMainView: { width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 15 },
+    errorTextText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
     mainContainer: {
         flex: 1,
         backgroundColor: "#ffffff"

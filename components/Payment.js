@@ -9,7 +9,7 @@ import {
   Dimensions,
   SafeAreaView,
   InteractionManager,
-
+  ActivityIndicator
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -22,6 +22,7 @@ import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAs
 import OrderFooter from '../reusableComponents/OrderFooter';
 import GetData from '../reusableComponents/API/GetData';
 import PostData from '../reusableComponents/API/PostData';
+import { WebView } from 'react-native-webview';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
@@ -29,19 +30,21 @@ const CODPAYMENTID = 17;
 const CREDITCARTPAYMENTID = 34;
 const PAYPALPAYMENTID = 20;
 let deliveryDetails = null;
-
+let gUser = null;
 class Payment extends Component {
   constructor(props) {
     super(props);
     //PaymentMode => 1 = CreditCard, 2 = paypal, 3 = COD
     this.state = {
       isReady: false,
-      cardNumber: '5424000000000015',//TODO: for testing purpose, remove it when deploy
+      cardNumber: '5424000000000015', //TODO: for testing purpose, remove it when deploy
       expMonth: '12',
       expYear: '2020',
       cardCode: '999',
       profile_id: this.props.route.params.profile_id,
       paymentMode: 1,
+      paypalLink: null,
+      showCircleLoader: false
     };
   }
 
@@ -49,306 +52,332 @@ class Payment extends Component {
     InteractionManager.runAfterInteractions(() => {
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         user = JSON.parse(user);
-        this.setState({ email: user.email })
+        this.setState({ email: user.email });
 
-        GetData(baseUrl + `api/userprofilesnew/${user.user_id}&profile_id=${this.state.profile_id}`) //TODO: Get user details
-          .then(res => res.json())
-          .then(response => {
+        GetData(
+          baseUrl +
+          `api/userprofilesnew/${user.user_id}&profile_id=${this.state.profile_id}`,
+        ) //TODO: Get user details
+          .then((res) => res.json())
+          .then((response) => {
             deliveryDetails = response[0];
             this.setState({
               isReady: true,
               dDetails: deliveryDetails,
               shippingDetails:
-                deliveryDetails.s_firstname + ' ' + deliveryDetails.s_lastname +
+                deliveryDetails.s_firstname +
+                ' ' +
+                deliveryDetails.s_lastname +
                 ', ' +
-                deliveryDetails.s_address + ' ' + deliveryDetails.s_address_2 +
+                deliveryDetails.s_address +
+                ' ' +
+                deliveryDetails.s_address_2 +
                 ', ' +
                 deliveryDetails.s_city +
                 ', ' +
                 deliveryDetails.s_state +
                 ' ' +
-                deliveryDetails.s_zipcode + ', ' + deliveryDetails.s_country,
-              billingDetails:
-                deliveryDetails.b_firstname + ' ' + deliveryDetails.b_lastname +
+                deliveryDetails.s_zipcode +
                 ', ' +
-                deliveryDetails.b_address + ' ' + deliveryDetails.b_address_2 +
+                deliveryDetails.s_country,
+              billingDetails:
+                deliveryDetails.b_firstname +
+                ' ' +
+                deliveryDetails.b_lastname +
+                ', ' +
+                deliveryDetails.b_address +
+                ' ' +
+                deliveryDetails.b_address_2 +
                 ', ' +
                 deliveryDetails.b_city +
                 ', ' +
                 deliveryDetails.b_state +
                 ' ' +
-                deliveryDetails.b_zipcode + ', ' + deliveryDetails.b_country,
+                deliveryDetails.b_zipcode +
+                ', ' +
+                deliveryDetails.b_country,
               sameShipping: deliveryDetails.is_same_shipping,
             });
-          })
+          });
       });
     });
   }
 
   performTransaction = () => {
     RetrieveDataAsync(STORAGE_USER).then((user) => {
-      let gUser = JSON.parse(user);
+      gUser = JSON.parse(user);
 
-      if (this.state.paymentMode == 1) this.postCreditCardTransaction(gUser); //Handle Credit Cart payment
-      else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser) //PayPal
-      else if (this.state.paymentMode == 3) this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()) //Directly place order. 
+      //Handle Credit Cart payment
+      if (this.state.paymentMode == 1) this.postCreditCardTransaction(gUser);
+      //PayPal
+      else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
+      else if (this.state.paymentMode == 3)
+        this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()); //Directly place order.
     });
-  }
+  };
 
   getPaypalAuth = () => {
-    let accessToken = null;
-
     var details = {
-      'grant_type': 'client_credentials',
+      grant_type: 'client_credentials',
     };
 
     var formBody = [];
     for (var property in details) {
       var encodedKey = encodeURIComponent(property);
       var encodedValue = encodeURIComponent(details[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
+      formBody.push(encodedKey + '=' + encodedValue);
     }
-    formBody = formBody.join("&");
+    formBody = formBody.join('&');
 
-    fetch('https://api.sandbox.paypal.com/v1/oauth2/token', {
-      method: 'POST',
+    let req = new Request('https://api.sandbox.paypal.com/v1/oauth2/token', {
       headers: {
-        'Authorization': 'Basic QVNZZ2toTTNRalN6OXN0UTBYV0pSbU1pTW5fUlljaVZ4UGxELXZSSWRRMHBoOTJDd3dnb0ZzMlV6LWI4STFMM0VQaGR1VV9vNjdRaWdiWVU6RVBTQllENHlleVYya0R2RmZqSGpPVUMta3JnLXZOY3hpcWoyOGVhUzVRWkhVbFRTbUwtQ3hqdmREX2pvN1ZmXzZocllqNVNrNURkTmowdlU=',
+        Authorization:
+          'Basic QVNZZ2toTTNRalN6OXN0UTBYV0pSbU1pTW5fUlljaVZ4UGxELXZSSWRRMHBoOTJDd3dnb0ZzMlV6LWI4STFMM0VQaGR1VV9vNjdRaWdiWVU6RVBTQllENHlleVYya0R2RmZqSGpPVUMta3JnLXZOY3hpcWoyOGVhUzVRWkhVbFRTbUwtQ3hqdmREX2pvN1ZmXzZocllqNVNrNURkTmowdlU=',
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
-      body: formBody
-    })
-      .then(res => res.json())
-      .then(response => {
-        accessToken = response.access_token
-        console.log(accessToken)
-        return accessToken
-      })
-      .catch(e => console.log(e))
-  }
+      method: 'POST',
+      body: formBody,
+    });
+
+    return fetch(req);
+  };
 
   handlePayPalTransaction = (user) => {
-    let paymentItems = []
-    //mapping lineItems(from params) onto below details object
+   
+    let paymentItems = [];
+    //mapping lineItems(from params) onto below payment items object
     let item = this.props.route.params.paymentLineItems;
-    for (let i=0;i<item.length;i++) {
-     console.log("******************** ",item[i])
+    for (let i = 0; i < item.length; i++) {
+      console.log('******************** ', item[i]);
       let singleItem = {
-        name: item[i].product,
-        "unit_amount": {
-          currency_code: "USD",
+        name: item[i].name,
+        unit_amount: {
+          currency_code: 'USD',
           value: item[i].unitPrice,
         },
-        quantity: item[i].amount,
-        category: 'n/a' //FIXME: no category attribute found anywhere
-      }
+        quantity: item[i].quantity,
+        category: 'PHYSICAL_GOODS',
+      };
       paymentItems.push(singleItem);
     }
 
-
     let data = {
-      "intent": "AUTHORIZE",
-      "payer": {
-        "name": {
-          "given_name": user.name
+      intent: 'AUTHORIZE',
+      payer: {
+        name: {
+          given_name: user.name,
         },
-        "email_address": user.email,
-        "address": {
-          "address_line_1": this.props.route.params.b_userAddress_1,
-          "address_line_2": this.props.route.params.b_userAddress_2,
-          "postal_code": this.props.route.params.b_zipCode,
-          "country_code": this.props.route.params.b_country,
-        }
-
+        email_address: user.email,
+        address: {
+          address_line_1: this.props.route.params.b_userAddress_1,
+          address_line_2: this.props.route.params.b_userAddress_2,
+          postal_code: this.props.route.params.b_zipCode,
+          country_code: this.props.route.params.b_country,
+        },
       },
-      "purchase_units": [
+      purchase_units: [
         {
-          "amount": {
-            "currency_code": "USD",
-            "value": this.props.route.params.finalCost,
-            "breakdown": {
-              "item_total": {
-                "currency_code": "USD",
-                "value": this.props.route.params.totalCost
-
+          amount: {
+            currency_code: 'USD',
+            value: this.props.route.params.finalCost,
+            breakdown: {
+              item_total: {
+                currency_code: 'USD',
+                value: this.props.route.params.totalCost,
               },
-              "discount": {
-                "currency_code": "USD",
-                "value": this.props.route.params.discount
-              }
-            }
+              discount: {
+                currency_code: 'USD',
+                value: this.props.route.params.discount,
+              },
+            },
           },
-          "payee": {
-            "email_address": user.email
+          payee: {
+            email_address: user.email,
           },
-          "items": paymentItems,
-        }
+          items: paymentItems,
+        },
       ],
-      "application_context": {
-        "brand_name": "Lucky and Blessed",
-        "user_action": "PAY_NOW",
-        "return_url": "http://dev.landbw.co/mobile_app/paypal_succes.html",
-        "cancel_url": "http://dev.landbw.co/mobile_app/paypal_cancel.html"
-      }
-    }
+      application_context: {
+        brand_name: 'Lucky and Blessed',
+        user_action: 'PAY_NOW',
+        return_url: 'http://dev.landbw.co/mobile_app/paypal_succes.html',
+        cancel_url: 'http://dev.landbw.co/mobile_app/paypal_cancel.html',
+      },
+    };
 
-    this.getPaypalAuth().then((res) => {
-      PostData('https://api.sandbox.paypal.com/v2/checkout/orders', data, res) //To create Order
-        .then(res => res.json())
-        .then(response => {
-          console.log(response)
-        })
-        .catch(e => console.log(e))
-
-    })
-
-
-
-  }
+    this.getPaypalAuth()
+      .then((res) => res.json())
+      .then((response) => {
+        PostData(
+          'https://api.sandbox.paypal.com/v2/checkout/orders',
+          data,
+          response.access_token,
+        ) //To create Order
+          .then((res) => res.json())
+          .then((response) => {
+            console.log('Paypal Response: ', response);
+            this.setState({ paypalLink: response.links[1].href });
+          })
+          .catch((e) => console.log('Exception 1', e));
+      })
+      .catch((e) => console.log('Exception', e));
+  };
 
   placeOrder = (user, payment_id, mproduct, transResponse = []) => {
     let orderData = {
       user_id: user.user_id,
-      shipping_id: "15", //UPS Shipping
+      shipping_id: '15', //UPS Shipping
       payment_id,
       payment_info: transResponse,
-      products: mproduct
-    }
-    PostData("http://dev.landbw.co/api/stores/1/orders", orderData)
-      .then(res => res.json())
-      .then(response => {
+      products: mproduct,
+    };
+    PostData('http://dev.landbw.co/api/stores/1/orders', orderData)
+      .then((res) => res.json())
+      .then((response) => {
         if (response.order_id) {
-          this.props.navigation.navigate('ConfirmationSuccess', { orderId: response.order_id })
+          this.props.navigation.navigate('ConfirmationSuccess', {
+            orderId: response.order_id,
+          });
+        } else {
+          Toast.show('Something went wrong');
         }
-        else {
-          Toast.show("Something went wrong")
-        }
-      })
-  }
+      });
+  };
 
   modifyProductJson = () => {
     let mproduct = {};
 
     for (let i = 0; i < this.props.route.params.orderItems.length; i++) {
-      let e = this.props.route.params.orderItems[i]
-      let mkey = Object.keys(e)[0]
-      mproduct[mkey] = e[mkey]
+      let e = this.props.route.params.orderItems[i];
+      let mkey = Object.keys(e)[0];
+      mproduct[mkey] = e[mkey];
     }
 
     return mproduct;
-  }
+  };
 
   postCreditCardTransaction = (user) => {
     let data = {
-      "createTransactionRequest": {
-        "merchantAuthentication": {
-          "name": "9Lw9PY5KCZkz",
-          "transactionKey": "9hG2Em8ZD6y64aCJ"
+      createTransactionRequest: {
+        merchantAuthentication: {
+          name: '9Lw9PY5KCZkz',
+          transactionKey: '9hG2Em8ZD6y64aCJ',
         },
 
-        "transactionRequest": {
-          "transactionType": "authOnlyTransaction",
-          "amount": this.props.route.params.finalCost,
-          "currencyCode": "USD",
-          "payment": {
-            "creditCard": {
-              "cardNumber": this.state.cardNumber,
-              "expirationDate": this.state.expYear + "-" + this.state.expMonth,
-              "cardCode": this.state.cardCode
-            }
+        transactionRequest: {
+          transactionType: 'authOnlyTransaction',
+          amount: this.props.route.params.finalCost,
+          currencyCode: 'USD',
+          payment: {
+            creditCard: {
+              cardNumber: this.state.cardNumber,
+              expirationDate: this.state.expYear + '-' + this.state.expMonth,
+              cardCode: this.state.cardCode,
+            },
           },
-          "lineItems": {
-            "lineItem": this.props.route.params.paymentLineItems
+          lineItems: {
+            lineItem: this.props.route.params.paymentLineItems,
           },
 
-          "customer": {
-            "id": user.user_id,
-            "email": user.email
+          customer: {
+            id: user.user_id,
+            email: user.email,
           },
-          "billTo": {
-            "firstName": deliveryDetails.b_firstname,
-            "lastName": deliveryDetails.b_lastname,
-            "address": deliveryDetails.b_address,
-            "city": deliveryDetails.b_city,
-            "state": deliveryDetails.b_state,
-            "zip": deliveryDetails.b_zipcode,
-            "country": deliveryDetails.b_country
+          billTo: {
+            firstName: deliveryDetails.b_firstname,
+            lastName: deliveryDetails.b_lastname,
+            address: deliveryDetails.b_address,
+            city: deliveryDetails.b_city,
+            state: deliveryDetails.b_state,
+            zip: deliveryDetails.b_zipcode,
+            country: deliveryDetails.b_country,
           },
-          "shipTo": {
-            "firstName": deliveryDetails.s_firstname,
-            "lastName": deliveryDetails.s_lastname,
-            "address": deliveryDetails.s_address,
-            "city": deliveryDetails.s_city,
-            "state": deliveryDetails.s_state,
-            "zip": deliveryDetails.s_zipCode,
-            "country": deliveryDetails.s_country
+          shipTo: {
+            firstName: deliveryDetails.s_firstname,
+            lastName: deliveryDetails.s_lastname,
+            address: deliveryDetails.s_address,
+            city: deliveryDetails.s_city,
+            state: deliveryDetails.s_state,
+            zip: deliveryDetails.s_zipCode,
+            country: deliveryDetails.s_country,
           },
-          "transactionSettings": {
-            "setting": {
-              "settingName": "emailCustomer",
-              "settingValue": false //TODO: Confirm
-            }
+          transactionSettings: {
+            setting: {
+              settingName: 'emailCustomer',
+              settingValue: false, //TODO: Confirm
+            },
           },
-          "userFields": {
-            "userField": [
+          userFields: {
+            userField: [
               {
-                "name": "OrderFrom",
-                "value": "MobileApp"
-              }
-            ]
-          }
-        }
-      }
+                name: 'OrderFrom',
+                value: 'MobileApp',
+              },
+            ],
+          },
+        },
+      },
     };
-
 
     // changing orderitems array format to supported ones
     let mproduct = this.modifyProductJson();
 
-
-    PostData("https://apitest.authorize.net/xml/v1/request.api", data)
+    PostData('https://apitest.authorize.net/xml/v1/request.api', data)
       .then((res) => res.text())
       .then((responses) => {
-        let transResponse = JSON.parse((responses.trim()));
-
+        let transResponse = JSON.parse(responses.trim());
 
         if (transResponse.transactionResponse.responseCode == 1) {
           this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transResponse);
-        }
-        else {
-          Toast.show(transResponse.transactionResponse.errors[0].errorText)
-
+        } else {
+          Toast.show(transResponse.transactionResponse.errors[0].errorText);
         }
       })
       .catch((ex) => {
         console.log('Promise exception', ex);
         alert(ex);
       });
-
-
-
-  }
+  };
 
   navigateToDeliveryScreen = () => {
-    this.props.navigation.navigate(
-      "Delivery",
-      {//sending props to delivery screen to reuse values
-        totalCost: this.props.route.params.totalCost,
-        finalCost: this.props.route.params.finalCost,
-        discount: this.props.route.params.discount,
-        paymentLineItems: this.state.paymentLineItems,
-        orderItems: this.state.orderItems,
-      })
-  }
+    this.props.navigation.navigate('Delivery', {
+      //sending props to delivery screen to reuse values
+      totalCost: this.props.route.params.totalCost,
+      finalCost: this.props.route.params.finalCost,
+      discount: this.props.route.params.discount,
+      paymentLineItems: this.state.paymentLineItems,
+      orderItems: this.state.orderItems,
+    });
+  };
 
   changePaymentMode = (paymentMode) => () => {
-    this.setState({ paymentMode })
+    this.setState({ paymentMode });
+  };
+  handleWebViewResponse = (data) => {
+    console.log(data)
+    if (data.title == "Success") {
+      console.log("Success")
+      this.setState(
+        { paypalLink: null }
+        , () => {
+          this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson()); 
+        })
+    } else if (data.title == "Cancel") {
+      {
+        this.setState({paypalLink: null})
+        Toast.show('Your payment was not Sucessful');
+      }
+    }
   }
-
+  hideSpinner=()=>{
+    this.setState({
+      showCircleLoader:false
+    })
+  }
   render() {
     let width = Dimensions.get('window').width;
     let height = Dimensions.get('window').height;
-
+    console.log(this.state.paypalLink)
     if (!this.state.isReady) {
       return (
         <View style={styles.shimmerMainView}>
@@ -365,201 +394,235 @@ class Payment extends Component {
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header navigation={this.props.navigation} />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: 'space-between',
-          }}>
-          <View style={{ marginBottom: 50 }}>
-            <View style={styles.subContainer}>
-              <View style={styles.paymentAndSecureView}>
-                <View>
-                  <Text style={styles.paymentText}>Payment</Text>
-                  <Text style={styles.secureCheckoutText}>Secure Checkout</Text>
-                </View>
-              </View>
 
-              <View>
-
-                {this.state.sameShipping == 'Y' ? (
-                  <View>
-                    <View style={styles.shippingAddressView}>
-                      <Text style={styles.heading}>Shipping address:</Text>
-                      <TouchableOpacity onPress={this.navigateToDeliveryScreen} >
-                        <Text style={styles.textButton}>Edit</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <Text style={styles.monikaWillemsText}>
-                      {this.state.shippingDetails}
-                    </Text>
-                  </View>
-                ) : (
-                    <View>
-                      <View>
-                        <View style={styles.shippingAddressView}>
-                          <Text style={styles.heading}>Shipping address:</Text>
-                          <TouchableOpacity onPress={this.navigateToDeliveryScreen} >
-                            <Text style={styles.textButton}>Edit</Text>
-                          </TouchableOpacity>
-                        </View>
-                        <Text style={styles.monikaWillemsText}>
-                          {this.state.shippingDetails}
-                        </Text>
-                      </View>
-                      <View>
-                        <View style={styles.shippingAddressView}>
-                          <Text style={styles.heading}>Billing address:</Text>
-                        </View>
-                        <Text style={styles.monikaWillemsText}>
-                          {this.state.billingDetails}
-                        </Text>
-                      </View>
-                    </View>
-
-                  )}
-
-                <Text>UPS Shipping - shipping will be added later</Text>
-
-                <View style={styles.promoAndCreditCardView}>
-                  <Text style={styles.heading}>
-                    Shipping charges
-                  </Text>
-                </View>
-                <Text style={styles.smallGreyText}>
-                  UPS Shipping - shipping will be added later
-                </Text>
-                <View style={styles.cardSelectorView}>
-                  <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(1)}>
-                    <View style={styles.cardSelectorTouchView}>
-                      {this.state.paymentMode == 1 ? (
-                        <Icon
-                          size={20}
-                          name="checkcircle"
-                          type="antdesign"
-                          color="#5dd136"
-                        />
-                      ) : (
-                          <Icon
-                            size={20}
-                            name="checkcircle"
-                            type="antdesign"
-                            color="#f6f6f6"
-                          />
-                        )}
-                      <Text style={styles.paymentSelectorText}>Credit Card</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(2)}>
-                    <View style={styles.cardSelectorTouchView}>
-                      {this.state.paymentMode == 2 ? (
-                        <Icon
-                          size={20}
-                          name="checkcircle"
-                          type="antdesign"
-                          color="#5dd136"
-                        />
-                      ) : (
-                          <Icon
-                            size={20}
-                            name="checkcircle"
-                            type="antdesign"
-                            color="#f6f6f6"
-                          />
-                        )}
-                      <FastImage
-                        style={styles.imagePaypalLogo}
-                        source={require('../static/paypalLogo.png')}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.5} onPress={this.changePaymentMode(3)}>
-                    <View style={styles.cardSelectorTouchView}>
-                      {this.state.paymentMode == 3 ? (
-                        <Icon
-                          size={20}
-                          name="checkcircle"
-                          type="antdesign"
-                          color="#5dd136"
-                        />
-                      ) : (
-                          <Icon
-                            size={20}
-                            name="checkcircle"
-                            type="antdesign"
-                            color="#f6f6f6"
-                          />
-                        )}
-                      <Text style={styles.paymentSelectorText}>COD</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                {this.state.paymentMode == 1 && (
-                  <View>
-                    <View style={styles.promoAndCreditCardView}>
-                      <Text style={styles.heading}>Credit card</Text>
-                      <Text style={styles.textButton}>Clear All</Text>
-                    </View>
-                    <TextInput
-                      style={[styles.textInput, styles.cardHolderTextInput]}
-                      placeholder="Card holder name"
-                    />
-                    <TextInput
-                      style={[styles.textInput, styles.cardNumTextInput]}
-                      placeholder="Card number"
-                      onChangeText={(text) => { this.setState({ cardNumber: text }) }}
-                    />
-                    <View style={styles.cardInfoView}>
-                      <TextInput
-                        style={[styles.textInput, styles.dateTextInput]}
-                        placeholder="mm"
-                        onChangeText={(text) => { this.setState({ expMonth: text }) }}
-
-                      />
-                      <TextInput
-                        style={[styles.textInput, styles.dateTextInput]}
-                        placeholder="yyyy"
-                        onChangeText={(text) => { this.setState({ expYear: text }) }}
-
-                      />
-                      <TextInput
-                        style={[styles.textInput, styles.cvvTextInput]}
-                        placeholder="CVV"
-                        onChangeText={(text) => { this.setState({ cardCode: text }) }}
-                      />
-                    </View>
-                    {/* <View style={styles.divider}></View> */}
-
-                  </View>
-                )}
-
-              </View>
-            </View>
-            <View style={styles.commentView}>
-              <TextInput
-                style={[styles.textInput, styles.commentTextInput]}
-                multiline={true}
-                numberOfLines={4}
-                placeholder="You can leave us a comment here"
+        {this.state.paypalLink != null ? (
+          <View style={{ flex: 1, backgroundColor: "#00f" }}>
+            <WebView style={{ flex: 1 }} source={{ uri: this.state.paypalLink }} onNavigationStateChange={data => this.handleWebViewResponse(data)} onLoadStart={this.hideSpinner} />
+            {this.state.showCircleLoader && (
+              <ActivityIndicator
+                style={{ position: "absolute", top: height / 3, left: width / 2 }}
+                size="large"
               />
-            </View>
-            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount} />
-            <View style={[styles.buttonContainer, styles.orderButtonView]}>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={[styles.buttonPaymentMethod]}
-                onPress={() => {
-                  this.performTransaction();
-                }}>
-                <Text style={[styles.buttonText, styles.orderButtonText]}>
-                  Place Order
-                </Text>
-              </TouchableOpacity>
-            </View>
+            )}
           </View>
-        </ScrollView>
+        ) : (
+            <>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  justifyContent: 'space-between',
+                }}>
+                {this.state.showCircleLoader && (
+                  <ActivityIndicator
+                    style={{ position: "absolute", top: (height / 2)+35, left: width / 2 }}
+                    size="large"
+                  />
+                )}
+                <View style={{ marginBottom: 50 }}>
+                  <View style={styles.subContainer}>
+                    <View style={styles.paymentAndSecureView}>
+                      <View>
+                        <Text style={styles.paymentText}>Payment</Text>
+                        <Text style={styles.secureCheckoutText}>Secure Checkout</Text>
+                      </View>
+                    </View>
 
-        <Footer navigation={this.props.navigation} />
+                    <View>
+                      {this.state.sameShipping == 'Y' ? (
+                        <View>
+                          <View style={styles.shippingAddressView}>
+                            <Text style={styles.heading}>Shipping address:</Text>
+                            <TouchableOpacity onPress={this.navigateToDeliveryScreen}>
+                              <Text style={styles.textButton}>Edit</Text>
+                            </TouchableOpacity>
+                          </View>
+                          <Text style={styles.monikaWillemsText}>
+                            {this.state.shippingDetails}
+                          </Text>
+                        </View>
+                      ) : (
+                          <View>
+                            <View>
+                              <View style={styles.shippingAddressView}>
+                                <Text style={styles.heading}>Shipping address:</Text>
+                                <TouchableOpacity
+                                  onPress={this.navigateToDeliveryScreen}>
+                                  <Text style={styles.textButton}>Edit</Text>
+                                </TouchableOpacity>
+                              </View>
+                              <Text style={styles.monikaWillemsText}>
+                                {this.state.shippingDetails}
+                              </Text>
+                            </View>
+                            <View>
+                              <View style={styles.shippingAddressView}>
+                                <Text style={styles.heading}>Billing address:</Text>
+                              </View>
+                              <Text style={styles.monikaWillemsText}>
+                                {this.state.billingDetails}
+                              </Text>
+                            </View>
+                          </View>
+                        )}
+
+                      <Text>UPS Shipping - shipping will be added later</Text>
+
+                      <View style={styles.promoAndCreditCardView}>
+                        <Text style={styles.heading}>Shipping charges</Text>
+                      </View>
+                      <Text style={styles.smallGreyText}>
+                        UPS Shipping - shipping will be added later
+                </Text>
+                      <View style={styles.cardSelectorView}>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={this.changePaymentMode(1)}>
+                          <View style={styles.cardSelectorTouchView}>
+                            {this.state.paymentMode == 1 ? (
+                              <Icon
+                                size={20}
+                                name="checkcircle"
+                                type="antdesign"
+                                color="#5dd136"
+                              />
+                            ) : (
+                                <Icon
+                                  size={20}
+                                  name="checkcircle"
+                                  type="antdesign"
+                                  color="#f6f6f6"
+                                />
+                              )}
+                            <Text style={styles.paymentSelectorText}>
+                              Credit Card
+                      </Text>
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={this.changePaymentMode(2)}>
+                          <View style={styles.cardSelectorTouchView}>
+                            {this.state.paymentMode == 2 ? (
+                              <Icon
+                                size={20}
+                                name="checkcircle"
+                                type="antdesign"
+                                color="#5dd136"
+                              />
+                            ) : (
+                                <Icon
+                                  size={20}
+                                  name="checkcircle"
+                                  type="antdesign"
+                                  color="#f6f6f6"
+                                />
+                              )}
+                            <FastImage
+                              style={styles.imagePaypalLogo}
+                              source={require('../static/paypalLogo.png')}
+                            />
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={this.changePaymentMode(3)}>
+                          <View style={styles.cardSelectorTouchView}>
+                            {this.state.paymentMode == 3 ? (
+                              <Icon
+                                size={20}
+                                name="checkcircle"
+                                type="antdesign"
+                                color="#5dd136"
+                              />
+                            ) : (
+                                <Icon
+                                  size={20}
+                                  name="checkcircle"
+                                  type="antdesign"
+                                  color="#f6f6f6"
+                                />
+                              )}
+                            <Text style={styles.paymentSelectorText}>COD</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                      {this.state.paymentMode == 1 && (
+                        <View>
+                          <View style={styles.promoAndCreditCardView}>
+                            <Text style={styles.heading}>Credit card</Text>
+                            <Text style={styles.textButton}>Clear All</Text>
+                          </View>
+                          <TextInput
+                            style={[styles.textInput, styles.cardHolderTextInput]}
+                            placeholder="Card holder name"
+                          />
+                          <TextInput
+                            style={[styles.textInput, styles.cardNumTextInput]}
+                            placeholder="Card number"
+                            onChangeText={(text) => {
+                              this.setState({ cardNumber: text });
+                            }}
+                          />
+                          <View style={styles.cardInfoView}>
+                            <TextInput
+                              style={[styles.textInput, styles.dateTextInput]}
+                              placeholder="mm"
+                              onChangeText={(text) => {
+                                this.setState({ expMonth: text });
+                              }}
+                            />
+                            <TextInput
+                              style={[styles.textInput, styles.dateTextInput]}
+                              placeholder="yyyy"
+                              onChangeText={(text) => {
+                                this.setState({ expYear: text });
+                              }}
+                            />
+                            <TextInput
+                              style={[styles.textInput, styles.cvvTextInput]}
+                              placeholder="CVV"
+                              onChangeText={(text) => {
+                                this.setState({ cardCode: text });
+                              }}
+                            />
+                          </View>
+                          {/* <View style={styles.divider}></View> */}
+                        </View>
+                      )}
+                    </View>
+                  </View>
+                  <View style={styles.commentView}>
+                    <TextInput
+                      style={[styles.textInput, styles.commentTextInput]}
+                      multiline={true}
+                      numberOfLines={4}
+                      placeholder="You can leave us a comment here"
+                    />
+                  </View>
+                  <OrderFooter
+                    totalCost={this.props.route.params.totalCost}
+                    finalCost={this.props.route.params.finalCost}
+                    discount={this.props.route.params.discount}
+                  />
+                  <View style={[styles.buttonContainer, styles.orderButtonView]}>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      style={[styles.buttonPaymentMethod]}
+                      onPress={() => {
+                        this.performTransaction();
+                      }}>
+                      <Text style={[styles.buttonText, styles.orderButtonText]}>
+                        Place Order
+                </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+              <Footer navigation={this.props.navigation} />
+
+            </>
+          )}
       </SafeAreaView>
     );
   }
@@ -618,7 +681,7 @@ const styles = StyleSheet.create({
   paymentAndSecureView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   orderButtonView: {
     paddingHorizontal: 30,
@@ -633,7 +696,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'column',
-    width: '100%'
+    width: '100%',
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
@@ -684,7 +747,7 @@ const styles = StyleSheet.create({
   imagePaypalLogo: {
     height: 21,
     width: 89,
-    marginStart: 5
+    marginStart: 5,
   },
   deliveryDetailText: {
     marginTop: 29,
@@ -760,16 +823,17 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
   },
   paymentSelectorText: {
-    fontFamily: "Avenir-Heavy",
+    fontFamily: 'Avenir-Heavy',
     fontSize: 16,
-    fontWeight: "900",
-    fontStyle: "normal",
+    fontWeight: '900',
+    fontStyle: 'normal',
     lineHeight: 18,
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#000000",
-    marginLeft: 5
-  }
+    textAlign: 'left',
+    color: '#000000',
+    marginLeft: 5,
+  },
+
 });
 
 export default Payment;
