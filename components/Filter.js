@@ -46,23 +46,19 @@ class Filter extends Component {
                     title: 'Category',
                     content: 'Jackets',
                 },
+               
                 {
                     id: 2,
-                    title: 'Brand',
-                    content: 'Addidas,Puma,Reebok',
-                },
-                {
-                    id: 3,
                     title: 'Size',
                     content: 'M,L',
                 },
                 {
-                    id: 4,
+                    id: 3,
                     title: 'Color',
                     content: ["#0f0", "#0ff"],
                 },
                 {
-                    id: 5,
+                    id: 4,
                     title: 'Price',
                     content: '$0 - $999',
                 },
@@ -72,50 +68,50 @@ class Filter extends Component {
         }
     }
 
-    callFilterAPI=()=>{
+    callFilterAPI = () => {
         let url = '';
-        if(this.state.selected==2){
-            url+="&sort_by=price&sort_order=desc"
+        if (this.state.selected == 2) {
+            url += "&sort_by=price&sort_order=desc"
         }
-        else if(this.state.selected==3){
-            url+="&sort_by=price&sort_order=asc"
+        else if (this.state.selected == 3) {
+            url += "&sort_by=price&sort_order=asc"
         }
-        if(this.state.multislideVal[0]!=0 || this.state.multislideVal[1]!=1000){
-            url+=`&price_from=${this.state.multislideVal[0]}&price_to=${this.state.multislideVal[1]}`
+        if (this.state.multislideVal[0] != 0 || this.state.multislideVal[1] != 1000) {
+            url += `&price_from=${this.state.multislideVal[0]}&price_to=${this.state.multislideVal[1]}`
         }
-        this.props.navigation.navigate('CategoriesProduct', {url});
-        
+        this.props.navigation.navigate('CategoriesProduct', { url });
+
     }
 
     //This function Receives the state from colour component when item is changed 
-    parentCallBackColor=(colorListData)=> {
+    parentCallBackColor = (colorListData) => {
         this.setState({ colorList: colorListData })
     }
 
     //This function Receives the state from size component when item is changed 
-    parentCallBackSize=(sizeListData)=> {
+    parentCallBackSize = (sizeListData) => {
         this.setState({ sizeList: sizeListData })
 
     }
     //clear All click Handler
-    rightIconClickHandler=()=> {
+    rightIconClickHandler = () => {
         alert("test")
     }
 
-    onItemClick=(key)=>()=>{
+    onItemClick = (key) => () => {
         this.setState({ selected: key })
     }
 
-    multiSliderValueHandler=(values)=>{
+    multiSliderValueHandler = (values) => {
         this.setState({ multislideVal: values })
     }
 
-    handleViewAll=()=>{
-          // To retrive value of colour and size not implement yet
+    handleViewAll = () => {
+        // To retrive value of colour and size not implement yet
         //   this.child.method()
-       
+
         this.callFilterAPI()
-     
+
     }
     _renderHeader = section => {
         let colors = []
@@ -161,59 +157,82 @@ class Filter extends Component {
         );
     };
 
-    _renderContent = section => {
+    _renderContent = (section, index) => {
         let Width = Dimensions.get("window").width
+
+
         if (section.title == "Gender" || section.title == "Category") {
-            return (
-                <View style={{ marginVertical: 15 }}>
-                    <ModalDropdown options={section.title=="Gender"?["Male", 'Female', "All"]:["Sneakers", 'Jacket', "All"]}
-                        style={{ padding: 10, backgroundColor: "#f6f6f6", borderRadius: 6 }}
-                        dropdownStyle={{ width: "80%", height: 134 }}
-                        textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
-                        renderRow={(option, index, isSelected) => {
-                            return (
-                                <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
-                            )
-                        }}
-                    />
-                </View>
-            )
+            if (this.state.activeSections.includes(0) || this.state.activeSections.includes(1)) {
+                console.log("I AM CALLED" + index)
+
+                return (
+                    <View style={{ marginVertical: 15 }}>
+                        <ModalDropdown options={section.title == "Gender" ? ["Male", 'Female', "All"] : ["Sneakers", 'Jacket', "All"]}
+                            style={{ padding: 10, backgroundColor: "#f6f6f6", borderRadius: 6 }}
+                            dropdownStyle={{ width: "80%", height: 134 }}
+                            textStyle={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f" }}
+                            renderRow={(option, index, isSelected) => {
+                                return (
+                                    <Text style={{ fontFamily: "Avenir-Book", fontSize: 18, lineHeight: 24, color: "#2d2d2f", paddingHorizontal: 20, paddingVertical: 10 }}>{option}</Text>
+                                )
+                            }}
+                        />
+                    </View>
+                )
+            }
+            else {
+                return null
+            }
         }
         else if (section.title == "Color") {
-            return (
-                <ColorPicker  onRef={ref => (this.child = ref)} callbackFunction={this.parentCallBackColor} />
-            )
+            if (this.state.activeSections.includes(3)) {
+                console.log("I AM CALLED" + index)
+
+                return (
+                    <ColorPicker onRef={ref => (this.child = ref)} callbackFunction={this.parentCallBackColor} />
+                )
+            }
+            else {
+                return null
+            }
         }
         else if (section.title == "Price") {
-            return (
-                <View style={{ alignItems: "center", marginTop: 10 }}>
+            if (this.state.activeSections.includes(4)) {
+                console.log("I AM CALLED" + index)
 
-                    <MultiSlider
-                        values={[this.state.multislideVal[0], this.state.multislideVal[1]]}
-                        onValuesChangeFinish={this.multiSliderValueHandler}
-                        min={0}
-                        max={999}
-                        step={10}
-                        allowOverlap={false}
-                        snapped
-                        sliderLength={Width * 0.75}
-                    />
-                </View>
-            )
+                return (
+                    <View style={{ alignItems: "center", marginTop: 10 }}>
+
+                        <MultiSlider
+                            values={[this.state.multislideVal[0], this.state.multislideVal[1]]}
+                            onValuesChangeFinish={this.multiSliderValueHandler}
+                            min={0}
+                            max={999}
+                            step={10}
+                            allowOverlap={false}
+                            snapped
+                            sliderLength={Width * 0.75}
+                        />
+                    </View>
+                )
+            }
+            else {
+                return null
+            }
         }
         else if (section.title == "Size") {
-            return (
-                <SizePicker  onRef={ref => (this.child = ref)}  callbackFunction={this.parentCallBackSize}  />
-            )
+            if (this.state.activeSections.includes(2)) {
+                console.log("I AM CALLED" + index)
+
+                return (
+                    <SizePicker onRef={ref => (this.child = ref)} callbackFunction={this.parentCallBackSize} />
+                )
+            }
+            else {
+                return null
+            }
         }
 
-        else {
-            return (
-                <View style={{ backgroundColor: "#fff", height: 50 }}>
-                    <Text>{section.content}</Text>
-                </View>
-            )
-        }
     };
 
     _updateSections = activeSections => {
@@ -239,7 +258,7 @@ class Filter extends Component {
                                     />
                                 </TouchableOpacity>
                                 :
-                                <TouchableOpacity key={key.toString()} style={styles.listItem} onPressIn={this.onItemClick(key) }>
+                                <TouchableOpacity key={key.toString()} style={styles.listItem} onPressIn={this.onItemClick(key)}>
                                     <Text style={[styles.listItemText, styles.abText]}>{item}</Text>
                                 </TouchableOpacity>
 
@@ -304,11 +323,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 20,
     },
-    twentyPad: {padding: 20},
-    grownFlex: {flexGrow: 1},
-    verticalAndHorizontalPad:{ paddingHorizontal: 20, paddingVertical: 10 },
-    spaceBetweenContent: {justifyContent: 'space-between'},
-    msbText:{ fontFamily: "Montserrat-SemiBold" },
+    twentyPad: { padding: 20 },
+    grownFlex: { flexGrow: 1 },
+    verticalAndHorizontalPad: { paddingHorizontal: 20, paddingVertical: 10 },
+    spaceBetweenContent: { justifyContent: 'space-between' },
+    msbText: { fontFamily: "Montserrat-SemiBold" },
     abText: { fontFamily: "Avenir-Book" },
     allItemsView: { backgroundColor: "#f6f6f6", marginBottom: 50, paddingTop: 20, alignItems: "center", paddingBottom: 20 },
     allItemsTouch: { backgroundColor: "#2967ff", alignItems: "center", width: "90%", borderRadius: 6 },

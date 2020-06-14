@@ -258,7 +258,7 @@ export default class ProductPage extends Component {
           .then((res) => res.json())
           .then((response) => {
             console.log("}}}}}}}}}}}",this.state.selectedQuantity)
-            Globals.cartCount+=this.state.selectedQuantity
+            Globals.cartCount+=Number(this.state.selectedQuantity)
             this.setState(this.state) //To trigger rerender
             Toast.show('Product added to cart');
           })
@@ -272,6 +272,7 @@ export default class ProductPage extends Component {
   };
 
   render() {
+console.log("BOO",this.state.data.qty_content)
 
     if (!this.state.isReady) {
       return (
@@ -355,10 +356,11 @@ export default class ProductPage extends Component {
               <View style={styles.productOptionsView}>
                 <View style={styles.rowView}>
                   <View style={styles.flexOneView}>
-                    {!this.state.data.qty_content || this.state.data.qty_content.length  == 1 ? (
+                    {!this.state.data.qty_content || this.state.data.qty_content.length  == 1 || this.state.data.qty_content.length  == 0 ? (
                       <TextInput
                         style={styles.valueText}
                         placeholder={'Quantity'}
+                        keyboardType = 'numeric'
                         onChangeText={(text) => {
                           this.onQuantityTextChange(text);
                         }}
@@ -387,7 +389,7 @@ export default class ProductPage extends Component {
                     )}
                   </View>
 
-                  <View style={{flex: 2, marginLeft: 20}}>
+                  {/* <View style={{flex: 2, marginLeft: 20}}>
                     <ModalDropdown
                       options={['Male', 'Female', 'All']}
                       hexCode={'#000'}
@@ -403,7 +405,7 @@ export default class ProductPage extends Component {
                         );
                       }}
                     />
-                  </View>
+                  </View> */}
                 </View>
                 <View style={styles.addToCartView}>
                   <Text style={styles.minQuantityText}>
@@ -619,14 +621,16 @@ const styles = StyleSheet.create({
   },
   flexOneView: {
     flex: 1,
+    alignItems:"center",
   },
   quantityModalStyle: {
     padding: 10,
     backgroundColor: '#fff',
     borderRadius: 6,
+    width:0.45 * Width //remove this when enable colour dropdown
   },
   quantityModalDropdownStyle: {
-    width: 0.25 * Width,
+    width: 0.35 * Width, //0.25 width
     height: 134,
   },
   quantityModalTextStyle: {

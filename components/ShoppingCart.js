@@ -108,7 +108,8 @@ class FlatListItem extends Component {
   onAvailableSizesModalSelect = (index, option, item) => {
     console.log('this.props.item.itemNum:', this.props.item.itemNum);
     console.log('Item', item);
-
+    console.log('Iteaaam', option);
+    Globals.cartCount+=(option-item.quantity)
     var data = {
       products: {
         [item.product_id]: {
@@ -124,7 +125,6 @@ class FlatListItem extends Component {
       .then((res) => res.json())
       .then((response) => {
         var productKey = Object.keys(response.cart_content.product_groups[0].products)[0]
-        console.log("PG: ",JSON.stringify(response));
 
         //to update the individual list item when quantity is changed inside cart
         let tempItemList = this.props.parentFlatList.state.itemList;
@@ -324,7 +324,10 @@ class ShoppingCart extends Component {
   };
 
   deleteItem = (index) => {
+    console.log(this.state.itemList[index])
+    Globals.cartCount-=this.state.itemList[index].quantity
     this.state.itemList.splice(index, 1);
+
   };
   postPromoData = (user) => {
     let data = {

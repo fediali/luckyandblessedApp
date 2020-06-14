@@ -47,14 +47,14 @@ export default class UserProfile extends Component {
         {
           id: 0,
           title: 'Referral Link',
-          content: 'http://dev.landbw.co/profiles-add.html?ref_code=',
+          content: baseUrl + 'profiles-add.html?ref_code=',
         },
       ],
       fullName: 'Monika',
       email: 'blackcherry@gmail.com',
       longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
       shortAddress: '455 Larkspur Dr. Califo...',
-      imageb64: "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"
+      imageb64: Globals.placeHolderImage
     };
   }
   static contextType = ThemeContext
@@ -77,10 +77,10 @@ export default class UserProfile extends Component {
                 {
                   id: 0,
                   title: 'Referral Link',
-                  content: `http://dev.landbw.co/profiles-add.html?ref_code=${result.ref_link}`,
+                  content: `${baseUrl}profiles-add.html?ref_code=${result.ref_link}`,
                 },
               ],
-              imageb64: result.profile_image ? result.profile_image : this.state.imageb64
+              imageb64: result.profile_image ? baseUrl + result.profile_image : this.state.imageb64
 
             })
           })
@@ -98,18 +98,18 @@ export default class UserProfile extends Component {
   }
   _renderContent = (section) => {
     return (
-      <View style={[styles.descriptionTextView, { flexDirection: "row", marginRight: 30 }]} >
-        {/* TODO: Justify Text to center */}
-        <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
+      <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
+
+        <View style={[styles.descriptionTextView, { flexDirection: "row", marginRight: 30 }]} >
+          {/* TODO: Justify Text to center */}
 
           <Text style={styles.descriptionText}>
             {section.content}
           </Text>
-        </TouchableOpacity>
-        <Icon size={20} name="clipboard" type="font-awesome" />
+          <Icon size={20} name="clipboard" type="font-awesome" />
+        </View>
+      </TouchableOpacity>
 
-
-      </View>
     );
   };
 
@@ -159,7 +159,7 @@ export default class UserProfile extends Component {
         console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
         // this.selectOneFile();
-        this.setState({ imageb64: "" })
+        this.setState({ imageb64: Globals.placeHolderImage })
         RetrieveDataAsync(STORAGE_USER).then(user => {
           PutData(
             baseUrl + `/api/usersnew/${JSON.parse(user).user_id}`,
@@ -177,13 +177,13 @@ export default class UserProfile extends Component {
         RNFS.readFile(response.uri, 'base64').then((fileBase64) => {
           // console.log(fileBase64)
           this.setState({
-            imageb64: fileBase64,
+            imageb64: "data:image/png;base64," + fileBase64,
           });
           RetrieveDataAsync(STORAGE_USER).then(user => {
 
             PutData(
               baseUrl + `/api/usersnew/${JSON.parse(user).user_id}`,
-              { profile_image: fileBase64 },
+              { profile_image: "data:image/png;base64," + fileBase64 },
             ).then((res) => res.json()).then((result) => {
               if (result.message == "User updated successfully") {
               }
@@ -219,7 +219,7 @@ export default class UserProfile extends Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollViewStyles}>
           <View style={styles.subContainer}>
-            <ImageBackground source={{ uri: "data:image/png;base64," + this.state.imageb64 }} style={styles.displayPicture} imageStyle={{ borderRadius: 88 }}>
+            <ImageBackground source={{ uri: this.state.imageb64 }} style={styles.displayPicture} imageStyle={{ borderRadius: 88 }}>
               <TouchableOpacity onPress={this.onImageEditClick}>
                 <View style={{ marginTop: 60, marginLeft: 50 }}>
                   <Icon reverse size={10} name="edit" type="entypo" color="#2967ff" />
