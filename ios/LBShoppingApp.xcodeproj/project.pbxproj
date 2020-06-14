@@ -503,11 +503,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-<<<<<<< HEAD
-						DevelopmentTeam = 63GJFGW86T;
-=======
 						DevelopmentTeam = S69XVTUHM6;
->>>>>>> firebaseIntegration
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -999,11 +995,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LBShoppingApp/LBShoppingApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-<<<<<<< HEAD
-				DEVELOPMENT_TEAM = 63GJFGW86T;
-=======
 				DEVELOPMENT_TEAM = S69XVTUHM6;
->>>>>>> firebaseIntegration
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1032,11 +1024,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LBShoppingApp/LBShoppingApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-<<<<<<< HEAD
-				DEVELOPMENT_TEAM = 63GJFGW86T;
-=======
 				DEVELOPMENT_TEAM = S69XVTUHM6;
->>>>>>> firebaseIntegration
 				INFOPLIST_FILE = LBShoppingApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

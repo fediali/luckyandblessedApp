@@ -33,7 +33,9 @@ import RetrieveDataAsync from './reusableComponents/AsyncStorage/RetrieveDataAsy
 import BarCodeScanner from './components/BarCodeScanner'
 import Globals from "./Globals"
 import firebase from 'react-native-firebase';
-
+import AsyncStorage from '@react-native-community/async-storage';
+import PutData from './reusableComponents/API/PutData';
+const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN;
 class App extends Component {
 
   
@@ -69,24 +71,23 @@ class App extends Component {
   }
 
   async getToken() {
-    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    let fcmToken = await AsyncStorage.getItem(STORAGE_FCM_TOKEN);
     if (!fcmToken) {
         fcmToken = await firebase.messaging().getToken();
         if (fcmToken) {
             // user has a device token
-            await AsyncStorage.setItem('fcmToken', fcmToken);
+            await AsyncStorage.setItem(STORAGE_FCM_TOKEN, fcmToken);
         }
     }
   }
  
   async createNotificationListeners() {
-    const token = await firebase.messaging().getToken();
-    console.log(token)
+    
     /*
     * Triggered when a particular notification has been received in foreground
     * */
     this.notificationListener = firebase.notifications().onNotification((notification) => {
-        console.log("")
+        console.log("Foreground",notification)
         const { title, body } = notification;
         this.showAlert(title, body);
     });

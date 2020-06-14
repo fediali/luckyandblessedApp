@@ -20,8 +20,6 @@ PODS:
     - React-Core (= 0.62.0)
     - React-jsi (= 0.62.0)
     - ReactCommon/turbomodule/core (= 0.62.0)
-<<<<<<< HEAD
-=======
   - Firebase/Core (6.24.0):
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 6.5.0)
@@ -71,7 +69,6 @@ PODS:
     - GoogleUtilities/Reachability (~> 6.5)
     - GoogleUtilities/UserDefaults (~> 6.5)
     - Protobuf (>= 3.9.2, ~> 3.9)
->>>>>>> firebaseIntegration
   - Flipper (0.33.1):
     - Flipper-Folly (~> 2.1)
     - Flipper-RSocket (~> 1.0)
