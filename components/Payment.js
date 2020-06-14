@@ -148,7 +148,6 @@ class Payment extends Component {
     //mapping lineItems(from params) onto below payment items object
     let item = this.props.route.params.paymentLineItems;
     for (let i = 0; i < item.length; i++) {
-      console.log('******************** ', item[i]);
       let singleItem = {
         name: item[i].name,
         unit_amount: {

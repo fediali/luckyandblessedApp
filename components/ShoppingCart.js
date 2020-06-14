@@ -84,6 +84,12 @@ class FlatListItem extends Component {
                 console.log(response);
                 Toast.show(response.message);
                 //Refresh FlatList !
+
+                this.props.parentFlatList.setState({
+                  totalCost: parseFloat(response.cart.display_subtotal).toFixed(2),//FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
+                  totalCartProducts: response.cart.amount,
+                  finalCost: parseFloat(response.cart.total).toFixed(2),
+                })
                 this.props.parentFlatList.refreshFlatList(deletingRow); //FIXME: Refresh Flatlist Header
               });
           },
@@ -100,7 +106,7 @@ class FlatListItem extends Component {
   };
 
   onAvailableSizesModalSelect = (index, option, item) => {
-    console.log('Index', option);
+    console.log('this.props.item.itemNum:', this.props.item.itemNum);
     console.log('Item', item);
 
     var data = {
@@ -117,7 +123,23 @@ class FlatListItem extends Component {
     PutData(baseUrl + `api/addcart`, data)
       .then((res) => res.json())
       .then((response) => {
-        console.log(response);
+        var productKey = Object.keys(response.cart_content.product_groups[0].products)[0]
+        console.log("PG: ",JSON.stringify(response));
+
+        //to update the individual list item when quantity is changed inside cart
+        let tempItemList = this.props.parentFlatList.state.itemList;
+        tempItemList[this.props.index].price  = (
+          parseFloat(response.cart_content.product_groups[0].products[productKey].amount) *
+          parseFloat(response.cart_content.product_groups[0].products[productKey].price)
+        ).toFixed(2),
+        tempItemList[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey].amount
+        this.props.parentFlatList.setState({
+          totalCost: parseFloat(response.cart_content.display_subtotal).toFixed(2),//FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
+          totalCartProducts: response.cart_content.amount,
+          finalCost: parseFloat(response.cart_content.total).toFixed(2),
+          itemList: tempItemList
+        })
+
         Toast.show(`${item.name} quantity updated`);
       });
     // this.setState({ stateText: usStates[index] , s_country: usStates[index], b_country: usStates[index]});
@@ -265,8 +287,8 @@ class ShoppingCart extends Component {
       deletedRowKey: null,
       itemList: [],
       orderItems: [],
-      totalCost: 0,
-      finalCost: 0,
+      totalCost: 0,//does not include promo cost
+      finalCost: 0,//calculated after promo added
       totalCartProducts: 0,
       s_userAddress: '',
       b_userAddress: '',
@@ -295,14 +317,6 @@ class ShoppingCart extends Component {
   }
 
   applyPromo = () => {
-    //TODO: Apply promo
-    // {
-    //     "user_id":4751,
-    //     "coupon_codes":"dummy" //dummy is the coupon code
-    // }
-
-    // http://dev.landbw.co/api/coupon
-
     RetrieveDataAsync(STORAGE_USER).then((user) => {
       gUser = JSON.parse(user);
       this.postPromoData(gUser);
