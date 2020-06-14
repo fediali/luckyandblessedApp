@@ -48,7 +48,7 @@
 		67DC2F22E0FE41438C54B34C /* Avenir-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2745A0D832E4434FA7093E30 /* Avenir-Black.ttf */; };
 		6AA9DEE82DFA4051A3BFF065 /* Avenir-MediumOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CA6D637DCA58497082C42C96 /* Avenir-MediumOblique.ttf */; };
 		6C453F1774874C5A9639AD29 /* Avenir-BlackOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC11E22506034425BBD2AF5C /* Avenir-BlackOblique.ttf */; };
-		6FB6D169246BE64300AE9955 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6FB6D168246BE64300AE9955 /* GoogleService-Info.plist */; };
+		6F5700E624925F540060F5B4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F5700E524925F530060F5B4 /* GoogleService-Info.plist */; };
 		6FD48545E82E4A7ABBB50AF2 /* Verdana.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 125910B40BC44E099ECD8330 /* Verdana.ttf */; };
 		73E92D191A9B4EBBB7E7DE9B /* Avenir-Oblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0BAAA7A418B2406999F61C85 /* Avenir-Oblique.ttf */; };
 		753DC4A575F44055A8EE2977 /* SF-Pro-Display-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = AC5CEA592EB049CF945C1F1C /* SF-Pro-Display-ThinItalic.otf */; };
@@ -145,7 +145,8 @@
 		5C0B9CEBF52146B3B727D693 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		5DC65634403543B6A6B0AFD4 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		6D254F0E641943DBAB903DC7 /* sans-serif.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "sans-serif.ttf"; path = "../assets/fonts/sans-serif.ttf"; sourceTree = "<group>"; };
-		6FB6D168246BE64300AE9955 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6F5700E524925F530060F5B4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6F5700E724925F900060F5B4 /* LBShoppingApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = LBShoppingApp.entitlements; path = LBShoppingApp/LBShoppingApp.entitlements; sourceTree = "<group>"; };
 		70041CB202BB4E74BDFFFE98 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		77783304007843A087F4CC1D /* Avenir-Book.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Book.ttf"; path = "../assets/fonts/Avenir-Book.ttf"; sourceTree = "<group>"; };
 		7B5D2022421746F98A230413 /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-ExtraBold.ttf"; path = "../assets/fonts/Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -253,6 +254,7 @@
 		13B07FAE1A68108700A75B9A /* LBShoppingApp */ = {
 			isa = PBXGroup;
 			children = (
+				6F5700E724925F900060F5B4 /* LBShoppingApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -287,7 +289,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				6FB6D168246BE64300AE9955 /* GoogleService-Info.plist */,
+				6F5700E524925F530060F5B4 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* LBShoppingApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* LBShoppingAppTests */,
@@ -501,7 +503,11 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+<<<<<<< HEAD
 						DevelopmentTeam = 63GJFGW86T;
+=======
+						DevelopmentTeam = S69XVTUHM6;
+>>>>>>> firebaseIntegration
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -581,7 +587,7 @@
 				D49CF302508C4CF3ADA3B103 /* Montserrat-SemiBoldItalic.ttf in Resources */,
 				5A56BA66B34B4E7D84DCFAFE /* Montserrat-Thin.ttf in Resources */,
 				7A09D685A8774E9A9C2EA1BB /* Montserrat-ThinItalic.ttf in Resources */,
-				6FB6D169246BE64300AE9955 /* GoogleService-Info.plist in Resources */,
+				6F5700E624925F540060F5B4 /* GoogleService-Info.plist in Resources */,
 				58B39F895623472595CDE01C /* SF-Pro-Display-Black.otf in Resources */,
 				BDAA607435574E54AE9404E8 /* SF-Pro-Display-BlackItalic.otf in Resources */,
 				DF842D82791E45C7AE41C713 /* SF-Pro-Display-Bold.otf in Resources */,
@@ -639,7 +645,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		18AA42C06CE45E9A3AFB9414 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -991,8 +997,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = LBShoppingApp/LBShoppingApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = 63GJFGW86T;
+=======
+				DEVELOPMENT_TEAM = S69XVTUHM6;
+>>>>>>> firebaseIntegration
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1019,8 +1030,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = LBShoppingApp/LBShoppingApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = 63GJFGW86T;
+=======
+				DEVELOPMENT_TEAM = S69XVTUHM6;
+>>>>>>> firebaseIntegration
 				INFOPLIST_FILE = LBShoppingApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
