@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "802871025656",
-    "firebase_url": "https://luckyblessed-47396.firebaseio.com",
-    "project_id": "luckyblessed-47396",
-    "storage_bucket": "luckyblessed-47396.appspot.com"
+    "project_number": "402016223032",
+    "firebase_url": "https://landbapp-1e12d.firebaseio.com",
+    "project_id": "landbapp-1e12d",
+    "storage_bucket": "landbapp-1e12d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:802871025656:android:ed9ca4714bc509c75c000d",
+        "mobilesdk_app_id": "1:402016223032:android:06ae99e6cafdfec06d0bcd",
         "android_client_info": {
           "package_name": "com.lbshoppingapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "802871025656-17p5cv089q3mjji235vthat1vql90qrn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.lbshoppingapp",
-            "certificate_hash": "df8e1ac6a9f1e04dd15ac50112a534594a89cf14"
-          }
-        },
-        {
-          "client_id": "802871025656-no6mhjftcm6hbeidj811dbprua5npgal.apps.googleusercontent.com",
+          "client_id": "402016223032-70nmh4s4gd9uq4a6ob9a5c7p11infv2f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBNuOEhSt1IR-sS8mkkRKfsDboJz9Z9gq8"
+          "current_key": "AIzaSyDvFUqEnL2AbRubErHPeek9ay3ojwTfb5U"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "802871025656-no6mhjftcm6hbeidj811dbprua5npgal.apps.googleusercontent.com",
+              "client_id": "402016223032-70nmh4s4gd9uq4a6ob9a5c7p11infv2f.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

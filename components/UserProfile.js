@@ -32,7 +32,9 @@ var RNFS = require('react-native-fs');
 const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
 const STORAGE_USER = Globals.STORAGE_USER
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
+const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN
 const baseUrl = Globals.baseUrl;
+
 //TODO: Image not coming and image not updating
 //TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 export default class UserProfile extends Component {
@@ -138,6 +140,7 @@ export default class UserProfile extends Component {
   logoutPressed = () => {
     AsyncStorage.removeItem(STORAGE_USER);
     AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
+    AsyncStorage.removeItem(STORAGE_FCM_TOKEN)
     this.context.setAuthenticated("")
   }
   onImageEditClick = () => {

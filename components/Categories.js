@@ -103,7 +103,7 @@ class Categories extends Component {
                         />
                     }
                 </View>
-                <Footer navigation={this.props.navigation} />
+                <Footer Key={Math.random()} navigation={this.props.navigation} />
             </SafeAreaView >
         )
     }
