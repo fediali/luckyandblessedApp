@@ -70,7 +70,7 @@ class SignIn extends Component {
                 var user = {
                   user_id: responses[1].users[0].user_id,
                   name: fullName,
-                  email: this.state.email,
+                  email: this.state.email.trim(),
                 };
 
                 this._storeData(user);
