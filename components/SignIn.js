@@ -184,11 +184,7 @@ class SignIn extends Component {
               }}
             />
           </View>
-          {this.state.emailError != '' ? (
-            this.showErrorMessage(this.state.emailError)
-          ) : (
-            <View></View>
-          )}
+          {this.state.emailError != '' ? this.showErrorMessage(this.state.emailError): <View></View>}
           <View style={styles.passwordInputView}>
             <TextInput
               style={styles.input}

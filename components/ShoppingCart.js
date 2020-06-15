@@ -121,7 +121,8 @@ class FlatListItem extends Component {
         user_id: gUser.user_id,
       },
     };
-    PutData(baseUrl + `api/addcart`, data)
+
+    PutData(baseUrl + "api/addcart/"+this.props.item.itemNum, data)
       .then((res) => res.json())
       .then((response) => {
         var productKey = Object.keys(response.cart_content.product_groups[0].products)[0]
