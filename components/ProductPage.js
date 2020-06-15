@@ -104,7 +104,7 @@ export default class ProductPage extends Component {
                   response[0].main_pair.detailed.image_path,
                 );
 
-                console.log("AAA",response[0].qty_content)
+                console.log("AAA",response[0])
                 // Stroing History of objects
                 RetrieveDataAsync('productHistoryList').then((value) => {
                   if (value == null) value = [];

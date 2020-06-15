@@ -47,8 +47,60 @@ class Payment extends Component {
       profile_id: this.props.route.params.profile_id,
       paymentMode: 1,
       paypalLink: null,
-      showCircleLoader: false
+      showCircleLoader: false,
+      //Error related states
+      cardNumberError: "",
+      expMonthError: "",
+      expYearError: "",
+      cardCodeError: "",
     };
+  }
+
+  isValid() {
+    let validFlag = true;
+
+    if (this.state.cardNumber == '') {
+      this.setState({ cardNumberError: 'Card number is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ cardNumberError: '' });
+    }
+
+    if (this.state.expMonth == '') {
+      this.setState({ expMonthError: 'Expiry month is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ expMonthError: '' });
+    }
+
+    if (this.state.expYear == '') {
+      this.setState({ expYearError: 'Expiry year is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ expYearError: '' });
+    }
+
+    if (this.state.cardCode == '') {
+      this.setState({ cardCodeError: 'CVV code is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ cardCodeError: '' });
+    }
+
+    return validFlag;
+  }
+  showErrorMessage(errorMessage) {
+    return (
+      <View style={styles.errorTextMainView}>
+        <Icon
+          size={30}
+          name="md-information-circle-outline"
+          type="ionicon"
+          color="#FF0000"
+        />
+        <Text style={styles.errorTextText}>{errorMessage}</Text>
+      </View>
+    );
   }
 
   componentDidMount() {
@@ -107,16 +159,18 @@ class Payment extends Component {
   }
 
   performTransaction = () => {
-    RetrieveDataAsync(STORAGE_USER).then((user) => {
-      gUser = JSON.parse(user);
+    if (this.isValid()) {
+      RetrieveDataAsync(STORAGE_USER).then((user) => {
+        gUser = JSON.parse(user);
 
-      //Handle Credit Cart payment
-      if (this.state.paymentMode == 1) this.postCreditCardTransaction(gUser);
-      //PayPal
-      else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
-      else if (this.state.paymentMode == 3)
-        this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()); //Directly place order.
-    });
+        //Handle Credit Cart payment
+        if (this.state.paymentMode == 1) this.postCreditCardTransaction(gUser);
+        //PayPal
+        else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
+        else if (this.state.paymentMode == 3)
+          this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()); //Directly place order.
+      });
+    }
   };
 
   getPaypalAuth = () => {
@@ -146,7 +200,7 @@ class Payment extends Component {
   };
 
   handlePayPalTransaction = (user) => {
-   this.setState({showCircleLoader:true})
+    this.setState({ showCircleLoader: true })
     let paymentItems = [];
     //mapping lineItems(from params) onto below payment items object
     let item = this.props.route.params.paymentLineItems;
@@ -329,6 +383,7 @@ class Payment extends Component {
       .then((res) => res.text())
       .then((responses) => {
         let transResponse = JSON.parse(responses.trim());
+        console.log("TransResponse", transResponse)
 
         if (transResponse.transactionResponse.responseCode == 1) {
           let transData = {
@@ -368,18 +423,18 @@ class Payment extends Component {
       this.setState(
         { paypalLink: null }
         , () => {
-          this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson()); 
+          this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson());
         })
     } else if (data.title == "Cancel") {
       {
-        this.setState({paypalLink: null})
+        this.setState({ paypalLink: null })
         Toast.show('Your payment was not Sucessful');
       }
     }
   }
-  hideSpinner=()=>{
+  hideSpinner = () => {
     this.setState({
-      showCircleLoader:false
+      showCircleLoader: false
     })
   }
   render() {
@@ -423,7 +478,7 @@ class Payment extends Component {
                 }}>
                 {this.state.showCircleLoader && (
                   <ActivityIndicator
-                    style={{ position: "absolute", top: (height / 2)+35, left: width / 2 }}
+                    style={{ position: "absolute", top: (height / 2) + 35, left: width / 2 }}
                     size="large"
                   />
                 )}
@@ -567,15 +622,19 @@ class Payment extends Component {
                           />
                           <TextInput
                             style={[styles.textInput, styles.cardNumTextInput]}
+                            keyboardType={'number-pad'}
                             placeholder="Card number"
                             onChangeText={(text) => {
                               this.setState({ cardNumber: text });
                             }}
                           />
+                          {this.state.cardNumberError != '' ? this.showErrorMessage(this.state.cardNumberError) : <View></View>}
+
                           <View style={styles.cardInfoView}>
                             <TextInput
                               style={[styles.textInput, styles.dateTextInput]}
                               placeholder="mm"
+                              keyboardType={'number-pad'}
                               onChangeText={(text) => {
                                 this.setState({ expMonth: text });
                               }}
@@ -583,6 +642,7 @@ class Payment extends Component {
                             <TextInput
                               style={[styles.textInput, styles.dateTextInput]}
                               placeholder="yyyy"
+                              keyboardType={'number-pad'}
                               onChangeText={(text) => {
                                 this.setState({ expYear: text });
                               }}
@@ -590,11 +650,16 @@ class Payment extends Component {
                             <TextInput
                               style={[styles.textInput, styles.cvvTextInput]}
                               placeholder="CVV"
+                              keyboardType={'number-pad'}
                               onChangeText={(text) => {
                                 this.setState({ cardCode: text });
                               }}
                             />
                           </View>
+                          {this.state.expMonthError != '' ? this.showErrorMessage(this.state.expMonthError) : <View></View>}
+                          {this.state.expYearError != '' ? this.showErrorMessage(this.state.expYearError) : <View></View>}
+                          {this.state.cardCodeError != '' ? this.showErrorMessage(this.state.cardCodeError) : <View></View>}
+
                           {/* <View style={styles.divider}></View> */}
                         </View>
                       )}
@@ -841,6 +906,14 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginLeft: 5,
   },
+  errorTextMainView: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 15,
+  },
+  errorTextText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
 
 });
 
