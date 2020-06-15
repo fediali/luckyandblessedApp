@@ -29,8 +29,11 @@ const baseUrl = Globals.baseUrl;
 const CODPAYMENTID = 17;
 const CREDITCARTPAYMENTID = 34;
 const PAYPALPAYMENTID = 20;
+const MERCHANTAUTH_NAME = "9Lw9PY5KCZkz";
+const MERCHANTAUTH_TRANSACTIONID = "9hG2Em8ZD6y64aCJ"
 let deliveryDetails = null;
 let gUser = null;
+
 class Payment extends Component {
   constructor(props) {
     super(props);
@@ -223,6 +226,7 @@ class Payment extends Component {
   };
 
   placeOrder = (user, payment_id, mproduct, transResponse = []) => {
+    
     let orderData = {
       user_id: user.user_id,
       shipping_id: '15', //UPS Shipping
@@ -259,8 +263,8 @@ class Payment extends Component {
     let data = {
       createTransactionRequest: {
         merchantAuthentication: {
-          name: '9Lw9PY5KCZkz',
-          transactionKey: '9hG2Em8ZD6y64aCJ',
+          name: MERCHANTAUTH_NAME,
+          transactionKey: MERCHANTAUTH_TRANSACTIONID,
         },
 
         transactionRequest: {
@@ -327,7 +331,12 @@ class Payment extends Component {
         let transResponse = JSON.parse(responses.trim());
 
         if (transResponse.transactionResponse.responseCode == 1) {
-          this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transResponse);
+          let transData = {
+            type = "AUTH_ONLY",
+            transaction_id = MERCHANTAUTH_TRANSACTIONID,
+            location = "MobileApp"
+          }
+          this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transData);
         } else {
           Toast.show(transResponse.transactionResponse.errors[0].errorText);
         }

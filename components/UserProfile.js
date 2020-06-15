@@ -141,6 +141,7 @@ export default class UserProfile extends Component {
     AsyncStorage.removeItem(STORAGE_USER);
     AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
     AsyncStorage.removeItem(STORAGE_FCM_TOKEN)
+    Globals.cartCount = 0
     this.context.setAuthenticated("")
   }
   onImageEditClick = () => {
