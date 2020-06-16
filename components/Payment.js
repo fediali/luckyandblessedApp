@@ -318,6 +318,16 @@ class Payment extends Component {
   };
 
   postCreditCardTransaction = (user) => {
+    let paymentItems = this.props.route.params.paymentLineItems;
+    //Max length allowed for product name is 31 characters
+    paymentItems.map(item => {
+      console.log("Mapping")
+      if (item.name.length > 31){
+        console.log("ITem", item.name)
+        item.name = item.name.substring(0, 31)
+
+      }
+    })
     let data = {
       createTransactionRequest: {
         merchantAuthentication: {
@@ -337,7 +347,7 @@ class Payment extends Component {
             },
           },
           lineItems: {
-            lineItem: this.props.route.params.paymentLineItems,
+            lineItem: paymentItems,
           },
 
           customer: {

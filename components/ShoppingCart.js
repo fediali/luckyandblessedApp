@@ -84,13 +84,14 @@ class FlatListItem extends Component {
                 console.log(response);
                 Toast.show(response.message);
                 //Refresh FlatList !
+                //FIXME: Delete the data from this.state.orderItems and this.state.paymentLineItems as well
 
                 this.props.parentFlatList.setState({
                   totalCost: parseFloat(response.cart.display_subtotal).toFixed(2),//FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
                   totalCartProducts: response.cart.amount,
                   finalCost: parseFloat(response.cart.total).toFixed(2),
                 })
-                this.props.parentFlatList.refreshFlatList(deletingRow); //FIXME: Refresh Flatlist Header
+                this.props.parentFlatList.refreshFlatList(deletingRow); 
               });
           },
         },
