@@ -379,17 +379,18 @@ class Payment extends Component {
     // changing orderitems array format to supported ones
     let mproduct = this.modifyProductJson();
 
+    console.log("DATA",JSON.stringify(data))
     PostData('https://apitest.authorize.net/xml/v1/request.api', data)
       .then((res) => res.text())
       .then((responses) => {
         let transResponse = JSON.parse(responses.trim());
-        console.log("TransResponse", transResponse)
+        console.log("TransResponse", JSON.stringify(transResponse))
 
         if (transResponse.transactionResponse.responseCode == 1) {
           let transData = {
-            type = "AUTH_ONLY",
-            transaction_id = MERCHANTAUTH_TRANSACTIONID,
-            location = "MobileApp"
+            type: "AUTH_ONLY",
+            transaction_id: MERCHANTAUTH_TRANSACTIONID,
+            location: "MobileApp"
           }
           this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transData);
         } else {
@@ -408,8 +409,8 @@ class Payment extends Component {
       totalCost: this.props.route.params.totalCost,
       finalCost: this.props.route.params.finalCost,
       discount: this.props.route.params.discount,
-      paymentLineItems: this.state.paymentLineItems,
-      orderItems: this.state.orderItems,
+      paymentLineItems: this.props.route.params.paymentLineItems,
+      orderItems: this.props.route.params.orderItems,
     });
   };
 
