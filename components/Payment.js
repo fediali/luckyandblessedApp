@@ -203,7 +203,6 @@ class Payment extends Component {
   };
 
   handlePayPalTransaction = (user) => {
-    console.log("OO")
     this.setState({ showCircleLoader: true })
     let paymentItems = [];
     //mapping lineItems(from params) onto below payment items object
@@ -275,7 +274,6 @@ class Payment extends Component {
         ) //To create Order
           .then((res) => res.json())
           .then((response) => {
-            console.log('Paypal Response: ', response);
             this.setState({ paypalLink: response.links[1].href });
           })
           .catch((e) => console.log('Exception 1', e));
@@ -321,9 +319,7 @@ class Payment extends Component {
     let paymentItems = this.props.route.params.paymentLineItems;
     //Max length allowed for product name is 31 characters
     paymentItems.map(item => {
-      console.log("Mapping")
       if (item.name.length > 31){
-        console.log("ITem", item.name)
         item.name = item.name.substring(0, 31)
 
       }
@@ -393,12 +389,10 @@ class Payment extends Component {
     // changing orderitems array format to supported ones
     let mproduct = this.modifyProductJson();
 
-    console.log("DATA",JSON.stringify(data))
     PostData('https://apitest.authorize.net/xml/v1/request.api', data)
       .then((res) => res.text())
       .then((responses) => {
         let transResponse = JSON.parse(responses.trim());
-        console.log("TransResponse", JSON.stringify(transResponse))
 
         if (transResponse.transactionResponse.responseCode == 1) {
           let transData = {
@@ -432,9 +426,7 @@ class Payment extends Component {
     this.setState({ paymentMode });
   };
   handleWebViewResponse = (data) => {
-    console.log(data)
     if (data.title == "Success") {
-      console.log("Success")
       this.setState(
         { paypalLink: null }
         , () => {
@@ -455,7 +447,7 @@ class Payment extends Component {
   render() {
     let width = Dimensions.get('window').width;
     let height = Dimensions.get('window').height;
-    console.log("PP", this.state.paypalLink)
+    // console.log("PP", this.state.paypalLink)
     if (!this.state.isReady) {
       return (
         <View style={styles.shimmerMainView}>

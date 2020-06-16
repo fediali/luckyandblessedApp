@@ -51,7 +51,6 @@ export default class TrackOrders extends Component {
 
   getData = (user) => {
     var promises = [];
-    console.log(user.user_id)
     promises.push(
       GetData(
         baseUrl +
@@ -59,14 +58,11 @@ export default class TrackOrders extends Component {
       ),
       
     ); 
-    console.log(baseUrl +
-      `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`);
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
           .then((responses) => {
             //Converting to required date format
-            console.log(responses)
             parseProducts = async () => {
               const tempOrders = [];
               if (responses[0].orders.length == 0) {

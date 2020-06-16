@@ -159,7 +159,6 @@ export default class SearchResults extends Component {
         this.state.iteratedPage <
         Math.ceil(this.state.totalProducts / this.state.totalItemsPerRequest)
       ) {
-        console.log('Getting more data');
         this.setState(
           {
             iteratedPage: this.state.iteratedPage + 1,

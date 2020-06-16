@@ -57,7 +57,6 @@ class FlatListItem extends Component {
 
   onDeletePress = () => {
     const deletingRow = this.state.activeRowKey;
-    console.log(deletingRow);
 
     Alert.alert(
       'Alert',
@@ -81,10 +80,9 @@ class FlatListItem extends Component {
             PostData(baseUrl + `api/removecart`, deleteData)
               .then((res) => res.json())
               .then((response) => {
-                console.log(response);
                 Toast.show(response.message);
                 //Refresh FlatList !
-                
+
                 //Also delete the data from relevant places..
                 let tempPaymentLineItems = this.props.parentFlatList.state.paymentLineItems;
                 tempPaymentLineItems.splice(this.props.index, 1);
@@ -114,9 +112,6 @@ class FlatListItem extends Component {
   };
 
   onAvailableSizesModalSelect = (index, option, item) => {
-    console.log('this.props.item.itemNum:', this.props.item.itemNum);
-    console.log('Item', item);
-    console.log('Iteaaam', option);
     Globals.cartCount+=(option-item.quantity)
     var data = {
       products: {
@@ -339,7 +334,6 @@ class ShoppingCart extends Component {
   };
 
   deleteItem = (index) => {
-    console.log(this.state.itemList[index])
     Globals.cartCount-=this.state.itemList[index].quantity
     this.state.itemList.splice(index, 1);
 
@@ -378,7 +372,7 @@ class ShoppingCart extends Component {
         let orderItems = [];
 
         if (responses.status == 404) {
-          console.log('No product found');
+          // console.log('No product found');
           this.setState({
             isReady: true,
           });
@@ -555,9 +549,6 @@ class ShoppingCart extends Component {
   };
   //Receive and forward lineitems to payment screen.. from delivery to payment.
   navigateToNextScreen = () => {
-    console.log("SC: ORDER ITEMS: ",this.state.orderItems);
-    console.log("SC: LINE ITEMS: ", this.state.paymentLineItems);
-    console.log("SC: ITEM LIST: ", this.state.itemList);
     if (this.state.finalCost < 100) Toast.show('Minimum order in $100');
     else {
       if (this.state.s_userAddress || this.state.s_userAddress) {
