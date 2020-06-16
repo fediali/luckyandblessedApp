@@ -84,12 +84,19 @@ class FlatListItem extends Component {
                 console.log(response);
                 Toast.show(response.message);
                 //Refresh FlatList !
-                //FIXME: Delete the data from this.state.orderItems and this.state.paymentLineItems as well
+                
+                //Also delete the data from relevant places..
+                let tempPaymentLineItems = this.props.parentFlatList.state.paymentLineItems;
+                tempPaymentLineItems.splice(this.props.index, 1);
+                let tempOrderItems = this.props.parentFlatList.state.orderItems;
+                tempOrderItems.splice(this.props.index, 1);
 
                 this.props.parentFlatList.setState({
                   totalCost: parseFloat(response.cart.display_subtotal).toFixed(2),//FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
                   totalCartProducts: response.cart.amount,
                   finalCost: parseFloat(response.cart.total).toFixed(2),
+                  paymentLineItems: tempPaymentLineItems,
+                  orderItems: tempOrderItems
                 })
                 this.props.parentFlatList.refreshFlatList(deletingRow); 
               });
@@ -135,11 +142,17 @@ class FlatListItem extends Component {
           parseFloat(response.cart_content.product_groups[0].products[productKey].price)
         ).toFixed(2),
         tempItemList[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey].amount
+        
+        //update the line items too for payment purpose..
+        let tempPaymentLineItems = this.props.parentFlatList.state.paymentLineItems;
+        tempPaymentLineItems[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey].amount
+        
         this.props.parentFlatList.setState({
           totalCost: parseFloat(response.cart_content.display_subtotal).toFixed(2),//FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
           totalCartProducts: response.cart_content.amount,
           finalCost: parseFloat(response.cart_content.total).toFixed(2),
-          itemList: tempItemList
+          itemList: tempItemList,
+          paymentLineItems: tempPaymentLineItems
         })
 
         Toast.show(`${item.name} quantity updated`);
@@ -542,6 +555,9 @@ class ShoppingCart extends Component {
   };
   //Receive and forward lineitems to payment screen.. from delivery to payment.
   navigateToNextScreen = () => {
+    console.log("SC: ORDER ITEMS: ",this.state.orderItems);
+    console.log("SC: LINE ITEMS: ", this.state.paymentLineItems);
+    console.log("SC: ITEM LIST: ", this.state.itemList);
     if (this.state.finalCost < 100) Toast.show('Minimum order in $100');
     else {
       if (this.state.s_userAddress || this.state.s_userAddress) {
