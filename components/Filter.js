@@ -163,7 +163,6 @@ class Filter extends Component {
 
         if (section.title == "Gender" || section.title == "Category") {
             if (this.state.activeSections.includes(0) || this.state.activeSections.includes(1)) {
-                console.log("I AM CALLED" + index)
 
                 return (
                     <View style={{ marginVertical: 15 }}>
@@ -186,7 +185,6 @@ class Filter extends Component {
         }
         else if (section.title == "Color") {
             if (this.state.activeSections.includes(3)) {
-                console.log("I AM CALLED" + index)
 
                 return (
                     <ColorPicker onRef={ref => (this.child = ref)} callbackFunction={this.parentCallBackColor} />
@@ -198,7 +196,6 @@ class Filter extends Component {
         }
         else if (section.title == "Price") {
             if (this.state.activeSections.includes(4)) {
-                console.log("I AM CALLED" + index)
 
                 return (
                     <View style={{ alignItems: "center", marginTop: 10 }}>
@@ -222,7 +219,6 @@ class Filter extends Component {
         }
         else if (section.title == "Size") {
             if (this.state.activeSections.includes(2)) {
-                console.log("I AM CALLED" + index)
 
                 return (
                     <SizePicker onRef={ref => (this.child = ref)} callbackFunction={this.parentCallBackSize} />

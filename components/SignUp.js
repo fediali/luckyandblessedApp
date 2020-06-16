@@ -104,7 +104,7 @@ class SignUp extends Component {
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        // console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
         this.selectOneFile();
       } else {
@@ -173,13 +173,11 @@ class SignUp extends Component {
                       "name": data.firstname + " " + data.lastname,
                       "company_id": data.company_id
                     }
-                    console.log("SubsData");
                     PostData(baseUrl + "api/subscribe", subsData)
                     .then(res => res.json())
                     .then((response => {
-                      console.log(response)
                       if(response.subscriber_id){
-                        console.log("Subscribed to newsletter Successfully")
+                        // console.log("Subscribed to newsletter Successfully")
                       }
                     }))
                   } else {

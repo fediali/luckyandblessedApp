@@ -93,7 +93,6 @@ class MainPage extends Component {
                             //Storing defaults obtained through API
                             StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then()
                             RetrieveDataAsync(STORAGE_USER).then((user) => {
-                                console.log("____________",JSON.parse(user).user_id)
 
                             GetData(baseUrl + `api/carts/${JSON.parse(user).user_id}`)
                                 .then((res) => res.json())
