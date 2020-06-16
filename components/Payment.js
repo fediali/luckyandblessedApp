@@ -159,18 +159,21 @@ class Payment extends Component {
   }
 
   performTransaction = () => {
-    if (this.isValid()) {
-      RetrieveDataAsync(STORAGE_USER).then((user) => {
-        gUser = JSON.parse(user);
+    RetrieveDataAsync(STORAGE_USER).then((user) => {
+      gUser = JSON.parse(user);
 
-        //Handle Credit Cart payment
-        if (this.state.paymentMode == 1) this.postCreditCardTransaction(gUser);
-        //PayPal
-        else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
-        else if (this.state.paymentMode == 3)
-          this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()); //Directly place order.
-      });
-    }
+      //Handle Credit Cart payment
+      if (this.state.paymentMode == 1) {
+        if (this.isValid()) {
+          this.postCreditCardTransaction(gUser);
+        }
+      }
+      //PayPal
+      else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
+      else if (this.state.paymentMode == 3)
+        this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()); //Directly place order.
+    });
+
   };
 
   getPaypalAuth = () => {
@@ -200,6 +203,7 @@ class Payment extends Component {
   };
 
   handlePayPalTransaction = (user) => {
+    console.log("OO")
     this.setState({ showCircleLoader: true })
     let paymentItems = [];
     //mapping lineItems(from params) onto below payment items object
@@ -441,7 +445,7 @@ class Payment extends Component {
   render() {
     let width = Dimensions.get('window').width;
     let height = Dimensions.get('window').height;
-    console.log(this.state.paypalLink)
+    console.log("PP", this.state.paypalLink)
     if (!this.state.isReady) {
       return (
         <View style={styles.shimmerMainView}>
