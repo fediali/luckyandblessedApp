@@ -65,8 +65,6 @@ export default class UserProfile extends Component {
         GetData(baseUrl + `api/usersnew/${JSON.parse(user).user_id}`)
           .then(res => res.json())
           .then((result) => {
-            console.log(result)
-            console.log("--------------------", JSON.parse(user).name)
             this.setState({
               fullName: JSON.parse(user).name,
               email: result.email,
@@ -142,7 +140,6 @@ export default class UserProfile extends Component {
     AsyncStorage.removeItem(STORAGE_PRODUCT_HISTORY_CATEGORY);
     AsyncStorage.removeItem(STORAGE_FCM_TOKEN)
     Globals.cartCount = 0
-
     this.context.setAuthenticated("")
   }
   onImageEditClick = () => {
@@ -158,7 +155,7 @@ export default class UserProfile extends Component {
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        // console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
         // this.selectOneFile();
         this.setState({ imageb64: Globals.placeHolderImage })

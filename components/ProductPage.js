@@ -104,7 +104,6 @@ export default class ProductPage extends Component {
                   response[0].main_pair.detailed.image_path,
                 );
 
-                console.log("AAA",response[0])
                 // Stroing History of objects
                 RetrieveDataAsync('productHistoryList').then((value) => {
                   if (value == null) value = [];
@@ -257,7 +256,6 @@ export default class ProductPage extends Component {
         PostData(baseUrl + `api/addcart`, order)
           .then((res) => res.json())
           .then((response) => {
-            console.log("}}}}}}}}}}}",this.state.selectedQuantity)
             Globals.cartCount+=Number(this.state.selectedQuantity)
             this.setState(this.state) //To trigger rerender
             Toast.show('Product added to cart');
@@ -272,7 +270,6 @@ export default class ProductPage extends Component {
   };
 
   render() {
-console.log("BOO",this.state.data.qty_content)
 
     if (!this.state.isReady) {
       return (

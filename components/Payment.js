@@ -29,18 +29,21 @@ const baseUrl = Globals.baseUrl;
 const CODPAYMENTID = 17;
 const CREDITCARTPAYMENTID = 34;
 const PAYPALPAYMENTID = 20;
+const MERCHANTAUTH_NAME = "9Lw9PY5KCZkz";
+const MERCHANTAUTH_TRANSACTIONID = "9hG2Em8ZD6y64aCJ"
 let deliveryDetails = null;
 let gUser = null;
+
 class Payment extends Component {
   constructor(props) {
     super(props);
     //PaymentMode => 1 = CreditCard, 2 = paypal, 3 = COD
     this.state = {
       isReady: false,
-      cardNumber: '', //TODO: for testing purpose, remove it when deploy
-      expMonth: '',
-      expYear: '',
-      cardCode: '',
+      cardNumber: '5424000000000015', //TODO: for testing purpose, remove it when deploy
+      expMonth: '12',
+      expYear: '2020',
+      cardCode: '999',
       profile_id: this.props.route.params.profile_id,
       paymentMode: 1,
       paypalLink: null,
@@ -200,7 +203,6 @@ class Payment extends Component {
   };
 
   handlePayPalTransaction = (user) => {
-    console.log("OO")
     this.setState({ showCircleLoader: true })
     let paymentItems = [];
     //mapping lineItems(from params) onto below payment items object
@@ -272,7 +274,6 @@ class Payment extends Component {
         ) //To create Order
           .then((res) => res.json())
           .then((response) => {
-            console.log('Paypal Response: ', response);
             this.setState({ paypalLink: response.links[1].href });
           })
           .catch((e) => console.log('Exception 1', e));
@@ -281,6 +282,7 @@ class Payment extends Component {
   };
 
   placeOrder = (user, payment_id, mproduct, transResponse = []) => {
+    
     let orderData = {
       user_id: user.user_id,
       shipping_id: '15', //UPS Shipping
@@ -314,11 +316,19 @@ class Payment extends Component {
   };
 
   postCreditCardTransaction = (user) => {
+    let paymentItems = this.props.route.params.paymentLineItems;
+    //Max length allowed for product name is 31 characters
+    paymentItems.map(item => {
+      if (item.name.length > 31){
+        item.name = item.name.substring(0, 31)
+
+      }
+    })
     let data = {
       createTransactionRequest: {
         merchantAuthentication: {
-          name: '9Lw9PY5KCZkz',
-          transactionKey: '9hG2Em8ZD6y64aCJ',
+          name: MERCHANTAUTH_NAME,
+          transactionKey: MERCHANTAUTH_TRANSACTIONID,
         },
 
         transactionRequest: {
@@ -333,7 +343,7 @@ class Payment extends Component {
             },
           },
           lineItems: {
-            lineItem: this.props.route.params.paymentLineItems,
+            lineItem: paymentItems,
           },
 
           customer: {
@@ -385,7 +395,12 @@ class Payment extends Component {
         let transResponse = JSON.parse(responses.trim());
 
         if (transResponse.transactionResponse.responseCode == 1) {
-          this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transResponse);
+          let transData = {
+            type: "AUTH_ONLY",
+            transaction_id: MERCHANTAUTH_TRANSACTIONID,
+            location: "MobileApp"
+          }
+          this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transData);
         } else {
           Toast.show(transResponse.transactionResponse.errors[0].errorText);
         }
@@ -402,8 +417,8 @@ class Payment extends Component {
       totalCost: this.props.route.params.totalCost,
       finalCost: this.props.route.params.finalCost,
       discount: this.props.route.params.discount,
-      paymentLineItems: this.state.paymentLineItems,
-      orderItems: this.state.orderItems,
+      paymentLineItems: this.props.route.params.paymentLineItems,
+      orderItems: this.props.route.params.orderItems,
     });
   };
 
@@ -411,9 +426,7 @@ class Payment extends Component {
     this.setState({ paymentMode });
   };
   handleWebViewResponse = (data) => {
-    console.log(data)
     if (data.title == "Success") {
-      console.log("Success")
       this.setState(
         { paypalLink: null }
         , () => {
@@ -434,7 +447,7 @@ class Payment extends Component {
   render() {
     let width = Dimensions.get('window').width;
     let height = Dimensions.get('window').height;
-    console.log("PP", this.state.paypalLink)
+    // console.log("PP", this.state.paypalLink)
     if (!this.state.isReady) {
       return (
         <View style={styles.shimmerMainView}>

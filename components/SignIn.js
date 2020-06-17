@@ -97,7 +97,6 @@ class SignIn extends Component {
   };
 
   putFcmToken = async (user) => {
-    console.log('Putting fcm token');
 
     let data = {
       firebase_id: await RetrieveDataAsync(Globals.STORAGE_FCM_TOKEN),
@@ -107,7 +106,6 @@ class SignIn extends Component {
       data,
     );
     let putResponse = await res.json();
-    console.log(putResponse);
   };
 
   isValid() {
@@ -153,7 +151,6 @@ class SignIn extends Component {
       PostData(baseUrl + `api/resetpasswordnew`, data)
         .then((res) => res.text())
         .then((response) => {
-          console.log(response);
           Toast.show('Check you email inbox to set new password.');
         });
     } else {
