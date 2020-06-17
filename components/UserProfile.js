@@ -247,13 +247,17 @@ export default class UserProfile extends Component {
             customSetState={(stateVal) => {
               this.customSetState(stateVal);
             }}></ProfileText>
-          <ProfileText
+            <ProfileText
+            navigation={this.props.navigation}
+            keyText="Delivery"
+            containIcon={true}></ProfileText>
+          {/* <ProfileText
             keyText="Address"
             valueText={this.state.longAddress}
             stateKey="address"
             customSetState={(stateVal) => {
               this.customSetState(stateVal);
-            }}></ProfileText>
+            }}></ProfileText> */}
 
           <View style={styles.divider}></View>
 

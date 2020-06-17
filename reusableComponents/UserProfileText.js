@@ -71,8 +71,8 @@ class ProfileText extends PureComponent {
     if (this.props.keyText == "TAX ID") {
       this.props.navigation.navigate("TaxID")
     }
-    else if (this.props.keyText == "Referral Link") {
-      this.props.navigation.navigate("TaxID")
+    else if (this.props.keyText == "Delivery") {
+      this.props.navigation.navigate("Delivery", {fromUserProfile: true})
     }
     else if (this.props.keyText == "My orders") {
       this.props.navigation.navigate("TrackOrders")
