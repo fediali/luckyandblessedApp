@@ -234,6 +234,9 @@ class Delivery extends Component {
     }
   };
 
+  navigateToUserProfile = () => {
+    this.props.navigation.navigate("UserProfile")
+  }
   validateAndRedirect = () => {
     if (this.isValid()) {
       this.setState({ isReady: false });
@@ -295,6 +298,8 @@ class Delivery extends Component {
           .then((response) => {
             if (!response.message) {
               Toast.show(`${data.profile_name} profile created successfully`);
+              if (this.props.route.params.fromUserProfile) this.props.navigation.navigate("UserProfile")
+              else {
               this.props.navigation.push('Payment', {
                 deliveryDetails: this.state,
                 totalCost: this.props.route.params.totalCost,
@@ -308,6 +313,7 @@ class Delivery extends Component {
                 b_zipCode: this.props.route.params.b_zipCode,
                 b_country: this.props.route.params.b_country,
               });
+            }
               setTimeout(() => {
                 this.setState({ isReady: true });
               }, 1000);
@@ -325,6 +331,8 @@ class Delivery extends Component {
           .then((response) => {
 
             if (response.profile_id) {
+              if (this.props.route.params.fromUserProfile) this.props.navigation.navigate("UserProfile")
+              else {
               this.props.navigation.push('Payment', {
                 totalCost: this.props.route.params.totalCost,
                 finalCost: this.props.route.params.finalCost,
@@ -333,6 +341,7 @@ class Delivery extends Component {
                 orderItems: this.props.route.params.orderItems,
                 profile_id: response.profile_id
               });
+            }
               setTimeout(() => {
                 this.setState({ isReady: true });
               }, 1000);

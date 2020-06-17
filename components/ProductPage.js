@@ -53,7 +53,7 @@ export default class ProductPage extends Component {
       ],
       selectedQuantity: 0,
       pid: this.props.route.params.pid,
-      cname: this.props.route.params.cname,
+      cname: null,
       product_stock: 0,
       data: {
         productName: '',
@@ -115,7 +115,7 @@ export default class ProductPage extends Component {
                     base_price: response[0].base_price,
                     mainImage: response[0].main_pair.detailed.image_path,
                     pid: this.state.pid,
-                    cname: this.state.cname,
+                    cname: response[0].category,
                     brand: response[0].brand,
                   };
                   if (
@@ -132,6 +132,7 @@ export default class ProductPage extends Component {
                 this.setState({
                   isReady: true,
                   product_stock: parseInt(response[0].amount),
+                  cname: response[0].category,
                   data: {
                     productName: response[0].product,
                     price: response[0].price,

@@ -5,7 +5,7 @@ import PutData from '../reusableComponents/API/PutData';
 import Toast from 'react-native-simple-toast';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
-
+import StoreDataAsync from "../reusableComponents/AsyncStorage/StoreDataAsync"
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER
 
@@ -26,25 +26,25 @@ class ProfileText extends PureComponent {
     this.setState({ isEdit: false })
     var key = this.props.stateKey; //fullName
     let data;
-    if (key == "address") { //TODO: Adress not updating by PUT request
-      data = {
-        b_address_2: this.state[key]
-      }
-
-    } else if (key == "fullName") {
+    //no need for email
+    RetrieveDataAsync(STORAGE_USER).then(user => {
+    if (key == "fullName") {
+      console.log("LLLL",{...JSON.parse(user)})
+      StoreDataAsync(STORAGE_USER,{...JSON.parse(user),name:this.state[key]})
       if (this.state[key].split(' ').length > 1) {
         let fname = this.state[key].split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
         let lname = this.state[key].split(' ').slice(-1).join(' ');
         data = {
-          b_firstname: fname,
-          b_lastname: lname
+          firstname: fname,
+          lastname: lname
         }
       } else {
         data = {
-          b_firstname: this.state[key],
-          b_lastname: ""
+          firstname: this.state[key],
+          lastname: ""
         }
       }
+      console.log("99999",data)
     }else if (key == "email"){
       data={
         email:this.state[key]
@@ -52,12 +52,12 @@ class ProfileText extends PureComponent {
     }
     this.props.customSetState({ [key]: this.state[key] })  //fullName: "Updated Text"
 
-    //no need for email
-    RetrieveDataAsync(STORAGE_USER).then(user => {
+    
       PutData(
-        baseUrl + `/api/usersnew/${JSON.parse(user).user_id}`,
+        baseUrl + `api/usersnew/${JSON.parse(user).user_id}`,
         data,
       ).then((res) => res.json()).then((result) => {
+        console.log("OOO",result,data)
         if (result.message=="User updated successfully") {
         }
         else {
@@ -71,8 +71,8 @@ class ProfileText extends PureComponent {
     if (this.props.keyText == "TAX ID") {
       this.props.navigation.navigate("TaxID")
     }
-    else if (this.props.keyText == "Referral Link") {
-      this.props.navigation.navigate("TaxID")
+    else if (this.props.keyText == "Address") {
+      this.props.navigation.navigate("Delivery", {fromUserProfile: true})
     }
     else if (this.props.keyText == "My orders") {
       this.props.navigation.navigate("TrackOrders")
