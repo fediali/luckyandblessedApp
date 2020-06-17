@@ -28,25 +28,20 @@ class ProfileText extends PureComponent {
     let data;
     //no need for email
     RetrieveDataAsync(STORAGE_USER).then(user => {
-    if (key == "address") { //TODO: Adress not updating by PUT request
-      data = {
-        b_address_2: this.state[key]
-      }
-
-    } else if (key == "fullName") {
+    if (key == "fullName") {
       console.log("LLLL",{...JSON.parse(user)})
       StoreDataAsync(STORAGE_USER,{...JSON.parse(user),name:this.state[key]})
       if (this.state[key].split(' ').length > 1) {
         let fname = this.state[key].split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
         let lname = this.state[key].split(' ').slice(-1).join(' ');
         data = {
-          b_firstname: fname,
-          b_lastname: lname
+          firstname: fname,
+          lastname: lname
         }
       } else {
         data = {
-          b_firstname: this.state[key],
-          b_lastname: ""
+          firstname: this.state[key],
+          lastname: ""
         }
       }
       console.log("99999",data)
@@ -76,7 +71,7 @@ class ProfileText extends PureComponent {
     if (this.props.keyText == "TAX ID") {
       this.props.navigation.navigate("TaxID")
     }
-    else if (this.props.keyText == "Delivery") {
+    else if (this.props.keyText == "Address") {
       this.props.navigation.navigate("Delivery", {fromUserProfile: true})
     }
     else if (this.props.keyText == "My orders") {

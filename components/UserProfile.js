@@ -60,6 +60,32 @@ export default class UserProfile extends Component {
   static contextType = ThemeContext
 
   componentDidMount() {
+
+    this.onComponentFocus = this.props.navigation.addListener('focus', () => {
+      RetrieveDataAsync(STORAGE_USER).then(user => {
+        GetData(baseUrl + `api/usersnew/${JSON.parse(user).user_id}`)
+          .then(res => res.json())
+          .then((result) => {
+            this.setState({
+              fullName: JSON.parse(user).name,
+              email: result.email,
+              longAddress: result.b_address_2,
+              shortAddress: result.b_address,
+              isReady: true,
+              section1: [
+                {
+                  id: 0,
+                  title: 'Referral Link',
+                  content: `${baseUrl}profiles-add.html?ref_code=${result.ref_link}`,
+                },
+              ],
+              imageb64: result.profile_image ? baseUrl + result.profile_image : this.state.imageb64
+
+            })
+          })
+      })
+  })
+
     InteractionManager.runAfterInteractions(() => {
       RetrieveDataAsync(STORAGE_USER).then(user => {
         GetData(baseUrl + `api/usersnew/${JSON.parse(user).user_id}`)
@@ -249,16 +275,8 @@ export default class UserProfile extends Component {
             }}></ProfileText>
             <ProfileText
             navigation={this.props.navigation}
-            keyText="Delivery"
-            containIcon={true}></ProfileText>
-          {/* <ProfileText
             keyText="Address"
-            valueText={this.state.longAddress}
-            stateKey="address"
-            customSetState={(stateVal) => {
-              this.customSetState(stateVal);
-            }}></ProfileText> */}
-
+            containIcon={true}></ProfileText>
           <View style={styles.divider}></View>
 
           <Accordion
