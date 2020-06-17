@@ -62,7 +62,7 @@ export default class UserProfile extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       RetrieveDataAsync(STORAGE_USER).then(user => {
-        GetData(baseUrl + `/api/usersnew/${JSON.parse(user).user_id}`)
+        GetData(baseUrl + `api/usersnew/${JSON.parse(user).user_id}`)
           .then(res => res.json())
           .then((result) => {
             console.log(result)
