@@ -39,6 +39,7 @@ export default class ProductPage extends Component {
     super(props);
     this.state = {
       activeSections: [],
+      disableAddToCartButton: false,
       isReady: false,
       sections: [
         {
@@ -237,6 +238,8 @@ export default class ProductPage extends Component {
   };
 
   addToCart = async () => {
+    this.setState({disableAddToCartButton: true})//to stop user from clicking multiple times before the API respond.
+    Toast.show("Please wait..")
     // Retriving the user_id
     if (this.state.product_stock > 0){
       RetrieveDataAsync(Globals.STORAGE_USER).then((user) => {
@@ -259,14 +262,18 @@ export default class ProductPage extends Component {
             Globals.cartCount+=Number(this.state.selectedQuantity)
             this.setState(this.state) //To trigger rerender
             Toast.show('Product added to cart');
+            this.setState({disableAddToCartButton: false})
           })
-          .catch((err) => alert(err));
+          .catch((err) => {
+            alert(err)
+            this.setState({disableAddToCartButton: false})
+          });
       });
     }
     else {
       Toast.show("Product is currently out of stock")
+      this.setState({disableAddToCartButton: false})
     }
-    
   };
 
   render() {
@@ -411,6 +418,7 @@ export default class ProductPage extends Component {
                   </Text>
                   <TouchableOpacity
                     style={styles.addToCartTouch}
+                    disabled={this.state.disableAddToCartButton}
                     onPress={this.addToCart}>
                     <Text style={styles.addToCartText}>Add to cart</Text>
                   </TouchableOpacity>

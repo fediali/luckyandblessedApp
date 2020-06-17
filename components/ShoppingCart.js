@@ -96,6 +96,7 @@ class FlatListItem extends Component {
                   paymentLineItems: tempPaymentLineItems,
                   orderItems: tempOrderItems
                 })
+                Globals.cartCount = parseInt(this.props.parentFlatList.state.totalCartProducts);
                 this.props.parentFlatList.refreshFlatList(deletingRow); 
               });
           },
@@ -149,7 +150,7 @@ class FlatListItem extends Component {
           itemList: tempItemList,
           paymentLineItems: tempPaymentLineItems
         })
-
+        Globals.cartCount = parseInt(this.props.parentFlatList.state.totalCartProducts);
         Toast.show(`${item.name} quantity updated`);
       });
     // this.setState({ stateText: usStates[index] , s_country: usStates[index], b_country: usStates[index]});
@@ -465,6 +466,8 @@ class ShoppingCart extends Component {
                   paymentLineItems: lineItems,
                   isReady: true,
                 });
+                Globals.cartCount = parseInt(this.state.totalCartProducts);
+
               })
               .catch((ex) =>
                 console.log('Get Specific Product Exception ' + ex),

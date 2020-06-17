@@ -104,7 +104,9 @@ const innerStyles = StyleSheet.create({
         letterSpacing: 0,
         textAlign: "left",
         color: '#2d2d2f',
-        width: Width * 0.427
+        width: Width * 0.427,
+        maxWidth: '80%',
+        maxHeight: '70%'
     },
     showAllText: {
         fontFamily: "Avenir-Book",
