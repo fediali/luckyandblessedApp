@@ -243,7 +243,7 @@ class MainPage extends Component {
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[1].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={innerStyles.gridCell}>
@@ -256,7 +256,7 @@ class MainPage extends Component {
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[2].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity activeOpacity={0.9} style={innerStyles.newArrivalGridTouch}
@@ -268,7 +268,7 @@ class MainPage extends Component {
                                     />
                                     <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
+                                    <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[3].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
