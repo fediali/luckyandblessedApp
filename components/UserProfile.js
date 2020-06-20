@@ -342,6 +342,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Book',
     fontSize: 16,
     lineHeight: 22,
+    textAlign: 'center',
+    width: Width * 0.6
   },
   divider: {
     height: Height * 0.01,

@@ -251,12 +251,19 @@ class Delivery extends Component {
         data.profile_name = this.state.selectedProfileName;
       }
 
-      let fullName = this.state.fullName.split(' ');
+      let fname = '', lname = '';
+      if (this.state.fullName.split(' ').length > 1) {
+        fname = this.state.fullName.split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
+        lname = this.state.fullName.split(' ').slice(-1).join(' ');
+        
+      } else {
+        fname = this.state.fullName
+      }
 
       if (this.state.sameShipping) {
-        (data.b_firstname = fullName[0]),
-          (data.b_lastname = fullName[1]),
-          (data.b_address = this.state.streetAddress),
+        (data.b_firstname = fname),
+          (data.b_lastname = lname),
+          (data.b_address = this.state.streetAddress), //TODO: Everything before first comma in b_address and everything after that is b_address_2
           (data.b_address_2 = ''),
           (data.b_county = ''),
           (data.b_country = 'US'),
@@ -266,10 +273,18 @@ class Delivery extends Component {
           (data.b_phone = this.state.phoneNumber),
           (data.is_same_shipping = 'Y');
       } else {
-        let s_fullName = this.state.s_fullName.split(' ');
+        let s_fname, s_lname = '';
+        if (this.state.s_fullName.split(' ').length > 1) {
+          s_fname = this.state.s_fullName.split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
+          s_lname = this.state.s_fullName.split(' ').slice(-1).join(' ');
+          
+        } else {
+          s_fname = this.state.s_fullName
+        }
 
-        (data.b_firstname = fullName[0]),
-          (data.b_lastname = fullName[1]),
+
+        (data.b_firstname = fname),
+          (data.b_lastname = lname),
           (data.b_address = this.state.streetAddress),
           (data.b_address_2 = ''),
           (data.b_county = ''),
@@ -278,8 +293,8 @@ class Delivery extends Component {
           (data.b_state = this.state.stateText),
           (data.b_zipcode = this.state.zipCode),
           (data.b_phone = this.state.phoneNumber),
-          (data.s_firstname = s_fullName[0]),
-          (data.s_lastname = s_fullName[1]),
+          (data.s_firstname = s_fname),
+          (data.s_lastname = s_lname),
           (data.s_address = this.state.s_streetAddress),
           (data.s_address_2 = ''),
           (data.s_county = ''),

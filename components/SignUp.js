@@ -134,7 +134,19 @@ class SignUp extends Component {
       this.setState({emailError: ''});
       //call signup API here
       //Splitting name to first and last name
-      var fullName = this.state.fullName.split(' ');
+      if (this.state.fullName.split(' ').length > 1) {
+        let fname = this.state.fullName.split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
+        let lname = this.state.fullName.split(' ').slice(-1).join(' ');
+        data = {
+          firstname: fname,
+          lastname: lname
+        }
+      } else {
+        data = {
+          firstname: this.state.fullName,
+          lastname: ""
+        }
+      }
 
       var data = {
         email: this.state.email,
