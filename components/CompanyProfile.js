@@ -100,18 +100,6 @@ export default class CompanyProfile extends Component {
                   content: response.wholesale_info,
               },
             ],
-              //TODO: Confitm
-              // {
-              //   id: 1,
-              //   title: 'Locations',
-              //   content: 'Jackets',
-              // },
-              // 
-              // {
-              //   id: 3,
-              //   title: 'Use and Sales TX ID form',
-              //   content: 'M,L',
-              // },
               section2: [
                 {
                   id: 0,
@@ -123,12 +111,6 @@ export default class CompanyProfile extends Component {
                   title: 'FAQs',
                   content: response.faq,
                 },
-                //TODO: Cnfirm
-                // {
-                //   id: 2,
-                //   title: 'Upcoming Tradeshows',
-                //   content: 'Addidas,Puma,Reebok',
-                // },
               ],
           })
 

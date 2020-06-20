@@ -10,7 +10,6 @@ import {
 
 class SizePicker extends PureComponent {
 
-    //TODO: Find a better workaround to update this.state.isChange
     constructor(props) {
         super(props)
         this.setupState();

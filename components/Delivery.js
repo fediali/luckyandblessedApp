@@ -150,7 +150,7 @@ class Delivery extends Component {
                 cityTown: main_profile.b_city,
                 stateText: main_profile.b_state,
                 zipCode: main_profile.b_zipcode,
-                email: 'demo@gmail.com',
+                email: user.email,
                 phoneNumber: main_profile.b_phone,
                 s_fullName: main_profile.s_firstname + ' ' + main_profile.s_lastname,
                 s_firstName: main_profile.s_firstname,
@@ -159,7 +159,7 @@ class Delivery extends Component {
                 s_cityTown: main_profile.s_city,
                 s_stateText: main_profile.s_state,
                 s_zipCode: main_profile.s_zipcode,
-                s_email: 'demo@gmail.com', //TODO: Check for email
+                s_email: user.email,
                 s_phoneNumber: main_profile.s_phone,
               });
             })
@@ -173,7 +173,6 @@ class Delivery extends Component {
         });
     }
 
-    //TODO: change user id to
     else {
       promises.push(GetData(baseUrl + `api/userprofilesnew/${user.user_id}`));
       Promise.all(promises)
@@ -210,7 +209,7 @@ class Delivery extends Component {
                 cityTown: main_profile.b_city,
                 stateText: main_profile.b_state,
                 zipCode: main_profile.b_zipcode,
-                email: 'demo@gmail.com', //TODO: Check for email
+                email: user.email, 
                 phoneNumber: main_profile.b_phone,
                 s_fullName:
                   main_profile.s_firstname + ' ' + main_profile.s_lastname,
@@ -219,7 +218,7 @@ class Delivery extends Component {
                 s_cityTown: main_profile.s_city,
                 s_stateText: main_profile.s_state,
                 s_zipCode: main_profile.s_zipcode,
-                s_email: 'demo@gmail.com', //TODO: Check for email
+                s_email: user.email, 
                 s_phoneNumber: main_profile.s_phone,
               });
             })

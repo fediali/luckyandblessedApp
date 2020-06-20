@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import CategoriesProductListSingleItem from '../reusableComponents/CategoriesProductListSingleItem';
 import CategoriesProductListDoubleItem from '../reusableComponents/CategoriesProductListDoubleItem';
-import {Image as FastImage} from 'react-native';
+import { Image as FastImage } from 'react-native';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import Globals from '../Globals';
@@ -81,13 +81,13 @@ class CategoriesProduct extends Component {
       var promises = [];
       if (cid == SIMILARPRODUCTS_CATEGORY_ID) {
         //-3 is cid of SIMILAR PRODUCTS
-        promises.push(GetData(baseUrl + `api/similarproducts/${this.props.route.params.pid}&status=A`)); 
+        promises.push(GetData(baseUrl + `api/similarproducts/${this.props.route.params.pid}&status=A`));
       } else {
-          if (this.state.filters){
-            promises.push(GetData(baseUrl +`api/products?cid=${cid}&status=A${this.state.filters}&page=${this.state.iteratedPage}`));
-          }
-          else
-            promises.push(GetData(baseUrl +`api/products?cid=${cid}&status=A&page=${this.state.iteratedPage}`));
+        if (this.state.filters) {
+          promises.push(GetData(baseUrl + `api/products?cid=${cid}&status=A${this.state.filters}&page=${this.state.iteratedPage}`));
+        }
+        else
+          promises.push(GetData(baseUrl + `api/products?cid=${cid}&status=A&page=${this.state.iteratedPage}`));
       }
       let itr = this.state.iteratedPage;
       Promise.all(promises)
@@ -110,9 +110,7 @@ class CategoriesProduct extends Component {
                   await tempProducts.push({
                     product: responses[0].products[i].product,
                     product_id: responses[0].products[i].product_id,
-                    price: parseFloat(responses[0].products[i].price).toFixed(
-                      2,
-                    ),
+                    price: parseFloat(responses[0].products[i].price).toFixed(2),
                     base_price: parseFloat(
                       responses[0].products[i].base_price,
                     ).toFixed(2),
@@ -120,7 +118,7 @@ class CategoriesProduct extends Component {
                       responses[0].products[i].main_pair.detailed.image_path,
                     product_brand: responses[0].products[i].brand
                       ? responses[0].products[i].brand
-                      : DEFAULTS_OBJ.brand, //TODO: should come from defaults
+                      : DEFAULTS_OBJ.brand, 
                     cname: catName, //Category name would be the same here.
                   });
                 }
@@ -204,7 +202,7 @@ class CategoriesProduct extends Component {
   }
 
   changeTextColor(item) {
-    this.setState({selected: item});
+    this.setState({ selected: item });
   }
   renderSeparator = (item) => {
     return <View style={styles.renderSeparator} />;
@@ -218,14 +216,14 @@ class CategoriesProduct extends Component {
     ) : null;
     return listFooter;
   };
-  renderSingleItem = ({item}) => {
+  renderSingleItem = ({ item }) => {
     return (
       <CategoriesProductListSingleItem
         key={item.product_id}
         pid={item.product_id}
         cname={item.cname}
         navigation={this.props.navigation}
-        imageUrl={{uri: item.imageUrl}}
+        imageUrl={{ uri: item.imageUrl }}
         name1={item.product}
         price1={'$' + item.price}
         name2={item.product_brand}
@@ -234,14 +232,14 @@ class CategoriesProduct extends Component {
     );
   };
 
-  renderGridItems = ({item}) => {
+  renderGridItems = ({ item }) => {
     return (
       <CategoriesProductListDoubleItem
         key={item.product_id}
         pid={item.product_id}
         cname={item.cname}
         navigation={this.props.navigation}
-        imageUrl={{uri: item.imageUrl}}
+        imageUrl={{ uri: item.imageUrl }}
         name1={item.product}
         price1={'$' + item.price}
         name2={item.product_brand}
@@ -262,134 +260,134 @@ class CategoriesProduct extends Component {
             <ActivityIndicator size="large" />
           </View>
         ) : (
-          <View style={styles.mainContainer}>
-            {this.state.showZeroProductScreen ? (
-              <View style={styles.completeScreen}>
-                <ZeroDataScreen />
-              </View>
-            ) : (
-              <>
-                <View style={styles.paddingHorizontal}>
-                  <Text style={styles.categoryNameText}>
-                    {this.state.cname}
-                  </Text>
-                  <Text style={styles.numCategoryText}>
-                    {this.state.totalProducts} products
-                  </Text>
+            <View style={styles.mainContainer}>
+              {this.state.showZeroProductScreen ? (
+                <View style={styles.completeScreen}>
+                  <ZeroDataScreen />
                 </View>
-                <View style={styles.horizontalImagesView}>
-                  <FastImage
-                    style={styles.imageList}
-                    source={require('../static/listIcon.png')}
-                  />
-
-                  <Text style={styles.sortingText}>Sorting</Text>
-                  <View style={styles.rightImages}>
-                    <TouchableOpacity
-                      style={styles.paddingLeftView}
-                      activeOpacity={0.99}
-                      onPress={() => {
-                        this.setState({singleItem: false});
-                      }}>
-                      {this.state.singleItem ? (
-                        <Icon
-                          size={25}
-                          name="grid"
-                          type="feather"
-                          color="#2d2d2f"
-                        />
-                      ) : (
-                        <Icon
-                          size={25}
-                          name="grid"
-                          type="feather"
-                          color="#2967ff"
-                        />
-                      )}
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.paddingLeftView}
-                      activeOpacity={0.99}
-                      onPress={() => {
-                        this.setState({singleItem: true});
-                      }}>
-                      {this.state.singleItem ? (
-                        <Icon
-                          style={styles.iconRight}
-                          size={25}
-                          name="square"
-                          type="feather"
-                          color="#2967ff"
-                        />
-                      ) : (
-                        <Icon
-                          style={styles.iconRight}
-                          size={25}
-                          name="square"
-                          type="feather"
-                          color="#2d2d2f"
-                        />
-                      )}
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.paddingLeftView}
-                      onPress={this.navigateToFilter}>
+              ) : (
+                  <>
+                    <View style={styles.paddingHorizontal}>
+                      <Text style={styles.categoryNameText}>
+                        {this.state.cname}
+                      </Text>
+                      <Text style={styles.numCategoryText}>
+                        {this.state.totalProducts} products
+                  </Text>
+                    </View>
+                    <View style={styles.horizontalImagesView}>
                       <FastImage
-                        style={styles.filterImage}
-                        source={require('../static/Filter.png')}
+                        style={styles.imageList}
+                        source={require('../static/listIcon.png')}
                       />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </>
-            )}
 
-            {/* Checking whether the Flatlist should render single item row or double item row */}
-            {this.state.singleItem ? (
-              // changing Key to rerender the FlatList component as chaning numColumn require rerender
-              // Single Item row FlatList
-              <FlatList
-                key={this.state.singleItem ? 'h' : 'v'}
-                data={this.state.products}
-                contentContainerStyle={styles.container}
-                keyExtractor={(item, index) => item.product_id}
-                renderItem={this.renderSingleItem}
-                ItemSeparatorComponent={this.renderSeparator}
-                onEndReached={this.handleLoadMore}
-                onEndReachedThreshold={5}
-                ListFooterComponent={this.ListFooter}
-                maxToRenderPerBatch={4}
-                initialNumToRender={2}
-                windowSize={8}
-              />
-            ) : (
-              /*
-                            product,
-                            product_id,
-                            price,
-                            base_price,
-                            products.main_pair.detailed.image_path
-                            */
-              // Double Item row FlatList
-              <FlatList
-                key={this.state.singleItem ? 'h' : 'v'}
-                data={this.state.products}
-                contentContainerStyle={styles.container}
-                numColumns={2}
-                keyExtractor={(item, index) => item.product_id}
-                renderItem={this.renderGridItems}
-                ItemSeparatorComponent={this.renderSeparator}
-                columnWrapperStyle={styles.multiRowStyling}
-                onEndReached={this.handleLoadMore}
-                onEndReachedThreshold={5}
-                ListFooterComponent={this.ListFooter}
-                maxToRenderPerBatch={6}
-                initialNumToRender={6}
-                windowSize={12}
-              />
-            )}
-          </View>
-        )}
+                      <Text style={styles.sortingText}>Sorting</Text>
+                      <View style={styles.rightImages}>
+                        <TouchableOpacity
+                          style={styles.paddingLeftView}
+                          activeOpacity={0.99}
+                          onPress={() => {
+                            this.setState({ singleItem: false });
+                          }}>
+                          {this.state.singleItem ? (
+                            <Icon
+                              size={25}
+                              name="grid"
+                              type="feather"
+                              color="#2d2d2f"
+                            />
+                          ) : (
+                              <Icon
+                                size={25}
+                                name="grid"
+                                type="feather"
+                                color="#2967ff"
+                              />
+                            )}
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.paddingLeftView}
+                          activeOpacity={0.99}
+                          onPress={() => {
+                            this.setState({ singleItem: true });
+                          }}>
+                          {this.state.singleItem ? (
+                            <Icon
+                              style={styles.iconRight}
+                              size={25}
+                              name="square"
+                              type="feather"
+                              color="#2967ff"
+                            />
+                          ) : (
+                              <Icon
+                                style={styles.iconRight}
+                                size={25}
+                                name="square"
+                                type="feather"
+                                color="#2d2d2f"
+                              />
+                            )}
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.paddingLeftView}
+                          onPress={this.navigateToFilter}>
+                          <FastImage
+                            style={styles.filterImage}
+                            source={require('../static/Filter.png')}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </>
+                )}
+
+              {/* Checking whether the Flatlist should render single item row or double item row */}
+              {this.state.singleItem ? (
+                // changing Key to rerender the FlatList component as chaning numColumn require rerender
+                // Single Item row FlatList
+                <FlatList
+                  key={this.state.singleItem ? 'h' : 'v'}
+                  data={this.state.products}
+                  contentContainerStyle={styles.container}
+                  keyExtractor={(item, index) => item.product_id}
+                  renderItem={this.renderSingleItem}
+                  ItemSeparatorComponent={this.renderSeparator}
+                  onEndReached={this.handleLoadMore}
+                  onEndReachedThreshold={5}
+                  ListFooterComponent={this.ListFooter}
+                  maxToRenderPerBatch={4}
+                  initialNumToRender={2}
+                  windowSize={8}
+                />
+              ) : (
+                  /*
+                                product,
+                                product_id,
+                                price,
+                                base_price,
+                                products.main_pair.detailed.image_path
+                                */
+                  // Double Item row FlatList
+                  <FlatList
+                    key={this.state.singleItem ? 'h' : 'v'}
+                    data={this.state.products}
+                    contentContainerStyle={styles.container}
+                    numColumns={2}
+                    keyExtractor={(item, index) => item.product_id}
+                    renderItem={this.renderGridItems}
+                    ItemSeparatorComponent={this.renderSeparator}
+                    columnWrapperStyle={styles.multiRowStyling}
+                    onEndReached={this.handleLoadMore}
+                    onEndReachedThreshold={5}
+                    ListFooterComponent={this.ListFooter}
+                    maxToRenderPerBatch={6}
+                    initialNumToRender={6}
+                    windowSize={12}
+                  />
+                )}
+            </View>
+          )}
         <Footer Key={Math.random()} navigation={this.props.navigation} />
       </SafeAreaView>
     );
@@ -423,8 +421,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
-  paddingHorizontal: {paddingHorizontal: 20},
-  loader: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  paddingHorizontal: { paddingHorizontal: 20 },
+  loader: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   categoryNameText: {
     fontSize: 30,
     lineHeight: 36,
@@ -444,7 +442,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 5,
   },
-  imageList: {width: 23, height: 23},
+  imageList: { width: 23, height: 23 },
   sortingText: {
     paddingLeft: 13,
     fontSize: 16,
@@ -452,14 +450,14 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     fontFamily: 'Montserrat-Medium',
   },
-  rightImages: {flex: 1, flexDirection: 'row', justifyContent: 'flex-end'},
-  paddingLeftView: {paddingLeft: 10},
+  rightImages: { flex: 1, flexDirection: 'row', justifyContent: 'flex-end' },
+  paddingLeftView: { paddingLeft: 10 },
   renderSeparator: {
     paddingBottom: 15,
   },
-  listFooter: {flex: 1, alignItems: 'center', justifyContent: 'center'},
-  iconRight: {alignSelf: 'flex-end'},
-  filterImage: {height: 22, width: 22},
+  listFooter: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  iconRight: { alignSelf: 'flex-end' },
+  filterImage: { height: 22, width: 22 },
 });
 
 export default CategoriesProduct;

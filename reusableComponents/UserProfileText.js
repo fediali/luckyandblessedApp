@@ -22,10 +22,11 @@ class ProfileText extends PureComponent {
     this.setState({ isEdit: true, [key]: this.props.valueText })
   }
 
-  checkButtonPressed = () => { //TODO: PUT API 
+  checkButtonPressed = () => {  
     this.setState({ isEdit: false })
     var key = this.props.stateKey; //fullName
     let data;
+    console.log("DSKKSDKSDKSDKSD");
     //no need for email
     RetrieveDataAsync(STORAGE_USER).then(user => {
     if (key == "fullName") {

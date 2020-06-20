@@ -94,16 +94,16 @@ class MainPage extends Component {
                             StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then()
                             RetrieveDataAsync(STORAGE_USER).then((user) => {
 
-                            GetData(baseUrl + `api/carts/${JSON.parse(user).user_id}`)
-                                .then((res) => res.json())
-                                .then((responses) => {
-                                    if (responses.status == 404) {
-                                        Globals.cartCount=0
-                                    }else{
-                                        Globals.cartCount=Number(responses.cart_products)
-                                    }
-                                    this.setState({isReady: true})
-                                })
+                                GetData(baseUrl + `api/carts/${JSON.parse(user).user_id}`)
+                                    .then((res) => res.json())
+                                    .then((responses) => {
+                                        if (responses.status == 404) {
+                                            Globals.cartCount = 0
+                                        } else {
+                                            Globals.cartCount = Number(responses.cart_products)
+                                        }
+                                        this.setState({ isReady: true })
+                                    })
                             })
 
                         })
@@ -229,7 +229,7 @@ class MainPage extends Component {
                                         // resizeMode='contain'
                                         source={{ uri: this.state.newArrivals[0].main_pair.detailed.image_path }}
                                     />
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].product}</Text>
+                                    <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
@@ -241,7 +241,7 @@ class MainPage extends Component {
                                         style={innerStyles.gridImage}
                                         source={{ uri: this.state.newArrivals[1].main_pair.detailed.image_path }}
                                     />
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
+                                    <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[1].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
@@ -254,7 +254,7 @@ class MainPage extends Component {
                                         style={innerStyles.gridImage}
                                         source={{ uri: this.state.newArrivals[2].main_pair.detailed.image_path }}
                                     />
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
+                                    <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[2].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
@@ -266,7 +266,7 @@ class MainPage extends Component {
                                         style={innerStyles.gridImage}
                                         source={{ uri: this.state.newArrivals[3].main_pair.detailed.image_path }}
                                     />
-                                    <Text style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
+                                    <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[3].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
@@ -298,32 +298,39 @@ class MainPage extends Component {
                             }
                             }
                         />
-
                         {/* history header*/}
-                        <View style={innerStyles.headerView}>
-                            <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>History</Text>
-                            <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
-                                onPress={this.navigateToHistoryCategoryScreen(HISTORY_CATEGORY_ID, HISTORY_NAME, this.state.history)} >
-                                <Text style={[innerStyles.showAllText]}>Show All</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <FlatList
-                            keyExtractor={(item) => item.pid[0]}
-                            data={this.state.history}
-                            horizontal={true}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => (
-                                <MainPageHistoryListItem
-                                    pid={item.pid[0]}
-                                    cname={item.cname}
-                                    imageUrl={item.mainImage}
-                                    name={item.productName}
-                                    type={item.brand ? item.brand : this.state.defaults.brand}
-                                    price={Number(item.price).toFixed(2)}
-                                    navigation={this.props.navigation}
+                        {this.state.history != null ?
+                            <>
+                                < View style={innerStyles.headerView}>
+                                    <Text style={[styles.buttonText, innerStyles.halfFlex, innerStyles.textAlignLeft]}>History</Text>
+                                    <TouchableOpacity style={[innerStyles.halfFlex, innerStyles.textAlignRight]}
+                                        onPress={this.navigateToHistoryCategoryScreen(HISTORY_CATEGORY_ID, HISTORY_NAME, this.state.history)} >
+                                        <Text style={[innerStyles.showAllText]}>Show All</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+
+                                <FlatList
+                                    keyExtractor={(item) => item.pid[0]}
+                                    data={this.state.history}
+                                    horizontal={true}
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({ item, index }) => (
+                                        <MainPageHistoryListItem
+                                            pid={item.pid[0]}
+                                            cname={item.cname}
+                                            imageUrl={item.mainImage}
+                                            name={item.productName}
+                                            type={item.brand ? item.brand : this.state.defaults.brand}
+                                            price={Number(item.price).toFixed(2)}
+                                            navigation={this.props.navigation}
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
+                            </> :
+                            <>
+                            </>
+                        }
                         {this.state.showNewsletter == true ?
                             <View style={innerStyles.newsLetterMainView}>
                                 <View style={innerStyles.newsLetterInnerView}>
@@ -363,7 +370,7 @@ class MainPage extends Component {
 
                 </ScrollView>
                 <Footer Key={Math.random()} selected="Home" navigation={this.props.navigation} />
-            </SafeAreaView>
+            </SafeAreaView >
         )
     }
 }
@@ -472,10 +479,11 @@ const innerStyles = StyleSheet.create({
     },
     gridCell: {
         width: Width,
-        height: Height * 0.4,
+        height: Height * 0.43,
         flexDirection: 'row',
         paddingHorizontal: 10,
         justifyContent: 'space-around'
+
     },
     gridImage: {
         width: Width * 0.427,
@@ -491,7 +499,9 @@ const innerStyles = StyleSheet.create({
         letterSpacing: 0,
         textAlign: "left",
         color: '#2d2d2f',
-        width: Width * 0.427
+        width: Width * 0.427,
+        // maxHeight: '15%',
+        // maxWidth: '80%',
     },
     buttonSubmit: {
         width: '100%',

@@ -22,7 +22,6 @@ import Globals from '../Globals';
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
 
-//FIXME: Accordian ScrollView
 export default class TrackOrders extends Component {
   constructor(props) {
     super(props);

@@ -11,7 +11,7 @@ import {Image as FastImage} from 'react-native';
 export default class ProductPageSimilarListItem extends PureComponent {
 
   navigateToProductPage=()=>{
-    this.props.navigation.push("ProductPage", { pid: [this.props.pid], cname:"//TODO" }) 
+    this.props.navigation.push("ProductPage", { pid: [this.props.pid], cname:"" }) 
 }
     render() {
         return (

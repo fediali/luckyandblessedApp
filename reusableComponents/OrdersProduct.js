@@ -15,7 +15,6 @@ import OrderProductListItem from './OrderProductListItem';
 const Globals = require('../Globals');
 
 const baseUrl = Globals.baseUrl;
-//TODO: image from imageurl is not getting rendered. So currently hard coded image is presenter
 export default class ordersProduct extends PureComponent {
   constructor(props) {
     super(props);

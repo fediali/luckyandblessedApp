@@ -39,6 +39,7 @@ export default class ProductPage extends Component {
     super(props);
     this.state = {
       activeSections: [],
+      disableAddToCartButton: false,
       isReady: false,
       sections: [
         {
@@ -72,9 +73,9 @@ export default class ProductPage extends Component {
 
   getData() {
     var promises = [];
-
-    promises.push(GetData(baseUrl + `api/products/${this.state.pid}`));
-    promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid}`)); 
+    console.log("PID: ", this.state.pid[0])
+    promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
+    promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`)); 
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
@@ -112,6 +113,7 @@ export default class ProductPage extends Component {
                     productName: response[0].product,
                     price: response[0].price,
                     base_price: response[0].base_price,
+
                     mainImage: response[0].main_pair.detailed.image_path,
                     pid: this.state.pid,
                     cname: response[0].category,
@@ -138,7 +140,7 @@ export default class ProductPage extends Component {
                     mainImage: response[0].main_pair.detailed.image_path,
                     secondaryImages: secondaryImagesArray,
                     min_qty: Number(response[0].min_qty),
-                    max_qty: 18, //TODO: Number(response[0].max_qty) currently 0 from api
+                    max_qty: 18, 
                     qty_step: Number(response[0].qty_step),
                     full_description: response[0].full_description,
                     composition: response[0].composition,
@@ -238,6 +240,8 @@ export default class ProductPage extends Component {
   };
 
   addToCart = async () => {
+    this.setState({disableAddToCartButton: true})//to stop user from clicking multiple times before the API respond.
+    Toast.show("Please wait..")
     // Retriving the user_id
     if (this.state.product_stock > 0){
       RetrieveDataAsync(Globals.STORAGE_USER).then((user) => {
@@ -260,14 +264,18 @@ export default class ProductPage extends Component {
             Globals.cartCount+=Number(this.state.selectedQuantity)
             this.setState(this.state) //To trigger rerender
             Toast.show('Product added to cart');
+            this.setState({disableAddToCartButton: false})
           })
-          .catch((err) => alert(err));
+          .catch((err) => {
+            alert(err)
+            this.setState({disableAddToCartButton: false})
+          });
       });
     }
     else {
       Toast.show("Product is currently out of stock")
+      this.setState({disableAddToCartButton: false})
     }
-    
   };
 
   render() {
@@ -412,6 +420,7 @@ export default class ProductPage extends Component {
                   </Text>
                   <TouchableOpacity
                     style={styles.addToCartTouch}
+                    disabled={this.state.disableAddToCartButton}
                     onPress={this.addToCart}>
                     <Text style={styles.addToCartText}>Add to cart</Text>
                   </TouchableOpacity>
@@ -448,7 +457,7 @@ export default class ProductPage extends Component {
                 showsHorizontalScrollIndicator={false}
                 renderItem={({item, index}) =>
                   item.main_pair ? (
-                    <ProductPageSimilarListItem //TODO:Confirm CNAME
+                    <ProductPageSimilarListItem 
                       pid={item.product_id}
                       cname={this.state.cname}
                       imageUrl={item.main_pair.detailed.image_path}
@@ -458,7 +467,7 @@ export default class ProductPage extends Component {
                     />
                   ) : (
                     //If No product image
-                    <ProductPageSimilarListItem //TODO:Confirm CNAME
+                    <ProductPageSimilarListItem 
                       pid={item.product_id}
                       cname={this.state.cname}
                       imageUrl={

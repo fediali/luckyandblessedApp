@@ -151,7 +151,6 @@ class SignUp extends Component {
 
       // var promises = [];
       if (this.state.salesTaxIdFile) {
-        // TODO: Sent this file to api
         PostData(baseUrl + 'api/users', data)
           .then((res) => res.json())
           .then((response) => {
@@ -300,13 +299,12 @@ class SignUp extends Component {
       this.setState({confirmPasswordError: ''});
     }
 
-    //TODO: Uncomment this
-    // if (this.state.salesTaxID == "" || this.state.salesTaxIdFile == null) {
-    //   this.setState({ salesTaxIDError: "Sales tax ID or tax file is required." })
-    //   validFlag = false;
-    // } else {
-    //   this.setState({ salesTaxIDError: "" })
-    // }
+    if (this.state.salesTaxID == "" || this.state.salesTaxIdFile == null) {
+      this.setState({ salesTaxIDError: "Sales tax ID or tax file is required." })
+      validFlag = false;
+    } else {
+      this.setState({ salesTaxIDError: "" })
+    }
 
     return validFlag;
   }

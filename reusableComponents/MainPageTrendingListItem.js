@@ -31,7 +31,7 @@ export default class MainPageTrendingListItem extends PureComponent {
                                 // resizeMode='contain'
                             />
                             <View style={innerStyles.innerInnerTrendingView}>
-                                <Text style={innerStyles.gridItemNameAndPriceText}>{val.product}</Text>
+                                <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{val.product}</Text>
                                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                             </View>
                         </View>
@@ -104,7 +104,9 @@ const innerStyles = StyleSheet.create({
         letterSpacing: 0,
         textAlign: "left",
         color: '#2d2d2f',
-        width: Width * 0.427
+        width: Width * 0.427,
+        maxWidth: '80%',
+        maxHeight: '70%'
     },
     showAllText: {
         fontFamily: "Avenir-Book",

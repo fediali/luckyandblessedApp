@@ -26,8 +26,6 @@ YellowBox.ignoreWarnings([
     'componentWillReceiveProps'
 ])
 
-
-//TODO: ClearAll
 class Filter extends Component {
 
     constructor(props) {
@@ -46,7 +44,7 @@ class Filter extends Component {
                     title: 'Category',
                     content: 'Jackets',
                 },
-               
+
                 {
                     id: 2,
                     title: 'Size',
@@ -95,7 +93,40 @@ class Filter extends Component {
     }
     //clear All click Handler
     rightIconClickHandler = () => {
-        alert("test")
+        this.setState({
+            selected: 1,//0,1,2,3 corresponds to Most Popular, New Items, Price H-L , Price L-H
+            multislideVal: [0, 1000],
+            sections: [
+                {
+                    id: 0,
+                    title: 'Gender',
+                    content: 'ALL',
+                },
+                {
+                    id: 1,
+                    title: 'Category',
+                    content: 'Jackets',
+                },
+
+                {
+                    id: 2,
+                    title: 'Size',
+                    content: 'M,L',
+                },
+                {
+                    id: 3,
+                    title: 'Color',
+                    content: ["#0f0", "#0ff"],
+                },
+                {
+                    id: 4,
+                    title: 'Price',
+                    content: '$0 - $999',
+                },
+
+            ],
+            activeSections: [],
+        })
     }
 
     onItemClick = (key) => () => {
