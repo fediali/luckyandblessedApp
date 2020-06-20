@@ -945,7 +945,10 @@ class Delivery extends Component {
               )}
             </View>
 
+            {!this.props.route.params.fromUserProfile && (
             <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount} />
+
+            )}
             <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
               <TouchableOpacity
                 activeOpacity={0.5}
