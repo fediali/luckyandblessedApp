@@ -28,15 +28,12 @@ import Toast from 'react-native-simple-toast';
 import ImagePicker from 'react-native-image-picker';
 var RNFS = require('react-native-fs');
 
-// TODO: GLOBALS NOT WORKING PROPERLY
 const STORAGE_PRODUCT_HISTORY_CATEGORY = Globals.STORAGE_PRODUCT_HISTORY_CATEGORY
 const STORAGE_USER = Globals.STORAGE_USER
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN
 const baseUrl = Globals.baseUrl;
 
-//TODO: Image not coming and image not updating
-//TODO: wHAT IF USER ADRESS IS GREATER THAN 2 LINES
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);

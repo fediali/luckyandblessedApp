@@ -40,10 +40,10 @@ class Payment extends Component {
     //PaymentMode => 1 = CreditCard, 2 = paypal, 3 = COD
     this.state = {
       isReady: false,
-      cardNumber: '5424000000000015', //TODO: for testing purpose, remove it when deploy
-      expMonth: '12',
-      expYear: '2020',
-      cardCode: '999',
+      cardNumber: '',
+      expMonth: '',
+      expYear: '',
+      cardCode: '',
       profile_id: this.props.route.params.profile_id,
       paymentMode: 1,
       paypalLink: null,
