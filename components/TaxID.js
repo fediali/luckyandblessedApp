@@ -122,7 +122,7 @@ class TaxID extends Component {
         })
         .catch((ex) => {
           console.log('Promise exception', ex);
-          alert(ex);
+          alert(ex.message);
         });
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
     }
@@ -154,7 +154,9 @@ class TaxID extends Component {
         this.props.navigation.navigate('SignIn'); //Passing user Name
       })
       .catch((err) => {
-        throw err;
+        alert(err.message)
+        console.log(err)
+
       });
   }
   isValid() {
