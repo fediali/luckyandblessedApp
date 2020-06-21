@@ -51,6 +51,7 @@ export default class UserProfile extends Component {
       email: 'blackcherry@gmail.com',
       longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
       shortAddress: '455 Larkspur Dr. Califo...',
+      city: '',
       imageb64: Globals.placeHolderImage
     };
   }
@@ -68,6 +69,7 @@ export default class UserProfile extends Component {
               email: result.email,
               longAddress: result.b_address_2,
               shortAddress: result.b_address,
+              city: result.b_city,
               isReady: true,
               section1: [
                 {
@@ -122,7 +124,6 @@ export default class UserProfile extends Component {
       <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
 
         <View style={[styles.descriptionTextView, { flexDirection: "row", marginRight: 30 }]} >
-          {/* TODO: Justify Text to center */}
 
           <Text style={styles.descriptionText}>
             {section.content}
@@ -251,7 +252,7 @@ export default class UserProfile extends Component {
 
             <Text style={styles.userNameText}>{this.state.fullName}</Text>
             <Text style={styles.userAddress}>{this.state.shortAddress}</Text>
-            <Text style={styles.userAddress}>{this.state.longAddress}</Text>
+            <Text style={styles.userAddress}>{this.state.longAddress} {this.state.city}</Text>
             <View style={styles.divideProfile}></View>
             <View style={styles.divider}></View>
           </View>

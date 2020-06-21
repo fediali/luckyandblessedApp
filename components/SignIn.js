@@ -75,7 +75,7 @@ class SignIn extends Component {
 
                 this._storeData(user);
 
-                this.putFcmToken(user)
+                this.putFcmToken(user);
 
                 this.context.setAuthenticated(fullName);
                 this.setState({requested: false});
@@ -97,7 +97,6 @@ class SignIn extends Component {
   };
 
   putFcmToken = async (user) => {
-
     let data = {
       firebase_id: await RetrieveDataAsync(Globals.STORAGE_FCM_TOKEN),
     };
@@ -181,7 +180,11 @@ class SignIn extends Component {
               }}
             />
           </View>
-          {this.state.emailError != '' ? this.showErrorMessage(this.state.emailError): <View></View>}
+          {this.state.emailError != '' ? (
+            this.showErrorMessage(this.state.emailError)
+          ) : (
+            <View></View>
+          )}
           <View style={styles.passwordInputView}>
             <TextInput
               style={styles.input}
