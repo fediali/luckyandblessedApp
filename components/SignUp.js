@@ -133,26 +133,22 @@ class SignUp extends Component {
       this.setState({emailError: ''});
       //call signup API here
       //Splitting name to first and last name
+      let fname = ''
+      let lname = ''
       if (this.state.fullName.split(' ').length > 1) {
-        let fname = this.state.fullName.split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
-        let lname = this.state.fullName.split(' ').slice(-1).join(' ');
-        data = {
-          firstname: fname,
-          lastname: lname
-        }
+        fname = this.state.fullName.split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
+        lname = this.state.fullName.split(' ').slice(-1).join(' ');
+        
       } else {
-        data = {
-          firstname: this.state.fullName,
-          lastname: ""
-        }
+        fname = this.state.fullName
       }
 
       var data = {
         email: this.state.email,
         // password: md5.hex_md5(this.state.password), //SignUp doesn't require password to be hashed now :/
         password: this.state.password,
-        firstname: fullName[0],
-        lastname: fullName[1],
+        firstname: fname,
+        lastname: lname,
         company_id: DEFAULTS_OBJ.store_id.toString(),
         company_name: "Mediagate",
         is_root: 'N',
@@ -368,7 +364,7 @@ class SignUp extends Component {
                 autoCapitalize="none"
                 placeholder="Email"
                 onChangeText={(text) => {
-                  this.setState({email: text});
+                  this.setState({email: text.trim()});
                 }}
               />
             </View>
