@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,10 +8,11 @@ import {
   SafeAreaView,
   ScrollView,
   InteractionManager,
+  StatusBar
 } from 'react-native';
 import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
-import {Image as FastImage} from 'react-native';
+import { Image as FastImage } from 'react-native';
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import Globals from '../Globals';
 import firebase from 'react-native-firebase';
@@ -32,41 +33,41 @@ export default class WalkThrough extends Component {
     };
   }
 
-    //1
+  //1
   async checkPermission() {
     const enabled = await firebase.messaging().hasPermission();
     if (enabled) {
-        this.getToken();
+      this.getToken();
     } else {
-        this.requestPermission();
-    }
-  }
-  
-    //3
-  async getToken() {
-    let fcmToken = await AsyncStorage.getItem('fcmToken');
-    if (!fcmToken) {
-        fcmToken = await firebase.messaging().getToken();
-        if (fcmToken) {
-            // user has a device token
-            await AsyncStorage.setItem('fcmToken', fcmToken);
-        }
-    }
-  }
-  
-    //2
-  async requestPermission() {
-    try {
-        await firebase.messaging().requestPermission();
-        // User has authorised
-        this.getToken();
-    } catch (error) {
-        // User has rejected permissions
-        console.log('permission rejected');
+      this.requestPermission();
     }
   }
 
-  navigateScreen=(screen)=>()=>{
+  //3
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        // user has a device token
+        await AsyncStorage.setItem('fcmToken', fcmToken);
+      }
+    }
+  }
+
+  //2
+  async requestPermission() {
+    try {
+      await firebase.messaging().requestPermission();
+      // User has authorised
+      this.getToken();
+    } catch (error) {
+      // User has rejected permissions
+      console.log('permission rejected');
+    }
+  }
+
+  navigateScreen = (screen) => () => {
     this.props.navigation.navigate(screen);
   }
   componentDidMount() {
@@ -85,7 +86,7 @@ export default class WalkThrough extends Component {
 
               this.checkPermission();
               StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
-            )
+              )
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);
@@ -108,7 +109,7 @@ export default class WalkThrough extends Component {
           style={styles.images}
           key={index}
           resizeMode="contain"
-          source={{uri: img}}
+          source={{ uri: img }}
         />,
       );
     });
@@ -129,6 +130,8 @@ export default class WalkThrough extends Component {
 
     return (
       <SafeAreaView style={GlobalStyles.parentContainer}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+
         <View style={styles.subContainer}>
           <FastImage
             style={styles.logo}
@@ -241,7 +244,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#2d2d2f',
   },
-  wholeSaleAccountTV:{flexDirection: 'row'},
+  wholeSaleAccountTV: { flexDirection: 'row' },
   buttonContainer: {
     flexDirection: 'row',
     marginTop: 23,
