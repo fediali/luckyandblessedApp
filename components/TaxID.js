@@ -141,7 +141,7 @@ class TaxID extends Component {
       title: this.state.nameOfPurchase,
       date: today,
       signature: this.state.signImage,
-      user_id: user_id, //CHECK THIS
+      user_id: user_id, 
       company_id: DEFAULTS_OBJ.store_id.toString(),
       timestamp: +new Date(),
 
@@ -154,7 +154,7 @@ class TaxID extends Component {
         this.props.navigation.navigate('SignIn'); //Passing user Name
       })
       .catch((err) => {
-        throw err;
+        Toast.show(err);
       });
   }
   isValid() {

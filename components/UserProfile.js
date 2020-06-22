@@ -69,7 +69,7 @@ export default class UserProfile extends Component {
               email: result.email,
               longAddress: result.b_address_2,
               shortAddress: result.b_address,
-              city: result.b_city,
+              city: ", " + result.b_city,
               isReady: true,
               section1: [
                 {
