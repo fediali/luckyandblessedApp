@@ -16,6 +16,7 @@ import SearchResultListItem from '../reusableComponents/SearchResultListItem';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import Globals from "../Globals"
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl;
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
@@ -86,15 +87,13 @@ export default class SearchResults extends Component {
                   this.setState(
                     {
                       showZeroProductScreen: true,
-                    },
-                    () => console.log('No produccts found '),
+                    }
                   );
                 } else {
                   this.setState(
                     {
                       showZeroProductScreen: false,
-                    },
-                    () => console.log('produccts found '),
+                    }
                   );
                   for (let i = 0; i < responses[0].products.length; i++) {
                     if (responses[0].products[i].main_pair == null) {
@@ -137,7 +136,7 @@ export default class SearchResults extends Component {
             })
             .catch((ex) => {
               console.log('Exception: Inner Promise', ex);
-              alert(ex);
+              Toast.show(ex.toString());
               this.setState({
                 showZeroProductScreen: true,
               });
@@ -145,7 +144,7 @@ export default class SearchResults extends Component {
         })
         .catch((ex) => {
           console.log('Exception: Outer Promise', ex);
-          alert(ex);
+          Toast.show(ex.toString());
           this.setState({
             showZeroProductScreen: true,
           });

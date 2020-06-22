@@ -5,6 +5,8 @@ import Footer from "../reusableComponents/Footer"
 import CategoriesListItem from "../reusableComponents/CategoriesListItem"
 import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalListItem"
 import Globals from "../Globals"
+import Toast from 'react-native-simple-toast';
+
 const baseUrl = Globals.baseUrl;
 
 class Categories extends Component {
@@ -51,7 +53,7 @@ class Categories extends Component {
                     }
 
                 }
-            )
+            ).catch(err => console.log(err), Toast.show(err.toString()))
 
         }
     }

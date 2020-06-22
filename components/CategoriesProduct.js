@@ -8,6 +8,7 @@ import {
   FlatList,
   InteractionManager,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -18,6 +19,8 @@ import { Image as FastImage } from 'react-native';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import Globals from '../Globals';
+import Toast from 'react-native-simple-toast';
+
 const baseUrl = Globals.baseUrl;
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 let DEFAULTS_OBJ = [];
@@ -144,12 +147,12 @@ class CategoriesProduct extends Component {
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);
-              alert(ex);
+              Toast.show(ex.toString());
             });
         })
         .catch((ex) => {
           console.log('Outer Promise', ex);
-          alert(ex);
+          Toast(ex);
         });
     }
   };

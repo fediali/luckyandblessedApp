@@ -203,7 +203,7 @@ class SignUp extends Component {
           })
           .catch((ex) => {
             console.log('Promise exception', ex);
-            alert(ex);
+            Toast.show(ex.toString());
           });
       } else {
         GetData(baseUrl + 'api/users?email=' + this.state.email)
@@ -224,7 +224,7 @@ class SignUp extends Component {
                   'The username or email you have chosen already exists',
               });
             }
-          });
+          }).catch(e => Toast.show(e.toString()));
       }
     }
   }

@@ -80,7 +80,7 @@ class FlatListItem extends Component {
             PostData(baseUrl + `api/removecart`, deleteData)
               .then((res) => res.json())
               .then((response) => {
-                Toast.show(response.message);
+                Toast.show(response.message.toString());
                 //Refresh FlatList !
 
                 //Also delete the data from relevant places..
@@ -359,7 +359,7 @@ class ShoppingCart extends Component {
       })
       .catch((ex) => {
         console.log('Promise exception', ex);
-        alert(ex);
+        Toast.show(ex.toString());
       });
   };
 
@@ -471,10 +471,11 @@ class ShoppingCart extends Component {
               })
               .catch((ex) =>
                 console.log('Get Specific Product Exception ' + ex),
+                Toast.show(ex.toString())
               );
           });
         }
-      });
+      }).catch(e => Toast.show(e.toString()));
   };
 
   refreshFlatList = (deletedKey) => {

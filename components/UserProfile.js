@@ -49,8 +49,8 @@ export default class UserProfile extends Component {
       ],
       fullName: 'Monika',
       email: 'blackcherry@gmail.com',
-      longAddress: '455 Larkspur Dr. California Springs, CA 92926, USA',
-      shortAddress: '455 Larkspur Dr. Califo...',
+      b_address_2: '455 Larkspur Dr. California Springs, CA 92926, USA',
+      b_address: '455 Larkspur Dr. Califo...',
       city: '',
       imageb64: Globals.placeHolderImage
     };
@@ -67,9 +67,9 @@ export default class UserProfile extends Component {
             this.setState({
               fullName: JSON.parse(user).name,
               email: result.email,
-              longAddress: result.b_address_2,
-              shortAddress: result.b_address,
-              city: ", " + result.b_city,
+              b_address_2: result.b_address_2 + ',',
+              b_address: result.b_address,
+              city: result.b_city,
               isReady: true,
               section1: [
                 {
@@ -93,8 +93,9 @@ export default class UserProfile extends Component {
             this.setState({
               fullName: JSON.parse(user).name,
               email: result.email,
-              longAddress: result.b_address_2,
-              shortAddress: result.b_address,
+              b_address_2: result.b_address_2 + ',',
+              b_address: result.b_address,
+              city: result.b_city,
               isReady: true,
               section1: [
                 {
@@ -123,7 +124,7 @@ export default class UserProfile extends Component {
     return (
       <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
 
-        <View style={[styles.descriptionTextView, { flexDirection: "row", marginRight: 30 }]} >
+        <View style={[styles.descriptionTextView, { paddingLeft: 10, flexDirection: "row", marginRight: 30 }]} >
 
           <Text style={styles.descriptionText}>
             {section.content}
@@ -213,7 +214,7 @@ export default class UserProfile extends Component {
               else {
                 Toast.show('Failed to update');
               }
-            })
+            }).catch(ex => console.log(ex), Toast.show(ex.toString()))
           })
         });
       }
@@ -251,8 +252,8 @@ export default class UserProfile extends Component {
             </ImageBackground>
 
             <Text style={styles.userNameText}>{this.state.fullName}</Text>
-            <Text style={styles.userAddress}>{this.state.shortAddress}</Text>
-            <Text style={styles.userAddress}>{this.state.longAddress} {this.state.city}</Text>
+            <Text style={styles.userAddress}>{this.state.b_address}</Text>
+            <Text style={styles.userAddress}>{this.state.b_address_2} {this.state.city}</Text>
             <View style={styles.divideProfile}></View>
             <View style={styles.divider}></View>
           </View>

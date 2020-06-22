@@ -6,6 +6,7 @@ import {
   Alert,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
+import Toast from 'react-native-simple-toast';
 
 const PendingView = () => (
   <View style={styles.PendingView}>
@@ -28,10 +29,7 @@ export default class BarCodeScanner extends Component {
   onBarCodeRead = (barcode) => {
     if (!this.state.barCodeRead) {
       this.setState({barCodeRead: true});
-      Alert.alert(
-        'Barcode value is' + barcode.data,
-        'Barcode type is' + barcode.type,
-      );
+      Toast.show("Barcode read successfully")
       this.props.navigation.navigate('SearchResults', {barcode});
     }
   };

@@ -276,9 +276,9 @@ class Payment extends Component {
           .then((response) => {
             this.setState({ paypalLink: response.links[1].href });
           })
-          .catch((e) => console.log('Exception 1', e));
+          .catch((e) => Toast.show(e.toString()), console.log('Exception 1', e));
       })
-      .catch((e) => console.log('Exception', e));
+      .catch((e) => Toast.show(e.toString()), console.log('Exception', e));
   };
 
   placeOrder = (user, payment_id, mproduct, transResponse = []) => {
@@ -402,12 +402,12 @@ class Payment extends Component {
           }
           this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transData);
         } else {
-          Toast.show(transResponse.transactionResponse.errors[0].errorText);
+          Toast.show(transResponse.transactionResponse.errors[0].errorText.toString());
         }
       })
       .catch((ex) => {
         console.log('Promise exception', ex);
-        alert(ex);
+        Toast.show(ex.toString());
       });
   };
 
@@ -447,7 +447,6 @@ class Payment extends Component {
   render() {
     let width = Dimensions.get('window').width;
     let height = Dimensions.get('window').height;
-    // console.log("PP", this.state.paypalLink)
     if (!this.state.isReady) {
       return (
         <View style={styles.shimmerMainView}>

@@ -141,21 +141,21 @@ class Delivery extends Component {
                 sameShipping: sameShipping,
                 selectedProfileName: main_profile.profile_name,
                 selectedProfileId: main_profile.profile_id,
-                fullName: main_profile.b_firstname + ' ' + main_profile.b_lastname,
+                fullName: (main_profile.b_firstname + ' ' + main_profile.b_lastname).trim(),
                 b_firstName: main_profile.b_firstname,
                 b_lastName: main_profile.b_lastname,
                 b_address: main_profile.b_address + ' ' + main_profile.b_address_2,
                 s_address: main_profile.s_address + ' ' + main_profile.s_address_2,
-                streetAddress: main_profile.b_address + ' ' + main_profile.s_address_2,
+                streetAddress: (main_profile.b_address + ' ' + main_profile.s_address_2).trim(),
                 cityTown: main_profile.b_city,
                 stateText: main_profile.b_state,
                 zipCode: main_profile.b_zipcode,
                 email: user.email,
                 phoneNumber: main_profile.b_phone,
-                s_fullName: main_profile.s_firstname + ' ' + main_profile.s_lastname,
+                s_fullName: (main_profile.s_firstname + ' ' + main_profile.s_lastname).trim(),
                 s_firstName: main_profile.s_firstname,
                 s_lastName: main_profile.s_lastname,
-                s_streetAddress: main_profile.s_address + ' ' + main_profile.s_address_2,
+                s_streetAddress: (main_profile.s_address + ' ' + main_profile.s_address_2).trim(),
                 s_cityTown: main_profile.s_city,
                 s_stateText: main_profile.s_state,
                 s_zipCode: main_profile.s_zipcode,
@@ -165,11 +165,12 @@ class Delivery extends Component {
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);
+              Toast.show(ex.toString())
             });
         })
         .catch((ex) => {
           console.log('Outer Promise', ex);
-          alert(ex);
+          Toast.show(ex.toString());
         });
     }
 
@@ -203,18 +204,18 @@ class Delivery extends Component {
                 b_address: main_profile.b_address + ' ' + main_profile.b_address_2,
                 s_address: main_profile.s_address + ' ' + main_profile.s_address_2,
                 fullName:
-                  main_profile.b_firstname + ' ' + main_profile.b_lastname,
+                  (main_profile.b_firstname + ' ' + main_profile.b_lastname).trim(),
                 streetAddress:
-                  main_profile.b_address + ' ' + main_profile.b_address_2,
+                  (main_profile.b_address + ' ' + main_profile.b_address_2).trim(),
                 cityTown: main_profile.b_city,
                 stateText: main_profile.b_state,
                 zipCode: main_profile.b_zipcode,
                 email: user.email, 
                 phoneNumber: main_profile.b_phone,
                 s_fullName:
-                  main_profile.s_firstname + ' ' + main_profile.s_lastname,
+                  (main_profile.s_firstname + ' ' + main_profile.s_lastname).trim(),
                 s_streetAddress:
-                  main_profile.s_address + ' ' + main_profile.s_address_2,
+                  (main_profile.s_address + ' ' + main_profile.s_address_2).trim(),
                 s_cityTown: main_profile.s_city,
                 s_stateText: main_profile.s_state,
                 s_zipCode: main_profile.s_zipcode,
@@ -224,11 +225,12 @@ class Delivery extends Component {
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);
+              Toast.show(ex.toString())
             });
         })
         .catch((ex) => {
           console.log('Outer Promise', ex);
-          alert(ex);
+          Toast.show(ex.toString());
         });
     }
   };
@@ -264,7 +266,7 @@ class Delivery extends Component {
         (data.b_firstname = fname),
           (data.b_lastname = lname),
           (data.b_address = this.state.streetAddress.split(",")[0]), //TODO: Everything before first comma in b_address and everything after that is b_address_2
-          (data.b_address_2 = this.state.streetAddress.split(",").shift().join(",")),
+          (data.b_address_2 = this.state.streetAddress.split(',').slice(1).join(',')),
           (data.b_county = ''),
           (data.b_country = 'US'),
           (data.b_city = this.state.cityTown),
@@ -286,7 +288,7 @@ class Delivery extends Component {
         (data.b_firstname = fname),
           (data.b_lastname = lname),
           (data.b_address = this.state.streetAddress.split(",")[0]),
-          (data.b_address_2 = this.state.streetAddress.split(",").shift().join(",")),
+          (data.b_address_2 = this.state.streetAddress.split(',').slice(1).join(',')),
           (data.b_county = ''),
           (data.b_country = 'US'),
           (data.b_city = this.state.cityTown),
@@ -295,8 +297,8 @@ class Delivery extends Component {
           (data.b_phone = this.state.phoneNumber),
           (data.s_firstname = s_fname),
           (data.s_lastname = s_lname),
-          (data.s_address = this.state.s_streetAddress),
-          (data.s_address_2 = ''),
+          (data.s_address = this.state.s_streetAddress.split(",")[0]),
+          (data.s_address_2 = this.state.s_streetAddress.split(',').slice(1).join(',')),
           (data.s_county = ''),
           (data.s_country = 'US'),
           (data.s_city = this.state.s_cityTown),
@@ -335,7 +337,7 @@ class Delivery extends Component {
               Toast.show(response.message);
             }
           })
-          .catch((e) => console.log(e));
+          .catch((e) => Toast.show(e.toString()), console.log(err));
       } else {
         PutData(
           baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
@@ -361,7 +363,7 @@ class Delivery extends Component {
               }, 1000);
             }
           })
-          .catch((e) => console.log(e));
+          .catch((e) => Toast.show(e.toString()), console.log(e));
       }
     }
   };
@@ -674,7 +676,7 @@ class Delivery extends Component {
                 <TextInput
                   style={styles.input}
                   placeholder="Full name"
-                  value={this.state.fullName.trim()}
+                  value={this.state.fullName}
                   onChangeText={(text) => {
                     this.setState({ fullName: text });
                   }}
@@ -690,7 +692,7 @@ class Delivery extends Component {
                 <TextInput
                   style={styles.input}
                   placeholder="Street address"
-                  value={this.state.streetAddress.trim()}
+                  value={this.state.streetAddress}
                   onChangeText={(text) => {
                     this.setState({ streetAddress: text });
                   }}
@@ -823,7 +825,7 @@ class Delivery extends Component {
                     <TextInput
                       style={styles.input}
                       placeholder="Full name"
-                      value={this.state.s_fullName.trim()}
+                      value={this.state.s_fullName}
                       onChangeText={(text) => {
                         this.setState({ s_fullName: text });
                       }}
@@ -839,7 +841,7 @@ class Delivery extends Component {
                     <TextInput
                       style={styles.input}
                       placeholder="Street address"
-                      value={this.state.s_streetAddress.trim()}
+                      value={this.state.s_streetAddress}
                       onChangeText={(text) => {
                         this.setState({ s_streetAddress: text });
                       }}

@@ -6,7 +6,8 @@ import {
   SafeAreaView,
   Image,
   Dimensions,
-  InteractionManager
+  InteractionManager,
+  ToastAndroid
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -17,6 +18,7 @@ import {Icon} from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import GetData from '../reusableComponents/API/GetData';
 import Globals from '../Globals';
+import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl
 export default class CompanyProfile extends Component {
@@ -115,7 +117,7 @@ export default class CompanyProfile extends Component {
           })
 
 
-        })
+        }).catch(err => console.log(err), Toast.show(err.toString()))
     })
 }
 

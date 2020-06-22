@@ -17,6 +17,7 @@ import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import Globals from '../Globals';
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
+import Toast from 'react-native-simple-toast';
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const baseUrl = Globals.baseUrl;
@@ -90,12 +91,12 @@ export default class WalkThrough extends Component {
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);
-              alert(ex);
+              Toast.show(ex.toString());
             });
         })
         .catch((ex) => {
           console.log('Outer Promise', ex);
-          alert(ex);
+          Toast.show(ex.toString());
         });
     });
   }

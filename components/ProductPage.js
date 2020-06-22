@@ -73,7 +73,6 @@ export default class ProductPage extends Component {
 
   getData() {
     var promises = [];
-    console.log("PID: ", this.state.pid[0])
     promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`)); 
     Promise.all(promises)
@@ -152,16 +151,17 @@ export default class ProductPage extends Component {
               })
               .catch((ex) => {
                 console.log(ex);
+                Toast.show(ex.toString())
               });
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
-            alert(ex);
+            Toast.show(ex.toString());
           });
       })
       .catch((ex) => {
         console.log('Outer Promise', ex);
-        alert(ex);
+        Toast.show(ex.toString());
       });
   }
 

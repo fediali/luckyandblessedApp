@@ -10,6 +10,7 @@ import {
     FlatList,
     InteractionManager,
     SafeAreaView,
+    StatusBar
 } from 'react-native'
 import styles from './Styles/Style'
 import Header from '../reusableComponents/Header'
@@ -25,6 +26,7 @@ import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAs
 import { Image as FastImage } from 'react-native'
 import ThemeContext from '../reusableComponents/ThemeContext'
 import Globals from "../Globals"
+import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl;
 const SELECTED_CATEGORY_ALL = -1
@@ -107,13 +109,13 @@ class MainPage extends Component {
                             })
 
                         })
-                    }).catch(ex => { console.log("Nested Promise", ex) })
+                    }).catch(ex => { Toast.show(ex.toString()), console.log("Nested Promise", ex) })
 
 
                     //Adding "All" to categories response
 
-                }).catch(ex => { console.log("Inner Promise", ex) })
-            }).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.props.navigation.navigate("SignIn") })
+                }).catch(ex => { Toast.show(ex.toString()), console.log("Inner Promise", ex) })
+            }).catch(ex => { console.log("Outer Promise", ex); Toast.show(ex.toString()); })
 
         })
     }
@@ -134,7 +136,7 @@ class MainPage extends Component {
                 setTimeout(() => { this.setState({ isReady: true }) }, 1000)
 
             }
-        ).catch(ex => { console.log("Outer Promise", ex); alert(ex); this.setState({ isReady: true }) })
+        ).catch(ex => { console.log("Outer Promise", ex); Toast.show(ex.toString()); this.setState({ isReady: true }) })
 
     }
 
@@ -173,6 +175,8 @@ class MainPage extends Component {
             return (
                 <View style={styles.loader}>
                     <Shimmer>
+                    <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+
                         <FastImage style={styles.logoImageLoader} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
                     </Shimmer>
                 </View>

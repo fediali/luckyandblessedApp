@@ -122,7 +122,7 @@ class TaxID extends Component {
         })
         .catch((ex) => {
           console.log('Promise exception', ex);
-          alert(ex.message);
+          Toast.show(ex.toString());
         });
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
     }
@@ -154,7 +154,7 @@ class TaxID extends Component {
         this.props.navigation.navigate('SignIn'); //Passing user Name
       })
       .catch((err) => {
-        Toast.show(err);
+        Toast.show(err.toString());
         console.log(err)
       });
   }

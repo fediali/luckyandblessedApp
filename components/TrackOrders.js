@@ -18,6 +18,7 @@ import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
+import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
@@ -124,11 +125,12 @@ export default class TrackOrders extends Component {
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
+            Toast.show(ex.toString())
           });
       })
       .catch((ex) => {
         console.log('Outer Promise', ex);
-        alert(ex);
+        Toast.show(ex.toString());
       });
   };
 
