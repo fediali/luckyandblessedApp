@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
+  StatusBar
 } from 'react-native';
 
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import PostData from '../reusableComponents/API/PostData';
 import Toast from 'react-native-simple-toast';
 import GetData from '../reusableComponents/API/GetData';
@@ -49,7 +50,7 @@ class SignIn extends Component {
   signInClick = () => {
     if (this.isValid()) {
       var promises = [];
-      this.setState({requested: true});
+      this.setState({ requested: true });
       promises.push(
         PostData(baseUrl + 'api/usertoken', {
           email: this.state.email,
@@ -78,10 +79,10 @@ class SignIn extends Component {
                 this.putFcmToken(user);
 
                 this.context.setAuthenticated(fullName);
-                this.setState({requested: false});
+                this.setState({ requested: false });
               } else {
                 Toast.show('Username or password incorrect', Toast.LONG);
-                this.setState({requested: false});
+                this.setState({ requested: false });
               }
             })
             .catch((ex) => {
@@ -111,17 +112,17 @@ class SignIn extends Component {
     let validFlag = true;
 
     if (this.state.email == '') {
-      this.setState({emailError: 'Email is required.'});
+      this.setState({ emailError: 'Email is required.' });
       validFlag = false;
     } else {
-      this.setState({emailError: ''});
+      this.setState({ emailError: '' });
     }
 
     if (this.state.password == '') {
-      this.setState({passwordError: 'Password is required.'});
+      this.setState({ passwordError: 'Password is required.' });
       validFlag = false;
     } else {
-      this.setState({passwordError: ''});
+      this.setState({ passwordError: '' });
     }
 
     return validFlag;
@@ -160,6 +161,8 @@ class SignIn extends Component {
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+
         <View style={styles.subContainer}>
           <Image
             style={{
@@ -176,15 +179,15 @@ class SignIn extends Component {
               placeholder="Email"
               autoCapitalize="none"
               onChangeText={(text) => {
-                this.setState({email: text});
+                this.setState({ email: text });
               }}
             />
           </View>
           {this.state.emailError != '' ? (
             this.showErrorMessage(this.state.emailError)
           ) : (
-            <View></View>
-          )}
+              <View></View>
+            )}
           <View style={styles.passwordInputView}>
             <TextInput
               style={styles.input}
@@ -192,15 +195,15 @@ class SignIn extends Component {
               secureTextEntry={true}
               placeholder="Password"
               onChangeText={(text) => {
-                this.setState({password: text});
+                this.setState({ password: text });
               }}
             />
           </View>
           {this.state.passwordError != '' ? (
             this.showErrorMessage(this.state.passwordError)
           ) : (
-            <View></View>
-          )}
+              <View></View>
+            )}
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -226,7 +229,7 @@ class SignIn extends Component {
           </TouchableOpacity>
           {this.state.requested ? (
             <ActivityIndicator
-              style={{marginTop: 30}}
+              style={{ marginTop: 30 }}
               size="large"
               color="#2967ff"
             />
@@ -244,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 15,
   },
-  errorTextText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
+  errorTextText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
   mainContainer: {
     flex: 1,
     backgroundColor: '#ffffff',

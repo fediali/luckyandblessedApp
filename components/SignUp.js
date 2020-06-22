@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  StatusBar
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import Toast from 'react-native-simple-toast';
@@ -334,6 +335,7 @@ class SignUp extends Component {
   render() {
     return (
       <SafeAreaView style={styles.parentContainer}>
+        
         <Header
           navigation={this.props.navigation}
           centerText={''}
