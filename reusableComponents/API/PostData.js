@@ -1,20 +1,22 @@
-export default PostData = (url,jsonObj, paypalOrder = null) => {
+import Globals from "../../Globals"
+
+export default PostData = (url, jsonObj, paypalOrder = null) => {
     // console.log(jsonObj)
-    
+
     let h = new Headers();
-    if (paypalOrder){
+    if (paypalOrder) {
         h.append(
-                    'Authorization',
-                    'Bearer ' + paypalOrder 
-                );
+            'Authorization',
+            'Bearer ' + paypalOrder
+        );
     }
     else {
         h.append(
             'Authorization',
-            'Basic: emF5YW50aGFyYW5pQGdtYWlsLmNvbTo3bjE3N0JFRTc5OXYyazRIeThkNVdKNDBIOXoxdzBvMw==',
+            Globals.AUTH_TOKEN,
         );
     }
-    
+
     h.append('Accept', 'application/json');
     h.append('Content-Type', 'application/json')
     // const formData = new FormData();

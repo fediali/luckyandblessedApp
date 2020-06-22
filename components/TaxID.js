@@ -122,7 +122,7 @@ class TaxID extends Component {
         })
         .catch((ex) => {
           console.log('Promise exception', ex);
-          alert(ex);
+          alert(ex.message);
         });
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
     }
@@ -155,6 +155,7 @@ class TaxID extends Component {
       })
       .catch((err) => {
         Toast.show(err);
+        console.log(err)
       });
   }
   isValid() {
@@ -229,14 +230,14 @@ class TaxID extends Component {
 
   showErrorMessage(errorMessage) {
     return (
-      <View style={styles.errorMessageView}>
+      <View style={innerStyles.errorMessageView}>
         <Icon
           size={30}
           name="md-information-circle-outline"
           type="ionicon"
           color="#FF0000"
         />
-        <Text style={styles.errorMessageText}>{errorMessage}</Text>
+        <Text style={innerStyles.errorMessageText}>{errorMessage}</Text>
       </View>
     );
   }

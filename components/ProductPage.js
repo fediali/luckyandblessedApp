@@ -232,7 +232,7 @@ export default class ProductPage extends Component {
   };
 
   onQuantityTextChange = (text) => {
-    this.setState({selectedQuantity: text});
+    this.setState({selectedQuantity: parseInt(text)});
   };
 
   onQuantityModalChange = ( index) => {
@@ -242,6 +242,11 @@ export default class ProductPage extends Component {
   addToCart = async () => {
     this.setState({disableAddToCartButton: true})//to stop user from clicking multiple times before the API respond.
     Toast.show("Please wait..")
+    if(this.state.data.min_qty > this.state.selectedQuantity){
+      Toast.show("Quantity must be greater than or equal to "+this.state.data.min_qty)
+      this.setState({disableAddToCartButton: false})
+      return;
+    }
     // Retriving the user_id
     if (this.state.product_stock > 0){
       RetrieveDataAsync(Globals.STORAGE_USER).then((user) => {
