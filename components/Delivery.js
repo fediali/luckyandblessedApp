@@ -263,8 +263,8 @@ class Delivery extends Component {
       if (this.state.sameShipping) {
         (data.b_firstname = fname),
           (data.b_lastname = lname),
-          (data.b_address = this.state.streetAddress), //TODO: Everything before first comma in b_address and everything after that is b_address_2
-          (data.b_address_2 = ''),
+          (data.b_address = this.state.streetAddress.split(",")[0]), //TODO: Everything before first comma in b_address and everything after that is b_address_2
+          (data.b_address_2 = this.state.streetAddress.split(",").shift().join(",")),
           (data.b_county = ''),
           (data.b_country = 'US'),
           (data.b_city = this.state.cityTown),
@@ -285,8 +285,8 @@ class Delivery extends Component {
 
         (data.b_firstname = fname),
           (data.b_lastname = lname),
-          (data.b_address = this.state.streetAddress),
-          (data.b_address_2 = ''),
+          (data.b_address = this.state.streetAddress.split(",")[0]),
+          (data.b_address_2 = this.state.streetAddress.split(",").shift().join(",")),
           (data.b_county = ''),
           (data.b_country = 'US'),
           (data.b_city = this.state.cityTown),

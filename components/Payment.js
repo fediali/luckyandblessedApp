@@ -29,8 +29,8 @@ const baseUrl = Globals.baseUrl;
 const CODPAYMENTID = 17;
 const CREDITCARTPAYMENTID = 34;
 const PAYPALPAYMENTID = 20;
-const MERCHANTAUTH_NAME = "9Lw9PY5KCZkz";
-const MERCHANTAUTH_TRANSACTIONID = "9hG2Em8ZD6y64aCJ"
+const MERCHANTAUTH_NAME = Globals.MERCHANTAUTH_NAME;
+const MERCHANTAUTH_TRANSACTIONID = Globals.MERCHANTAUTH_TRANSACTIONID;
 let deliveryDetails = null;
 let gUser = null;
 
@@ -192,7 +192,7 @@ class Payment extends Component {
     let req = new Request('https://api.sandbox.paypal.com/v1/oauth2/token', {
       headers: {
         Authorization:
-          'Basic QVNZZ2toTTNRalN6OXN0UTBYV0pSbU1pTW5fUlljaVZ4UGxELXZSSWRRMHBoOTJDd3dnb0ZzMlV6LWI4STFMM0VQaGR1VV9vNjdRaWdiWVU6RVBTQllENHlleVYya0R2RmZqSGpPVUMta3JnLXZOY3hpcWoyOGVhUzVRWkhVbFRTbUwtQ3hqdmREX2pvN1ZmXzZocllqNVNrNURkTmowdlU=',
+          Globals.PAYPAL_AUTH_TOKEN,
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
       method: 'POST',

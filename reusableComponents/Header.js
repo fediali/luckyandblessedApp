@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Share,
+  StatusBar
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 
@@ -114,6 +115,8 @@ class Header extends PureComponent {
     return (
       <View style={styles.topLevelView}>
         <View style={styles.subParent}>
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+
           {this.props.homepage ? (
             <View style={styles.backView}></View>
           ) : (
