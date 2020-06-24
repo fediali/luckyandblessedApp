@@ -178,6 +178,7 @@ class SignIn extends Component {
               style={styles.input}
               placeholder="Email"
               autoCapitalize="none"
+              returnKeyType='done'
               onChangeText={(text) => {
                 this.setState({ email: text });
               }}
@@ -194,6 +195,7 @@ class SignIn extends Component {
               autoCapitalize="none"
               secureTextEntry={true}
               placeholder="Password"
+              returnKeyType='done'
               onChangeText={(text) => {
                 this.setState({ password: text });
               }}
