@@ -253,12 +253,7 @@ class TaxID extends Component {
     };
     return (
       <SafeAreaView style={styles.parentContainer}>
-        <Header
-          navigation={this.props.navigation}
-          centerText={''}
-          rightIcon="info"
-        />
-
+        <Header navigation={this.props.navigation}/>
         <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
           <View style={[styles.parentContainer, innerStyles.scrollMargin]}>
             <View style={styles.subParentContainer}>
