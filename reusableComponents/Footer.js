@@ -140,7 +140,7 @@ const innerStyles = StyleSheet.create({
         bottom: 0,
         height: 50,
         width: "100%",
-        marginBottom: (Platform.OS === 'ios') ? 25 : 0
+        paddingBottom: (Platform.OS === 'ios') ? 25 : 0
     },
     subViewStyle: {
         flex: 1,

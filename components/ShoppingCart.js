@@ -469,13 +469,14 @@ class ShoppingCart extends Component {
                 Globals.cartCount = parseInt(this.state.totalCartProducts);
 
               })
-              .catch((ex) =>
-                console.log('Get Specific Product Exception ' + ex),
+              .catch((ex) =>{
+                console.log('Get Specific Product Exception ' + ex);
                 Toast.show(ex.toString())
+              }
               );
           });
         }
-      }).catch(e => Toast.show(e.toString()));
+      }).catch(e => {Toast.show(e.toString()); console.log(e)});
   };
 
   refreshFlatList = (deletedKey) => {

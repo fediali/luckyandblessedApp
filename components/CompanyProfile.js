@@ -117,7 +117,7 @@ export default class CompanyProfile extends Component {
           })
 
 
-        }).catch(err => console.log(err), Toast.show(err.toString()))
+        }).catch(err => {console.log(err); Toast.show(err.toString())})
     })
 }
 

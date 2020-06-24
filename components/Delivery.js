@@ -337,7 +337,7 @@ class Delivery extends Component {
               Toast.show(response.message);
             }
           })
-          .catch((e) => Toast.show(e.toString()), console.log(err));
+          .catch((e) => {Toast.show(e.toString()); console.log(err)});
       } else {
         PutData(
           baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
@@ -363,7 +363,7 @@ class Delivery extends Component {
               }, 1000);
             }
           })
-          .catch((e) => Toast.show(e.toString()), console.log(e));
+          .catch((e) => {Toast.show(e.toString()); console.log(e)});
       }
     }
   };

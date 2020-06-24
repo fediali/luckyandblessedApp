@@ -276,9 +276,9 @@ class Payment extends Component {
           .then((response) => {
             this.setState({ paypalLink: response.links[1].href });
           })
-          .catch((e) => Toast.show(e.toString()), console.log('Exception 1', e));
+          .catch((e) => {Toast.show(e.toString()); console.log('Exception 1', e)});
       })
-      .catch((e) => Toast.show(e.toString()), console.log('Exception', e));
+      .catch((e) => {Toast.show(e.toString()); console.log('Exception', e)});
   };
 
   placeOrder = (user, payment_id, mproduct, transResponse = []) => {

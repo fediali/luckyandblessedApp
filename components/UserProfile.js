@@ -214,7 +214,7 @@ export default class UserProfile extends Component {
               else {
                 Toast.show('Failed to update');
               }
-            }).catch(ex => console.log(ex), Toast.show(ex.toString()))
+            }).catch(ex => {console.log(ex); Toast.show(ex.toString())})
           })
         });
       }
