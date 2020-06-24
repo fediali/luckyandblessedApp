@@ -26,11 +26,9 @@ class ProfileText extends PureComponent {
     this.setState({ isEdit: false })
     var key = this.props.stateKey; //fullName
     let data;
-    console.log("DSKKSDKSDKSDKSD");
     //no need for email
     RetrieveDataAsync(STORAGE_USER).then(user => {
     if (key == "fullName") {
-      console.log("LLLL",{...JSON.parse(user)})
       StoreDataAsync(STORAGE_USER,{...JSON.parse(user),name:this.state[key]})
       if (this.state[key].split(' ').length > 1) {
         let fname = this.state[key].split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
@@ -45,7 +43,6 @@ class ProfileText extends PureComponent {
           lastname: ""
         }
       }
-      console.log("99999",data)
     }else if (key == "email"){
       data={
         email:this.state[key]
@@ -58,13 +55,15 @@ class ProfileText extends PureComponent {
         baseUrl + `api/usersnew/${JSON.parse(user).user_id}`,
         data,
       ).then((res) => res.json()).then((result) => {
-        console.log("OOO",result,data)
         if (result.message=="User updated successfully") {
         }
         else {
           Toast.show('Failed to update');
         }
-      })
+      }).catch((ex) => {
+        console.log('Inner Promise', ex);
+        Toast.show(ex.toString())
+      });
     })
   }
 

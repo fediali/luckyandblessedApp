@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import OrderProductListItem from './OrderProductListItem';
+import Toast from 'react-native-simple-toast';
+
 const Globals = require('../Globals');
 
 const baseUrl = Globals.baseUrl;
@@ -54,11 +56,12 @@ export default class ordersProduct extends PureComponent {
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
+            Toast.show(ex.toString())
           });
       })
       .catch((ex) => {
         console.log('Outer Promise', ex);
-        alert(ex);
+        Toast.show(ex.toString());
       });
   };
 
@@ -125,11 +128,12 @@ export default class ordersProduct extends PureComponent {
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
+            Toast.show(ex.toString())
           });
       })
       .catch((ex) => {
         console.log('Outer Promise', ex);
-        alert(ex);
+        Toast.show(ex.toString());
       });
   };
 
