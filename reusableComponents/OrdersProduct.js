@@ -56,7 +56,7 @@ export default class ordersProduct extends PureComponent {
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
-            Toast.show(ex.toString())
+            // Toast.show(ex.toString())
           });
       })
       .catch((ex) => {

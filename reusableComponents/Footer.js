@@ -127,7 +127,6 @@ class Footer extends Component {
                             />}
                     </TouchableOpacity>
                 </View>
-
             </View >
         )
     }
@@ -138,9 +137,8 @@ const innerStyles = StyleSheet.create({
         backgroundColor: "#fff",
         position: "absolute",
         bottom: 0,
-        height: 50,
         width: "100%",
-        paddingBottom: (Platform.OS === 'ios') ? 25 : 0
+        paddingBottom: (Platform.OS === 'ios') ? 25 : 10
     },
     subViewStyle: {
         flex: 1,
