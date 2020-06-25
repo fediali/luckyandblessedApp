@@ -693,6 +693,7 @@ class Delivery extends Component {
                   style={styles.input}
                   placeholder="Street address"
                   value={this.state.streetAddress}
+                  multiline={true}
                   onChangeText={(text) => {
                     this.setState({ streetAddress: text });
                   }}

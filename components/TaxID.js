@@ -194,23 +194,24 @@ class TaxID extends Component {
       this.setState({addressError: ''});
     }
 
-    if (this.state.texasSales == '') {
+    if (this.state.texasSales == '' && this.state.outOfState == '') {
       this.setState({
-        texasSalesError: 'Texas sales & Use Tax Permit number is required.',
+        texasSalesError: 'Texas sales or out-of-state taxpay number is required.',
+        outOfStateError: 'Out-of-state or Federal Texpay number is required.'
       });
       validFlag = false;
     } else {
-      this.setState({texasSalesError: ''});
+      this.setState({texasSalesError: '', outOfStateError: ''});
     }
 
-    if (this.state.outOfState == '') {
-      this.setState({
-        outOfStateError: 'Out-of-state or Federal Texpay number is required.',
-      });
-      validFlag = false;
-    } else {
-      this.setState({outOfStateError: ''});
-    }
+    // if (this.state.outOfState == '') {
+    //   this.setState({
+    //     outOfStateError: 'Out-of-state or Federal Texpay number is required.',
+    //   });
+    //   validFlag = false;
+    // } else {
+    //   this.setState({outOfStateError: ''});
+    // }
 
     if (this.state.description == '') {
       this.setState({descriptionError: 'Description of buisness is required.'});

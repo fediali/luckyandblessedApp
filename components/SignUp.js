@@ -79,6 +79,7 @@ class SignUp extends Component {
       if (DocumentPicker.isCancel(err)) {
         //If user canceled the document selection
         //alert('Canceled from single doc picker');
+        this.setState({})
       } else {
         //For Unknown Error
         alert('Some unknown error occured while selecting file');
@@ -117,6 +118,12 @@ class SignUp extends Component {
         //   // idCardBase64 = result;
         //   console.log(result)
         // });
+
+        let path = response.uri;
+        if (Platform.OS === "ios") {
+          path = "~" + path.substring(path.indexOf("/Documents"));
+        }
+        if (!response.fileName) response.fileName = path.split("/").pop() + ".jpg";
 
         RNFS.readFile(response.uri, 'base64').then((fileBase64) => {
           // console.log(fileBase64)
@@ -410,6 +417,7 @@ class SignUp extends Component {
                 <TextInput
                   style={innerStyles.input}
                   editable={false}
+                  multiline={true}
                   placeholder={this.state.fileSelectText}
                 />
                 <View style={innerStyles.uploadFile}>
