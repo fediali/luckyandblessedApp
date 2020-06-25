@@ -276,13 +276,13 @@ class Payment extends Component {
           .then((response) => {
             this.setState({ paypalLink: response.links[1].href });
           })
-          .catch((e) => {Toast.show(e.toString()); console.log('Exception 1', e)});
+          .catch((e) => { Toast.show(e.toString()); console.log('Exception 1', e) });
       })
-      .catch((e) => {Toast.show(e.toString()); console.log('Exception', e)});
+      .catch((e) => { Toast.show(e.toString()); console.log('Exception', e) });
   };
 
   placeOrder = (user, payment_id, mproduct, transResponse = []) => {
-    
+
     let orderData = {
       user_id: user.user_id,
       shipping_id: '15', //UPS Shipping
@@ -319,7 +319,7 @@ class Payment extends Component {
     let paymentItems = this.props.route.params.paymentLineItems;
     //Max length allowed for product name is 31 characters
     paymentItems.map(item => {
-      if (item.name.length > 31){
+      if (item.name.length > 31) {
         item.name = item.name.substring(0, 31)
 
       }
@@ -447,6 +447,7 @@ class Payment extends Component {
   render() {
     let width = Dimensions.get('window').width;
     let height = Dimensions.get('window').height;
+    console.log(this.state.showCircleLoader)
     if (!this.state.isReady) {
       return (
         <View style={styles.shimmerMainView}>
@@ -476,18 +477,19 @@ class Payment extends Component {
           </View>
         ) : (
             <>
+            {this.state.showCircleLoader && (
+                    <ActivityIndicator
+                      style={{ position: "absolute", top: (height / 3)-30, left: width / 2  }}
+                      size="large"
+                    />
+                )}
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
                   flexGrow: 1,
                   justifyContent: 'space-between',
                 }}>
-                {this.state.showCircleLoader && (
-                  <ActivityIndicator
-                    style={{ position: "absolute", top: (height / 2) + 35, left: width / 2 }}
-                    size="large"
-                  />
-                )}
+                
                 <View style={{ marginBottom: 50 }}>
                   <View style={styles.subContainer}>
                     <View style={styles.paymentAndSecureView}>
