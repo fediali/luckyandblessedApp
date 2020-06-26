@@ -203,7 +203,6 @@ class App extends Component {
 
       loading ?
         <>
-        <ActivityIndicator size="large"/>
         </>
         :
         <NavigationContainer>

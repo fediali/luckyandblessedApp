@@ -12,11 +12,11 @@ const TRENDING_NAME = "Trending"
 export default class MainPageTrendingListItem extends PureComponent {
 
     navigateToProductPage=(product_id)=>()=>{
-        this.props.navigation.push("ProductPage", { pid: product_id, cname:[TRENDING_NAME] }) 
+        console.log(product_id)
+        this.props.navigation.push("ProductPage", { pid: [product_id], cname:[TRENDING_NAME] }) 
     }
 
     render() {
-    
         return (
             <View style={innerStyles.mainItemView}>
 

@@ -73,6 +73,7 @@ export default class ProductPage extends Component {
 
   getData() {
     var promises = [];
+    console.log("AAAAA",this.state.pid[0])
     promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`)); 
     Promise.all(promises)

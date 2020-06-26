@@ -22,48 +22,64 @@ class ProfileText extends PureComponent {
     this.setState({ isEdit: true, [key]: this.props.valueText })
   }
 
-  checkButtonPressed = () => {  
+  checkButtonPressed = () => {
     this.setState({ isEdit: false })
     var key = this.props.stateKey; //fullName
     let data;
     //no need for email
     RetrieveDataAsync(STORAGE_USER).then(user => {
-    if (key == "fullName") {
-      StoreDataAsync(STORAGE_USER,{...JSON.parse(user),name:this.state[key]})
-      if (this.state[key].split(' ').length > 1) {
-        let fname = this.state[key].split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
-        let lname = this.state[key].split(' ').slice(-1).join(' ');
-        data = {
-          firstname: fname,
-          lastname: lname
+      let validFlag = true
+      if (key == "fullName") {
+        StoreDataAsync(STORAGE_USER, { ...JSON.parse(user), name: this.state[key] })
+        if (this.state[key].split(' ').length > 1) {
+          let fname = this.state[key].split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
+          let lname = this.state[key].split(' ').slice(-1).join(' ');
+          data = {
+            firstname: fname,
+            lastname: lname
+          }
+        } else {
+          data = {
+            firstname: this.state[key],
+            lastname: ""
+          }
         }
-      } else {
+      } else if (key == "email") {
+        if (this.state.email == '') {
+          Toast.show('Email cannot be empty');
+          validFlag = false;
+        } else {
+          let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
+          if (emailRegex.test(this.state.email) === false) {
+            Toast.show('Email is invalid');
+            validFlag = false;
+          } else {
+            this.setState({ emailError: '' });
+          }
+        }
         data = {
-          firstname: this.state[key],
-          lastname: ""
+          email: this.state[key]
         }
       }
-    }else if (key == "email"){
-      data={
-        email:this.state[key]
-      }
-    }
-    this.props.customSetState({ [key]: this.state[key] })  //fullName: "Updated Text"
+      if (validFlag) {
+        this.props.customSetState({ [key]: this.state[key] })  //fullName: "Updated Text"
 
-    
-      PutData(
-        baseUrl + `api/usersnew/${JSON.parse(user).user_id}`,
-        data,
-      ).then((res) => res.json()).then((result) => {
-        if (result.message=="User updated successfully") {
-        }
-        else {
-          Toast.show('Failed to update');
-        }
-      }).catch((ex) => {
-        console.log('Inner Promise', ex);
-        Toast.show(ex.toString())
-      });
+
+        PutData(
+          baseUrl + `api/usersnew/${JSON.parse(user).user_id}`,
+          data,
+        ).then((res) => res.json()).then((result) => {
+          if (result.message == "User updated successfully") {
+          }
+          else {
+            Toast.show('Failed to update');
+          }
+        }).catch((ex) => {
+          console.log('Inner Promise', ex);
+          Toast.show(ex.toString())
+        });
+      }
+
     })
   }
 
@@ -72,7 +88,7 @@ class ProfileText extends PureComponent {
       this.props.navigation.navigate("TaxID")
     }
     else if (this.props.keyText == "Address") {
-      this.props.navigation.navigate("Delivery", {fromUserProfile: true})
+      this.props.navigation.navigate("Delivery", { fromUserProfile: true })
     }
     else if (this.props.keyText == "My orders") {
       this.props.navigation.navigate("TrackOrders")
