@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import {Text,Alert} from 'react-native';
+import { Text, Alert, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import SignIn from "./components/SignIn"
@@ -38,8 +38,8 @@ import PutData from './reusableComponents/API/PutData';
 const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN;
 class App extends Component {
 
-  
-  componentDidMount(){
+
+  componentDidMount() {
     this.checkPermission();
     this.createNotificationListeners(); //add this line
 
@@ -53,67 +53,67 @@ class App extends Component {
   async checkPermission() {
     const enabled = await firebase.messaging().hasPermission();
     if (enabled) {
-        this.getToken();
+      this.getToken();
     } else {
-        this.requestPermission();
+      this.requestPermission();
     }
   }
 
   async requestPermission() {
     try {
-        await firebase.messaging().requestPermission();
-        // User has authorised
-        this.getToken();
+      await firebase.messaging().requestPermission();
+      // User has authorised
+      this.getToken();
     } catch (error) {
-        // User has rejected permissions
-        console.log('permission rejected');
+      // User has rejected permissions
+      console.log('permission rejected');
     }
   }
 
   async getToken() {
     let fcmToken = await AsyncStorage.getItem(STORAGE_FCM_TOKEN);
     if (!fcmToken) {
-        fcmToken = await firebase.messaging().getToken();
-        if (fcmToken) {
-            // user has a device token
-            await AsyncStorage.setItem(STORAGE_FCM_TOKEN, fcmToken);
-        }
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        // user has a device token
+        await AsyncStorage.setItem(STORAGE_FCM_TOKEN, fcmToken);
+      }
     }
   }
- 
+
   async createNotificationListeners() {
-    
+
     /*
     * Triggered when a particular notification has been received in foreground
     * */
     this.notificationListener = firebase.notifications().onNotification((notification) => {
-        console.log("Foreground",notification)
-        const { title, body } = notification;
-        this.showAlert(title, body);
+      console.log("Foreground", notification)
+      const { title, body } = notification;
+      this.showAlert(title, body);
     });
-  
+
     /*
     * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
     * */
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
       const { title, body } = notificationOpen.notification;
 
-      console.log("PPPP",title,body)
+      console.log("PPPP", title, body)
 
-        // this.showAlert(title, body);
+      // this.showAlert(title, body);
     });
-  
+
     /*
     * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
     * */
     const notificationOpen = await firebase.notifications().getInitialNotification();
     if (notificationOpen) {
-      console.log("ZZ",notificationOpen.notification)
+      console.log("ZZ", notificationOpen.notification)
 
-        // const { title, body } = notificationOpen.notification;
-        // console.log("zzPPPP",title,body)
+      // const { title, body } = notificationOpen.notification;
+      // console.log("zzPPPP",title,body)
 
-        this.showAlert("Notification", "You received a notification");
+      this.showAlert("Notification", "You received a notification");
     }
     /*
     * Triggered for data only payload in foreground
@@ -125,12 +125,12 @@ class App extends Component {
     //   console.log(JSON.stringify(message));
     // });
   }
-  
+
   showAlert(title, body) {
     Alert.alert(
       title, body,
       [
-          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
       ],
       { cancelable: false },
     );
@@ -143,7 +143,36 @@ class App extends Component {
       loading: true
     }
 
+    try {
+      RetrieveDataAsync(Globals.STORAGE_USER).then((value) => {
+        if (value != null) {
 
+          this.setState({
+            isAuthenticated: true,
+            username: JSON.parse(value).name,
+            loading: false
+
+          })
+
+        }
+        else {
+          this.setState({
+            loading: false,
+            isAuthenticated: false,
+            username: ""
+          })
+        }
+      });
+    } catch (exp) {
+      this.setState({
+        loading: false,
+        isAuthenticated: false,
+        username: ""
+      })
+    }
+  }
+
+  setAuthenticated = (username) => {
     RetrieveDataAsync(Globals.STORAGE_USER).then((value) => {
       if (value != null) {
 
@@ -158,22 +187,11 @@ class App extends Component {
       else {
         this.setState({
           loading: false,
-          isAuthenticated:false,
-          username:""
+          isAuthenticated: false,
+          username: ""
         })
       }
     });
-
-  }
-
-  setAuthenticated = (username) => {
-    if (!username) {
-      this.setState({ isAuthenticated: false, username: username })
-    }
-    else {
-      this.setState({ isAuthenticated: true, username: username })
-
-    }
   }
 
   render() {
@@ -185,6 +203,7 @@ class App extends Component {
 
       loading ?
         <>
+        <ActivityIndicator size="large"/>
         </>
         :
         <NavigationContainer>
@@ -235,7 +254,7 @@ class App extends Component {
                 </>
 
               }
-              
+
             </Stack.Navigator>
           </ThemeContext.Provider>
         </NavigationContainer>
