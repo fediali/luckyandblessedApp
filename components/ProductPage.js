@@ -129,6 +129,7 @@ export default class ProductPage extends Component {
                     StoreDataAsync('productHistoryList', value);
                   }
                 });
+                console.log("MAX", response[0].max_qty)
 
                 this.setState({
                   isReady: true,
@@ -140,7 +141,7 @@ export default class ProductPage extends Component {
                     mainImage: response[0].main_pair.detailed.image_path,
                     secondaryImages: secondaryImagesArray,
                     min_qty: Number(response[0].min_qty),
-                    max_qty: 18, 
+                    max_qty: 18,//FIXME: get from api. till now api is returning max=0 which is wrong.
                     qty_step: Number(response[0].qty_step),
                     full_description: response[0].full_description,
                     composition: response[0].composition,
@@ -233,7 +234,7 @@ export default class ProductPage extends Component {
   };
 
   onQuantityTextChange = (text) => {
-    this.setState({selectedQuantity: parseInt(text)});
+    this.setState({selectedQuantity: parseInt(text) || 0});
   };
 
   onQuantityModalChange = ( index) => {
@@ -464,7 +465,7 @@ export default class ProductPage extends Component {
                 renderItem={({item, index}) =>
                   item.main_pair ? (
                     <ProductPageSimilarListItem 
-                      pid={item.product_id}
+                      pid={[item.product_id]}
                       cname={this.state.cname}
                       imageUrl={item.main_pair.detailed.image_path}
                       name={item.product}

@@ -47,10 +47,10 @@ export default class UserProfile extends Component {
           content: baseUrl + 'profiles-add.html?ref_code=',
         },
       ],
-      fullName: 'Monika',
-      email: 'blackcherry@gmail.com',
-      b_address_2: '455 Larkspur Dr. California Springs, CA 92926, USA',
-      b_address: '455 Larkspur Dr. Califo...',
+      fullName: '',
+      email: '',
+      b_address_2: '',
+      b_address: '',
       city: '',
       imageb64: Globals.placeHolderImage
     };
