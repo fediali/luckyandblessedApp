@@ -78,7 +78,7 @@ class TaxID extends Component {
         RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
           DEFAULTS_OBJ = JSON.parse(defaults);
         });
-
+        console.log("getting tax id")
         this.getTaxId();
       });
     } else {
@@ -89,6 +89,7 @@ class TaxID extends Component {
   }
 
   getTaxId = async () => {
+    console.log("Calleddddd taxid")
     RetrieveDataAsync(STORAGE_USER).then((user_data) => {
       user = JSON.parse(user_data);
       let url =
@@ -160,9 +161,12 @@ class TaxID extends Component {
   }
 
   submitClick = () => {
+    console.log("CALL 1")
     if (this.state.taxIdUrl) this.props.navigation.navigate('UserProfile');
     //Passing user Name
     else if (this.isValid()) {
+      console.log("CALL 2")
+
       this.refs['sign'].saveImage();
       var today = new Date();
       var dd = String(today.getDate()).padStart(2, '0');
@@ -171,8 +175,17 @@ class TaxID extends Component {
       today = mm + '/' + dd + '/' + yyyy;
 
       if (this.props.route.params.fromUserProfile) {
+        console.log("CALL 3")
+
         if (this.state.taxIdUrl) this.callAPI(today, user.user_id);
+        else{
+          //this else was not here before.. and on clicking submit this is getting executed
+          console.log("CALL 3.2")
+          Toast.show("something goes wrong")
+        }
       } else {
+        console.log("CALL 4")
+
         PostData(this.props.route.params.url, this.props.route.params.data)
           .then((res) => res.json())
           .then((response) => {
@@ -188,6 +201,8 @@ class TaxID extends Component {
   };
 
   callAPI(today, user_id) {
+    console.log("CALL 5")
+
     const data = {
       name: this.state.nameOfPurchase,
       phone: this.state.phone,
@@ -206,6 +221,8 @@ class TaxID extends Component {
     };
 
     if (this.props.route.params.fromUserProfile) {
+      console.log("CALL 6")
+
       PutData(baseUrl + 'api/salestaxid/' + user_id, data)
         .then((res) => res.json())
         .then((response) => {
@@ -220,6 +237,8 @@ class TaxID extends Component {
           console.log(err);
         });
     } else {
+      console.log("CALL 7")
+
       PostData(baseUrl + 'api/salestaxid', data)
         .then((res) => res.json())
         .then((response) => {
