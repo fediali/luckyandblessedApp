@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  InteractionManager,
 } from 'react-native';
 
 import styles from './Styles/Style';
@@ -18,12 +19,18 @@ import Toast from 'react-native-simple-toast';
 import LogoSmall from './Styles/LogoSmall';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
+import Shimmer from 'react-native-shimmer';
+import {Image as FastImage} from 'react-native';
+import GetData from '../reusableComponents/API/GetData';
+import GlobalStyles from './Styles/Style';
+import {WebView} from 'react-native-webview';
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 const baseUrl = Globals.baseUrl;
+const STORAGE_USER = Globals.STORAGE_USER;
 
 let DEFAULTS_OBJ = [];
-
+let user = null;
 class TaxID extends Component {
   constructor(props) {
     super(props);
@@ -59,14 +66,62 @@ class TaxID extends Component {
       signImage: '', //base64 encoded
       defaults: null,
       dateToday: dateToday,
+      isReady: true,
     };
   }
 
   componentDidMount() {
-    RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
-      DEFAULTS_OBJ = JSON.parse(defaults);
-    });
+    if (this.props.route.params.fromUserProfile) {
+      this.setState({isReady: false});
+      InteractionManager.runAfterInteractions(() => {
+        RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
+          DEFAULTS_OBJ = JSON.parse(defaults);
+        });
+
+        this.getTaxId();
+      });
+    } else {
+      RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
+        DEFAULTS_OBJ = JSON.parse(defaults);
+      });
+    }
   }
+
+  getTaxId = async () => {
+    RetrieveDataAsync(STORAGE_USER).then((user_data) => {
+      user = JSON.parse(user_data);
+      let url =
+        baseUrl +
+        `/api/salestaxid/${
+          user.user_id
+        }&company_id=${DEFAULTS_OBJ.store_id.toString()}`;
+      GetData(url)
+        .then((res) => res.json())
+        .then((taxIdData) => {
+          if (!taxIdData.taxid_file) {
+            console.log('We here');
+            this.setState({
+              nameOfPurchase: taxIdData.name,
+              phone: taxIdData.phone,
+              address: taxIdData.address,
+              address2: taxIdData.address2,
+              texasSales: taxIdData.tax_number,
+              outOfState: taxIdData.registration_number,
+              description: taxIdData.business_description,
+              dateToday: taxIdData.date,
+              signImage: taxIdData.signature,
+              isReady: true,
+            });
+          } else {
+            this.setState({
+              showWebView: true,
+              taxIdUrl: baseUrl + taxIdData.taxid_file,
+              isReady: true,
+            });
+          }
+        });
+    });
+  };
 
   updateSize = (height) => {
     this.setState({
@@ -99,14 +154,14 @@ class TaxID extends Component {
     });
   };
   _onDragEvent() {
-
     // This callback will be called when the user enters signature
     this.setState({sign: true});
-
   }
 
   submitClick = () => {
-    if (this.isValid()) {
+    if (this.state.taxIdUrl) this.props.navigation.navigate('UserProfile');
+    //Passing user Name
+    else if (this.isValid()) {
       this.refs['sign'].saveImage();
       var today = new Date();
       var dd = String(today.getDate()).padStart(2, '0');
@@ -114,16 +169,19 @@ class TaxID extends Component {
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
 
-      PostData(this.props.route.params.url, this.props.route.params.data)
-        .then((res) => res.json())
-        .then((response) => {
-
-          setTimeout(() => this.callAPI(today, response.user_id), 500);
-        })
-        .catch((ex) => {
-          console.log('Promise exception', ex);
-          Toast.show(ex.toString());
-        });
+      if (this.props.route.params.fromUserProfile) {
+        if (this.state.taxIdUrl) this.callAPI(today, user.user_id);
+      } else {
+        PostData(this.props.route.params.url, this.props.route.params.data)
+          .then((res) => res.json())
+          .then((response) => {
+            setTimeout(() => this.callAPI(today, response.user_id), 500);
+          })
+          .catch((ex) => {
+            console.log('Promise exception', ex);
+            Toast.show(ex.toString());
+          });
+      }
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
     }
   };
@@ -141,22 +199,37 @@ class TaxID extends Component {
       title: this.state.nameOfPurchase,
       date: today,
       signature: this.state.signImage,
-      user_id: user_id, 
+      user_id: user_id,
       company_id: DEFAULTS_OBJ.store_id.toString(),
       timestamp: +new Date(),
-
     };
 
-    PostData(baseUrl + 'api/salestaxid', data)
-      .then((res) => res.json())
-      .then((response) => {
-        Toast.show('Registered Successfully');
-        this.props.navigation.navigate('SignIn'); //Passing user Name
-      })
-      .catch((err) => {
-        Toast.show(err.toString());
-        console.log(err)
-      });
+    if (this.props.route.params.fromUserProfile) {
+      PutData(baseUrl + 'api/salestaxid/' + user_id, data)
+        .then((res) => res.json())
+        .then((response) => {
+          console.log(response);
+          if (response.tax_id) {
+            Toast.show('Sales Tax ID updated successfully');
+            this.props.navigation.navigate('UserProfile'); //Passing user Name
+          }
+        })
+        .catch((err) => {
+          Toast.show(err.toString());
+          console.log(err);
+        });
+    } else {
+      PostData(baseUrl + 'api/salestaxid', data)
+        .then((res) => res.json())
+        .then((response) => {
+          Toast.show('Registered Successfully');
+          this.props.navigation.navigate('SignIn'); //Passing user Name
+        })
+        .catch((err) => {
+          Toast.show(err.toString());
+          console.log(err);
+        });
+    }
   }
   isValid() {
     let validFlag = true;
@@ -196,8 +269,9 @@ class TaxID extends Component {
 
     if (this.state.texasSales == '' && this.state.outOfState == '') {
       this.setState({
-        texasSalesError: 'Texas sales or out-of-state taxpay number is required.',
-        outOfStateError: 'Out-of-state or Federal Texpay number is required.'
+        texasSalesError:
+          'Texas sales or out-of-state taxpay number is required.',
+        outOfStateError: 'Out-of-state or Federal Texpay number is required.',
       });
       validFlag = false;
     } else {
@@ -252,9 +326,23 @@ class TaxID extends Component {
     let newStyle2 = {
       height2,
     };
+    if (!this.state.isReady) {
+      return (
+        <View style={GlobalStyles.loader}>
+          <Shimmer>
+            <FastImage
+              style={GlobalStyles.logoImageLoader}
+              resizeMode={'contain'}
+              source={require('../static/logo-signIn.png')}
+            />
+          </Shimmer>
+        </View>
+      );
+    }
+
     return (
       <SafeAreaView style={styles.parentContainer}>
-        <Header navigation={this.props.navigation}/>
+        <Header navigation={this.props.navigation} />
         <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
           <View style={[styles.parentContainer, innerStyles.scrollMargin]}>
             <View style={styles.subParentContainer}>
@@ -265,173 +353,202 @@ class TaxID extends Component {
               <Text style={[styles.customTextBold, innerStyles.textMargin]}>
                 Use & Sale Tax Form
               </Text>
-              <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Name of purchaser, firm or agence"
-                  onChangeText={(text) => {
-                    this.setState({nameOfPurchase: text});
-                  }}
-                />
-              </View>
-              {this.state.nameOfPurchaseError != ''
-                ? this.showErrorMessage(this.state.nameOfPurchaseError)
-                : null}
-
-              <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Phone"
-                  keyboardType={'number-pad'}
-                  onChangeText={(text) => {
-                    this.setState({phone: text});
-                  }}
-                />
-              </View>
-              {this.state.phoneError != ''
-                ? this.showErrorMessage(this.state.phoneError)
-                : null}
-
-              <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Address"
-                  onChangeText={(text) => {
-                    this.setState({address: text});
-                  }}
-                />
-              </View>
-              {this.state.addressError != ''
-                ? this.showErrorMessage(this.state.addressError)
-                : null}
-
-              <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="City, State, ZIP code"
-                  onChangeText={(text) => {
-                    this.setState({address2: text});
-                  }}
-                />
-              </View>
-              {this.state.address2Error != ''
-                ? this.showErrorMessage(this.state.address2Error)
-                : null}
-
-              <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Texas sales & Use Tax Permit Num"
-                  keyboardType={'number-pad'}
-                  onChangeText={(text) => {
-                    this.setState({texasSales: text});
-                  }}
-                />
-              </View>
-              {this.state.texasSalesError != ''
-                ? this.showErrorMessage(this.state.texasSalesError)
-                : null}
-
-              <View style={styles.inputView}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Out-of-state or Fedral Taxpay Num"
-                  keyboardType={'number-pad'}
-                  onChangeText={(text) => {
-                    this.setState({outOfState: text});
-                  }}
-                />
-              </View>
-              {this.state.outOfStateError != ''
-                ? this.showErrorMessage(this.state.outOfStateError)
-                : null}
-
-              <Text style={[innerStyles.customText1]}>
-                I, the purchaser named above, claim the right to make a
-                non-taxable purchase (for resale of the taxable items described
-                below or on the attached order or invoice) from:
-              </Text>
-              <Text
-                style={[innerStyles.customText1, innerStyles.customTextMargin]}>
-                <Text
-                  style={[styles.customTextBold, innerStyles.titleFontSize]}>
-                  L&B
-                </Text>{' '}
-                - 12801 N STEMMONS FWY STE 710 FARMERS BRANCH, TX 75234
-              </Text>
-              <View style={innerStyles.divider}></View>
-              <Text
-                style={[
-                  innerStyles.customTextBoldSmall,
-                  innerStyles.customTextMargin,
-                ]}>
-                Description of the type of business activity generally engaged
-                in or type of items normally sold by the purchaser:
-              </Text>
-
-              <View
-                style={[
-                  innerStyles.customInputView,
-                  innerStyles.customPadding,
-                ]}>
-                <TextInput
-                  placeholder="Type here"
-                  onChangeText={(value1) =>
-                    this.setState({value1, description: value1})
-                  }
-                  style={[innerStyles.customInput]}
-                  editable={true}
-                  multiline={true}
-                  value={value1}
-                  onContentSizeChange={(e) =>
-                    this.updateSize(e.nativeEvent.contentSize.height)
-                  }></TextInput>
-              </View>
-              {this.state.descriptionError != ''
-                ? this.showErrorMessage(this.state.descriptionError)
-                : null}
-
-              <Text
-                style={[
-                  innerStyles.customTextBoldSmall,
-                  innerStyles.customTextMargin,
-                ]}>
-                This certificate should be furnished to the supplier. Do not
-                send the completed certificate to the Comptroller of Public
-                Accounts.
-              </Text>
-              <View
-                style={[innerStyles.customInputView, innerStyles.customDim]}>
-                <View style={innerStyles.customView}>
-                  <Text style={innerStyles.signText}>Sign Below:</Text>
-                  <TouchableOpacity onPress={this.resetSign.bind(this)}>
-                    <Text style={innerStyles.resetSignature}>Reset</Text>
-                  </TouchableOpacity>
+              {this.state.taxIdUrl ? (
+                <View style={{flex: 1}}>
+                  <View style={{flex: 10, marginBottom: 20}}>
+                    <WebView source={{uri: this.state.taxIdUrl}}></WebView>
+                  </View>
+                  <Text style={styles.input}>Form is downloading</Text>
                 </View>
-                <SignatureCapture
-                  style={innerStyles.signCap}
-                  ref="sign"
-                  showBorder={true}
-                  backgroundColor={'#f6f6f6'}
-                  contentSize="10"
-                  onSaveEvent={this._onSaveEvent}
-                  onDragEvent={this._onDragEvent.bind(this)}
-                  saveImageFileInExtStorage={false}
-                  showNativeButtons={false}
-                  showTitleLabel={true}
-                  viewMode={'portrait'}
-                  maxStrokeWidth={8}
-                  minStrokeWidth={7}
-                />
-              </View>
-              {this.state.signError != ''
-                ? this.showErrorMessage(this.state.signError)
-                : null}
+              ) : (
+                <View>
+                  <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Name of purchaser, firm or agence"
+                      value={this.state.nameOfPurchase}
+                      onChangeText={(text) => {
+                        this.setState({nameOfPurchase: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.nameOfPurchaseError != ''
+                    ? this.showErrorMessage(this.state.nameOfPurchaseError)
+                    : null}
 
-              <Text
-                style={[innerStyles.customTextBoldSmall, innerStyles.dateText]}>
-                Date: {this.state.dateToday}
-              </Text>
+                  <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Phone"
+                      value={this.state.phone}
+                      keyboardType={'number-pad'}
+                      onChangeText={(text) => {
+                        this.setState({phone: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.phoneError != ''
+                    ? this.showErrorMessage(this.state.phoneError)
+                    : null}
+
+                  <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      value={this.state.address}
+                      placeholder="Address"
+                      onChangeText={(text) => {
+                        this.setState({address: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.addressError != ''
+                    ? this.showErrorMessage(this.state.addressError)
+                    : null}
+
+                  <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      value={this.state.address2}
+                      placeholder="City, State, ZIP code"
+                      onChangeText={(text) => {
+                        this.setState({address2: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.address2Error != ''
+                    ? this.showErrorMessage(this.state.address2Error)
+                    : null}
+
+                  <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Texas sales & Use Tax Permit Num"
+                      keyboardType={'number-pad'}
+                      value={this.state.texasSales}
+                      onChangeText={(text) => {
+                        this.setState({texasSales: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.texasSalesError != ''
+                    ? this.showErrorMessage(this.state.texasSalesError)
+                    : null}
+
+                  <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Out-of-state or Fedral Taxpay Num"
+                      keyboardType={'number-pad'}
+                      value={this.state.outOfState}
+                      onChangeText={(text) => {
+                        this.setState({outOfState: text});
+                      }}
+                    />
+                  </View>
+                  {this.state.outOfStateError != ''
+                    ? this.showErrorMessage(this.state.outOfStateError)
+                    : null}
+
+                  <Text style={[innerStyles.customText1]}>
+                    I, the purchaser named above, claim the right to make a
+                    non-taxable purchase (for resale of the taxable items
+                    described below or on the attached order or invoice) from:
+                  </Text>
+                  <Text
+                    style={[
+                      innerStyles.customText1,
+                      innerStyles.customTextMargin,
+                    ]}>
+                    <Text
+                      style={[
+                        styles.customTextBold,
+                        innerStyles.titleFontSize,
+                      ]}>
+                      L&B
+                    </Text>{' '}
+                    - 12801 N STEMMONS FWY STE 710 FARMERS BRANCH, TX 75234
+                  </Text>
+                  <View style={innerStyles.divider}></View>
+                  <Text
+                    style={[
+                      innerStyles.customTextBoldSmall,
+                      innerStyles.customTextMargin,
+                    ]}>
+                    Description of the type of business activity generally
+                    engaged in or type of items normally sold by the purchaser:
+                  </Text>
+
+                  <View
+                    style={[
+                      innerStyles.customInputView,
+                      innerStyles.customPadding,
+                    ]}>
+                    <TextInput
+                      placeholder="Type here"
+                      value={this.state.description}
+                      onChangeText={(value1) =>
+                        this.setState({description: value1})
+                      }
+                      style={[innerStyles.customInput]}
+                      editable={true}
+                      multiline={true}
+                      onContentSizeChange={(e) =>
+                        this.updateSize(e.nativeEvent.contentSize.height)
+                      }></TextInput>
+                  </View>
+                  {this.state.descriptionError != ''
+                    ? this.showErrorMessage(this.state.descriptionError)
+                    : null}
+
+                  <Text
+                    style={[
+                      innerStyles.customTextBoldSmall,
+                      innerStyles.customTextMargin,
+                    ]}>
+                    This certificate should be furnished to the supplier. Do not
+                    send the completed certificate to the Comptroller of Public
+                    Accounts.
+                  </Text>
+                  <View
+                    style={[
+                      innerStyles.customInputView,
+                      innerStyles.customDim,
+                    ]}>
+                    <View style={innerStyles.customView}>
+                      <Text style={innerStyles.signText}>Sign Below:</Text>
+                      <TouchableOpacity onPress={this.resetSign.bind(this)}>
+                        <Text style={innerStyles.resetSignature}>Reset</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <SignatureCapture
+                      style={innerStyles.signCap}
+                      ref="sign"
+                      showBorder={true}
+                      backgroundColor={'#f6f6f6'}
+                      contentSize="10"
+                      onSaveEvent={this._onSaveEvent}
+                      onDragEvent={this._onDragEvent.bind(this)}
+                      saveImageFileInExtStorage={false}
+                      showNativeButtons={false}
+                      showTitleLabel={true}
+                      viewMode={'portrait'}
+                      maxStrokeWidth={8}
+                      minStrokeWidth={7}
+                    />
+                  </View>
+                  {this.state.signError != ''
+                    ? this.showErrorMessage(this.state.signError)
+                    : null}
+
+                  <Text
+                    style={[
+                      innerStyles.customTextBoldSmall,
+                      innerStyles.dateText,
+                    ]}>
+                    Date: {this.state.dateToday}
+                  </Text>
+                </View>
+              )}
               <View style={[styles.buttonContainer, innerStyles.buttonView]}>
                 <TouchableOpacity
                   style={[innerStyles.buttonSubmit]}

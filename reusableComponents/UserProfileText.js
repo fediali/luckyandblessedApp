@@ -92,7 +92,7 @@ class ProfileText extends PureComponent {
 
   navigateScreen = () => {
     if (this.props.keyText == 'TAX ID') {
-      this.props.navigation.navigate('TaxID');
+      this.props.navigation.navigate('TaxID', {fromUserProfile: true});
     } else if (this.props.keyText == 'Address') {
       this.props.navigation.navigate('Delivery', {fromUserProfile: true});
     } else if (this.props.keyText == 'My orders') {
