@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text,
+  TextInput,
   View,
   StyleSheet,
   SafeAreaView,
@@ -126,9 +127,12 @@ export default class UserProfile extends Component {
 
         <View style={[styles.descriptionTextView, { paddingLeft: 10, flexDirection: "row", marginRight: 30 }]} >
 
-          <Text style={styles.descriptionText}>
-            {section.content}
-          </Text>
+          <TextInput 
+            editable={false}
+            multiline={true} 
+            style={styles.descriptionText}
+            value  = {section.content}>
+          </TextInput>
           <Icon size={20} name="clipboard" type="font-awesome" />
         </View>
       </TouchableOpacity>
