@@ -108,12 +108,12 @@ class App extends Component {
     * */
     const notificationOpen = await firebase.notifications().getInitialNotification();
     if (notificationOpen) {
-      console.log("ZZ", notificationOpen.notification)
+      const { title, body } = notificationOpen.notification;
 
       // const { title, body } = notificationOpen.notification;
       // console.log("zzPPPP",title,body)
 
-      this.showAlert("Notification", "You received a notification");
+      this.showAlert(title, body);
     }
     /*
     * Triggered for data only payload in foreground

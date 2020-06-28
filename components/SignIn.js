@@ -102,11 +102,13 @@ class SignIn extends Component {
     let data = {
       firebase_id: await RetrieveDataAsync(Globals.STORAGE_FCM_TOKEN),
     };
+    console.log("Firebase Token", data.firebase_id)
     let res = await PutData(
       Globals.baseUrl + `api/usersnew/${user.user_id}`,
       data,
     );
     let putResponse = await res.json();
+    console.log(putResponse)
   };
 
   isValid() {
