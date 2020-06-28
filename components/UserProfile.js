@@ -34,6 +34,7 @@ const STORAGE_USER = Globals.STORAGE_USER
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN
 const baseUrl = Globals.baseUrl;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 export default class UserProfile extends Component {
   constructor(props) {
@@ -128,6 +129,7 @@ export default class UserProfile extends Component {
         <View style={[styles.descriptionTextView, { paddingLeft: 10, flexDirection: "row", marginRight: 30 }]} >
 
           <TextInput 
+            placeholderTextColor={TEXTINPUT_COLOR}
             editable={false}
             multiline={true} 
             style={styles.descriptionText}

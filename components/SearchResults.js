@@ -20,6 +20,8 @@ import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl;
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+
 let DEFAULTS_OBJ = [];
 
 export default class SearchResults extends Component {
@@ -41,8 +43,8 @@ export default class SearchResults extends Component {
 
 
     this.onComponentFocus = this.props.navigation.addListener('focus', () => {
-      if (this.props.route.params){
-        this.setState({searchText: this.props.route.params.barcode.data}, () => this.searchText())
+      if (this.props.route.params) {
+        this.setState({ searchText: this.props.route.params.barcode.data }, () => this.searchText())
       }
     });
     InteractionManager.runAfterInteractions(() => {
@@ -69,7 +71,7 @@ export default class SearchResults extends Component {
 
   searchText = () => {
     var promises = [];
-    if (this.state.searchText != null && this.state.searchText.length > 0){
+    if (this.state.searchText != null && this.state.searchText.length > 0) {
       promises.push(
         GetData(
           baseUrl +
@@ -99,7 +101,7 @@ export default class SearchResults extends Component {
                     if (responses[0].products[i].main_pair == null) {
                       continue;
                     }
-  
+
                     await tempProducts.push({
                       product: responses[0].products[i].product,
                       product_id: responses[0].products[i].product_id,
@@ -113,11 +115,11 @@ export default class SearchResults extends Component {
                         responses[0].products[i].main_pair.detailed.image_path,
                       product_brand: responses[0].products[i].brand
                         ? responses[0].products[i].brand
-                        : DEFAULTS_OBJ.brand, 
+                        : DEFAULTS_OBJ.brand,
                     });
                   }
                 }
-  
+
                 return tempProducts;
               };
               parseProducts().then((prod) => {
@@ -186,7 +188,7 @@ export default class SearchResults extends Component {
 
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Search" navigation={this.props.navigation} rightIcon="scanner"/>
+        <Header centerText="Search" navigation={this.props.navigation} rightIcon="scanner" />
         <View style={styles.mainView}>
           <View style={styles.inputView}>
             <View style={styles.innerView}>
@@ -199,6 +201,7 @@ export default class SearchResults extends Component {
             </View>
 
             <TextInput
+              placeholderTextColor={TEXTINPUT_COLOR}
               style={styles.inputText}
               placeholder="Search"
               returnKeyType="search"
@@ -251,7 +254,7 @@ const styles = StyleSheet.create({
   },
   mainView: {
     marginHorizontal: 20,
-    flex:1
+    flex: 1
   },
   innerView: {
     marginVertical: 9.8,

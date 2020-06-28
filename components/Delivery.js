@@ -36,6 +36,8 @@ import OrderFooter from '../reusableComponents/OrderFooter';
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
 const usStates = Globals.usStates;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+
 let gUser;
 var radio_props = [
   { label: 'Yes', value: true },
@@ -210,7 +212,7 @@ class Delivery extends Component {
                 cityTown: main_profile.b_city,
                 stateText: main_profile.b_state,
                 zipCode: main_profile.b_zipcode,
-                email: user.email, 
+                email: user.email,
                 phoneNumber: main_profile.b_phone,
                 s_fullName:
                   (main_profile.s_firstname + ' ' + main_profile.s_lastname).trim(),
@@ -219,7 +221,7 @@ class Delivery extends Component {
                 s_cityTown: main_profile.s_city,
                 s_stateText: main_profile.s_state,
                 s_zipCode: main_profile.s_zipcode,
-                s_email: user.email, 
+                s_email: user.email,
                 s_phoneNumber: main_profile.s_phone,
               });
             })
@@ -257,7 +259,7 @@ class Delivery extends Component {
       if (this.state.fullName.split(' ').length > 1) {
         fname = this.state.fullName.split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
         lname = this.state.fullName.split(' ').slice(-1).join(' ');
-        
+
       } else {
         fname = this.state.fullName
       }
@@ -279,7 +281,7 @@ class Delivery extends Component {
         if (this.state.s_fullName.split(' ').length > 1) {
           s_fname = this.state.s_fullName.split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
           s_lname = this.state.s_fullName.split(' ').slice(-1).join(' ');
-          
+
         } else {
           s_fname = this.state.s_fullName
         }
@@ -316,20 +318,20 @@ class Delivery extends Component {
               Toast.show(`${data.profile_name} profile created successfully`);
               if (this.props.route.params.fromUserProfile) this.props.navigation.navigate("UserProfile")
               else {
-              this.props.navigation.push('Payment', {
-                deliveryDetails: this.state,
-                totalCost: this.props.route.params.totalCost,
-                finalCost: this.props.route.params.finalCost,
-                discount: this.props.route.params.discount,
-                paymentLineItems: this.props.route.params.paymentLineItems,
-                orderItems: this.props.route.params.orderItems,
-                profile_id: response.profile_id,
-                b_userAddress_1: this.props.route.params.b_userAddress_1,
-                b_userAddress_2: this.props.route.params.b_userAddress_2,
-                b_zipCode: this.props.route.params.b_zipCode,
-                b_country: this.props.route.params.b_country,
-              });
-            }
+                this.props.navigation.push('Payment', {
+                  deliveryDetails: this.state,
+                  totalCost: this.props.route.params.totalCost,
+                  finalCost: this.props.route.params.finalCost,
+                  discount: this.props.route.params.discount,
+                  paymentLineItems: this.props.route.params.paymentLineItems,
+                  orderItems: this.props.route.params.orderItems,
+                  profile_id: response.profile_id,
+                  b_userAddress_1: this.props.route.params.b_userAddress_1,
+                  b_userAddress_2: this.props.route.params.b_userAddress_2,
+                  b_zipCode: this.props.route.params.b_zipCode,
+                  b_country: this.props.route.params.b_country,
+                });
+              }
               setTimeout(() => {
                 this.setState({ isReady: true });
               }, 1000);
@@ -337,7 +339,7 @@ class Delivery extends Component {
               Toast.show(response.message);
             }
           })
-          .catch((e) => {Toast.show(e.toString()); console.log(err)});
+          .catch((e) => { Toast.show(e.toString()); console.log(err) });
       } else {
         PutData(
           baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
@@ -349,21 +351,21 @@ class Delivery extends Component {
             if (response.profile_id) {
               if (this.props.route.params.fromUserProfile) this.props.navigation.navigate("UserProfile")
               else {
-              this.props.navigation.push('Payment', {
-                totalCost: this.props.route.params.totalCost,
-                finalCost: this.props.route.params.finalCost,
-                discount: this.props.route.params.discount,
-                paymentLineItems: this.props.route.params.paymentLineItems,
-                orderItems: this.props.route.params.orderItems,
-                profile_id: response.profile_id
-              });
-            }
+                this.props.navigation.push('Payment', {
+                  totalCost: this.props.route.params.totalCost,
+                  finalCost: this.props.route.params.finalCost,
+                  discount: this.props.route.params.discount,
+                  paymentLineItems: this.props.route.params.paymentLineItems,
+                  orderItems: this.props.route.params.orderItems,
+                  profile_id: response.profile_id
+                });
+              }
               setTimeout(() => {
                 this.setState({ isReady: true });
               }, 1000);
             }
           })
-          .catch((e) => {Toast.show(e.toString()); console.log(e)});
+          .catch((e) => { Toast.show(e.toString()); console.log(e) });
       }
     }
   };
@@ -674,8 +676,10 @@ class Delivery extends Component {
               <Text style={innerStyles.shippingAddress}>Billing Address</Text>
               <View style={innerStyles.inputView}>
                 <TextInput
+                  textContentType="name"
                   style={styles.input}
                   placeholder="Full name"
+                  placeholderTextColor={TEXTINPUT_COLOR}
                   value={this.state.fullName}
                   onChangeText={(text) => {
                     this.setState({ fullName: text });
@@ -690,6 +694,8 @@ class Delivery extends Component {
 
               <View style={innerStyles.inputView}>
                 <TextInput
+                  placeholderTextColor={TEXTINPUT_COLOR}
+                  textContentType="fullStreetAddress"
                   style={styles.input}
                   placeholder="Street address"
                   value={this.state.streetAddress}
@@ -707,6 +713,8 @@ class Delivery extends Component {
 
               <View style={innerStyles.inputView}>
                 <TextInput
+                  placeholderTextColor={TEXTINPUT_COLOR}
+                  textContentType="addressCity"
                   style={styles.input}
                   placeholder="City / Town"
                   value={this.state.cityTown}
@@ -742,8 +750,10 @@ class Delivery extends Component {
                   />
                 </View>
                 <TextInput
+                  placeholderTextColor={TEXTINPUT_COLOR}
+                  textContentType = "postalCode"
                   style={[styles.input, innerStyles.marginStart]}
-                  keyboardType={'number-pad'}
+                  keyboardType={'phone-pad'}
                   placeholder="Zip code"
                   value={this.state.zipCode}
                   onChangeText={(text) => {
@@ -763,9 +773,11 @@ class Delivery extends Component {
                 )}
               <View style={innerStyles.inputView}>
                 <TextInput
+                  placeholderTextColor={TEXTINPUT_COLOR}
+                  textContentType="telephoneNumber"
                   style={styles.input}
                   placeholder="Phone number"
-                  keyboardType={'number-pad'}
+                  keyboardType={'phone-pad'}
                   value={this.state.phoneNumber}
                   onChangeText={(text) => {
                     this.setState({ phoneNumber: text });
@@ -780,7 +792,10 @@ class Delivery extends Component {
 
               <View style={innerStyles.inputView}>
                 <TextInput
+                  placeholderTextColor={TEXTINPUT_COLOR}
+                  textContentType="emailAddress"
                   style={styles.input}
+                  keyboardType="email-address"
                   placeholder="Email address"
                   value={this.state.email}
                   onChangeText={(text) => {
@@ -824,6 +839,8 @@ class Delivery extends Component {
                   </Text>
                   <View style={innerStyles.inputView}>
                     <TextInput
+                      placeholderTextColor={TEXTINPUT_COLOR}
+                      textContentType="name"
                       style={styles.input}
                       placeholder="Full name"
                       value={this.state.s_fullName}
@@ -840,6 +857,8 @@ class Delivery extends Component {
 
                   <View style={innerStyles.inputView}>
                     <TextInput
+                      placeholderTextColor={TEXTINPUT_COLOR}
+                      textContentType="fullStreetAddress"
                       style={styles.input}
                       placeholder="Street address"
                       value={this.state.s_streetAddress}
@@ -856,6 +875,8 @@ class Delivery extends Component {
 
                   <View style={innerStyles.inputView}>
                     <TextInput
+                      placeholderTextColor={TEXTINPUT_COLOR}
+                      textContentType="addressCity"
                       style={styles.input}
                       placeholder="City / Town"
                       value={this.state.s_cityTown}
@@ -893,8 +914,10 @@ class Delivery extends Component {
                       />
                     </View>
                     <TextInput
+                      placeholderTextColor={TEXTINPUT_COLOR}
+                      textContentType="postalCode"
                       style={[styles.input, innerStyles.marginStart]}
-                      keyboardType={'number-pad'}
+                      keyboardType={'phone-pad'}
                       placeholder="Zip code"
                       value={this.state.s_zipCode}
                       onChangeText={(text) => {
@@ -914,9 +937,11 @@ class Delivery extends Component {
                     )}
                   <View style={innerStyles.inputView}>
                     <TextInput
+                      placeholderTextColor={TEXTINPUT_COLOR}
+                      textContentType="telephoneNumber"
                       style={styles.input}
                       placeholder="Phone number"
-                      keyboardType={'number-pad'}
+                      keyboardType={'phone-pad'}
                       value={this.state.s_phoneNumber}
                       onChangeText={(text) => {
                         this.setState({ s_phoneNumber: text });
@@ -931,8 +956,11 @@ class Delivery extends Component {
 
                   <View style={innerStyles.inputView}>
                     <TextInput
+                      placeholderTextColor={TEXTINPUT_COLOR}
+                      textContentType="emailAddress"
                       style={styles.input}
                       placeholder="Email address"
+                      keyboardType="email-address"
                       value={this.state.s_email}
                       onChangeText={(text) => {
                         this.setState({ s_email: text });
@@ -949,7 +977,7 @@ class Delivery extends Component {
             </View>
 
             {!this.props.route.params.fromUserProfile && (
-            <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount} />
+              <OrderFooter totalCost={this.props.route.params.totalCost} finalCost={this.props.route.params.finalCost} discount={this.props.route.params.discount} />
 
             )}
             <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>

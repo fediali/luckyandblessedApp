@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -15,15 +15,17 @@ import md5 from 'react-native-md5';
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import LogoSmall from './Styles/LogoSmall';
-import {Image as FastImage} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Image as FastImage } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
 var RNFS = require('react-native-fs');
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+
 const baseUrl = Globals.baseUrl;
 
 let DEFAULTS_OBJ = [];
@@ -92,7 +94,7 @@ class SignUp extends Component {
     /////////////////////////   Image Picker   ////////////////////////////
     const options = {
       title: 'Upload from..',
-      customButtons: [{name: 'document', title: 'Upload PDF file'}],
+      customButtons: [{ name: 'document', title: 'Upload PDF file' }],
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -138,7 +140,7 @@ class SignUp extends Component {
   }
   signUpClick(showAlert = true) {
     if (this.isValid()) {
-      this.setState({emailError: ''});
+      this.setState({ emailError: '' });
       //call signup API here
       //Splitting name to first and last name
       let fname = ''
@@ -146,7 +148,7 @@ class SignUp extends Component {
       if (this.state.fullName.split(' ').length > 1) {
         fname = this.state.fullName.split(' ').slice(0, -1).join(' '); // returns "Paul Steve"
         lname = this.state.fullName.split(' ').slice(-1).join(' ');
-        
+
       } else {
         fname = this.state.fullName
       }
@@ -188,12 +190,12 @@ class SignUp extends Component {
                       "company_id": data.company_id
                     }
                     PostData(baseUrl + "api/subscribe", subsData)
-                    .then(res => res.json())
-                    .then((response => {
-                      if(response.subscriber_id){
-                        // console.log("Subscribed to newsletter Successfully")
-                      }
-                    }))
+                      .then(res => res.json())
+                      .then((response => {
+                        if (response.subscriber_id) {
+                          // console.log("Subscribed to newsletter Successfully")
+                        }
+                      }))
                   } else {
                     //TODO: Incase of an error in taxId file, delete user.
                   }
@@ -256,7 +258,7 @@ class SignUp extends Component {
           },
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
@@ -267,32 +269,32 @@ class SignUp extends Component {
   isValid() {
     let validFlag = true;
     if (this.state.fullName == '') {
-      this.setState({fullNameError: 'Full name is required.'});
+      this.setState({ fullNameError: 'Full name is required.' });
       validFlag = false;
     } else {
-      this.setState({fullNameError: ''});
+      this.setState({ fullNameError: '' });
     }
 
     if (this.state.email == '') {
-      this.setState({emailError: 'Email is required.'});
+      this.setState({ emailError: 'Email is required.' });
       validFlag = false;
     } else {
       let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
       if (emailRegex.test(this.state.email) === false) {
-        this.setState({emailError: 'Email is invalid.'});
+        this.setState({ emailError: 'Email is invalid.' });
         validFlag = false;
       } else {
-        this.setState({emailError: ''});
+        this.setState({ emailError: '' });
       }
     }
     if (this.state.password != this.state.confirmPassword) {
-      this.setState({nonMatchingPasswordError: 'Passwords do not match.'});
+      this.setState({ nonMatchingPasswordError: 'Passwords do not match.' });
       validFlag = false;
     } else {
-      this.setState({nonMatchingPasswordError: ''});
+      this.setState({ nonMatchingPasswordError: '' });
     }
     if (this.state.password == '') {
-      this.setState({passwordError: 'Password is required.'});
+      this.setState({ passwordError: 'Password is required.' });
       validFlag = false;
     } else {
       let passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{7,}$/;
@@ -303,15 +305,15 @@ class SignUp extends Component {
         });
         validFlag = false;
       } else {
-        this.setState({passwordError: ''});
+        this.setState({ passwordError: '' });
       }
     }
 
     if (this.state.confirmPassword == '') {
-      this.setState({confirmPasswordError: 'Confirm password is required.'});
+      this.setState({ confirmPasswordError: 'Confirm password is required.' });
       validFlag = false;
     } else {
-      this.setState({confirmPasswordError: ''});
+      this.setState({ confirmPasswordError: '' });
     }
 
     return validFlag;
@@ -342,7 +344,7 @@ class SignUp extends Component {
   render() {
     return (
       <SafeAreaView style={styles.parentContainer}>
-        <Header navigation={this.props.navigation}/>
+        <Header navigation={this.props.navigation} />
         <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
           <View style={styles.subParentContainer}>
             <LogoSmall />
@@ -350,11 +352,13 @@ class SignUp extends Component {
 
             <View style={styles.inputView}>
               <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="name"
                 style={styles.input}
                 placeholder="Full Name"
                 autoCapitalize="words"
                 onChangeText={(text) => {
-                  this.setState({fullName: text});
+                  this.setState({ fullName: text });
                 }}
               />
             </View>
@@ -364,11 +368,12 @@ class SignUp extends Component {
             <View style={styles.inputView}>
               <TextInput
                 style={styles.input}
-                textContentType={'emailAddress'}
+                textContentType="emailAddress"
+                keyboardType="email-address"
                 autoCapitalize="none"
                 placeholder="Email"
                 onChangeText={(text) => {
-                  this.setState({email: text.trim()});
+                  this.setState({ email: text.trim() });
                 }}
               />
             </View>
@@ -378,12 +383,14 @@ class SignUp extends Component {
 
             <View style={styles.inputView}>
               <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="password"
                 style={styles.input}
                 secureTextEntry={true}
                 autoCapitalize="none"
                 placeholder="Password"
                 onChangeText={(text) => {
-                  this.setState({password: text});
+                  this.setState({ password: text });
                 }}
               />
             </View>
@@ -393,12 +400,14 @@ class SignUp extends Component {
 
             <View style={styles.inputView}>
               <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="password"
                 style={styles.input}
                 secureTextEntry={true}
                 autoCapitalize="none"
                 placeholder="Confirm password"
                 onChangeText={(text) => {
-                  this.setState({confirmPassword: text});
+                  this.setState({ confirmPassword: text });
                 }}
               />
             </View>
@@ -415,6 +424,7 @@ class SignUp extends Component {
                 style={[innerStyles.input, innerStyles.uploadFileView]}
                 onPress={this.displayImagePicker.bind(this)}>
                 <TextInput
+                  placeholderTextColor={TEXTINPUT_COLOR}
                   style={innerStyles.input}
                   editable={false}
                   multiline={true}
@@ -526,19 +536,19 @@ const innerStyles = StyleSheet.create({
     color: '#2d2d2f',
     fontFamily: 'Montserrat',
   },
-  arrowButton: {width: 10, height: 17, alignSelf: 'center'},
-  fillTaxView: {width: '100%', flexDirection: 'row'},
+  arrowButton: { width: 10, height: 17, alignSelf: 'center' },
+  fillTaxView: { width: '100%', flexDirection: 'row' },
   fillTaxID: {
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  buttonPadding: {paddingHorizontal: 15},
-  marginView: {marginTop: 10},
-  uploadFileImage: {width: 35, height: 47},
-  uploadFile: {alignItems: 'center', justifyContent: 'center'},
-  uploadFileView: {flexDirection: 'row'},
-  errorMessageText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
+  buttonPadding: { paddingHorizontal: 15 },
+  marginView: { marginTop: 10 },
+  uploadFileImage: { width: 35, height: 47 },
+  uploadFile: { alignItems: 'center', justifyContent: 'center' },
+  uploadFileView: { flexDirection: 'row' },
+  errorMessageText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
   buttonSignUp: {
     width: '100%',
     backgroundColor: '#2d2d2f',

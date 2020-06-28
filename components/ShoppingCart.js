@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   InteractionManager,
   ToastAndroid,
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import Shimmer from 'react-native-shimmer';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -28,6 +28,8 @@ import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 
 const STORAGE_USER = Globals.STORAGE_USER;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+
 const baseUrl = Globals.baseUrl;
 let gUser = null;
 YellowBox.ignoreWarnings([
@@ -48,11 +50,11 @@ class FlatListItem extends Component {
 
   onDeleteClose = () => {
     if (this.state.activeRowKey != null) {
-      this.setState({activeRowKey: null});
+      this.setState({ activeRowKey: null });
     }
   };
   onDeleteOpen = () => {
-    this.setState({activeRowKey: this.props.item.itemNum});
+    this.setState({ activeRowKey: this.props.item.itemNum });
   };
 
   onDeletePress = () => {
@@ -97,12 +99,12 @@ class FlatListItem extends Component {
                   orderItems: tempOrderItems
                 })
                 Globals.cartCount = parseInt(this.props.parentFlatList.state.totalCartProducts);
-                this.props.parentFlatList.refreshFlatList(deletingRow); 
+                this.props.parentFlatList.refreshFlatList(deletingRow);
               });
           },
         },
       ],
-      {cancelable: true},
+      { cancelable: true },
     );
   };
 
@@ -113,7 +115,7 @@ class FlatListItem extends Component {
   };
 
   onAvailableSizesModalSelect = (index, option, item) => {
-    Globals.cartCount+=(option-item.quantity)
+    Globals.cartCount += (option - item.quantity)
     var data = {
       products: {
         [item.product_id]: {
@@ -126,23 +128,23 @@ class FlatListItem extends Component {
       },
     };
 
-    PutData(baseUrl + "api/addcart/"+this.props.item.itemNum, data)
+    PutData(baseUrl + "api/addcart/" + this.props.item.itemNum, data)
       .then((res) => res.json())
       .then((response) => {
         var productKey = Object.keys(response.cart_content.product_groups[0].products)[0]
 
         //to update the individual list item when quantity is changed inside cart
         let tempItemList = this.props.parentFlatList.state.itemList;
-        tempItemList[this.props.index].price  = (
+        tempItemList[this.props.index].price = (
           parseFloat(response.cart_content.product_groups[0].products[productKey].amount) *
           parseFloat(response.cart_content.product_groups[0].products[productKey].price)
         ).toFixed(2),
-        tempItemList[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey].amount
-        
+          tempItemList[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey].amount
+
         //update the line items too for payment purpose..
         let tempPaymentLineItems = this.props.parentFlatList.state.paymentLineItems;
         tempPaymentLineItems[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey].amount
-        
+
         this.props.parentFlatList.setState({
           totalCost: parseFloat(response.cart_content.display_subtotal).toFixed(2),//FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
           totalCartProducts: response.cart_content.amount,
@@ -187,7 +189,7 @@ class FlatListItem extends Component {
               <Image
                 style={[innerStyles.itemImage]}
                 resizeMode="contain"
-                source={{uri: this.props.item.path}}
+                source={{ uri: this.props.item.path }}
               />
               <View style={innerStyles.listTextsContainerView}>
                 <View style={innerStyles.listRowView}>
@@ -318,7 +320,7 @@ class ShoppingCart extends Component {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: false});
+      this.setState({ isReady: false });
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);
@@ -335,7 +337,7 @@ class ShoppingCart extends Component {
   };
 
   deleteItem = (index) => {
-    Globals.cartCount-=this.state.itemList[index].quantity
+    Globals.cartCount -= this.state.itemList[index].quantity
     this.state.itemList.splice(index, 1);
 
   };
@@ -469,14 +471,14 @@ class ShoppingCart extends Component {
                 Globals.cartCount = parseInt(this.state.totalCartProducts);
 
               })
-              .catch((ex) =>{
+              .catch((ex) => {
                 console.log('Get Specific Product Exception ' + ex);
                 Toast.show(ex.toString())
               }
               );
           });
         }
-      }).catch(e => {Toast.show(e.toString()); console.log(e)});
+      }).catch(e => { Toast.show(e.toString()); console.log(e) });
   };
 
   refreshFlatList = (deletedKey) => {
@@ -508,10 +510,11 @@ class ShoppingCart extends Component {
         <View style={innerStyles.promoView}>
           <View style={styles.inputView}>
             <TextInput
+              placeholderTextColor={TEXTINPUT_COLOR}
               style={[styles.input]}
               placeholder="Gift Or Promo code"
               onChangeText={(text) => {
-                this.setState({promocode: text});
+                this.setState({ promocode: text });
               }}
             />
             <TouchableOpacity
@@ -609,24 +612,24 @@ class ShoppingCart extends Component {
         {this.state.showZeroProductScreen ? (
           <ZeroDataScreen />
         ) : (
-          <View style={styles.parentContainer}>
-            <FlatList
-              keyExtractor={(item) => item.itemNum.toString()}
-              data={this.state.itemList}
-              numColumns={1}
-              renderItem={({item, index}) => {
-                return (
-                  <FlatListItem
-                    item={item}
-                    index={index}
-                    parentFlatList={this}></FlatListItem>
-                );
-              }}
-              ListHeaderComponent={this.renderFlatListHeader}
-              ListFooterComponent={this.renderFlatListFooter}
-            />
-          </View>
-        )}
+            <View style={styles.parentContainer}>
+              <FlatList
+                keyExtractor={(item) => item.itemNum.toString()}
+                data={this.state.itemList}
+                numColumns={1}
+                renderItem={({ item, index }) => {
+                  return (
+                    <FlatListItem
+                      item={item}
+                      index={index}
+                      parentFlatList={this}></FlatListItem>
+                  );
+                }}
+                ListHeaderComponent={this.renderFlatListHeader}
+                ListFooterComponent={this.renderFlatListFooter}
+              />
+            </View>
+          )}
         <Footer selected="Shop" navigation={this.props.navigation} />
       </SafeAreaView>
     );
@@ -862,7 +865,7 @@ const innerStyles = StyleSheet.create({
     lineHeight: 30,
     textAlign: 'right',
   },
-  shippingText: {fontFamily: 'Avenir-Medium', fontSize: 16},
+  shippingText: { fontFamily: 'Avenir-Medium', fontSize: 16 },
   orderGiftText: {
     lineHeight: 30,
   },

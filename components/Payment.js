@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -14,15 +14,15 @@ import {
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import Shimmer from 'react-native-shimmer';
-import {Icon} from 'react-native-elements';
-import {Image as FastImage} from 'react-native';
+import { Icon } from 'react-native-elements';
+import { Image as FastImage } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import OrderFooter from '../reusableComponents/OrderFooter';
 import GetData from '../reusableComponents/API/GetData';
 import PostData from '../reusableComponents/API/PostData';
-import {WebView} from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
@@ -31,6 +31,8 @@ const CREDITCARTPAYMENTID = 34;
 const PAYPALPAYMENTID = 20;
 const MERCHANTAUTH_NAME = Globals.MERCHANTAUTH_NAME;
 const MERCHANTAUTH_TRANSACTIONID = Globals.MERCHANTAUTH_TRANSACTIONID;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+
 let deliveryDetails = null;
 let gUser = null;
 
@@ -60,31 +62,31 @@ class Payment extends Component {
     let validFlag = true;
 
     if (this.state.cardNumber == '') {
-      this.setState({cardNumberError: 'Card number is required.'});
+      this.setState({ cardNumberError: 'Card number is required.' });
       validFlag = false;
     } else {
-      this.setState({cardNumberError: ''});
+      this.setState({ cardNumberError: '' });
     }
 
     if (this.state.expMonth == '') {
-      this.setState({expMonthError: 'Expiry month is required.'});
+      this.setState({ expMonthError: 'Expiry month is required.' });
       validFlag = false;
     } else {
-      this.setState({expMonthError: ''});
+      this.setState({ expMonthError: '' });
     }
 
     if (this.state.expYear == '') {
-      this.setState({expYearError: 'Expiry year is required.'});
+      this.setState({ expYearError: 'Expiry year is required.' });
       validFlag = false;
     } else {
-      this.setState({expYearError: ''});
+      this.setState({ expYearError: '' });
     }
 
     if (this.state.cardCode == '') {
-      this.setState({cardCodeError: 'CVV code is required.'});
+      this.setState({ cardCodeError: 'CVV code is required.' });
       validFlag = false;
     } else {
-      this.setState({cardCodeError: ''});
+      this.setState({ cardCodeError: '' });
     }
 
     return validFlag;
@@ -107,11 +109,11 @@ class Payment extends Component {
     InteractionManager.runAfterInteractions(() => {
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         user = JSON.parse(user);
-        this.setState({email: user.email});
+        this.setState({ email: user.email });
 
         GetData(
           baseUrl +
-            `api/userprofilesnew/${user.user_id}&profile_id=${this.state.profile_id}`,
+          `api/userprofilesnew/${user.user_id}&profile_id=${this.state.profile_id}`,
         ) //TODO: Get user details
           .then((res) => res.json())
           .then((response) => {
@@ -201,7 +203,7 @@ class Payment extends Component {
   };
 
   handlePayPalTransaction = (user) => {
-    this.setState({showCircleLoader: true});
+    this.setState({ showCircleLoader: true });
     let paymentItems = [];
     //mapping lineItems(from params) onto below payment items object
     let item = this.props.route.params.paymentLineItems;
@@ -272,7 +274,7 @@ class Payment extends Component {
         ) //To create Order
           .then((res) => res.json())
           .then((response) => {
-            this.setState({paypalLink: response.links[1].href});
+            this.setState({ paypalLink: response.links[1].href });
           })
           .catch((e) => {
             Toast.show(e.toString());
@@ -427,16 +429,16 @@ class Payment extends Component {
   };
 
   changePaymentMode = (paymentMode) => () => {
-    this.setState({paymentMode});
+    this.setState({ paymentMode });
   };
   handleWebViewResponse = (data) => {
     if (data.title == 'Success') {
-      this.setState({paypalLink: null}, () => {
+      this.setState({ paypalLink: null }, () => {
         this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson());
       });
     } else if (data.title == 'Cancel') {
       {
-        this.setState({paypalLink: null});
+        this.setState({ paypalLink: null });
         Toast.show('Your payment was not Sucessful');
       }
     }
@@ -467,10 +469,10 @@ class Payment extends Component {
         <Header navigation={this.props.navigation} />
 
         {this.state.paypalLink != null ? (
-          <View style={{flex: 1, backgroundColor: '#00f'}}>
+          <View style={{ flex: 1, backgroundColor: '#00f' }}>
             <WebView
-              style={{flex: 1}}
-              source={{uri: this.state.paypalLink}}
+              style={{ flex: 1 }}
+              source={{ uri: this.state.paypalLink }}
               onNavigationStateChange={(data) =>
                 this.handleWebViewResponse(data)
               }
@@ -478,61 +480,45 @@ class Payment extends Component {
             />
             {this.state.showCircleLoader && (
               <ActivityIndicator
-                style={{position: 'absolute', top: height / 3, left: width / 2}}
+                style={{ position: 'absolute', top: height / 3, left: width / 2 }}
                 size="large"
               />
             )}
           </View>
         ) : (
-          <>
-            {this.state.showCircleLoader && (
-              <ActivityIndicator
-                style={{
-                  position: 'absolute',
-                  top: height / 3 - 30,
-                  left: width / 2,
-                }}
-                size="large"
-              />
-            )}
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                flexGrow: 1,
-                justifyContent: 'space-between',
-              }}>
-              <View style={{marginBottom: 50}}>
-                <View style={styles.subContainer}>
-                  <View style={styles.paymentAndSecureView}>
-                    <View>
-                      <Text style={styles.paymentText}>Payment</Text>
-                      <Text style={styles.secureCheckoutText}>
-                        Secure Checkout
+            <>
+              {this.state.showCircleLoader && (
+                <ActivityIndicator
+                  style={{
+                    position: 'absolute',
+                    top: height / 3 - 30,
+                    left: width / 2,
+                  }}
+                  size="large"
+                />
+              )}
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  justifyContent: 'space-between',
+                }}>
+                <View style={{ marginBottom: 50 }}>
+                  <View style={styles.subContainer}>
+                    <View style={styles.paymentAndSecureView}>
+                      <View>
+                        <Text style={styles.paymentText}>Payment</Text>
+                        <Text style={styles.secureCheckoutText}>
+                          Secure Checkout
                       </Text>
-                    </View>
-                  </View>
-
-                  <View>
-                    {this.state.sameShipping == 'Y' ? (
-                      <View>
-                        <View style={styles.shippingAddressView}>
-                          <Text style={styles.heading}>Shipping address:</Text>
-                          <TouchableOpacity
-                            onPress={this.navigateToDeliveryScreen}>
-                            <Text style={styles.textButton}>Edit</Text>
-                          </TouchableOpacity>
-                        </View>
-                        <Text style={styles.monikaWillemsText}>
-                          {this.state.shippingDetails}
-                        </Text>
                       </View>
-                    ) : (
-                      <View>
+                    </View>
+
+                    <View>
+                      {this.state.sameShipping == 'Y' ? (
                         <View>
                           <View style={styles.shippingAddressView}>
-                            <Text style={styles.heading}>
-                              Shipping address:
-                            </Text>
+                            <Text style={styles.heading}>Shipping address:</Text>
                             <TouchableOpacity
                               onPress={this.navigateToDeliveryScreen}>
                               <Text style={styles.textButton}>Edit</Text>
@@ -542,199 +528,223 @@ class Payment extends Component {
                             {this.state.shippingDetails}
                           </Text>
                         </View>
-                        <View>
-                          <View style={styles.shippingAddressView}>
-                            <Text style={styles.heading}>Billing address:</Text>
+                      ) : (
+                          <View>
+                            <View>
+                              <View style={styles.shippingAddressView}>
+                                <Text style={styles.heading}>
+                                  Shipping address:
+                            </Text>
+                                <TouchableOpacity
+                                  onPress={this.navigateToDeliveryScreen}>
+                                  <Text style={styles.textButton}>Edit</Text>
+                                </TouchableOpacity>
+                              </View>
+                              <Text style={styles.monikaWillemsText}>
+                                {this.state.shippingDetails}
+                              </Text>
+                            </View>
+                            <View>
+                              <View style={styles.shippingAddressView}>
+                                <Text style={styles.heading}>Billing address:</Text>
+                              </View>
+                              <Text style={styles.monikaWillemsText}>
+                                {this.state.billingDetails}
+                              </Text>
+                            </View>
                           </View>
-                          <Text style={styles.monikaWillemsText}>
-                            {this.state.billingDetails}
-                          </Text>
-                        </View>
+                        )}
+
+                      <Text>UPS Shipping - shipping will be added later</Text>
+
+                      <View style={styles.promoAndCreditCardView}>
+                        <Text style={styles.heading}>Shipping charges</Text>
                       </View>
-                    )}
-
-                    <Text>UPS Shipping - shipping will be added later</Text>
-
-                    <View style={styles.promoAndCreditCardView}>
-                      <Text style={styles.heading}>Shipping charges</Text>
-                    </View>
-                    <Text style={styles.smallGreyText}>
-                      UPS Shipping - shipping will be added later
+                      <Text style={styles.smallGreyText}>
+                        UPS Shipping - shipping will be added later
                     </Text>
-                    <View style={styles.cardSelectorView}>
-                      <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={this.changePaymentMode(1)}>
-                        <View style={styles.cardSelectorTouchView}>
-                          {this.state.paymentMode == 1 ? (
-                            <Icon
-                              size={20}
-                              name="checkcircle"
-                              type="antdesign"
-                              color="#5dd136"
-                            />
-                          ) : (
-                            <Icon
-                              size={20}
-                              name="checkcircle"
-                              type="antdesign"
-                              color="#f6f6f6"
-                            />
-                          )}
-                          <Text style={styles.paymentSelectorText}>
-                            Credit Card
+                      <View style={styles.cardSelectorView}>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={this.changePaymentMode(1)}>
+                          <View style={styles.cardSelectorTouchView}>
+                            {this.state.paymentMode == 1 ? (
+                              <Icon
+                                size={20}
+                                name="checkcircle"
+                                type="antdesign"
+                                color="#5dd136"
+                              />
+                            ) : (
+                                <Icon
+                                  size={20}
+                                  name="checkcircle"
+                                  type="antdesign"
+                                  color="#f6f6f6"
+                                />
+                              )}
+                            <Text style={styles.paymentSelectorText}>
+                              Credit Card
                           </Text>
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={this.changePaymentMode(2)}>
-                        <View style={styles.cardSelectorTouchView}>
-                          {this.state.paymentMode == 2 ? (
-                            <Icon
-                              size={20}
-                              name="checkcircle"
-                              type="antdesign"
-                              color="#5dd136"
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={this.changePaymentMode(2)}>
+                          <View style={styles.cardSelectorTouchView}>
+                            {this.state.paymentMode == 2 ? (
+                              <Icon
+                                size={20}
+                                name="checkcircle"
+                                type="antdesign"
+                                color="#5dd136"
+                              />
+                            ) : (
+                                <Icon
+                                  size={20}
+                                  name="checkcircle"
+                                  type="antdesign"
+                                  color="#f6f6f6"
+                                />
+                              )}
+                            <FastImage
+                              style={styles.imagePaypalLogo}
+                              source={require('../static/paypalLogo.png')}
                             />
-                          ) : (
-                            <Icon
-                              size={20}
-                              name="checkcircle"
-                              type="antdesign"
-                              color="#f6f6f6"
-                            />
-                          )}
-                          <FastImage
-                            style={styles.imagePaypalLogo}
-                            source={require('../static/paypalLogo.png')}
-                          />
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={this.changePaymentMode(3)}>
-                        <View style={styles.cardSelectorTouchView}>
-                          {this.state.paymentMode == 3 ? (
-                            <Icon
-                              size={20}
-                              name="checkcircle"
-                              type="antdesign"
-                              color="#5dd136"
-                            />
-                          ) : (
-                            <Icon
-                              size={20}
-                              name="checkcircle"
-                              type="antdesign"
-                              color="#f6f6f6"
-                            />
-                          )}
-                          <Text style={styles.paymentSelectorText}>COD</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                    {this.state.paymentMode == 1 && (
-                      <View>
-                        <View style={styles.promoAndCreditCardView}>
-                          <Text style={styles.heading}>Credit card</Text>
-                          <Text style={styles.textButton}>Clear All</Text>
-                        </View>
-                        <TextInput
-                          style={[styles.textInput, styles.cardHolderTextInput]}
-                          placeholder="Card holder name"
-                        />
-                        <TextInput
-                          style={[styles.textInput, styles.cardNumTextInput]}
-                          keyboardType={'number-pad'}
-                          placeholder="Card number"
-                          onChangeText={(text) => {
-                            this.setState({cardNumber: text});
-                          }}
-                        />
-                        {this.state.cardNumberError != '' ? (
-                          this.showErrorMessage(this.state.cardNumberError)
-                        ) : (
-                          <View></View>
-                        )}
-
-                        <View style={styles.cardInfoView}>
-                          <TextInput
-                            style={[styles.textInput, styles.dateTextInput]}
-                            placeholder="mm"
-                            keyboardType={'number-pad'}
-                            onChangeText={(text) => {
-                              this.setState({expMonth: text});
-                            }}
-                          />
-                          <TextInput
-                            style={[styles.textInput, styles.dateTextInput]}
-                            placeholder="yyyy"
-                            keyboardType={'number-pad'}
-                            onChangeText={(text) => {
-                              this.setState({expYear: text});
-                            }}
-                          />
-                          <TextInput
-                            style={[styles.textInput, styles.cvvTextInput]}
-                            placeholder="CVV"
-                            keyboardType={'number-pad'}
-                            onChangeText={(text) => {
-                              this.setState({cardCode: text});
-                            }}
-                          />
-                        </View>
-                        {this.state.expMonthError != '' ? (
-                          this.showErrorMessage(this.state.expMonthError)
-                        ) : (
-                          <View></View>
-                        )}
-                        {this.state.expYearError != '' ? (
-                          this.showErrorMessage(this.state.expYearError)
-                        ) : (
-                          <View></View>
-                        )}
-                        {this.state.cardCodeError != '' ? (
-                          this.showErrorMessage(this.state.cardCodeError)
-                        ) : (
-                          <View></View>
-                        )}
-
-                        {/* <View style={styles.divider}></View> */}
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={this.changePaymentMode(3)}>
+                          <View style={styles.cardSelectorTouchView}>
+                            {this.state.paymentMode == 3 ? (
+                              <Icon
+                                size={20}
+                                name="checkcircle"
+                                type="antdesign"
+                                color="#5dd136"
+                              />
+                            ) : (
+                                <Icon
+                                  size={20}
+                                  name="checkcircle"
+                                  type="antdesign"
+                                  color="#f6f6f6"
+                                />
+                              )}
+                            <Text style={styles.paymentSelectorText}>COD</Text>
+                          </View>
+                        </TouchableOpacity>
                       </View>
-                    )}
+                      {this.state.paymentMode == 1 && (
+                        <View>
+                          <View style={styles.promoAndCreditCardView}>
+                            <Text style={styles.heading}>Credit card</Text>
+                            <Text style={styles.textButton}>Clear All</Text>
+                          </View>
+                          <TextInput
+                            placeholderTextColor={TEXTINPUT_COLOR}
+                            textContentType="name"
+                            style={[styles.textInput, styles.cardHolderTextInput]}
+                            placeholder="Card holder name"
+                          />
+                          <TextInput
+                            placeholderTextColor={TEXTINPUT_COLOR}
+                            textContentType="creditCardNumber"
+                            style={[styles.textInput, styles.cardNumTextInput]}
+                            keyboardType={'phone-pad'}
+                            placeholder="Card number"
+                            onChangeText={(text) => {
+                              this.setState({ cardNumber: text });
+                            }}
+                          />
+                          {this.state.cardNumberError != '' ? (
+                            this.showErrorMessage(this.state.cardNumberError)
+                          ) : (
+                              <View></View>
+                            )}
+
+                          <View style={styles.cardInfoView}>
+                            <TextInput
+                              placeholderTextColor={TEXTINPUT_COLOR}
+                              style={[styles.textInput, styles.dateTextInput]}
+                              placeholder="mm"
+                              keyboardType={'phone-pad'}
+                              onChangeText={(text) => {
+                                this.setState({ expMonth: text });
+                              }}
+                            />
+                            <TextInput
+                              placeholderTextColor={TEXTINPUT_COLOR}
+                              style={[styles.textInput, styles.dateTextInput]}
+                              placeholder="yyyy"
+                              keyboardType={'number-pad'}
+                              onChangeText={(text) => {
+                                this.setState({ expYear: text });
+                              }}
+                            />
+                            <TextInput
+                              placeholderTextColor={TEXTINPUT_COLOR}
+                              style={[styles.textInput, styles.cvvTextInput]}
+                              placeholder="CVV"
+                              keyboardType={'number-pad'}
+                              onChangeText={(text) => {
+                                this.setState({ cardCode: text });
+                              }}
+                            />
+                          </View>
+                          {this.state.expMonthError != '' ? (
+                            this.showErrorMessage(this.state.expMonthError)
+                          ) : (
+                              <View></View>
+                            )}
+                          {this.state.expYearError != '' ? (
+                            this.showErrorMessage(this.state.expYearError)
+                          ) : (
+                              <View></View>
+                            )}
+                          {this.state.cardCodeError != '' ? (
+                            this.showErrorMessage(this.state.cardCodeError)
+                          ) : (
+                              <View></View>
+                            )}
+
+                          {/* <View style={styles.divider}></View> */}
+                        </View>
+                      )}
+                    </View>
+                  </View>
+                  <View style={styles.commentView}>
+                    <TextInput
+                      placeholderTextColor={TEXTINPUT_COLOR}
+                      style={[styles.textInput, styles.commentTextInput]}
+                      multiline={true}
+                      numberOfLines={4}
+                      placeholder="You can leave us a comment here"
+                    />
+                  </View>
+                  <OrderFooter
+                    totalCost={this.props.route.params.totalCost}
+                    finalCost={this.props.route.params.finalCost}
+                    discount={this.props.route.params.discount}
+                  />
+                  <View style={[styles.buttonContainer, styles.orderButtonView]}>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      style={[styles.buttonPaymentMethod]}
+                      onPress={() => {
+                        this.performTransaction();
+                      }}>
+                      <Text style={[styles.buttonText, styles.orderButtonText]}>
+                        Place Order
+                    </Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <View style={styles.commentView}>
-                  <TextInput
-                    style={[styles.textInput, styles.commentTextInput]}
-                    multiline={true}
-                    numberOfLines={4}
-                    placeholder="You can leave us a comment here"
-                  />
-                </View>
-                <OrderFooter
-                  totalCost={this.props.route.params.totalCost}
-                  finalCost={this.props.route.params.finalCost}
-                  discount={this.props.route.params.discount}
-                />
-                <View style={[styles.buttonContainer, styles.orderButtonView]}>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    style={[styles.buttonPaymentMethod]}
-                    onPress={() => {
-                      this.performTransaction();
-                    }}>
-                    <Text style={[styles.buttonText, styles.orderButtonText]}>
-                      Place Order
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ScrollView>
-            <Footer navigation={this.props.navigation} />
-          </>
-        )}
+              </ScrollView>
+              <Footer navigation={this.props.navigation} />
+            </>
+          )}
       </SafeAreaView>
     );
   }
@@ -952,7 +962,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 15,
   },
-  errorTextText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
+  errorTextText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
 });
 
 export default Payment;

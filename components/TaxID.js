@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -13,21 +13,22 @@ import {
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import SignatureCapture from 'react-native-signature-capture';
-import {Icon} from 'react-native-elements';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Icon } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import LogoSmall from './Styles/LogoSmall';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
 import Shimmer from 'react-native-shimmer';
-import {Image as FastImage} from 'react-native';
+import { Image as FastImage } from 'react-native';
 import GetData from '../reusableComponents/API/GetData';
 import GlobalStyles from './Styles/Style';
-import {WebView} from 'react-native-webview';
+import { WebView } from 'react-native-webview';
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 let DEFAULTS_OBJ = [];
 let user = null;
@@ -72,7 +73,7 @@ class TaxID extends Component {
 
   componentDidMount() {
     if (this.props.route.params.fromUserProfile) {
-      this.setState({isReady: false});
+      this.setState({ isReady: false });
       InteractionManager.runAfterInteractions(() => {
         RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
           DEFAULTS_OBJ = JSON.parse(defaults);
@@ -93,7 +94,7 @@ class TaxID extends Component {
       let url =
         baseUrl +
         `/api/salestaxid/${
-          user.user_id
+        user.user_id
         }&company_id=${DEFAULTS_OBJ.store_id.toString()}`;
       GetData(url)
         .then((res) => res.json())
@@ -141,7 +142,7 @@ class TaxID extends Component {
   }
 
   resetSign() {
-    this.setState({sign: false});
+    this.setState({ sign: false });
     this.refs['sign'].resetImage();
   }
 
@@ -155,7 +156,7 @@ class TaxID extends Component {
   };
   _onDragEvent() {
     // This callback will be called when the user enters signature
-    this.setState({sign: true});
+    this.setState({ sign: true });
   }
 
   submitClick = () => {
@@ -239,14 +240,14 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({nameOfPurchaseError: ''});
+      this.setState({ nameOfPurchaseError: '' });
     }
 
     if (this.state.phone == '') {
-      this.setState({phoneError: 'Phone is required.'});
+      this.setState({ phoneError: 'Phone is required.' });
       validFlag = false;
     } else {
-      this.setState({phoneError: ''});
+      this.setState({ phoneError: '' });
     }
 
     if (this.state.address == '') {
@@ -255,7 +256,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({addressError: ''});
+      this.setState({ addressError: '' });
     }
 
     if (this.state.address2 == '') {
@@ -264,7 +265,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({addressError: ''});
+      this.setState({ addressError: '' });
     }
 
     if (this.state.texasSales == '' && this.state.outOfState == '') {
@@ -275,7 +276,7 @@ class TaxID extends Component {
       });
       validFlag = false;
     } else {
-      this.setState({texasSalesError: '', outOfStateError: ''});
+      this.setState({ texasSalesError: '', outOfStateError: '' });
     }
 
     // if (this.state.outOfState == '') {
@@ -288,17 +289,17 @@ class TaxID extends Component {
     // }
 
     if (this.state.description == '') {
-      this.setState({descriptionError: 'Description of buisness is required.'});
+      this.setState({ descriptionError: 'Description of buisness is required.' });
       validFlag = false;
     } else {
-      this.setState({descriptionError: ''});
+      this.setState({ descriptionError: '' });
     }
 
     if (this.state.sign == false) {
-      this.setState({signError: 'Your signature is required.'});
+      this.setState({ signError: 'Your signature is required.' });
       validFlag = false;
     } else {
-      this.setState({signError: ''});
+      this.setState({ signError: '' });
     }
     return validFlag;
   }
@@ -317,8 +318,8 @@ class TaxID extends Component {
     );
   }
   render() {
-    const {value1, _, height1, __} = this.state;
-    const {___, value2, ____, height2} = this.state;
+    const { value1, _, height1, __ } = this.state;
+    const { ___, value2, ____, height2 } = this.state;
 
     let newStyle1 = {
       height1,
@@ -354,201 +355,211 @@ class TaxID extends Component {
                 Use & Sale Tax Form
               </Text>
               {this.state.taxIdUrl ? (
-                <View style={{flex: 1}}>
-                  <View style={{flex: 10, marginBottom: 20}}>
-                    <WebView source={{uri: this.state.taxIdUrl}}></WebView>
+                <View style={{ flex: 1 }}>
+                  <View style={{ flex: 10, marginBottom: 20 }}>
+                    <WebView source={{ uri: this.state.taxIdUrl }}></WebView>
                   </View>
                   <Text style={styles.input}>Form is downloading</Text>
                 </View>
               ) : (
-                <View>
-                  <View style={styles.inputView}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Name of purchaser, firm or agence"
-                      value={this.state.nameOfPurchase}
-                      onChangeText={(text) => {
-                        this.setState({nameOfPurchase: text});
-                      }}
-                    />
-                  </View>
-                  {this.state.nameOfPurchaseError != ''
-                    ? this.showErrorMessage(this.state.nameOfPurchaseError)
-                    : null}
+                  <View>
+                    <View style={styles.inputView}>
+                      <TextInput
+                        placeholderTextColor={TEXTINPUT_COLOR}
+                        style={styles.input}
+                        placeholder="Name of purchaser, firm or agence"
+                        value={this.state.nameOfPurchase}
+                        onChangeText={(text) => {
+                          this.setState({ nameOfPurchase: text });
+                        }}
+                      />
+                    </View>
+                    {this.state.nameOfPurchaseError != ''
+                      ? this.showErrorMessage(this.state.nameOfPurchaseError)
+                      : null}
 
-                  <View style={styles.inputView}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Phone"
-                      value={this.state.phone}
-                      keyboardType={'number-pad'}
-                      onChangeText={(text) => {
-                        this.setState({phone: text});
-                      }}
-                    />
-                  </View>
-                  {this.state.phoneError != ''
-                    ? this.showErrorMessage(this.state.phoneError)
-                    : null}
+                    <View style={styles.inputView}>
+                      <TextInput
+                        placeholderTextColor={TEXTINPUT_COLOR}
+                        textContentType="telephoneNumber"
+                        style={styles.input}
+                        placeholder="Phone"
+                        value={this.state.phone}
+                        keyboardType="phone-pad"
+                        onChangeText={(text) => {
+                          this.setState({ phone: text });
+                        }}
+                      />
+                    </View>
+                    {this.state.phoneError != ''
+                      ? this.showErrorMessage(this.state.phoneError)
+                      : null}
 
-                  <View style={styles.inputView}>
-                    <TextInput
-                      style={styles.input}
-                      value={this.state.address}
-                      placeholder="Address"
-                      onChangeText={(text) => {
-                        this.setState({address: text});
-                      }}
-                    />
-                  </View>
-                  {this.state.addressError != ''
-                    ? this.showErrorMessage(this.state.addressError)
-                    : null}
+                    <View style={styles.inputView}>
+                      <TextInput
+                        placeholderTextColor={TEXTINPUT_COLOR}
+                        textContentType="fullStreetAddress"
+                        style={styles.input}
+                        value={this.state.address}
+                        placeholder="Address"
+                        onChangeText={(text) => {
+                          this.setState({ address: text });
+                        }}
+                      />
+                    </View>
+                    {this.state.addressError != ''
+                      ? this.showErrorMessage(this.state.addressError)
+                      : null}
 
-                  <View style={styles.inputView}>
-                    <TextInput
-                      style={styles.input}
-                      value={this.state.address2}
-                      placeholder="City, State, ZIP code"
-                      onChangeText={(text) => {
-                        this.setState({address2: text});
-                      }}
-                    />
-                  </View>
-                  {this.state.address2Error != ''
-                    ? this.showErrorMessage(this.state.address2Error)
-                    : null}
+                    <View style={styles.inputView}>
+                      <TextInput
+                        placeholderTextColor={TEXTINPUT_COLOR}
+                        textContentType="postalCode"
+                        style={styles.input}
+                        value={this.state.address2}
+                        placeholder="City, State, ZIP code"
+                        onChangeText={(text) => {
+                          this.setState({ address2: text });
+                        }}
+                      />
+                    </View>
+                    {this.state.address2Error != ''
+                      ? this.showErrorMessage(this.state.address2Error)
+                      : null}
 
-                  <View style={styles.inputView}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Texas sales & Use Tax Permit Num"
-                      keyboardType={'number-pad'}
-                      value={this.state.texasSales}
-                      onChangeText={(text) => {
-                        this.setState({texasSales: text});
-                      }}
-                    />
-                  </View>
-                  {this.state.texasSalesError != ''
-                    ? this.showErrorMessage(this.state.texasSalesError)
-                    : null}
+                    <View style={styles.inputView}>
+                      <TextInput
+                        placeholderTextColor={TEXTINPUT_COLOR}
+                        style={styles.input}
+                        placeholder="Texas sales & Use Tax Permit Num"
+                        keyboardType={'phone-pad'}
+                        value={this.state.texasSales}
+                        onChangeText={(text) => {
+                          this.setState({ texasSales: text });
+                        }}
+                      />
+                    </View>
+                    {this.state.texasSalesError != ''
+                      ? this.showErrorMessage(this.state.texasSalesError)
+                      : null}
 
-                  <View style={styles.inputView}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Out-of-state or Fedral Taxpay Num"
-                      keyboardType={'number-pad'}
-                      value={this.state.outOfState}
-                      onChangeText={(text) => {
-                        this.setState({outOfState: text});
-                      }}
-                    />
-                  </View>
-                  {this.state.outOfStateError != ''
-                    ? this.showErrorMessage(this.state.outOfStateError)
-                    : null}
+                    <View style={styles.inputView}>
+                      <TextInput
+                        placeholderTextColor={TEXTINPUT_COLOR}
+                        style={styles.input}
+                        placeholder="Out-of-state or Fedral Taxpay Num"
+                        keyboardType={'phone-pad'}
+                        value={this.state.outOfState}
+                        onChangeText={(text) => {
+                          this.setState({ outOfState: text });
+                        }}
+                      />
+                    </View>
+                    {this.state.outOfStateError != ''
+                      ? this.showErrorMessage(this.state.outOfStateError)
+                      : null}
 
-                  <Text style={[innerStyles.customText1]}>
-                    I, the purchaser named above, claim the right to make a
-                    non-taxable purchase (for resale of the taxable items
-                    described below or on the attached order or invoice) from:
+                    <Text style={[innerStyles.customText1]}>
+                      I, the purchaser named above, claim the right to make a
+                      non-taxable purchase (for resale of the taxable items
+                      described below or on the attached order or invoice) from:
                   </Text>
-                  <Text
-                    style={[
-                      innerStyles.customText1,
-                      innerStyles.customTextMargin,
-                    ]}>
                     <Text
                       style={[
-                        styles.customTextBold,
-                        innerStyles.titleFontSize,
+                        innerStyles.customText1,
+                        innerStyles.customTextMargin,
                       ]}>
-                      L&B
+                      <Text
+                        style={[
+                          styles.customTextBold,
+                          innerStyles.titleFontSize,
+                        ]}>
+                        L&B
                     </Text>{' '}
                     - 12801 N STEMMONS FWY STE 710 FARMERS BRANCH, TX 75234
                   </Text>
-                  <View style={innerStyles.divider}></View>
-                  <Text
-                    style={[
-                      innerStyles.customTextBoldSmall,
-                      innerStyles.customTextMargin,
-                    ]}>
-                    Description of the type of business activity generally
-                    engaged in or type of items normally sold by the purchaser:
+                    <View style={innerStyles.divider}></View>
+                    <Text
+                      style={[
+                        innerStyles.customTextBoldSmall,
+                        innerStyles.customTextMargin,
+                      ]}>
+                      Description of the type of business activity generally
+                      engaged in or type of items normally sold by the purchaser:
                   </Text>
 
-                  <View
-                    style={[
-                      innerStyles.customInputView,
-                      innerStyles.customPadding,
-                    ]}>
-                    <TextInput
-                      placeholder="Type here"
-                      value={this.state.description}
-                      onChangeText={(value1) =>
-                        this.setState({description: value1})
-                      }
-                      style={[innerStyles.customInput]}
-                      editable={true}
-                      multiline={true}
-                      onContentSizeChange={(e) =>
-                        this.updateSize(e.nativeEvent.contentSize.height)
-                      }></TextInput>
-                  </View>
-                  {this.state.descriptionError != ''
-                    ? this.showErrorMessage(this.state.descriptionError)
-                    : null}
-
-                  <Text
-                    style={[
-                      innerStyles.customTextBoldSmall,
-                      innerStyles.customTextMargin,
-                    ]}>
-                    This certificate should be furnished to the supplier. Do not
-                    send the completed certificate to the Comptroller of Public
-                    Accounts.
-                  </Text>
-                  <View
-                    style={[
-                      innerStyles.customInputView,
-                      innerStyles.customDim,
-                    ]}>
-                    <View style={innerStyles.customView}>
-                      <Text style={innerStyles.signText}>Sign Below:</Text>
-                      <TouchableOpacity onPress={this.resetSign.bind(this)}>
-                        <Text style={innerStyles.resetSignature}>Reset</Text>
-                      </TouchableOpacity>
+                    <View
+                      style={[
+                        innerStyles.customInputView,
+                        innerStyles.customPadding,
+                      ]}>
+                      <TextInput
+                        placeholderTextColor={TEXTINPUT_COLOR}
+                        placeholder="Type here"
+                        value={this.state.description}
+                        onChangeText={(value1) =>
+                          this.setState({ description: value1 })
+                        }
+                        style={[innerStyles.customInput]}
+                        editable={true}
+                        multiline={true}
+                        onContentSizeChange={(e) =>
+                          this.updateSize(e.nativeEvent.contentSize.height)
+                        }></TextInput>
                     </View>
-                    <SignatureCapture
-                      style={innerStyles.signCap}
-                      ref="sign"
-                      showBorder={true}
-                      backgroundColor={'#f6f6f6'}
-                      contentSize="10"
-                      onSaveEvent={this._onSaveEvent}
-                      onDragEvent={this._onDragEvent.bind(this)}
-                      saveImageFileInExtStorage={false}
-                      showNativeButtons={false}
-                      showTitleLabel={true}
-                      viewMode={'portrait'}
-                      maxStrokeWidth={8}
-                      minStrokeWidth={7}
-                    />
-                  </View>
-                  {this.state.signError != ''
-                    ? this.showErrorMessage(this.state.signError)
-                    : null}
+                    {this.state.descriptionError != ''
+                      ? this.showErrorMessage(this.state.descriptionError)
+                      : null}
 
-                  <Text
-                    style={[
-                      innerStyles.customTextBoldSmall,
-                      innerStyles.dateText,
-                    ]}>
-                    Date: {this.state.dateToday}
+                    <Text
+                      style={[
+                        innerStyles.customTextBoldSmall,
+                        innerStyles.customTextMargin,
+                      ]}>
+                      This certificate should be furnished to the supplier. Do not
+                      send the completed certificate to the Comptroller of Public
+                      Accounts.
                   </Text>
-                </View>
-              )}
+                    <View
+                      style={[
+                        innerStyles.customInputView,
+                        innerStyles.customDim,
+                      ]}>
+                      <View style={innerStyles.customView}>
+                        <Text style={innerStyles.signText}>Sign Below:</Text>
+                        <TouchableOpacity onPress={this.resetSign.bind(this)}>
+                          <Text style={innerStyles.resetSignature}>Reset</Text>
+                        </TouchableOpacity>
+                      </View>
+                      <SignatureCapture
+                        style={innerStyles.signCap}
+                        ref="sign"
+                        showBorder={true}
+                        backgroundColor={'#f6f6f6'}
+                        contentSize="10"
+                        onSaveEvent={this._onSaveEvent}
+                        onDragEvent={this._onDragEvent.bind(this)}
+                        saveImageFileInExtStorage={false}
+                        showNativeButtons={false}
+                        showTitleLabel={true}
+                        viewMode={'portrait'}
+                        maxStrokeWidth={8}
+                        minStrokeWidth={7}
+                      />
+                    </View>
+                    {this.state.signError != ''
+                      ? this.showErrorMessage(this.state.signError)
+                      : null}
+
+                    <Text
+                      style={[
+                        innerStyles.customTextBoldSmall,
+                        innerStyles.dateText,
+                      ]}>
+                      Date: {this.state.dateToday}
+                    </Text>
+                  </View>
+                )}
               <View style={[styles.buttonContainer, innerStyles.buttonView]}>
                 <TouchableOpacity
                   style={[innerStyles.buttonSubmit]}
@@ -604,7 +615,7 @@ const innerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 15,
   },
-  errorMessageText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
+  errorMessageText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
   customInput: {
     borderRadius: 6,
     backgroundColor: '#f6f6f6',
@@ -624,12 +635,12 @@ const innerStyles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between',
   },
-  titleFontSize: {fontSize: 20},
-  scrollMargin: {marginBottom: 38},
-  textMargin: {marginTop: 20},
-  customTextMargin: {marginTop: 15},
-  customPadding: {paddingHorizontal: 30},
-  customDim: {height: 240, paddingHorizontal: 30},
+  titleFontSize: { fontSize: 20 },
+  scrollMargin: { marginBottom: 38 },
+  textMargin: { marginTop: 20 },
+  customTextMargin: { marginTop: 15 },
+  customPadding: { paddingHorizontal: 30 },
+  customDim: { height: 240, paddingHorizontal: 30 },
   customView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -647,9 +658,9 @@ const innerStyles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
   },
-  buttonView: {paddingHorizontal: 30, marginTop: 20, width: '100%'},
-  dateText: {width: '100%', textAlign: 'left'},
-  signCap: {borderRadius: 6, borderColor: '#000', flex: 1},
+  buttonView: { paddingHorizontal: 30, marginTop: 20, width: '100%' },
+  dateText: { width: '100%', textAlign: 'left' },
+  signCap: { borderRadius: 6, borderColor: '#000', flex: 1 },
   buttonSubmit: {
     width: '100%',
     backgroundColor: '#2967ff',

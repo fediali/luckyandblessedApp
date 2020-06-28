@@ -21,6 +21,7 @@ import Globals from '../Globals';
 import ThemeContext from '../reusableComponents/ThemeContext';
 import PutData from '../reusableComponents/API/PutData';
 const baseUrl = Globals.baseUrl;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // Naming Conventions for assets camelCase = **assetName-componentName**
@@ -175,6 +176,9 @@ class SignIn extends Component {
           />
           <View style={styles.emailInputView}>
             <TextInput
+              placeholderTextColor={TEXTINPUT_COLOR}
+              textContentType="emailAddress"
+              keyboardType="email-address"
               style={styles.input}
               placeholder="Email"
               autoCapitalize="none"
@@ -191,6 +195,8 @@ class SignIn extends Component {
             )}
           <View style={styles.passwordInputView}>
             <TextInput
+              placeholderTextColor={TEXTINPUT_COLOR}
+              textContentType='password'
               style={styles.input}
               autoCapitalize="none"
               secureTextEntry={true}

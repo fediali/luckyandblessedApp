@@ -37,6 +37,7 @@ const TRENDING_NAME = "Trending"
 const HISTORY_NAME = "History"
 const HISTORY_CATEGORY_ID = -2
 const STORAGE_USER = Globals.STORAGE_USER;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 class MainPage extends Component {
     constructor(props) {
@@ -349,7 +350,7 @@ class MainPage extends Component {
                                     </TouchableOpacity>
                                 </View>
                                 <View style={[styles.inputView, { paddingHorizontal: 10 }]}>
-                                    <TextInput style={[styles.input, innerStyles.whiteBackgroundTextInput]} placeholder="Email" />
+                                    <TextInput textContentType="emailAddress" keyboardType="email-address" placeholderTextColor={TEXTINPUT_COLOR} style={[styles.input, innerStyles.whiteBackgroundTextInput]} placeholder="Email" />
                                 </View>
                                 <View style={[styles.buttonContainer, innerStyles.subscribeButtonView]}>
                                     <TouchableOpacity activeOpacity={0.5} style={[innerStyles.buttonSubmit]}>

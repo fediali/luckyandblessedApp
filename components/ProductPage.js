@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -15,12 +15,12 @@ import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import Accordion from 'react-native-collapsible/Accordion';
 import ModalDropdown from 'react-native-modal-dropdown';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import GetData from '../reusableComponents/API/GetData';
 import HTMLView from 'react-native-htmlview';
 import Toast from 'react-native-simple-toast';
-import {Image as FastImage} from 'react-native';
+import { Image as FastImage } from 'react-native';
 import ProductPageSimilarListItem from '../reusableComponents/ProductPageSimilarListItem';
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
@@ -30,6 +30,7 @@ import Globals from '../Globals';
 const SIMILARPRODUCTS_CATEGORY_ID = -3;
 const SIMILARPRODUCTS_NAME = 'SIMILAR PRODUCTS';
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
+const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 const baseUrl = Globals.baseUrl;
 let DEFAULTS_OBJ = [];
@@ -73,9 +74,9 @@ export default class ProductPage extends Component {
 
   getData() {
     var promises = [];
-    console.log("AAAAA",this.state.pid[0])
+    console.log("AAAAA", this.state.pid[0])
     promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
-    promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`)); 
+    promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`));
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
@@ -145,7 +146,7 @@ export default class ProductPage extends Component {
                     qty_step: Number(response[0].qty_step),
                     full_description: response[0].full_description,
                     composition: response[0].composition,
-                    qty_content:response[0].qty_content
+                    qty_content: response[0].qty_content
                   },
                   similarProducts: response[1].products,
                   selectedQuantity: Number(response[0].min_qty),
@@ -180,7 +181,7 @@ export default class ProductPage extends Component {
   }
 
   _updateSections = (activeSections) => {
-    this.setState({activeSections});
+    this.setState({ activeSections });
   };
   _renderHeader = (section) => {
     return (
@@ -194,29 +195,29 @@ export default class ProductPage extends Component {
             color="#2d2d2f"
           />
         ) : (
-          <Icon
-            size={25}
-            name="ios-arrow-down"
-            type="ionicon"
-            color="#2d2d2f"
-          />
-        )}
+            <Icon
+              size={25}
+              name="ios-arrow-down"
+              type="ionicon"
+              color="#2d2d2f"
+            />
+          )}
       </View>
     );
   };
   _renderContent = (section) => {
     if (section.name == 'Description') {
       return (
-        <View style={{paddingHorizontal: 20}}>
+        <View style={{ paddingHorizontal: 20 }}>
           <HTMLView value={this.state.data.full_description} />
           <HTMLView value={this.state.data.composition} />
         </View>
       );
     } else {
       return (
-        <View style={{paddingHorizontal: 20, alignItems: 'center'}}>
+        <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
           <FastImage
-            style={{width: '100%', height: 400}}
+            style={{ width: '100%', height: 400 }}
             resizeMode={'contain'}
             source={require('../static/sizeGuide.png')}
           />
@@ -226,34 +227,34 @@ export default class ProductPage extends Component {
   };
 
   appendImageToData = (val) => () => {
-    this.setState({data: {...this.state.data, mainImage: val}});
+    this.setState({ data: { ...this.state.data, mainImage: val } });
   };
 
   navigateToCategoryScreen = (cid, cname) => () => {
-    this.props.navigation.push('CategoriesProduct', {cid, cname, pid: this.state.pid});
+    this.props.navigation.push('CategoriesProduct', { cid, cname, pid: this.state.pid });
   };
 
   onQuantityTextChange = (text) => {
-    this.setState({selectedQuantity: parseInt(text) || 0});
+    this.setState({ selectedQuantity: parseInt(text) || 0 });
   };
 
-  onQuantityModalChange = ( index) => {
-    this.setState({selectedQuantity: this.state.data.qty_content[index]});
+  onQuantityModalChange = (index) => {
+    this.setState({ selectedQuantity: this.state.data.qty_content[index] });
   };
 
   addToCart = async () => {
-    this.setState({disableAddToCartButton: true})//to stop user from clicking multiple times before the API respond.
+    this.setState({ disableAddToCartButton: true })//to stop user from clicking multiple times before the API respond.
     Toast.show("Please wait..")
-    if(this.state.data.min_qty > this.state.selectedQuantity){
-      Toast.show("Quantity must be greater than or equal to "+this.state.data.min_qty)
-      this.setState({disableAddToCartButton: false})
+    if (this.state.data.min_qty > this.state.selectedQuantity) {
+      Toast.show("Quantity must be greater than or equal to " + this.state.data.min_qty)
+      this.setState({ disableAddToCartButton: false })
       return;
     }
     // Retriving the user_id
-    if (this.state.product_stock > 0){
+    if (this.state.product_stock > 0) {
       RetrieveDataAsync(Globals.STORAGE_USER).then((user) => {
         user = JSON.parse(user);
-  
+
         let order = {
           products: {
             [this.state.pid]: {
@@ -268,20 +269,20 @@ export default class ProductPage extends Component {
         PostData(baseUrl + `api/addcart`, order)
           .then((res) => res.json())
           .then((response) => {
-            Globals.cartCount+=Number(this.state.selectedQuantity)
+            Globals.cartCount += Number(this.state.selectedQuantity)
             this.setState(this.state) //To trigger rerender
             Toast.show('Product added to cart');
-            this.setState({disableAddToCartButton: false})
+            this.setState({ disableAddToCartButton: false })
           })
           .catch((err) => {
             alert(err)
-            this.setState({disableAddToCartButton: false})
+            this.setState({ disableAddToCartButton: false })
           });
       });
     }
     else {
       Toast.show("Product is currently out of stock")
-      this.setState({disableAddToCartButton: false})
+      this.setState({ disableAddToCartButton: false })
     }
   };
 
@@ -289,10 +290,10 @@ export default class ProductPage extends Component {
 
     if (!this.state.isReady) {
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Shimmer>
             <FastImage
-              style={{height: 200, width: 200}}
+              style={{ height: 200, width: 200 }}
               resizeMode={'contain'}
               source={require('../static/logo-signIn.png')}
             />
@@ -312,97 +313,98 @@ export default class ProductPage extends Component {
             <ZeroDataScreen />
           </View>
         ) : (
-          <ScrollView>
-            <View style={styles.bottomMarginStyle}>
-              <View style={[styles.subContainer]}>
-                <View style={styles.productView}>
-                  <View>
-                    <Text style={styles.itemNameText}>
-                      {this.state.data.productName}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text
-                      style={[styles.itemNameText, styles.alignFlexEndStyle]}>
-                      ${Number(this.state.data.price).toFixed(2)}
-                    </Text>
-                    <Text style={styles.subText}>
-                      Prepack Price: $
+            <ScrollView>
+              <View style={styles.bottomMarginStyle}>
+                <View style={[styles.subContainer]}>
+                  <View style={styles.productView}>
+                    <View>
+                      <Text style={styles.itemNameText}>
+                        {this.state.data.productName}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text
+                        style={[styles.itemNameText, styles.alignFlexEndStyle]}>
+                        ${Number(this.state.data.price).toFixed(2)}
+                      </Text>
+                      <Text style={styles.subText}>
+                        Prepack Price: $
                       {Number(
                         this.state.data.price * this.state.data.min_qty,
                       ).toFixed(2)}
-                    </Text>
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <View style={{}}>
-                  <View style={[styles.mainPicture, styles.mainImageView]}>
-                    <FastImage
-                      style={styles.mainPicture}
-                      source={{uri: this.state.data.mainImage}}
-                      resizeMode="contain"></FastImage>
-                  </View>
-                  <ScrollView
-                    showsHorizontalScrollIndicator={false}
-                    horizontal={true}
-                    contentContainerStyle={styles.verticalMarginStyle}>
-                    {this.state.data.secondaryImages.map((val, num) => {
-                      return (
-                        <TouchableOpacity
-                          key={num}
-                          onPress={this.appendImageToData(val)}>
-                          <FastImage
-                            style={
-                              this.state.data.mainImage == val
-                                ? [
+                  <View style={{}}>
+                    <View style={[styles.mainPicture, styles.mainImageView]}>
+                      <FastImage
+                        style={styles.mainPicture}
+                        source={{ uri: this.state.data.mainImage }}
+                        resizeMode="contain"></FastImage>
+                    </View>
+                    <ScrollView
+                      showsHorizontalScrollIndicator={false}
+                      horizontal={true}
+                      contentContainerStyle={styles.verticalMarginStyle}>
+                      {this.state.data.secondaryImages.map((val, num) => {
+                        return (
+                          <TouchableOpacity
+                            key={num}
+                            onPress={this.appendImageToData(val)}>
+                            <FastImage
+                              style={
+                                this.state.data.mainImage == val
+                                  ? [
                                     styles.thumbnail,
                                     styles.customThumbnailImage,
                                   ]
-                                : styles.thumbnail
-                            }
-                            source={{uri: val}}></FastImage>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </ScrollView>
-                </View>
-              </View>
-              <View style={styles.productOptionsView}>
-                <View style={styles.rowView}>
-                  <View style={styles.flexOneView}>
-                    {!this.state.data.qty_content || this.state.data.qty_content.length  == 1 || this.state.data.qty_content.length  == 0 ? (
-                      <TextInput
-                        style={styles.valueText}
-                        placeholder={'Quantity'}
-                        keyboardType = 'numeric'
-                        onChangeText={(text) => {
-                          this.onQuantityTextChange(text);
-                        }}
-                      />
-                    ) : (
-                      <ModalDropdown
-                        onSelect={(index) => {
-                          this.onQuantityModalChange(
-                            
-                            index,
-                          );
-                        }}
-                        options={this.state.data.qty_content}
-                        defaultValue={this.state.data.qty_content[0]}
-                        style={styles.quantityModalStyle}
-                        dropdownStyle={styles.quantityModalDropdownStyle}
-                        textStyle={styles.quantityModalTextStyle}
-                        renderRow={(option, index, isSelected) => {
-                          return (
-                            <Text style={styles.modalActualTextstyle}>
-                              {option}
-                            </Text>
-                          );
-                        }}
-                      />
-                    )}
+                                  : styles.thumbnail
+                              }
+                              source={{ uri: val }}></FastImage>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </ScrollView>
                   </View>
+                </View>
+                <View style={styles.productOptionsView}>
+                  <View style={styles.rowView}>
+                    <View style={styles.flexOneView}>
+                      {!this.state.data.qty_content || this.state.data.qty_content.length == 1 || this.state.data.qty_content.length == 0 ? (
+                        <TextInput
+                          placeholderTextColor={TEXTINPUT_COLOR}
+                          style={styles.valueText}
+                          placeholder={'Quantity'}
+                          keyboardType={'phone-pad'}
+                          onChangeText={(text) => {
+                            this.onQuantityTextChange(text);
+                          }}
+                        />
+                      ) : (
+                          <ModalDropdown
+                            onSelect={(index) => {
+                              this.onQuantityModalChange(
 
-                  {/* <View style={{flex: 2, marginLeft: 20}}>
+                                index,
+                              );
+                            }}
+                            options={this.state.data.qty_content}
+                            defaultValue={this.state.data.qty_content[0]}
+                            style={styles.quantityModalStyle}
+                            dropdownStyle={styles.quantityModalDropdownStyle}
+                            textStyle={styles.quantityModalTextStyle}
+                            renderRow={(option, index, isSelected) => {
+                              return (
+                                <Text style={styles.modalActualTextstyle}>
+                                  {option}
+                                </Text>
+                              );
+                            }}
+                          />
+                        )}
+                    </View>
+
+                    {/* <View style={{flex: 2, marginLeft: 20}}>
                     <ModalDropdown
                       options={['Male', 'Female', 'All']}
                       hexCode={'#000'}
@@ -419,78 +421,78 @@ export default class ProductPage extends Component {
                       }}
                     />
                   </View> */}
-                </View>
-                <View style={styles.addToCartView}>
-                  <Text style={styles.minQuantityText}>
-                    Minimum quantity for "{this.state.data.productName}" is{' '}
-                    {this.state.data.min_qty}.
+                  </View>
+                  <View style={styles.addToCartView}>
+                    <Text style={styles.minQuantityText}>
+                      Minimum quantity for "{this.state.data.productName}" is{' '}
+                      {this.state.data.min_qty}.
                   </Text>
+                    <TouchableOpacity
+                      style={styles.addToCartTouch}
+                      disabled={this.state.disableAddToCartButton}
+                      onPress={this.addToCart}>
+                      <Text style={styles.addToCartText}>Add to cart</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Accordion
+                  style={{ marginBottom: 0, paddingBottom: 0 }}
+                  underlayColor="#fff"
+                  sections={this.state.sections}
+                  activeSections={this.state.activeSections}
+                  renderHeader={this._renderHeader}
+                  renderContent={this._renderContent}
+                  onChange={this._updateSections}
+                  expandMultiple={true}
+                />
+
+                <View style={[styles.headerView, styles.historyHeaderView]}>
+                  <Text style={[styles.buttonText, styles.similarProductText]}>
+                    Similar Products
+                </Text>
                   <TouchableOpacity
-                    style={styles.addToCartTouch}
-                    disabled={this.state.disableAddToCartButton}
-                    onPress={this.addToCart}>
-                    <Text style={styles.addToCartText}>Add to cart</Text>
+                    style={styles.similarProductTouch}
+                    onPress={this.navigateToCategoryScreen(
+                      SIMILARPRODUCTS_CATEGORY_ID,
+                      SIMILARPRODUCTS_NAME,
+                    )}>
+                    <Text style={[styles.showAllText]}>Show All</Text>
                   </TouchableOpacity>
                 </View>
+                <FlatList
+                  keyExtractor={(item) => item.product_id}
+                  data={this.state.similarProducts}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({ item, index }) =>
+                    item.main_pair ? (
+                      <ProductPageSimilarListItem
+                        pid={[item.product_id]}
+                        cname={this.state.cname}
+                        imageUrl={item.main_pair.detailed.image_path}
+                        name={item.product}
+                        type={item.brand ? item.brand : DEFAULTS_OBJ.brand}
+                        navigation={this.props.navigation}
+                      />
+                    ) : (
+                        //If No product image
+                        <ProductPageSimilarListItem
+                          pid={item.product_id}
+                          cname={this.state.cname}
+                          imageUrl={
+                            'https://www.dhresource.com/0x0/f2/albu/g9/M00/25/59/rBVaVVxvaJmAeWPpAAE-IYplWiA081.jpg'
+                          }
+                          name={item.product}
+                          type={item.brand ? item.brand : DEFAULTS_OBJ.brand}
+                          navigation={this.props.navigation}
+                        />
+                      )
+                  }
+                />
               </View>
-              <Accordion
-                style={{marginBottom: 0, paddingBottom: 0}}
-                underlayColor="#fff"
-                sections={this.state.sections}
-                activeSections={this.state.activeSections}
-                renderHeader={this._renderHeader}
-                renderContent={this._renderContent}
-                onChange={this._updateSections}
-                expandMultiple={true}
-              />
-
-              <View style={[styles.headerView, styles.historyHeaderView]}>
-                <Text style={[styles.buttonText, styles.similarProductText]}>
-                  Similar Products
-                </Text>
-                <TouchableOpacity
-                  style={styles.similarProductTouch}
-                  onPress={this.navigateToCategoryScreen(
-                    SIMILARPRODUCTS_CATEGORY_ID,
-                    SIMILARPRODUCTS_NAME,
-                  )}>
-                  <Text style={[styles.showAllText]}>Show All</Text>
-                </TouchableOpacity>
-              </View>
-              <FlatList
-                keyExtractor={(item) => item.product_id}
-                data={this.state.similarProducts}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({item, index}) =>
-                  item.main_pair ? (
-                    <ProductPageSimilarListItem 
-                      pid={[item.product_id]}
-                      cname={this.state.cname}
-                      imageUrl={item.main_pair.detailed.image_path}
-                      name={item.product}
-                      type={item.brand ? item.brand : DEFAULTS_OBJ.brand}
-                      navigation={this.props.navigation}
-                    />
-                  ) : (
-                    //If No product image
-                    <ProductPageSimilarListItem 
-                      pid={item.product_id}
-                      cname={this.state.cname}
-                      imageUrl={
-                        'https://www.dhresource.com/0x0/f2/albu/g9/M00/25/59/rBVaVVxvaJmAeWPpAAE-IYplWiA081.jpg'
-                      }
-                      name={item.product}
-                      type={item.brand ? item.brand : DEFAULTS_OBJ.brand}
-                      navigation={this.props.navigation}
-                    />
-                  )
-                }
-              />
-            </View>
-          </ScrollView>
-        )}
-        <Footer Key={Math.random()}  navigation={this.props.navigation} />
+            </ScrollView>
+          )}
+        <Footer Key={Math.random()} navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }
@@ -535,7 +537,7 @@ const styles = StyleSheet.create({
     color: '#8d8d8e',
     marginVertical: 8,
   },
-  mainPicture: {width: Width * 0.893, height: Width * 0.893},
+  mainPicture: { width: Width * 0.893, height: Width * 0.893 },
   thumbnail: {
     width: Width * 0.28,
     height: Width * 0.28,
@@ -635,13 +637,13 @@ const styles = StyleSheet.create({
   },
   flexOneView: {
     flex: 1,
-    alignItems:"center",
+    alignItems: "center",
   },
   quantityModalStyle: {
     padding: 10,
     backgroundColor: '#fff',
     borderRadius: 6,
-    width:0.45 * Width //remove this when enable colour dropdown
+    width: 0.45 * Width //remove this when enable colour dropdown
   },
   quantityModalDropdownStyle: {
     width: 0.35 * Width, //0.25 width
