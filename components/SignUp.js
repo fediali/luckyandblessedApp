@@ -24,7 +24,7 @@ import Globals from '../Globals';
 var RNFS = require('react-native-fs');
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 const baseUrl = Globals.baseUrl;
 

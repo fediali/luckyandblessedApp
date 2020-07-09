@@ -15,7 +15,7 @@ import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAs
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync';
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 class ProfileText extends PureComponent {
   constructor(props) {

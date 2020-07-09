@@ -20,7 +20,7 @@ import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl;
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 let DEFAULTS_OBJ = [];
 

@@ -34,8 +34,11 @@ import BarCodeScanner from './components/BarCodeScanner'
 import Globals from "./Globals"
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
-import PutData from './reusableComponents/API/PutData';
+import GetData from './reusableComponents/API/GetData';
+import Toast from 'react-native-simple-toast';
+
 const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN;
+
 class App extends Component {
 
 
@@ -199,6 +202,9 @@ class App extends Component {
     const { isAuthenticated, loading } = this.state
     const { username } = this.state
     const { setAuthenticated } = this
+
+    
+
     return (
 
       loading ?
@@ -225,7 +231,6 @@ class App extends Component {
                   <Stack.Screen name="WalkThrough" component={WalkThrough} />
                   <Stack.Screen name="SignIn" component={SignIn} />
                   <Stack.Screen name="SignUp" component={SignUp} />
-                  <Stack.Screen name="CompanyProfile" component={CompanyProfile} />
                   <Stack.Screen name="TaxID" component={TaxID} />
                 </>
 

@@ -28,7 +28,7 @@ import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 
 const STORAGE_USER = Globals.STORAGE_USER;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 const baseUrl = Globals.baseUrl;
 let gUser = null;

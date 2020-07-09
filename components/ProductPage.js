@@ -30,8 +30,8 @@ import Globals from '../Globals';
 const SIMILARPRODUCTS_CATEGORY_ID = -3;
 const SIMILARPRODUCTS_NAME = 'SIMILAR PRODUCTS';
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
-
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
+const SIZE_CHART_PAGE_ID = 87;
 const baseUrl = Globals.baseUrl;
 let DEFAULTS_OBJ = [];
 
@@ -49,7 +49,7 @@ export default class ProductPage extends Component {
         },
         {
           id: 1,
-          name: 'Size guide',
+          name: 'Size Guide',
         },
       ],
       selectedQuantity: 0,
@@ -66,6 +66,8 @@ export default class ProductPage extends Component {
         qty_step: 0,
         full_description: '',
         composition: '',
+        sizes : '',
+        sizeChart: ''
       },
       similarProducts: [],
       showZeroProductScreen: false,
@@ -74,9 +76,9 @@ export default class ProductPage extends Component {
 
   getData() {
     var promises = [];
-    console.log("AAAAA", this.state.pid[0])
     promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`));
+    promises.push(GetData(baseUrl + `api/pages/87`))
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
@@ -130,8 +132,8 @@ export default class ProductPage extends Component {
                     StoreDataAsync('productHistoryList', value);
                   }
                 });
-                console.log("MAX", response[0].max_qty)
 
+                console.log(response[2].description)
                 this.setState({
                   isReady: true,
                   product_stock: parseInt(response[0].amount),
@@ -146,7 +148,10 @@ export default class ProductPage extends Component {
                     qty_step: Number(response[0].qty_step),
                     full_description: response[0].full_description,
                     composition: response[0].composition,
-                    qty_content: response[0].qty_content
+                    qty_content: response[0].qty_content,
+                    sizes: response[0].sizes,
+                    sizeChart: response[2].description //FIXME: This html is not being rendered
+
                   },
                   similarProducts: response[1].products,
                   selectedQuantity: Number(response[0].min_qty),
@@ -211,16 +216,20 @@ export default class ProductPage extends Component {
         <View style={{ paddingHorizontal: 20 }}>
           <HTMLView value={this.state.data.full_description} />
           <HTMLView value={this.state.data.composition} />
+          {this.state.data.sizes && (
+            <View style={{flexDirection: "row"}}>
+              <Text>Sizes: </Text>
+              <Text>{this.state.data.sizes}</Text>
+            </View>
+          )}
+
         </View>
       );
-    } else {
+    } 
+    else {
       return (
-        <View style={{ paddingHorizontal: 20, alignItems: 'center' }}>
-          <FastImage
-            style={{ width: '100%', height: 400 }}
-            resizeMode={'contain'}
-            source={require('../static/sizeGuide.png')}
-          />
+        <View style={{ paddingHorizontal: 20 }}>
+          <HTMLView value={this.state.data.sizeChart} />
         </View>
       );
     }

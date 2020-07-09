@@ -21,7 +21,7 @@ import Globals from '../Globals';
 import ThemeContext from '../reusableComponents/ThemeContext';
 import PutData from '../reusableComponents/API/PutData';
 const baseUrl = Globals.baseUrl;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 // This Component is the Actual SignIn screen / Different from WalkThrough screen that will the intial screen(Greeting Screen)
 // Naming Conventions for assets camelCase = **assetName-componentName**

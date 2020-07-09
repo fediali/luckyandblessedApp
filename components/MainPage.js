@@ -37,7 +37,7 @@ const TRENDING_NAME = "Trending"
 const HISTORY_NAME = "History"
 const HISTORY_CATEGORY_ID = -2
 const STORAGE_USER = Globals.STORAGE_USER;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 class MainPage extends Component {
     constructor(props) {
@@ -122,7 +122,7 @@ class MainPage extends Component {
     }
     onCategorySelect = (cid, cname) => {
         this.setState({ isReady: false })
-        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`).then(res => res.json()).then(
+        GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A&items_per_page=20`).then(res => res.json()).then(
             (responses) => {
 
                 if (responses.categories.length > 0) {

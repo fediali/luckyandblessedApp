@@ -39,7 +39,7 @@ class Categories extends Component {
         }
         else {
             this.setState({ isReady: false })
-            GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A`).then(res => res.json()).then(
+            GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A&items_per_page=20`).then(res => res.json()).then(
                 (responses) => {
                     if (responses.categories.length > 0) {
                         var subCat = responses.categories;

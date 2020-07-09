@@ -34,7 +34,7 @@ const STORAGE_USER = Globals.STORAGE_USER
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN
 const baseUrl = Globals.baseUrl;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 export default class UserProfile extends Component {
   constructor(props) {
@@ -80,7 +80,7 @@ export default class UserProfile extends Component {
                   content: `${baseUrl}profiles-add.html?ref_code=${result.ref_link}`,
                 },
               ],
-              imageb64: result.profile_image ? baseUrl + result.profile_image : this.state.imageb64
+              imageb64: result.profile_image.includes('.') ? baseUrl + result.profile_image : this.state.imageb64
 
             })
           })

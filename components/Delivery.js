@@ -36,7 +36,7 @@ import OrderFooter from '../reusableComponents/OrderFooter';
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
 const usStates = Globals.usStates;
-const TEXTINPUT_COLOR = Globals.TEXT_INPUT_PLACEHOLDER_COLOR;
+const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 let gUser;
 var radio_props = [
