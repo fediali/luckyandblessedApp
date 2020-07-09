@@ -42,7 +42,7 @@ let Height = Dimensions.get("window").height
 const styles = StyleSheet.create({
     button: { flexDirection: "row", paddingHorizontal: 20, alignItems: "center" },
     image: { height: Height * 0.20, width: Width * 0.24, borderRadius: 6, backgroundColor: '#f6f6f6' },
-    mainText: { fontFamily: "Montserrat-SemiBold", fontSize: 24, lineHeight: 28 },
+    mainText: { fontFamily: "Montserrat-SemiBold", fontSize: 24, lineHeight: 28,maxWidth:200 },
     subText: { fontSize: 14, lineHeight: 18, color: "#2967ff" },
     paddingLeft: { paddingLeft: 20 }
 

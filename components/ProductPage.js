@@ -26,6 +26,7 @@ import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import Globals from '../Globals';
+import { WebView } from 'react-native-webview';
 
 const SIMILARPRODUCTS_CATEGORY_ID = -3;
 const SIMILARPRODUCTS_NAME = 'SIMILAR PRODUCTS';
@@ -66,7 +67,7 @@ export default class ProductPage extends Component {
         qty_step: 0,
         full_description: '',
         composition: '',
-        sizes : '',
+        sizes: '',
         sizeChart: ''
       },
       similarProducts: [],
@@ -216,20 +217,28 @@ export default class ProductPage extends Component {
         <View style={{ paddingHorizontal: 20 }}>
           <HTMLView value={this.state.data.full_description} />
           <HTMLView value={this.state.data.composition} />
-          {this.state.data.sizes && (
-            <View style={{flexDirection: "row"}}>
+          {this.state.data.sizes ?
+            <View style={{ flexDirection: "row" }}>
               <Text>Sizes: </Text>
               <Text>{this.state.data.sizes}</Text>
             </View>
-          )}
+            : <></>
+          }
 
         </View>
       );
-    } 
+    }
     else {
+      console.log("OOO", this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,""))
       return (
-        <View style={{ paddingHorizontal: 20 }}>
-          <HTMLView value={this.state.data.sizeChart} />
+        <View>
+          <HTMLView value={this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"")} />
+          {/* <WebView
+            ref={'webview'}
+            automaticallyAdjustContentInsets={false}
+            style={styles.webView}
+          
+            source={{ html: this.state.data.sizeChart }}/> */}
         </View>
       );
     }
