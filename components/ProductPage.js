@@ -151,7 +151,7 @@ export default class ProductPage extends Component {
                     composition: response[0].composition,
                     qty_content: response[0].qty_content,
                     sizes: response[0].sizes,
-                    sizeChart: response[2].description //FIXME: This html is not being rendered
+                    sizeChart: response[2].description
 
                   },
                   similarProducts: response[1].products,
@@ -229,16 +229,9 @@ export default class ProductPage extends Component {
       );
     }
     else {
-      console.log("OOO", this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,""))
       return (
         <View>
           <HTMLView value={this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"")} />
-          {/* <WebView
-            ref={'webview'}
-            automaticallyAdjustContentInsets={false}
-            style={styles.webView}
-          
-            source={{ html: this.state.data.sizeChart }}/> */}
         </View>
       );
     }
