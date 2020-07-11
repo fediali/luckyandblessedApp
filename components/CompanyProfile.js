@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -11,14 +11,15 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import ProfileText from '../reusableComponents/CompanyProfileText';
 import Accordion from 'react-native-collapsible/Accordion';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import GetData from '../reusableComponents/API/GetData';
 import Globals from '../Globals';
 import Toast from 'react-native-simple-toast';
+import HTMLView from 'react-native-htmlview';
 
 const baseUrl = Globals.baseUrl
 export default class CompanyProfile extends Component {
@@ -31,6 +32,7 @@ export default class CompanyProfile extends Component {
       address_1: null,
       address_2: null,
       address_3: null,
+      htmlRes: "",
       section1: [
         {
           id: 0,
@@ -80,66 +82,87 @@ export default class CompanyProfile extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
 
-        GetData(baseUrl + 'api/companyprofile')
+      GetData(baseUrl + 'api/companyprofile')
         .then(res => res.json())
         .then(response => {
+          console.log("COMPANY::::::::::::::::: ", response)
+          let temppages = []
+          for (var key in response.pages) {
+            let pageJson = {}
+            pageJson = {
+              page_id: response.pages[key].page_id,
+              title: response.pages[key].title
+            }
+            temppages.push(pageJson)
+          }
           this.setState({
-            isReady: true,
             address_1: response.address_1,
             address_2: response.address_2,
             address_3: response.address_3,
             call: response.call,
             email: response.email,
-            section1: [
-              {
-                id: 0,
-                title: 'Company',
-                content: response.about_us
-              },
-              {
-                  id: 2,
-                  title: 'Wholesale Info',
-                  content: response.wholesale_info,
-              },
-            ],
-              section2: [
-                {
-                  id: 0,
-                  title: 'Return Policy',
-                  content: response.return_policy,
-                },
-                {
-                  id: 1,
-                  title: 'FAQs',
-                  content: response.faq,
-                },
-              ],
+            pages: temppages
           })
+          var promises = []
+          for (var key in this.state.pages) {
+            promises.push(GetData(baseUrl + 'api/pages/' + this.state.pages[key].page_id));
+          }
+          Promise.all(promises)
+            .then((promiseResponses) => {
+              Promise.all(promiseResponses.map((res) => res.json()))
+                .then((response) => {
+                  var htmlsRes = []
+                  for (let i = 0; i < response.length; i++) {
+                    htmlsRes.push(response[i].description)
+                    let tempPage = this.state.pages;
+                    temppages[i].description = response[i].description.replace(/<p>/g,"").replace(/<[/]p>/g,"")
+                    this.setState({
+                      pages: temppages
+                    })
+                  }
+                  console.log("COMPANY **************** ", this.state.pages)
 
+                  this.setState({
+                    isReady: true
+                  })
 
-        }).catch(err => {console.log(err); Toast.show(err.toString())})
+                })
+            })
+
+        }).catch(err => { console.log(err); Toast.show(err.toString()) })
     })
-}
+  }
 
   _updateSection1 = (activeSection1) => {
-    this.setState({activeSection1});
+    this.setState({ activeSection1 });
   };
 
   _updateSection2 = (activeSection2) => {
-    this.setState({activeSection2});
+    this.setState({ activeSection2 });
   };
 
-  _renderContent = (section) => {
+  _renderContent = (section, index) => {
+    console.log("contenttttt((((((((((( ", section)
     return (
-      <View style={styles.justifyCenter}>
-        <Text style={styles.descriptionText}>
-          {section.content}
-        </Text>
-      </View>
-    );
+        <View style={styles.justifyCenter}>
+          <HTMLView value={section.description} />
+        </View>
+      
+    )
+    // return (
+    //   <View style={styles.justifyCenter}>
+    //     <Text style={styles.descriptionText}>
+    //       {section.content}
+    //     </Text>
+    //   </View>
+    // );
+    // GetData(baseUrl + 'api/pages/' + section.id)
+    //   .then(res => res.json())
+    //   .then(response => {
+    //     // console.log("HTML: ", response.description)
   };
 
-  _renderHeader1 = (section) => {
+  _renderHeader1 = (section, index) => {
     return (
       <View>
         <View style={styles.userDetails}>
@@ -149,11 +172,11 @@ export default class CompanyProfile extends Component {
           <View style={styles.flexDirectionRow}>
             <View
               style={styles.headerViewStyle}>
-              {!this.state.activeSection1.includes(section.id) ? (
+              {!this.state.activeSection1.includes(section.page_id) ? (
                 <Icon size={20} name="right" type="antdesign" />
               ) : (
-                <Icon size={20} name="down" type="antdesign" />
-              )}
+                  <Icon size={20} name="down" type="antdesign" />
+                )}
             </View>
           </View>
         </View>
@@ -174,8 +197,8 @@ export default class CompanyProfile extends Component {
               {!this.state.activeSection2.includes(section.id) ? (
                 <Icon size={20} name="right" type="antdesign" />
               ) : (
-                <Icon size={20} name="down" type="antdesign" />
-              )}
+                  <Icon size={20} name="down" type="antdesign" />
+                )}
             </View>
           </View>
         </View>
@@ -188,17 +211,17 @@ export default class CompanyProfile extends Component {
     let Width = Dimensions.get('window').width;
     if (!this.state.isReady) {
       return (
-          <View style={styles.loader}>
-              <Shimmer>
-                  <Image style={styles.logoImage} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
-              </Shimmer>
-          </View>
+        <View style={styles.loader}>
+          <Shimmer>
+            <Image style={styles.logoImage} resizeMode={"contain"} source={require("../static/logo-signIn.png")} />
+          </Shimmer>
+        </View>
       )
 
-  }
+    }
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Help & Info"  navigation={this.props.navigation}/>
+        <Header centerText="Help & Info" navigation={this.props.navigation} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollView}>
@@ -234,7 +257,7 @@ export default class CompanyProfile extends Component {
 
           <Accordion
             underlayColor="#fff"
-            sections={this.state.section1}
+            sections={this.state.pages}
             activeSections={this.state.activeSection1}
             renderHeader={this._renderHeader1}
             renderContent={this._renderContent}
@@ -243,7 +266,7 @@ export default class CompanyProfile extends Component {
 
           />
 
-          <View style={styles.divider}></View>
+          {/* <View style={styles.divider}></View>
           <Accordion
             underlayColor="#fff"
             sections={this.state.section2}
@@ -252,13 +275,13 @@ export default class CompanyProfile extends Component {
             renderContent={this._renderContent}
             onChange={this._updateSection2}
             expandMultiple={true}
-          />
+          /> */}
 
           {/* Below view is useless */}
           <View style={styles.belowPaddingView}></View>
         </ScrollView>
 
-        <Footer selected="Info"  navigation={this.props.navigation}/>
+        <Footer selected="Info" navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }
@@ -326,22 +349,22 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: '#2d2d2f',
   },
-  paddingVertical:{paddingVertical: 19},
-  headerViewStyle:{
+  paddingVertical: { paddingVertical: 19 },
+  headerViewStyle: {
     marginVertical: 18,
     marginRight: 6,
     marginLeft: 19.5,
   },
-  flexDirectionRow:{flexDirection: 'row'},
-  logoImage:{ height: 200, width: 200 },
-  loader:{ flex: 1, alignItems: "center", justifyContent: "center", },
-  scrollView:{
+  flexDirectionRow: { flexDirection: 'row' },
+  logoImage: { height: 200, width: 200 },
+  loader: { flex: 1, alignItems: "center", justifyContent: "center", },
+  scrollView: {
     backgroundColor: '#fff',
     flexGrow: 1,
     justifyContent: 'space-between',
   },
-  topProfileLogo:{height: 168.9, width: 198.7, marginBottom: 26},
-  marginTop:{marginTop: 33},
-  belowPaddingView:{paddingBottom: 60, backgroundColor: '#ffffff'},
-  justifyCenter:{justifyContent: 'center'}
+  topProfileLogo: { height: 168.9, width: 198.7, marginBottom: 26 },
+  marginTop: { marginTop: 33 },
+  belowPaddingView: { paddingBottom: 60, backgroundColor: '#ffffff' },
+  justifyCenter: { justifyContent: 'center' , paddingHorizontal: 20 }
 });

@@ -134,7 +134,6 @@ export default class ProductPage extends Component {
                   }
                 });
 
-                console.log(response[2].description)
                 this.setState({
                   isReady: true,
                   product_stock: parseInt(response[0].amount),
