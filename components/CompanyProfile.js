@@ -85,7 +85,6 @@ export default class CompanyProfile extends Component {
       GetData(baseUrl + 'api/companyprofile')
         .then(res => res.json())
         .then(response => {
-          console.log("COMPANY::::::::::::::::: ", response)
           let temppages = []
           for (var key in response.pages) {
             let pageJson = {}
@@ -120,7 +119,6 @@ export default class CompanyProfile extends Component {
                       pages: temppages
                     })
                   }
-                  console.log("COMPANY **************** ", this.state.pages)
 
                   this.setState({
                     isReady: true
@@ -142,24 +140,12 @@ export default class CompanyProfile extends Component {
   };
 
   _renderContent = (section, index) => {
-    console.log("contenttttt((((((((((( ", section)
     return (
         <View style={styles.justifyCenter}>
           <HTMLView value={section.description} />
         </View>
       
     )
-    // return (
-    //   <View style={styles.justifyCenter}>
-    //     <Text style={styles.descriptionText}>
-    //       {section.content}
-    //     </Text>
-    //   </View>
-    // );
-    // GetData(baseUrl + 'api/pages/' + section.id)
-    //   .then(res => res.json())
-    //   .then(response => {
-    //     // console.log("HTML: ", response.description)
   };
 
   _renderHeader1 = (section, index) => {
@@ -194,7 +180,7 @@ export default class CompanyProfile extends Component {
           <View style={styles.flexDirectionRow}>
             <View
               style={styles.headerViewStyle}>
-              {!this.state.activeSection2.includes(section.id) ? (
+              {!this.state.activeSection2.includes(section.id) ? (//FIXME: not working
                 <Icon size={20} name="right" type="antdesign" />
               ) : (
                   <Icon size={20} name="down" type="antdesign" />
