@@ -15,7 +15,7 @@ import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
 import Shimmer from 'react-native-shimmer';
 import { Icon } from 'react-native-elements';
-import { Image as FastImage } from 'react-native';
+import FastImage from 'react-native-fast-image'
 import Toast from 'react-native-simple-toast';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';

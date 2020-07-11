@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet, Dimensions, } from 'react-native';
-import {Image as FastImage} from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 export default class OrderProductListItem extends PureComponent {
   render() {
@@ -12,7 +12,7 @@ export default class OrderProductListItem extends PureComponent {
               <FastImage
                 style={[styles.thumbnailImage]}
                 resizeMode="contain"
-                source={{ uri: this.props.data.imageUrl }}
+                source={{ uri: (this.props.data.imageUrl)?this.props.data.imageUrl:"" }}
               />
             </View>
 

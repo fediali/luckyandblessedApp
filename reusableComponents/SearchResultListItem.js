@@ -6,7 +6,7 @@ import {
     Dimensions,
     View
 } from 'react-native'
-import {Image as FastImage} from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 export default class ProductPageSimilarListItem extends PureComponent {
 
@@ -20,7 +20,7 @@ export default class ProductPageSimilarListItem extends PureComponent {
                 <View style={innerStyles.touchView}>
                   <FastImage
                     style={[innerStyles.thumbnailImage]}
-                    source={this.props.imageUrl}
+                    source={(this.props.imageUrl)?this.props.imageUrl:""}
                   />
                   <View style={innerStyles.touchInnerView}>
                     <Text style={[innerStyles.itemNameText, innerStyles.limitWidth]}>{this.props.name1}</Text>

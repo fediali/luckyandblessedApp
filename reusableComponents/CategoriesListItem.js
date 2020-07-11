@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 
-import {Image as FastImage} from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 class CategoriesListItem extends PureComponent {
 

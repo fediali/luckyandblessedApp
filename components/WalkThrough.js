@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
-import { Image as FastImage } from 'react-native';
+import FastImage from 'react-native-fast-image'
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import Globals from '../Globals';
 import firebase from 'react-native-firebase';
@@ -110,7 +110,7 @@ export default class WalkThrough extends Component {
           style={styles.images}
           key={index}
           resizeMode="contain"
-          source={{ uri: img }}
+          source={{ uri: (img)?img:"" }}
         />,
       );
     });

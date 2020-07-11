@@ -20,7 +20,7 @@ import LogoSmall from './Styles/LogoSmall';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
 import Shimmer from 'react-native-shimmer';
-import {Image as FastImage} from 'react-native';
+import FastImage from 'react-native-fast-image'
 import GetData from '../reusableComponents/API/GetData';
 import GlobalStyles from './Styles/Style';
 import {WebView} from 'react-native-webview';

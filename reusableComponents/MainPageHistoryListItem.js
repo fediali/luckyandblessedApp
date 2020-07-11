@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Dimensions
 } from 'react-native'
-import {Image as FastImage} from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 export default class MainPageHistoryListItem extends PureComponent {
 
@@ -21,7 +21,7 @@ export default class MainPageHistoryListItem extends PureComponent {
                 <FastImage
                     style={innerStyles.gridImage}
                     resizeMode="cover"
-                    source={{uri: this.props.imageUrl}}
+                    source={{uri: (this.props.imageUrl)?this.props.imageUrl:""}}
                 />
                 <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.props.name}</Text>
                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.type}</Text>

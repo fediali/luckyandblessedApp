@@ -20,7 +20,7 @@ import Shimmer from 'react-native-shimmer';
 import GetData from '../reusableComponents/API/GetData';
 import HTMLView from 'react-native-htmlview';
 import Toast from 'react-native-simple-toast';
-import { Image as FastImage } from 'react-native';
+import FastImage from 'react-native-fast-image'
 import ProductPageSimilarListItem from '../reusableComponents/ProductPageSimilarListItem';
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
@@ -350,8 +350,8 @@ export default class ProductPage extends Component {
                     <View style={[styles.mainPicture, styles.mainImageView]}>
                       <FastImage
                         style={styles.mainPicture}
-                        source={{ uri: this.state.data.mainImage }}
-                        resizeMode="contain"></FastImage>
+                        source={{ uri: (this.state.data.mainImage)?this.state.data.mainImage:"" }}
+                        resizeMode="contain"/>
                     </View>
                     <ScrollView
                       showsHorizontalScrollIndicator={false}
@@ -371,7 +371,7 @@ export default class ProductPage extends Component {
                                   ]
                                   : styles.thumbnail
                               }
-                              source={{ uri: val }}></FastImage>
+                              source={{ uri: (val)?val:"" }}/>
                           </TouchableOpacity>
                         );
                       })}

@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     Dimensions
 } from 'react-native';
-import {Image as FastImage} from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 
 class CategoriesProductListSingleItem extends PureComponent {
@@ -19,7 +19,7 @@ class CategoriesProductListSingleItem extends PureComponent {
         return (
             <TouchableOpacity activeOpacity={0.9} onPress={this.navigateToProductPage}>
                 <View style={styles.imageView}>
-                    <FastImage source={this.props.imageUrl} style={styles.image} resizeMode="contain" />
+                    <FastImage source={(this.props.imageUrl)?this.props.imageUrl:""} style={styles.image} resizeMode="contain" />
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={[styles.mainText, styles.limitWidth]}>{this.props.name1}</Text>

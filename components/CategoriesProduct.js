@@ -15,7 +15,7 @@ import Footer from '../reusableComponents/Footer';
 import { Icon } from 'react-native-elements';
 import CategoriesProductListSingleItem from '../reusableComponents/CategoriesProductListSingleItem';
 import CategoriesProductListDoubleItem from '../reusableComponents/CategoriesProductListDoubleItem';
-import { Image as FastImage } from 'react-native';
+import FastImage from 'react-native-fast-image'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import Globals from '../Globals';
@@ -226,7 +226,7 @@ class CategoriesProduct extends Component {
         pid={item.product_id}
         cname={item.cname}
         navigation={this.props.navigation}
-        imageUrl={{ uri: item.imageUrl }}
+        imageUrl={{ uri: (item.imageUrl)?item.imageUrl:"" }}
         name1={item.product}
         price1={'$' + item.price}
         name2={item.product_brand}
@@ -242,7 +242,7 @@ class CategoriesProduct extends Component {
         pid={item.product_id}
         cname={item.cname}
         navigation={this.props.navigation}
-        imageUrl={{ uri: item.imageUrl }}
+        imageUrl={{ uri: (item.imageUrl)?item.imageUrl:"" }}
         name1={item.product}
         price1={'$' + item.price}
         name2={item.product_brand}

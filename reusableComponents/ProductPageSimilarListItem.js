@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Dimensions
 } from 'react-native'
-import {Image as FastImage} from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 export default class ProductPageSimilarListItem extends PureComponent {
     navigateToProductPage=()=>{
@@ -22,7 +22,7 @@ export default class ProductPageSimilarListItem extends PureComponent {
                     style={innerStyles.gridImage}
                     // resizeMode='contain'
                     resizeMode="cover"
-                    source={{uri: this.props.imageUrl}}
+                    source={{uri: (this.props.imageUrl)?this.props.imageUrl:""}}
                 />
                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.name}</Text>
                 <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.type}</Text>

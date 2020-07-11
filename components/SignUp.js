@@ -15,7 +15,7 @@ import md5 from 'react-native-md5';
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import LogoSmall from './Styles/LogoSmall';
-import { Image as FastImage } from 'react-native';
+import FastImage from 'react-native-fast-image'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
 import { Icon } from 'react-native-elements';

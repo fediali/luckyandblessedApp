@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Dimensions
 } from 'react-native';
-import {Image as FastImage} from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 class CategoriesProductListDoubleItem extends PureComponent {
 

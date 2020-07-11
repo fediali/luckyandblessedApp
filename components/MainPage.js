@@ -23,7 +23,7 @@ import MainPageHistoryListItem from "../reusableComponents/MainPageHistoryListIt
 import MainPageTrendingListItem from "../reusableComponents/MainPageTrendingListItem"
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync'
-import { Image as FastImage } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import ThemeContext from '../reusableComponents/ThemeContext'
 import Globals from "../Globals"
 import Toast from 'react-native-simple-toast';
@@ -232,7 +232,7 @@ class MainPage extends Component {
                                     <FastImage
                                         style={innerStyles.gridImage}
                                         // resizeMode='contain'
-                                        source={{ uri: this.state.newArrivals[0].main_pair.detailed.image_path }}
+                                        source={{ uri: (this.state.newArrivals[0].main_pair.detailed.image_path)?this.state.newArrivals[0].main_pair.detailed.image_path:"" }}
                                     />
                                     <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
@@ -244,7 +244,7 @@ class MainPage extends Component {
                                 >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        source={{ uri: this.state.newArrivals[1].main_pair.detailed.image_path }}
+                                        source={{ uri: (this.state.newArrivals[1].main_pair.detailed.image_path)?this.state.newArrivals[1].main_pair.detailed.image_path:"" }}
                                     />
                                     <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
@@ -257,7 +257,7 @@ class MainPage extends Component {
                                 >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        source={{ uri: this.state.newArrivals[2].main_pair.detailed.image_path }}
+                                        source={{ uri: (this.state.newArrivals[2].main_pair.detailed.image_path)?this.state.newArrivals[2].main_pair.detailed.image_path:"" }}
                                     />
                                     <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
@@ -269,7 +269,7 @@ class MainPage extends Component {
                                 >
                                     <FastImage
                                         style={innerStyles.gridImage}
-                                        source={{ uri: this.state.newArrivals[3].main_pair.detailed.image_path }}
+                                        source={{ uri: (this.state.newArrivals[3].main_pair.detailed.image_path)?this.state.newArrivals[3].main_pair.detailed.image_path:"" }}
                                     />
                                     <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
                                     <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
