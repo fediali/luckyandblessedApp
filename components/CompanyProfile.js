@@ -158,7 +158,7 @@ export default class CompanyProfile extends Component {
           <View style={styles.flexDirectionRow}>
             <View
               style={styles.headerViewStyle}>
-              {!this.state.activeSection1.includes(section.page_id) ? (
+              {!this.state.activeSection1.includes(index) ? (
                 <Icon size={20} name="right" type="antdesign" />
               ) : (
                   <Icon size={20} name="down" type="antdesign" />
