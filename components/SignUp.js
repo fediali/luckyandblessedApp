@@ -367,6 +367,7 @@ class SignUp extends Component {
               : null}
             <View style={styles.inputView}>
               <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
                 style={styles.input}
                 textContentType="emailAddress"
                 keyboardType="email-address"
