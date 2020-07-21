@@ -68,12 +68,14 @@ class TaxID extends Component {
       defaults: null,
       dateToday: dateToday,
       isReady: true,
+      fromUserProfile: false,
+      isEditable: true
     };
   }
 
   componentDidMount() {
     if (this.props.route.params.fromUserProfile) {
-      this.setState({isReady: false});
+      this.setState({isReady: false, fromUserProfile: true, isEditable: false});
       InteractionManager.runAfterInteractions(() => {
         RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
           DEFAULTS_OBJ = JSON.parse(defaults);
@@ -159,7 +161,7 @@ class TaxID extends Component {
   }
 
   submitClick = () => {
-    if (this.props.route.params.fromUserProfile && this.state.taxIdUrl)
+    if (this.props.route.params.fromUserProfile)
       this.props.navigation.navigate('UserProfile');
     //Passing user Name
     else if (this.isValid()) {
@@ -170,19 +172,17 @@ class TaxID extends Component {
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
 
-      if (this.props.route.params.fromUserProfile) {
-        this.callAPI(today, user.user_id);
-      } else {
-        PostData(this.props.route.params.url, this.props.route.params.data)
-          .then((res) => res.json())
-          .then((response) => {
-            setTimeout(() => this.callAPI(today, response.user_id), 500);
-          })
-          .catch((ex) => {
-            console.log('Promise exception', ex);
-            Toast.show(ex.toString());
-          });
-      }
+     
+      PostData(this.props.route.params.url, this.props.route.params.data)
+        .then((res) => res.json())
+        .then((response) => {
+          setTimeout(() => this.callAPI(today, response.user_id), 500);
+        })
+        .catch((ex) => {
+          console.log('Promise exception', ex);
+          Toast.show(ex.toString());
+        });
+      
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
     }
   };
@@ -205,32 +205,20 @@ class TaxID extends Component {
       timestamp: +new Date(),
     };
 
-    if (this.props.route.params.fromUserProfile) {
-      PutData(baseUrl + 'api/salestaxid/' + user_id, data)
-        .then((res) => res.json())
-        .then((response) => {
-          if (response.tax_id) {
-            Toast.show('Sales Tax ID updated successfully');
-            this.props.navigation.navigate('UserProfile'); //Passing user Name
-          }
-        })
-        .catch((err) => {
-          Toast.show(err.toString());
-          console.log(err);
-        });
-    } else {
-      PostData(baseUrl + 'api/salestaxid', data)
-        .then((res) => res.json())
-        .then((response) => {
-          Toast.show('Registered Successfully');
-          this.props.navigation.navigate('SignIn'); //Passing user Name
-        })
-        .catch((err) => {
-          Toast.show(err.toString());
-          console.log(err);
-        });
-    }
+    
+    PostData(baseUrl + 'api/salestaxid', data)
+      .then((res) => res.json())
+      .then((response) => {
+        Toast.show('Registered Successfully');
+        this.props.navigation.navigate('SignIn'); //Passing user Name
+      })
+      .catch((err) => {
+        Toast.show(err.toString());
+        console.log(err);
+      });
+    
   }
+
   isValid() {
     let validFlag = true;
     if (this.state.nameOfPurchase == '') {
@@ -358,7 +346,7 @@ class TaxID extends Component {
                   <View style={{flex: 10, marginBottom: 20}}>
                     <WebView source={{uri: this.state.taxIdUrl}}></WebView>
                   </View>
-                  <Text style={styles.input}>Form is downloading</Text>
+                  <Text style={styles.input}>TaxID form is being downloaded</Text>
                 </View>
               ) : (
                 <>
@@ -366,6 +354,7 @@ class TaxID extends Component {
                     <TextInput
                       placeholderTextColor={TEXTINPUT_COLOR}
                       style={styles.input}
+                      editable={this.state.isEditable}
                       placeholder="Name of purchaser, firm or agence"
                       value={this.state.nameOfPurchase}
                       onChangeText={(text) => {
@@ -382,6 +371,7 @@ class TaxID extends Component {
                       placeholderTextColor={TEXTINPUT_COLOR}
                       textContentType="telephoneNumber"
                       style={styles.input}
+                      editable={this.state.isEditable}
                       placeholder="Phone"
                       value={this.state.phone}
                       keyboardType="phone-pad"
@@ -399,6 +389,7 @@ class TaxID extends Component {
                       placeholderTextColor={TEXTINPUT_COLOR}
                       textContentType="fullStreetAddress"
                       style={styles.input}
+                      editable={this.state.isEditable}
                       value={this.state.address}
                       placeholder="Address"
                       onChangeText={(text) => {
@@ -415,6 +406,7 @@ class TaxID extends Component {
                       placeholderTextColor={TEXTINPUT_COLOR}
                       textContentType="postalCode"
                       style={styles.input}
+                      editable={this.state.isEditable}
                       value={this.state.address2}
                       placeholder="City, State, ZIP code"
                       onChangeText={(text) => {
@@ -430,6 +422,7 @@ class TaxID extends Component {
                     <TextInput
                       placeholderTextColor={TEXTINPUT_COLOR}
                       style={styles.input}
+                      editable={this.state.isEditable}
                       placeholder="Texas sales & Use Tax Permit Num"
                       keyboardType={'phone-pad'}
                       value={this.state.texasSales}
@@ -446,6 +439,7 @@ class TaxID extends Component {
                     <TextInput
                       placeholderTextColor={TEXTINPUT_COLOR}
                       style={styles.input}
+                      editable={this.state.isEditable}
                       placeholder="Out-of-state or Fedral Taxpay Num"
                       keyboardType={'phone-pad'}
                       value={this.state.outOfState}
@@ -495,12 +489,12 @@ class TaxID extends Component {
                     <TextInput
                       placeholderTextColor={TEXTINPUT_COLOR}
                       placeholder="Type here"
+                      editable={this.state.isEditable}
                       value={this.state.description}
                       onChangeText={(value1) =>
                         this.setState({description: value1})
                       }
                       style={[innerStyles.customInput]}
-                      editable={true}
                       multiline={true}
                       onContentSizeChange={(e) =>
                         this.updateSize(e.nativeEvent.contentSize.height)
@@ -519,7 +513,8 @@ class TaxID extends Component {
                     send the completed certificate to the Comptroller of Public
                     Accounts.
                   </Text>
-                  <View
+                  {this.state.isEditable && (
+                    <View
                     style={[
                       innerStyles.customInputView,
                       innerStyles.customDim,
@@ -549,6 +544,8 @@ class TaxID extends Component {
                       ? this.showErrorMessage(this.state.signError)
                       : null}
                   </View>
+                  )}
+                  
 
                   <Text
                     style={[
@@ -563,9 +560,16 @@ class TaxID extends Component {
                 <TouchableOpacity
                   style={[innerStyles.buttonSubmit]}
                   onPress={this.submitClick}>
-                  <Text style={[styles.buttonText, innerStyles.submitText]}>
-                    Submit
-                  </Text>
+                    {this.state.fromUserProfile ? (
+                      <Text style={[styles.buttonText, innerStyles.submitText]}>
+                        Go Back
+                      </Text>
+                    ) : (
+                      <Text style={[styles.buttonText, innerStyles.submitText]}>
+                        Submit
+                      </Text>
+                    )}
+                  
                 </TouchableOpacity>
               </View>
             </View>

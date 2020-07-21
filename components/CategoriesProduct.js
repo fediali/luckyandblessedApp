@@ -279,12 +279,12 @@ class CategoriesProduct extends Component {
                   </Text>
                     </View>
                     <View style={styles.horizontalImagesView}>
-                      <FastImage
+                      {/* <FastImage
                         style={styles.imageList}
                         source={require('../static/listIcon.png')}
-                      />
+                      /> */}
 
-                      <Text style={styles.sortingText}>Sorting</Text>
+                      {/* <Text style={styles.sortingText}>Sorting</Text> */}
                       <View style={styles.rightImages}>
                         <TouchableOpacity
                           style={styles.paddingLeftView}

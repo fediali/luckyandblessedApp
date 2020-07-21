@@ -271,6 +271,7 @@ class Filter extends Component {
             <SafeAreaView style={styles.mainContainer}>
                 <Header navigation={this.props.navigation} centerText="Filter" rightIcon="clear" rightIconClickHandler={this.rightIconClickHandler} />
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.grownFlex}>
+                    <View></View>
                     <View style={styles.twentyPad}>
                         {filterListItemsText.map((item, key) => (
                             this.state.selected == key ?
@@ -291,8 +292,8 @@ class Filter extends Component {
 
                         ))}
                     </View>
-                    <View style={styles.divider}></View>
-                    <View style={styles.verticalAndHorizontalPad}>
+                    {/* <View style={styles.divider}></View> */}
+                    {/* <View style={styles.verticalAndHorizontalPad}>
                         <Accordion
                             style={{ marginBottom: 0, paddingBottom: 0 }}
                             underlayColor="#fff"
@@ -304,7 +305,7 @@ class Filter extends Component {
                             expandMultiple={true}
 
                         />
-                    </View>
+                    </View> */}
                     <View style={styles.allItemsView}>
                         <TouchableOpacity style={styles.allItemsTouch} onPress={this.handleViewAll}>
                             <Text style={styles.allItemsText}>
@@ -333,7 +334,8 @@ const styles = StyleSheet.create({
     },
     listItem: {
         flexDirection: "row",
-        alignItems: "center",
+        justifyContent: "space-between",
+        alignContent: "flex-end",
         paddingVertical: 10
     },
     listItemText: {
@@ -350,10 +352,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical: 20,
     },
-    twentyPad: { padding: 20 },
-    grownFlex: { flexGrow: 1 },
+    twentyPad: { padding: 20, },
+    grownFlex: { flexGrow: 1, justifyContent: "space-between" },
     verticalAndHorizontalPad: { paddingHorizontal: 20, paddingVertical: 10 },
-    spaceBetweenContent: { justifyContent: 'space-between' },
+    // spaceBetweenContent: { justifyContent: 'space-between' },
     msbText: { fontFamily: "Montserrat-SemiBold" },
     abText: { fontFamily: "Avenir-Book" },
     allItemsView: { backgroundColor: "#f6f6f6", marginBottom: 50, paddingTop: 20, alignItems: "center", paddingBottom: 20 },

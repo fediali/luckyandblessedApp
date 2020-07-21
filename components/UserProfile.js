@@ -35,7 +35,7 @@ const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN
 const baseUrl = Globals.baseUrl;
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
-
+let DEFAULTS_OBJ = [];
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +47,11 @@ export default class UserProfile extends Component {
           id: 0,
           title: 'Referral Link',
           content: baseUrl + 'profiles-add.html?ref_code=',
+        },
+        {
+          id: 1,
+          title: 'Tax ID',
+          content: '',
         },
       ],
       fullName: '',
@@ -68,6 +73,7 @@ export default class UserProfile extends Component {
           .then((result) => {
             this.setState({
               fullName: JSON.parse(user).name,
+              activeSection1: [],
               email: result.email,
               b_address_2: result.b_address_2 + ',',
               b_address: result.b_address,
@@ -78,42 +84,73 @@ export default class UserProfile extends Component {
                   id: 0,
                   title: 'Referral Link',
                   content: `${baseUrl}profiles-add.html?ref_code=${result.ref_link}`,
+                },
+                {
+                  id: 1,
+                  title: 'Tax ID',
+                  content: 'No content',
                 },
               ],
               imageb64: result.profile_image.includes('.') ? baseUrl + result.profile_image : this.state.imageb64
 
             })
           })
+          .catch(error => {this.logoutPressed})
       })
   })
 
     InteractionManager.runAfterInteractions(() => {
+      
+
       RetrieveDataAsync(STORAGE_USER).then(user => {
-        GetData(baseUrl + `api/usersnew/${JSON.parse(user).user_id}`)
-          .then(res => res.json())
-          .then((result) => {
-            this.setState({
-              fullName: JSON.parse(user).name,
-              email: result.email,
-              b_address_2: result.b_address_2 + ',',
-              b_address: result.b_address,
-              city: result.b_city,
-              isReady: true,
-              section1: [
-                {
-                  id: 0,
-                  title: 'Referral Link',
-                  content: `${baseUrl}profiles-add.html?ref_code=${result.ref_link}`,
-                },
-              ],
-              imageb64: result.profile_image ? baseUrl + result.profile_image : this.state.imageb64
+        RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
+          DEFAULTS_OBJ = JSON.parse(defaults);
+          let taxIDUrl = baseUrl + `/api/salestaxid/${JSON.parse(user).user_id}&company_id=${DEFAULTS_OBJ.store_id.toString()}`;
 
-            })
+          var promises = []
+          promises.push(GetData(baseUrl + baseUrl + `api/usersnew/${JSON.parse(user).user_id}`))
+          promises.push(GetData(taxIDUrl)) //Category id for store.
+          Promise.all(promises).then((promiseResponses) => {
+          Promise.all(promiseResponses.map(res => res.json())).then((responses) => {
+
+     
+          this.setState({
+            fullName: JSON.parse(user).name,
+            email: responses[0].email,
+            b_address_2: responses[0].b_address_2 + ',',
+            b_address: responses[0].b_address,
+            city: responses[0].b_city,
+            isReady: true,
+            section1: [
+              {
+                id: 0,
+                title: 'Referral Link',
+                content: `${baseUrl}profiles-add.html?ref_code=${responses[0].ref_link}`,
+              },
+              {
+                id: 1,
+                title: 'Tax ID',
+                content: 'No content',
+              },
+            ],
+            imageb64: responses[0].profile_image.includes('.') ? baseUrl + responses[0].profile_image : this.state.imageb64,
+            taxIDFileName: responses[1].taxid_file,
+            taxIdDate: responses[1].date
           })
+        }).catch(error => {
+          console.log("Inner", error)
+          Toast.show('An error occured. Please log in again');
+          this.logoutPressed()
+        })
       })
+  
 
+        }).catch(error => { console.log("Outer",error)});
+        
+           
     });
-  }
+  })
+}
   _updateSection1 = (activeSection1) => {
     this.setState({ activeSection1 });
   };
@@ -122,25 +159,44 @@ export default class UserProfile extends Component {
     Clipboard.setString(content.toString())
     Toast.show('Copied to clipboard');
   }
-  _renderContent = (section) => {
-    return (
-      <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
+  _renderContent = (section, index) => {
+    if (this.state.activeSection1.includes(index)){
+      if (section.title === 'Referral Link'){
+      return (
+        
+        <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
 
-        <View style={[styles.descriptionTextView, { paddingLeft: 10, flexDirection: "row", marginRight: 30 }]} >
+          <View style={[styles.descriptionTextView, { paddingLeft: 10, flexDirection: "row", marginRight: 30 }]} >
 
-          <TextInput 
-            placeholderTextColor={TEXTINPUT_COLOR}
-            editable={false}
-            multiline={true} 
-            style={styles.descriptionText}
-            value  = {section.content}>
-          </TextInput>
-          <Icon size={20} name="clipboard" type="font-awesome" />
-        </View>
-      </TouchableOpacity>
+            <TextInput 
+              placeholderTextColor={TEXTINPUT_COLOR}
+              editable={false}
+              multiline={true} 
+              style={styles.descriptionText}
+              value  = {section.content}>
+            </TextInput>
+            <Icon size={20} name="clipboard" type="font-awesome" />
+          </View>
+        </TouchableOpacity>
 
-    );
+      );
+    }
+    else if (section.title === 'Tax ID'){
+      if (this.state.taxIDFileName){
+        return (
+          <View>
+            <Text style={styles.descriptionText}>File name: {"\t\t" + this.state.taxIDFileName.substring(this.state.taxIDFileName.lastIndexOf('/') + 1)}</Text>
+            <Text style={styles.descriptionText}>Date submitted: {"\t\t" + this.state.taxIdDate}</Text>
+          </View>
+        )
+      }
+      else {
+        console.log("We here")
+        this.props.navigation.navigate("TaxID", {fromUserProfile: true})
+      }
+    }
   };
+}
 
   _renderHeader1 = (section) => {
     return (
@@ -293,10 +349,7 @@ export default class UserProfile extends Component {
             onChange={this._updateSection1}
             expandMultiple={true}
           />
-          <ProfileText
-            navigation={this.props.navigation}
-            keyText="TAX ID"
-            containIcon={true}></ProfileText>
+         
           <ProfileText
             navigation={this.props.navigation}
             keyText="My orders"
@@ -367,7 +420,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     textAlign: 'center',
     color: '#ffffff',
-    paddingVertical: 11,
+    // paddingVertical: 11,
     width: Width * 0.8,
   },
   descriptionText: {
@@ -403,7 +456,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2967ff',
     alignItems: 'center',
     borderRadius: 6,
-
+    justifyContent: "center"
   },
   titleTextView: { paddingVertical: 19 }
 });

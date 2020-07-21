@@ -155,8 +155,8 @@ class SignUp extends Component {
 
       var data = {
         email: this.state.email,
-        // password: md5.hex_md5(this.state.password), //SignUp doesn't require password to be hashed now :/
-        password: this.state.password,
+        password: md5.hex_md5(this.state.password), //SignUp doesn't require password to be hashed now :/
+        // password: this.state.password,
         firstname: fname,
         lastname: lname,
         company_id: DEFAULTS_OBJ.store_id.toString(),
@@ -172,10 +172,18 @@ class SignUp extends Component {
           .then((res) => res.json())
           .then((response) => {
             if (response.user_id) {
+
+              var today = new Date();
+              var dd = String(today.getDate()).padStart(2, '0');
+              var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+              var yyyy = today.getFullYear();
+              today = mm + '/' + dd + '/' + yyyy;
+
               let taxIdData = {
                 user_id: response.user_id,
                 company_id: DEFAULTS_OBJ.store_id.toString(),
                 taxid_file: this.state.fileBase64,
+                date: today
               };
 
               PostData(baseUrl + 'api/salestaxid', taxIdData)

@@ -12,8 +12,8 @@ class LogoSmall extends PureComponent {
         let height=Dimensions.get('window').height;
         return (
             <FastImage style={{
-                width: width*0.2,
-                height: height*0.15,
+                width: width*0.3,
+                height: height*0.25,
             }} resizeMode="contain" source={require("../../static/logo-signIn.png")} />  
         )
     }

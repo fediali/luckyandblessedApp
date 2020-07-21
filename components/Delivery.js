@@ -183,7 +183,7 @@ class Delivery extends Component {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
               let main_profile = responses[0].main_profile[0];
-              let sameShipping = main_profile.is_same_shipping;
+              let sameShipping = main_profile.is_same_shipping === 'Y' ? true : false;
               let newUser = true;
               if (
                 main_profile.b_address ||
@@ -341,6 +341,7 @@ class Delivery extends Component {
           })
           .catch((e) => { Toast.show(e.toString()); console.log(err) });
       } else {
+        console.log(data)
         PutData(
           baseUrl + `api/userprofilesnew/${this.state.selectedProfileId}`,
           data,
