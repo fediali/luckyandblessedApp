@@ -24,7 +24,6 @@ export default class MainPageHistoryListItem extends PureComponent {
                     source={{uri: (this.props.imageUrl)?this.props.imageUrl:""}}
                 />
                 <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.props.name}</Text>
-                <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.type}</Text>
                 <Text style={innerStyles.gridItemNameAndPriceText}>${this.props.price}</Text>
             </TouchableOpacity>
         )
@@ -48,7 +47,7 @@ const innerStyles = StyleSheet.create({
     },
     gridItemNameAndPriceText: {
         fontFamily: "Montserrat-Medium",
-        fontSize: 16,
+        fontSize: 14,
         fontStyle: "normal",
         lineHeight: 20,
         letterSpacing: 0,

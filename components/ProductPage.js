@@ -335,7 +335,7 @@ export default class ProductPage extends Component {
                     </View>
                     <View>
                       <Text
-                        style={[styles.itemNameText, styles.alignFlexEndStyle]}>
+                        style={[styles.itemPriceText, styles.alignFlexEndStyle]}>
                         ${Number(this.state.data.price).toFixed(2)}
                       </Text>
                       <Text style={styles.subText}>
@@ -482,7 +482,6 @@ export default class ProductPage extends Component {
                         cname={this.state.cname}
                         imageUrl={item.main_pair.detailed.image_path}
                         name={item.product}
-                        type={item.brand ? item.brand : DEFAULTS_OBJ.brand}
                         navigation={this.props.navigation}
                       />
                     ) : (
@@ -494,7 +493,6 @@ export default class ProductPage extends Component {
                             'https://www.dhresource.com/0x0/f2/albu/g9/M00/25/59/rBVaVVxvaJmAeWPpAAE-IYplWiA081.jpg'
                           }
                           name={item.product}
-                          type={item.brand ? item.brand : DEFAULTS_OBJ.brand}
                           navigation={this.props.navigation}
                         />
                       )
@@ -535,6 +533,13 @@ const styles = StyleSheet.create({
     marginTop: 14,
   },
   itemNameText: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#2d2d2f',
+    maxWidth: 0.54 * Width,
+  },
+  itemPriceText: {
     fontFamily: 'Montserrat-Medium',
     fontSize: 16,
     lineHeight: 20,

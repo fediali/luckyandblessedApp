@@ -32,7 +32,6 @@ export default class MainPageTrendingListItem extends PureComponent {
                             />
                             <View style={innerStyles.innerInnerTrendingView}>
                                 <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{val.product}</Text>
-                                <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                             </View>
                         </View>
                         <View style={innerStyles.trendingViewPriceView}>
@@ -98,7 +97,7 @@ const innerStyles = StyleSheet.create({
     },
     gridItemNameAndPriceText: {
         fontFamily: "Montserrat-Medium",
-        fontSize: 16,
+        fontSize: 14,
         fontStyle: "normal",
         lineHeight: 20,
         letterSpacing: 0,

@@ -25,7 +25,6 @@ export default class ProductPageSimilarListItem extends PureComponent {
                     source={{uri: (this.props.imageUrl)?this.props.imageUrl:""}}
                 />
                 <Text style={innerStyles.gridItemNameAndPriceText}>{this.props.name}</Text>
-                <Text style={[innerStyles.showAllText, innerStyles.brandText]}>{this.props.type}</Text>
             </TouchableOpacity>
         )
     }

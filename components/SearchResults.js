@@ -229,7 +229,6 @@ export default class SearchResults extends Component {
                     imageUrl={{ uri: item.imageUrl }}
                     name1={item.product}
                     price1={'$' + item.price}
-                    name2={item.product_brand}
                   />
                 )}
                 ItemSeparatorComponent={this.renderSeparator}

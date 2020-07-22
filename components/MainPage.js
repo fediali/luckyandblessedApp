@@ -235,7 +235,6 @@ class MainPage extends Component {
                                         source={{ uri: (this.state.newArrivals[0].main_pair.detailed.image_path)?this.state.newArrivals[0].main_pair.detailed.image_path:"" }}
                                     />
                                     <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[0].product}</Text>
-                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[0].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
 
@@ -247,7 +246,6 @@ class MainPage extends Component {
                                         source={{ uri: (this.state.newArrivals[1].main_pair.detailed.image_path)?this.state.newArrivals[1].main_pair.detailed.image_path:"" }}
                                     />
                                     <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[1].product}</Text>
-                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[1].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -260,7 +258,6 @@ class MainPage extends Component {
                                         source={{ uri: (this.state.newArrivals[2].main_pair.detailed.image_path)?this.state.newArrivals[2].main_pair.detailed.image_path:"" }}
                                     />
                                     <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[2].product}</Text>
-                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[2].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
 
@@ -272,7 +269,6 @@ class MainPage extends Component {
                                         source={{ uri: (this.state.newArrivals[3].main_pair.detailed.image_path)?this.state.newArrivals[3].main_pair.detailed.image_path:"" }}
                                     />
                                     <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.state.newArrivals[3].product}</Text>
-                                    <Text style={[innerStyles.showAllText, innerStyles.brandText]}>L&B</Text>
                                     <Text style={innerStyles.gridItemNameAndPriceText}>${parseFloat(this.state.newArrivals[3].price).toFixed(2)}</Text>
                                 </TouchableOpacity>
                             </View>
@@ -326,7 +322,6 @@ class MainPage extends Component {
                                             cname={item.cname}
                                             imageUrl={item.mainImage}
                                             name={item.productName}
-                                            type={item.brand ? item.brand : this.state.defaults.brand}
                                             price={Number(item.price).toFixed(2)}
                                             navigation={this.props.navigation}
                                         />
@@ -498,7 +493,7 @@ const innerStyles = StyleSheet.create({
     },
     gridItemNameAndPriceText: {
         fontFamily: "Montserrat-Medium",
-        fontSize: 16,
+        fontSize: 14,
         fontStyle: "normal",
         lineHeight: 20,
         letterSpacing: 0,

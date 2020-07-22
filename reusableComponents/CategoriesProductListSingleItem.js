@@ -26,7 +26,6 @@ class CategoriesProductListSingleItem extends PureComponent {
                     <Text style={styles.mainText}>{this.props.price1}</Text>
                 </View>
                 <View style={styles.textContainer2}>
-                    <Text style={[styles.subText, styles.colorBlue]}>{this.props.name2}</Text>
                     <Text style={[styles.subText, styles.colourGrey]}>{this.props.price2}</Text>
                 </View>
             </TouchableOpacity>
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
     image: { alignSelf: "center", height: Height * 0.5, width: Width * 0.88 },
     textContainer: { paddingVertical: 9, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between" },
     textContainer2: { paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between" },
-    mainText: { fontFamily: "Montserrat-Medium", fontSize: 16, lineHeight: 20, color: "#2d2d2f", },
+    mainText: { fontFamily: "Montserrat-Medium", fontSize: 14, lineHeight: 20, color: "#2d2d2f", },
     limitWidth: { maxWidth: Width * 0.65 },
     subText: { fontFamily: "Avenir-Book", fontSize: 14, lineHeight: 18, },
     colourGrey: { color: "#8d8d8e" },

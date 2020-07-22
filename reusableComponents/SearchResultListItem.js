@@ -24,7 +24,6 @@ export default class ProductPageSimilarListItem extends PureComponent {
                   />
                   <View style={innerStyles.touchInnerView}>
                     <Text style={[innerStyles.itemNameText, innerStyles.limitWidth]}>{this.props.name1}</Text>
-                    <Text style={[innerStyles.categoriesText]}>{this.props.name2}</Text>
                     <Text style={[innerStyles.priceText]}>{this.props.price1}</Text>
                   </View>
                 </View>
@@ -53,7 +52,7 @@ const innerStyles = StyleSheet.create({
     },
     itemNameText: {
       fontFamily: 'Montserrat-Medium',
-      fontSize: 16,
+      fontSize: 14,
       lineHeight: 20,
       color: '#2d2d2f',
     },

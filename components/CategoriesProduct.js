@@ -229,7 +229,6 @@ class CategoriesProduct extends Component {
         imageUrl={{ uri: (item.imageUrl)?item.imageUrl:"" }}
         name1={item.product}
         price1={'$' + item.price}
-        name2={item.product_brand}
         price2={'$' + item.base_price}
       />
     );
@@ -245,7 +244,6 @@ class CategoriesProduct extends Component {
         imageUrl={{ uri: (item.imageUrl)?item.imageUrl:"" }}
         name1={item.product}
         price1={'$' + item.price}
-        name2={item.product_brand}
         price2={'$' + item.base_price}
       />
     );
@@ -427,7 +425,7 @@ const styles = StyleSheet.create({
   paddingHorizontal: { paddingHorizontal: 20 },
   loader: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   categoryNameText: {
-    fontSize: 30,
+    fontSize: 28,
     lineHeight: 36,
     fontFamily: 'Montserrat-Bold',
     color: '#2d2d2f',
