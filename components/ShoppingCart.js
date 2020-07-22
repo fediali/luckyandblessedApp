@@ -315,12 +315,13 @@ class ShoppingCart extends Component {
       paymentLineItems: [],
       isReady: false,
       profile_id: null,
+      isFetching: false,
+
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({ isReady: false });
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);
@@ -378,6 +379,7 @@ class ShoppingCart extends Component {
           // console.log('No product found');
           this.setState({
             isReady: true,
+            isFetching:false
           });
         } else {
           var promises = [];
@@ -467,6 +469,7 @@ class ShoppingCart extends Component {
                   profile_id: responses.user_data.profile_id,
                   paymentLineItems: lineItems,
                   isReady: true,
+                  isFetching:false
                 });
                 Globals.cartCount = parseInt(this.state.totalCartProducts);
 
@@ -590,7 +593,14 @@ class ShoppingCart extends Component {
       }
     }
   };
-
+  onRefresh = () => {
+    this.setState({ isFetching: true, }, () => {
+      RetrieveDataAsync(STORAGE_USER).then((user) => {
+        gUser = JSON.parse(user);
+        this.getData(gUser);
+      });
+    });
+  }
   render() {
     if (!this.state.isReady) {
       return (
@@ -627,6 +637,8 @@ class ShoppingCart extends Component {
                 }}
                 ListHeaderComponent={this.renderFlatListHeader}
                 ListFooterComponent={this.renderFlatListFooter}
+                onRefresh={this.onRefresh}
+                refreshing={this.state.isFetching}
               />
             </View>
           )}

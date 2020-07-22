@@ -35,6 +35,7 @@ class SignIn extends Component {
       emailError: '',
       passwordError: '',
       requested: false,
+      isPasswordVisible: false
     };
   }
   static contextType = ThemeContext;
@@ -160,7 +161,11 @@ class SignIn extends Component {
       Toast.show('Input your email in email box.');
     }
   };
-
+  handlePasswordView = () => {
+    this.setState(prevState => ({
+      isPasswordVisible: !prevState.isPasswordVisible
+    }));
+  }
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
@@ -201,13 +206,23 @@ class SignIn extends Component {
               textContentType='password'
               style={styles.input}
               autoCapitalize="none"
-              secureTextEntry={true}
+              secureTextEntry={!this.state.isPasswordVisible}
               placeholder="Password"
               returnKeyType='done'
               onChangeText={(text) => {
                 this.setState({ password: text });
               }}
+
             />
+            <TouchableOpacity activeOpacity={0.95} onPress={this.handlePasswordView}>
+              <Icon
+                size={30}
+                name={this.state.isPasswordVisible ? "md-eye" : "md-eye-off"}
+                type="ionicon"
+                color="#2d2d2f"
+              />
+            </TouchableOpacity>
+
           </View>
           {this.state.passwordError != '' ? (
             this.showErrorMessage(this.state.passwordError)
@@ -267,10 +282,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    borderRadius: 6,
     backgroundColor: '#f6f6f6',
     flex: 1,
-    paddingHorizontal: 15,
     fontFamily: 'Avenir-Book',
     fontSize: 18,
     fontWeight: 'normal',
@@ -320,12 +333,20 @@ const styles = StyleSheet.create({
   },
   passwordInputView: {
     flexDirection: 'row',
-    paddingHorizontal: 40,
+    paddingHorizontal: 15,
     marginTop: 15,
+    backgroundColor: "#f6f6f6",
+    marginHorizontal: 40,
+    borderRadius: 6,
+    alignItems: "center"
+
   },
   emailInputView: {
     flexDirection: 'row',
-    paddingHorizontal: 40,
+    paddingHorizontal: 15,
+    backgroundColor: "#f6f6f6",
+    marginHorizontal: 40,
+    borderRadius: 6,
   },
 });
 
