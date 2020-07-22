@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Dimensions,
   StatusBar
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
@@ -19,13 +20,24 @@ import FastImage from 'react-native-fast-image'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
 import { Icon } from 'react-native-elements';
+import ModalDropdown from 'react-native-modal-dropdown';
+
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
 var RNFS = require('react-native-fs');
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
-
+const usStates = Globals.usStates;
+var radio_props = [
+  { label: 'Yes', value: true },
+  { label: 'No', value: false },
+];
 const baseUrl = Globals.baseUrl;
 
 let DEFAULTS_OBJ = [];
@@ -48,6 +60,35 @@ class SignUp extends Component {
       confirmPasswordError: '',
       salesTaxIDError: '',
       salesTaxIDFileError: '',
+      company:'',
+      companyError:'',
+      businessPhone: '',
+      businessPhoneError:'',
+      mobile: '',
+      mobileError: '',
+      //billing states
+      billingFullName: '',
+      billingFullNameError: '',
+      streetAddress: '',
+      streetAddressError: '',
+      cityTownError: '',
+      stateTextError: '',
+      zipCodeError: '',
+      email: '',
+      emailError: '',
+      phoneNumber: '',
+      phoneNumberError: '',
+      s_fullName: '',
+      s_fullNameError: '',
+      s_streetAddress: '',
+      s_streetAddressError: '',
+      s_cityTownError: '',
+      s_stateTextError: '',
+      s_zipCodeError: '',
+      s_email: '',
+      s_emailError: '',
+      s_phoneNumber: '',
+      s_phoneNumberError: '',
     };
 
     RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
@@ -283,6 +324,27 @@ class SignUp extends Component {
       this.setState({ fullNameError: '' });
     }
 
+    if (this.state.company == '') {
+      this.setState({ companyError: 'Company is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ companyError: '' });
+    }
+
+    if (this.state.businessPhone == '') {
+      this.setState({ businessPhoneError: 'Phone number is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ businessPhoneError: '' });
+    }
+
+    if (this.state.mobile == '') {
+      this.setState({ mobileError: 'Mobile is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ mobileError: '' });
+    }
+
     if (this.state.email == '') {
       this.setState({ emailError: 'Email is required.' });
       validFlag = false;
@@ -324,6 +386,108 @@ class SignUp extends Component {
       this.setState({ confirmPasswordError: '' });
     }
 
+    //Billing address
+    if (this.state.billingFullName == '') {
+      this.setState({ billingFullNameError: 'Full Name is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ billingFullNameError: '' });
+    }
+
+    if (this.state.streetAddress == '') {
+      this.setState({ streetAddressError: 'Street address is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ streetAddressError: '' });
+    }
+
+    if (this.state.cityTown == '') {
+      this.setState({ cityTownError: 'City/Town is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ cityTownError: '' });
+    }
+
+    if (this.state.stateText == '') {
+      this.setState({ stateTextError: 'State is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ stateTextError: '' });
+    }
+
+    if (this.state.zipCode == '') {
+      this.setState({ zipCodeError: 'Zip code is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ zipCodeError: '' });
+    }
+
+    if (this.state.email == '') {
+      this.setState({ emailError: 'Email is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ emailError: '' });
+    }
+
+    if (this.state.phoneNumber == '') {
+      this.setState({ phoneNumberError: 'Phone number is required.' });
+      validFlag = false;
+    } else {
+      this.setState({ phoneNumberError: '' });
+    }
+
+    //Shipping address
+    if (!this.state.sameShipping) {
+      if (this.state.s_fullName == '') {
+        this.setState({ s_fullNameError: 'Full Name is required.' });
+        validFlag = false;
+      } else {
+        this.setState({ s_fullNameError: '' });
+      }
+
+      if (this.state.s_streetAddress == '') {
+        this.setState({ s_streetAddressError: 'Street address is required.' });
+        validFlag = false;
+      } else {
+        this.setState({ s_streetAddressError: '' });
+      }
+
+      if (this.state.s_cityTown == '') {
+        this.setState({ s_cityTownError: 'City/Town is required.' });
+        validFlag = false;
+      } else {
+        this.setState({ s_cityTownError: '' });
+      }
+
+      if (this.state.s_stateText == '') {
+        this.setState({ s_stateTextError: 'State is required.' });
+        validFlag = false;
+      } else {
+        this.setState({ s_stateTextError: '' });
+      }
+
+      if (this.state.s_zipCode == '') {
+        this.setState({ s_zipCodeError: 'Zip code is required.' });
+        validFlag = false;
+      } else {
+        this.setState({ s_zipCodeError: '' });
+      }
+
+      if (this.state.s_email == '') {
+        this.setState({ s_emailError: 'Email is required.' });
+        validFlag = false;
+      } else {
+        this.setState({ s_emailError: '' });
+      }
+
+      if (this.state.s_phoneNumber == '') {
+        this.setState({ s_phoneNumberError: 'Phone number is required.' });
+        validFlag = false;
+      } else {
+        this.setState({ s_phoneNumberError: '' });
+      }
+    }
+
     return validFlag;
   }
 
@@ -347,6 +511,18 @@ class SignUp extends Component {
 
   navigateScreen = (screen) => () => {
     this.props.navigation.navigate(screen);
+  };
+
+
+  onRadioPress = (value) => {
+    this.setState({ sameShipping: value });
+  };
+
+  onStateModalSelect = (index) => {
+    this.setState({ stateText: usStates[index], s_country: usStates[index], b_country: usStates[index] });
+  };
+  onShipStateModalSelect = (index) => {
+    this.setState({ s_stateText: usStates[index] });
   };
 
   render() {
@@ -420,14 +596,365 @@ class SignUp extends Component {
                 }}
               />
             </View>
-
+            
             {this.state.confirmPasswordError != ''
               ? this.showErrorMessage(this.state.confirmPasswordError)
               : null}
             {this.state.nonMatchingPasswordError != ''
               ? this.showErrorMessage(this.state.nonMatchingPasswordError)
               : null}
+            <View style={styles.inputView}>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="name"
+                style={styles.input}
+                secureTextEntry={true}
+                autoCapitalize="none"
+                placeholder="Company"
+                onChangeText={(text) => {
+                  this.setState({ company: text });
+                }}
+              />
+            </View>
+            {this.state.company != ''
+              ? this.showErrorMessage(this.state.company)
+              : null}
+            <View style={styles.inputView}>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="telephoneNumber"
+                style={styles.input}
+                secureTextEntry={true}
+                autoCapitalize="none"
+                placeholder="Business Phone"
+                onChangeText={(text) => {
+                  this.setState({ businessPhone: text });
+                }}
+              />
+            </View>
+            {this.state.businessPhone != ''
+              ? this.showErrorMessage(this.state.businessPhone)
+              : null}
+            <View style={styles.inputView}>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="telephoneNumber"
+                style={styles.input}
+                secureTextEntry={true}
+                autoCapitalize="none"
+                placeholder="Mobile"
+                onChangeText={(text) => {
+                  this.setState({ mobile: text });
+                }}
+              />
+            </View>
+            {this.state.mobile != ''
+              ? this.showErrorMessage(this.state.mobile)
+              : null}
 
+
+            {/*************************  BILLING ADDRESS ************************** */}
+            <Text style={innerStyles.shippingAddress}>Billing Address</Text>
+            <View style={styles.inputView}>
+              <TextInput
+                textContentType="name"
+                style={styles.input}
+                placeholder="Full name"
+                placeholderTextColor={TEXTINPUT_COLOR}
+                value={this.state.billingFullName}
+                onChangeText={(text) => {
+                  this.setState({ billingFullName: text });
+                }}
+              />
+            </View>
+            {this.state.billingFullNameError != '' ? (
+              this.showErrorMessage(this.state.billingFullNameError)
+            ) : (
+                <View></View>
+              )}
+
+            <View style={styles.inputView}>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="fullStreetAddress"
+                style={styles.input}
+                placeholder="Street address"
+                value={this.state.streetAddress}
+                multiline={true}
+                onChangeText={(text) => {
+                  this.setState({ streetAddress: text });
+                }}
+              />
+            </View>
+            {this.state.streetAddressError != '' ? (
+              this.showErrorMessage(this.state.streetAddressError)
+            ) : (
+                <View></View>
+              )}
+
+            <View style={styles.inputView}>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="addressCity"
+                style={styles.input}
+                placeholder="City / Town"
+                value={this.state.cityTown}
+                onChangeText={(text) => {
+                  this.setState({ cityTown: text });
+                }}
+              />
+            </View>
+            {this.state.cityTownError != '' ? (
+              this.showErrorMessage(this.state.cityTownError)
+            ) : (
+                <View></View>
+              )}
+
+            <View style={styles.inputView}>
+              <View style={innerStyles.modalView}>
+                <ModalDropdown
+                  options={usStates}
+                  defaultValue={
+                    this.state.stateText ? this.state.stateText : 'State'
+                  }
+                  style={styles.input}
+                  dropdownStyle={innerStyles.modalDropdownStyle}
+                  textStyle={innerStyles.modalTextStyle}
+                  onSelect={(index) => {
+                    this.onStateModalSelect(index);
+                  }}
+                  renderRow={(option, index, isSelected) => {
+                    return (
+                      <Text style={[innerStyles.numText]}>{option}</Text>
+                    );
+                  }}
+                />
+              </View>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="postalCode"
+                style={[styles.input, innerStyles.marginStart]}
+                keyboardType={'phone-pad'}
+                placeholder="Zip code"
+                value={this.state.zipCode}
+                onChangeText={(text) => {
+                  this.setState({ zipCode: text });
+                }}
+              />
+            </View>
+            {this.state.stateTextError != '' ? (
+              this.showErrorMessage(this.state.stateTextError)
+            ) : (
+                <View></View>
+              )}
+            {this.state.zipCodeError != '' ? (
+              this.showErrorMessage(this.state.zipCodeError)
+            ) : (
+                <View></View>
+              )}
+            <View style={styles.inputView}>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="telephoneNumber"
+                style={styles.input}
+                placeholder="Phone number"
+                keyboardType={'phone-pad'}
+                value={this.state.phoneNumber}
+                onChangeText={(text) => {
+                  this.setState({ phoneNumber: text });
+                }}
+              />
+            </View>
+            {this.state.phoneNumberError != '' ? (
+              this.showErrorMessage(this.state.phoneNumberError)
+            ) : (
+                <View></View>
+              )}
+
+            <View style={styles.inputView}>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="emailAddress"
+                style={styles.input}
+                keyboardType="email-address"
+                placeholder="Email address"
+                value={this.state.email}
+                onChangeText={(text) => {
+                  this.setState({ email: text });
+                }}
+              />
+            </View>
+            {this.state.emailError != '' ? (
+              this.showErrorMessage(this.state.emailError)
+            ) : (
+                <View></View>
+              )}
+
+            <Text style={innerStyles.sameShipping}>
+              Billing and shipping addresses same
+              </Text>
+            {this.state.sameShipping ? (
+              <RadioForm
+                radio_props={radio_props}
+                initial={0}
+                onPress={this.onRadioPress}
+                formHorizontal={true}
+                style={innerStyles.radioButton}
+                labelStyle={innerStyles.labelStyle}
+              />
+            ) : (
+                <RadioForm
+                  radio_props={radio_props}
+                  initial={1}
+                  onPress={this.onRadioPress}
+                  formHorizontal={true}
+                  style={innerStyles.radioButton}
+                  labelStyle={innerStyles.labelStyle}
+                />
+              )}
+
+            {!this.state.sameShipping && (
+              <>
+                <Text style={innerStyles.shippingAddress}>
+                  Shipping Address
+                  </Text>
+                <View style={styles.inputView}>
+                  <TextInput
+                    placeholderTextColor={TEXTINPUT_COLOR}
+                    textContentType="name"
+                    style={styles.input}
+                    placeholder="Full name"
+                    value={this.state.s_fullName}
+                    onChangeText={(text) => {
+                      this.setState({ s_fullName: text });
+                    }}
+                  />
+                </View>
+                {this.state.s_fullNameError != '' ? (
+                  this.showErrorMessage(this.state.s_fullNameError)
+                ) : (
+                    <View></View>
+                  )}
+
+                <View style={styles.inputView}>
+                  <TextInput
+                    placeholderTextColor={TEXTINPUT_COLOR}
+                    textContentType="fullStreetAddress"
+                    style={styles.input}
+                    placeholder="Street address"
+                    value={this.state.s_streetAddress}
+                    onChangeText={(text) => {
+                      this.setState({ s_streetAddress: text });
+                    }}
+                  />
+                </View>
+                {this.state.s_streetAddressError != '' ? (
+                  this.showErrorMessage(this.state.s_streetAddressError)
+                ) : (
+                    <View></View>
+                  )}
+
+                <View style={styles.inputView}>
+                  <TextInput
+                    placeholderTextColor={TEXTINPUT_COLOR}
+                    textContentType="addressCity"
+                    style={styles.input}
+                    placeholder="City / Town"
+                    value={this.state.s_cityTown}
+                    onChangeText={(text) => {
+                      this.setState({ s_cityTown: text });
+                    }}
+                  />
+                </View>
+                {this.state.s_cityTownError != '' ? (
+                  this.showErrorMessage(this.state.s_cityTownError)
+                ) : (
+                    <View></View>
+                  )}
+
+                <View style={styles.inputView}>
+                  <View style={innerStyles.modalView}>
+                    <ModalDropdown
+                      options={usStates}
+                      defaultValue={
+                        this.state.s_stateText
+                          ? this.state.s_stateText
+                          : 'State'
+                      }
+                      style={styles.input}
+                      dropdownStyle={innerStyles.modalDropdownStyle}
+                      textStyle={innerStyles.modalTextStyle}
+                      onSelect={(index) => {
+                        this.onShipStateModalSelect(index);
+                      }}
+                      renderRow={(option, index, isSelected) => {
+                        return (
+                          <Text style={[innerStyles.numText]}>{option}</Text>
+                        );
+                      }}
+                    />
+                  </View>
+                  <TextInput
+                    placeholderTextColor={TEXTINPUT_COLOR}
+                    textContentType="postalCode"
+                    style={[styles.input, innerStyles.marginStart]}
+                    keyboardType={'phone-pad'}
+                    placeholder="Zip code"
+                    value={this.state.s_zipCode}
+                    onChangeText={(text) => {
+                      this.setState({ s_zipCode: text });
+                    }}
+                  />
+                </View>
+                {this.state.s_stateTextError != '' ? (
+                  this.showErrorMessage(this.state.s_stateTextError)
+                ) : (
+                    <View></View>
+                  )}
+                {this.state.s_zipCodeError != '' ? (
+                  this.showErrorMessage(this.state.s_zipCodeError)
+                ) : (
+                    <View></View>
+                  )}
+                <View style={styles.inputView}>
+                  <TextInput
+                    placeholderTextColor={TEXTINPUT_COLOR}
+                    textContentType="telephoneNumber"
+                    style={styles.input}
+                    placeholder="Phone number"
+                    keyboardType={'phone-pad'}
+                    value={this.state.s_phoneNumber}
+                    onChangeText={(text) => {
+                      this.setState({ s_phoneNumber: text });
+                    }}
+                  />
+                </View>
+                {this.state.s_phoneNumberError != '' ? (
+                  this.showErrorMessage(this.state.s_phoneNumberError)
+                ) : (
+                    <View></View>
+                  )}
+
+                <View style={styles.inputView}>
+                  <TextInput
+                    placeholderTextColor={TEXTINPUT_COLOR}
+                    textContentType="emailAddress"
+                    style={styles.input}
+                    placeholder="Email address"
+                    keyboardType="email-address"
+                    value={this.state.s_email}
+                    onChangeText={(text) => {
+                      this.setState({ s_email: text });
+                    }}
+                  />
+                </View>
+                {this.state.s_emailError != '' ? (
+                  this.showErrorMessage(this.state.s_emailError)
+                ) : (
+                    <View></View>
+                  )}
+              </>
+            )}
             <View style={styles.inputView}>
               <TouchableOpacity
                 style={[innerStyles.input, innerStyles.uploadFileView]}
@@ -500,6 +1027,9 @@ class SignUp extends Component {
     );
   }
 }
+
+let width = Dimensions.get('window').width;
+let height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
   input: {
@@ -580,6 +1110,211 @@ const innerStyles = StyleSheet.create({
     marginRight: 15,
     marginTop: 18,
     marginBottom: 20,
+  },
+  labelStyle: {
+    marginRight: 10,
+    fontFamily: 'Avenir-Medium',
+    color: '#2d2d2f',
+  },
+  paymentText: {
+    color: '#ffffff',
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  checkIcon: {
+    marginTop: 20,
+  },
+  inputView: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+  },
+  orderButtonView: {
+    paddingHorizontal: 30,
+    width: '100%',
+    backgroundColor: '#f6f6f6',
+    paddingBottom: 20,
+  },
+  padRight15: { marginRight: 15 },
+  buttonStyles: {
+    paddingHorizontal: 30,
+    width: '100%',
+    backgroundColor: '#f6f6f6',
+    paddingBottom: 20,
+  },
+  profileHeading: {
+    marginTop: 14,
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 18,
+    lineHeight: 22,
+    color: '#454547',
+    marginBottom: 8,
+  },
+  orderButtonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    lineHeight: 22,
+  },
+  modalView: {
+    flexDirection: 'row',
+    width: '42.7%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  modalStyle: {
+    flex: 1,
+    padding: 5,
+    borderRadius: 6,
+    backgroundColor: '#f6f6f6',
+  },
+  modalDropdownStyle: {
+    width: '30%',
+  },
+  modalTextStyle: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 18,
+    lineHeight: 24,
+    color: '#2d2d2f',
+    paddingRight: 10,
+  },
+  modalInnerView: {
+    width: 25,
+    height: 25,
+    alignSelf: 'center',
+    marginVertical: 10,
+    borderRadius: 25,
+    alignSelf: 'center',
+  },
+  radioButton: {
+    alignSelf: 'center',
+  },
+  priceText: { flex: 1, lineHeight: 30, textAlign: 'right' },
+  marginStart: { marginStart: 15 },
+  alignRight: { flex: 1, textAlign: 'right' },
+  textBold: { fontSize: 18, lineHeight: 30 },
+  orderViewNested: { flexDirection: 'row', paddingHorizontal: 20 },
+  plusIconStyle: {
+    width: width * 0.08,
+    height: height * 0.08,
+  },
+  paddingHorizontal: { paddingHorizontal: 20 },
+  iconDoneStyle: {
+    width: width * 0.12,
+    height: height * 0.12,
+    justifyContent: 'center',
+  },
+  marginStart: { marginStart: 20 },
+  buttonContainerAdd: { marginTop: 20, width: '100%' },
+  maincontainer: { flex: 1, backgroundColor: '#fff' },
+  scrollView: {
+    backgroundColor: '#fff',
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingBottom: 60,
+  },
+  mainTextBold: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 30,
+    fontStyle: 'normal',
+    lineHeight: 45,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#454547',
+    marginTop: 10,
+    paddingBottom: 26,
+  },
+  lightText: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 14,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 18,
+    letterSpacing: 1,
+    color: '#8d8d8e',
+    lineHeight: 30,
+  },
+  profileName: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 14,
+    lineHeight: 18,
+    letterSpacing: 1,
+    color: '#010101',
+    marginTop: 15,
+  },
+  buttonTextContainer: {
+    width: '100%',
+    paddingVertical: 30,
+    borderRadius: 6,
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderColor: '#007de3',
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  horizontalView: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+    flex: 1,
+  },
+  squareBoxButtons: {
+    paddingVertical: 10,
+    borderRadius: 6,
+    backgroundColor: '#ffffff',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#e6e6e7',
+    alignItems: 'center',
+    flex: 0.5,
+    width: width * 0.4,
+  },
+  numText: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 18,
+    lineHeight: 24,
+    color: '#454547',
+    textAlign: 'left',
+    marginStart: 20,
+    marginVertical: 10,
+  },
+  shippingAddress: {
+    marginTop: 25,
+    marginBottom: 12,
+    fontFamily: 'Avenir-Medium',
+    fontSize: 21,
+    lineHeight: 24,
+    color: '#2d2d2f',
+  },
+  sameShipping: {
+    marginTop: 24,
+    marginBottom: 10,
+    marginLeft: 20,
+    fontFamily: 'Avenir-Medium',
+    fontSize: 21,
+    lineHeight: 24,
+    color: '#2d2d2f',
+  },
+  showOrderView: {
+    paddingTop: 15,
+    flexDirection: 'column',
+    flex: 1,
+    marginTop: 15,
+    width: '100%',
+    backgroundColor: '#f6f6f6',
+  },
+  buttonPaymentMethod: {
+    width: '100%',
+    backgroundColor: '#2967ff',
+    borderRadius: 6,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    marginTop: 15,
+  },
+  loader: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  loaderImage: { height: 200, width: 200 },
+  textAlignLeft: { textAlign: 'left' },
+  textAlignCenter: { textAlign: 'center' },
+  alignCenter: {
+    alignItems: 'center',
   },
 });
 

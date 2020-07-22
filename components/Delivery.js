@@ -673,7 +673,7 @@ class Delivery extends Component {
                     isDialogVisible: false,
                   });
                 }}></DialogInput>
-
+              {/*************************  BILLING ADDRESS ************************** */}
               <Text style={innerStyles.shippingAddress}>Billing Address</Text>
               <View style={innerStyles.inputView}>
                 <TextInput
@@ -1217,6 +1217,7 @@ const innerStyles = StyleSheet.create({
   alignCenter: {
     alignItems: 'center',
   },
+  
 });
 
 export default Delivery;
