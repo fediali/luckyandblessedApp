@@ -60,10 +60,10 @@ class SignUp extends Component {
       confirmPasswordError: '',
       salesTaxIDError: '',
       salesTaxIDFileError: '',
-      company:'',
-      companyError:'',
+      company: '',
+      companyError: '',
       businessPhone: '',
-      businessPhoneError:'',
+      businessPhoneError: '',
       mobile: '',
       mobileError: '',
       //billing states
@@ -89,6 +89,8 @@ class SignUp extends Component {
       s_emailError: '',
       s_phoneNumber: '',
       s_phoneNumberError: '',
+      isConfirmPasswordVisible:false,
+      isPasswordVisible:false
     };
 
     RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
@@ -525,6 +527,16 @@ class SignUp extends Component {
     this.setState({ s_stateText: usStates[index] });
   };
 
+  handlePasswordView=()=>{
+    this.setState(prevState => ({
+      isPasswordVisible: !prevState.isPasswordVisible
+    }));
+  }
+  handleConfirmPasswordView=()=>{
+    this.setState(prevState => ({
+      isConfirmPasswordVisible: !prevState.isConfirmPasswordVisible
+    }));
+  }
   render() {
     return (
       <SafeAreaView style={styles.parentContainer}>
@@ -571,13 +583,21 @@ class SignUp extends Component {
                 placeholderTextColor={TEXTINPUT_COLOR}
                 textContentType="password"
                 style={styles.input}
-                secureTextEntry={true}
+                secureTextEntry={!this.state.isPasswordVisible}
                 autoCapitalize="none"
                 placeholder="Password"
                 onChangeText={(text) => {
                   this.setState({ password: text });
                 }}
               />
+              <TouchableOpacity activeOpacity={0.95} onPress={this.handlePasswordView}>
+                <Icon
+                  size={22}
+                  name={this.state.isPasswordVisible ? "md-eye" : "md-eye-off"}
+                  type="ionicon"
+                  color="#2d2d2f"
+                />
+              </TouchableOpacity>
             </View>
             {this.state.passwordError != ''
               ? this.showErrorMessage(this.state.passwordError)
@@ -588,15 +608,23 @@ class SignUp extends Component {
                 placeholderTextColor={TEXTINPUT_COLOR}
                 textContentType="password"
                 style={styles.input}
-                secureTextEntry={true}
+                secureTextEntry={!this.state.isConfirmPasswordVisible}
                 autoCapitalize="none"
                 placeholder="Confirm password"
                 onChangeText={(text) => {
                   this.setState({ confirmPassword: text });
                 }}
               />
+              <TouchableOpacity activeOpacity={0.95} onPress={this.handleConfirmPasswordView}>
+                <Icon
+                  size={22}
+                  name={this.state.isConfirmPasswordVisible ? "md-eye" : "md-eye-off"}
+                  type="ionicon"
+                  color="#2d2d2f"
+                />
+              </TouchableOpacity>
             </View>
-            
+
             {this.state.confirmPasswordError != ''
               ? this.showErrorMessage(this.state.confirmPasswordError)
               : null}
