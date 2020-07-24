@@ -189,7 +189,7 @@ class FlatListItem extends Component {
               <Image
                 style={[innerStyles.itemImage]}
                 resizeMode="contain"
-                source={{ uri: this.props.item.path }}
+                source={{ uri: (this.props.item.path)?this.props.item.path:Globals.noImageFoundURL }}
               />
               <View style={innerStyles.listTextsContainerView}>
                 <View style={innerStyles.listRowView}>
@@ -427,7 +427,7 @@ class ShoppingCart extends Component {
                     singleProduct.path =
                       responses.products[i].extra.main_pair.detailed.image_path;
                   } else {
-                    singleProduct.path = 'https://picsum.photos/200';
+                    singleProduct.path = Globals.noImageFoundURL;
                   }
 
                   singleLineITem = {

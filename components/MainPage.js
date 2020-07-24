@@ -305,11 +305,9 @@ class MainPage extends Component {
                     style={innerStyles.gridImage}
                     // resizeMode='contain'
                     source={{
-                      uri: this.state.newArrivals[0].main_pair.detailed
-                        .image_path
-                        ? this.state.newArrivals[0].main_pair.detailed
-                            .image_path
-                        : '',
+                      uri: (this.state.newArrivals[0].main_pair.detailed.image_path)? 
+                        this.state.newArrivals[0].main_pair.detailed.image_path
+                        : Globals.noImageFoundURL
                     }}
                   />
                   <Text
@@ -336,7 +334,7 @@ class MainPage extends Component {
                         .image_path
                         ? this.state.newArrivals[1].main_pair.detailed
                             .image_path
-                        : '',
+                        : Globals.noImageFoundURL
                     }}
                   />
                   <Text
@@ -364,7 +362,7 @@ class MainPage extends Component {
                         .image_path
                         ? this.state.newArrivals[2].main_pair.detailed
                             .image_path
-                        : '',
+                        : Globals.noImageFoundURL
                     }}
                   />
                   <Text
@@ -391,7 +389,7 @@ class MainPage extends Component {
                         .image_path
                         ? this.state.newArrivals[3].main_pair.detailed
                             .image_path
-                        : '',
+                        : Globals.noImageFoundURL
                     }}
                   />
                   <Text

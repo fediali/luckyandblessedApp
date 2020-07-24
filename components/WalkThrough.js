@@ -110,7 +110,7 @@ export default class WalkThrough extends Component {
           style={styles.images}
           key={index}
           resizeMode="contain"
-          source={{ uri: (img)?img:"" }}
+          source={{ uri: (img)?img:Globals.noImageFoundURL }}
         />,
       );
     });

@@ -111,7 +111,7 @@ export default class ordersProduct extends PureComponent {
                     productGroupKeys[i]
                   ].main_pair.detailed.image_path;
               } else {
-                jsonProducts['imageUrl'] = 'https://picsum.photos/200';
+                jsonProducts['imageUrl'] = Globals.noImageFoundURL;
               }
               if (responses[0].shipment_ids.length > 0) {
                 jsonProducts['shipment_id'] = responses[0].shipment_ids;

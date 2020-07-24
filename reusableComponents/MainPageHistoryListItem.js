@@ -6,6 +6,7 @@ import {
     Dimensions
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import Globals from '../Globals'
 
 export default class MainPageHistoryListItem extends PureComponent {
 
@@ -21,7 +22,7 @@ export default class MainPageHistoryListItem extends PureComponent {
                 <FastImage
                     style={innerStyles.gridImage}
                     resizeMode="cover"
-                    source={{uri: (this.props.imageUrl)?this.props.imageUrl:""}}
+                    source={{uri: (this.props.imageUrl)?this.props.imageUrl:Globals.noImageFoundURL}}
                 />
                 <Text numberOfLines={2} style={innerStyles.gridItemNameAndPriceText}>{this.props.name}</Text>
                 <Text style={innerStyles.gridItemNameAndPriceText}>${this.props.price}</Text>

@@ -9,6 +9,7 @@ import {
 import { Icon } from 'react-native-elements'
 
 import FastImage from 'react-native-fast-image'
+import Globals from '../Globals';
 
 class CategoriesListItem extends PureComponent {
 
@@ -17,6 +18,7 @@ class CategoriesListItem extends PureComponent {
     }
     
     render() {
+        //console.log(this.props.imageUrl)
         return (
             <TouchableOpacity activeOpacity={0.9} style={styles.button}  onPress={this.navigateToProductPage}>
                 <FastImage source={this.props.imageUrl} resizeMode="contain" style={styles.image} />

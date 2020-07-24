@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet, Dimensions, } from 'react-native';
 import FastImage from 'react-native-fast-image'
+import Globals from '../Globals';
 
 export default class OrderProductListItem extends PureComponent {
   render() {
+    console.log(this.props.data.imageUrl)
     return (
       <View style={styles.padBottom20}>
         <View style={styles.topLevelView}>
@@ -12,7 +14,7 @@ export default class OrderProductListItem extends PureComponent {
               <FastImage
                 style={[styles.thumbnailImage]}
                 resizeMode="contain"
-                source={{ uri: (this.props.data.imageUrl)?this.props.data.imageUrl:"" }}
+                source={{ uri: (this.props.data.imageUrl)?this.props.data.imageUrl:Globals.noImageFoundURL }}
               />
             </View>
 

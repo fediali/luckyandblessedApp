@@ -94,10 +94,10 @@ class Categories extends Component {
 
                                 (item.main_pair) ?
                                     <CategoriesListItem key={item.category} navigation={this.props.navigation}
-                                        imageUrl={{ uri: (item.main_pair.detailed.image_path)?item.main_pair.detailed.image_path:"" }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
+                                        imageUrl={{ uri: (item.main_pair.detailed.image_path)?item.main_pair.detailed.image_path:Globals.noImageFoundURL }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
                                     :
                                     <CategoriesListItem key={item.category} navigation={this.props.navigation}
-                                        imageUrl={{ uri: 'http://dev.landbw.co/images/detailed/39/26_8sq6-me.jpg' }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
+                                        imageUrl={{ uri: Globals.noImageFoundURL }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
 
                             )}
                             ItemSeparatorComponent={this.renderSeparator}

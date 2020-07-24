@@ -350,7 +350,7 @@ export default class ProductPage extends Component {
                     <View style={[styles.mainPicture, styles.mainImageView]}>
                       <FastImage
                         style={styles.mainPicture}
-                        source={{ uri: (this.state.data.mainImage)?this.state.data.mainImage:"" }}
+                        source={{ uri: (this.state.data.mainImage)?this.state.data.mainImage:Globals.noImageFoundURL }}
                         resizeMode="contain"/>
                     </View>
                     <ScrollView
@@ -371,7 +371,7 @@ export default class ProductPage extends Component {
                                   ]
                                   : styles.thumbnail
                               }
-                              source={{ uri: (val)?val:"" }}/>
+                              source={{ uri: (val)?val:Globals.noImageFoundURL }}/>
                           </TouchableOpacity>
                         );
                       })}

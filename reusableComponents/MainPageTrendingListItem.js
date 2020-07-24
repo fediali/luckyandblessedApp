@@ -7,6 +7,7 @@ import {
     View
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import Globals from '../Globals'
 const TRENDING_NAME = "Trending"
 
 export default class MainPageTrendingListItem extends PureComponent {
@@ -27,7 +28,7 @@ export default class MainPageTrendingListItem extends PureComponent {
                         <View style={innerStyles.innerTrendingView}>
                             <FastImage
                                 style={innerStyles.trendingImage}
-                                source={{ uri: (val.main_pair.detailed.image_path)?val.main_pair.detailed.image_path:"" }}
+                                source={{ uri: (val.main_pair.detailed.image_path)?val.main_pair.detailed.image_path:Globals.noImageFoundURL }}
                                 // resizeMode='contain'
                             />
                             <View style={innerStyles.innerInnerTrendingView}>

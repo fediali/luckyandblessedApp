@@ -6,6 +6,7 @@ import {
     ImageBackground,
     Dimensions
 } from 'react-native'
+import Globals from '../Globals';
 
 export default class MainPageCollections extends PureComponent {
     render() {
@@ -13,7 +14,7 @@ export default class MainPageCollections extends PureComponent {
             <TouchableOpacity activeOpacity={0.9} style={innerStyles.borderRadiusSix}>
                 <ImageBackground
                     style={innerStyles.collectionImages}
-                    source={{ uri: this.props.imageUrl }}
+                    source={{ uri: (this.props.imageUrl)?this.props.imageUrl:Globals.noImageFoundURL }}
                     resizeMode='stretch'
                 >
                     <Text style={innerStyles.semiBoldText}>{this.props.text}</Text>
