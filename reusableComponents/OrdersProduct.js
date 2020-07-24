@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
   Text,
   View,
@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import OrderProductListItem from './OrderProductListItem';
 import Toast from 'react-native-simple-toast';
 
@@ -37,7 +37,7 @@ export default class ordersProduct extends PureComponent {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: false});
+      this.setState({ isReady: false });
       this.getData(this.props.orderId);
     });
   }
@@ -115,16 +115,16 @@ export default class ordersProduct extends PureComponent {
               }
               if (responses[0].shipment_ids.length > 0) {
                 jsonProducts['shipment_id'] = responses[0].shipment_ids;
-                this.setState({isTrackingReady: false});
+                this.setState({ isTrackingReady: false });
                 this.getTrackingData(jsonProducts['shipment_id'], i);
               } else {
-                this.setState({isTrackingReady: true});
+                this.setState({ isTrackingReady: true });
               }
               productArray[i] = jsonProducts;
               jsonProducts = {};
             }
 
-            this.setState({orders: productArray, isReady: true});
+            this.setState({ orders: productArray, isReady: true });
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
@@ -153,19 +153,22 @@ export default class ordersProduct extends PureComponent {
           return <OrderProductListItem key={index.toString()} data={item} />;
         })}
         <View style={styles.dividerLine}></View>
+        {this.state.trackingURL ?
+          <TouchableOpacity
+            style={styles.trackingStyle}
+            onPress={() => {
+              Linking.openURL(this.state.trackingURL);
+            }}>
+            <Text style={styles.orderIdText}>
+              Track: {this.state.trackingNumber}
+            </Text>
+            <View style={styles.mar19}>
+              <Icon size={20} name="right" type="antdesign" />
+            </View>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.trackingStyle}
-          onPress={() => {
-            Linking.openURL(this.state.trackingURL);
-          }}>
-          <Text style={styles.orderIdText}>
-            Track: {this.state.trackingNumber}
-          </Text>
-          <View style={styles.mar19}>
-            <Icon size={20} name="right" type="antdesign" />
-          </View>
-        </TouchableOpacity>
+          : <></>
+        }
         <View style={styles.dividerLine}></View>
 
         <View style={styles.divider}></View>
@@ -182,7 +185,7 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 6,
   },
-  loader: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  loader: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   lightText: {
     fontFamily: 'Avenir-Book',
     fontSize: 14,
@@ -204,13 +207,13 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     marginVertical: 19,
   },
-  seperator: {paddingBottom: 20},
-  flatlistStyle: {marginTop: 13},
-  dividerLine: {backgroundColor: '#f6f6f6', paddingTop: 1},
+  seperator: { paddingBottom: 20 },
+  flatlistStyle: { marginTop: 13 },
+  dividerLine: { backgroundColor: '#f6f6f6', paddingTop: 1 },
   trackingStyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 20,
   },
-  mar19: {marginTop: 19},
+  mar19: { marginTop: 19 },
 });

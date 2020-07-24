@@ -5,7 +5,6 @@ import Globals from '../Globals';
 
 export default class OrderProductListItem extends PureComponent {
   render() {
-    console.log(this.props.data.imageUrl)
     return (
       <View style={styles.padBottom20}>
         <View style={styles.topLevelView}>
