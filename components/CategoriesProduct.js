@@ -91,7 +91,7 @@ class CategoriesProduct extends Component {
         if (this.state.filters) {
           promises.push(GetData(baseUrl + `api/products?cid=${cid}&status=A${this.state.filters}&page=${this.state.iteratedPage}`));
         }
-        else if(cname.includes(SALE_NAME)){
+        else if (cname.includes(SALE_NAME)) {
           //extraproducts API returns search instead of params
           promises.push(GetData(baseUrl + `/api/extraproducts/?mode=on_sale&status=A&page=${this.state.iteratedPage}`))
         }
@@ -103,7 +103,7 @@ class CategoriesProduct extends Component {
         .then((promiseResponses) => {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
-              if (cname.includes(SALE_NAME)){
+              if (cname.includes(SALE_NAME)) {
                 // console.log(responses[0].products)
                 this.setState({
                   totalProducts: parseFloat(
@@ -114,16 +114,16 @@ class CategoriesProduct extends Component {
                   ).toFixed(0),
                 });
               }
-              else{
-              this.setState({
-                totalProducts: parseFloat(
-                  responses[0].params.total_items,
-                ).toFixed(0),
-                totalItemsPerRequest: parseFloat(
-                  responses[0].params.items_per_page,
-                ).toFixed(0),
-              });
-            }
+              else {
+                this.setState({
+                  totalProducts: parseFloat(
+                    responses[0].params.total_items,
+                  ).toFixed(0),
+                  totalItemsPerRequest: parseFloat(
+                    responses[0].params.items_per_page,
+                  ).toFixed(0),
+                });
+              }
               async function parseProducts() {
                 const tempProducts = [];
                 for (let i = 0; i < responses[0].products.length; i++) {
@@ -136,12 +136,12 @@ class CategoriesProduct extends Component {
                     base_price: parseFloat(
                       responses[0].products[i].base_price,
                     ).toFixed(2),
-                    list_price:responses[0].products[i].list_price && responses[0].products[i].list_price!=0?responses[0].products[i].list_price:null,
+                    list_price: responses[0].products[i].list_price && responses[0].products[i].list_price != 0 ? responses[0].products[i].list_price : null,
                     imageUrl:
                       responses[0].products[i].main_pair.detailed.image_path,
                     product_brand: responses[0].products[i].brand
                       ? responses[0].products[i].brand
-                      : DEFAULTS_OBJ.brand, 
+                      : DEFAULTS_OBJ.brand,
                     cname: catName, //Category name would be the same here.
                   });
                 }
@@ -246,7 +246,7 @@ class CategoriesProduct extends Component {
         pid={item.product_id}
         cname={item.cname}
         navigation={this.props.navigation}
-        imageUrl={{ uri: (item.imageUrl)?item.imageUrl:"" }}
+        imageUrl={{ uri: (item.imageUrl) ? item.imageUrl : "" }}
         name1={item.product}
         price1={'$' + item.price}
         price2={'$' + item.base_price}
@@ -262,10 +262,12 @@ class CategoriesProduct extends Component {
         pid={item.product_id}
         cname={item.cname}
         navigation={this.props.navigation}
-        imageUrl={{ uri: (item.imageUrl)?item.imageUrl:"" }}
+        imageUrl={{ uri: (item.imageUrl) ? item.imageUrl : "" }}
         name1={item.product}
         price1={'$' + item.price}
         price2={'$' + item.base_price}
+        list_price={item.list_price}
+
       />
     );
   };
@@ -274,7 +276,7 @@ class CategoriesProduct extends Component {
     this.props.navigation.navigate('Filter');
   };
   render() {
-    console.log("AAAAAA\n\n",this.state.products[0])
+    console.log("AAAAAA\n\n", this.state.products[0])
     return (
       <SafeAreaView style={styles.superMainContainer}>
         <Header navigation={this.props.navigation} rightIcon="search" />
