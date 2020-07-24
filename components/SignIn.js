@@ -216,7 +216,7 @@ class SignIn extends Component {
             />
             <TouchableOpacity activeOpacity={0.95} onPress={this.handlePasswordView}>
               <Icon
-                size={30}
+                size={22}
                 name={this.state.isPasswordVisible ? "md-eye" : "md-eye-off"}
                 type="ionicon"
                 color="#2d2d2f"

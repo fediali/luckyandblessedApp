@@ -381,7 +381,7 @@ export default class ProductPage extends Component {
                 <View style={styles.productOptionsView}>
                   <View style={styles.rowView}>
                     <View style={styles.flexOneView}>
-                      {!this.state.data.qty_content || this.state.data.qty_content.length == 1 || this.state.data.qty_content.length == 0 ? (
+                      {!this.state.data.qty_content || this.state.data.qty_content.length == 0 ? (
                         <TextInput
                           placeholderTextColor={TEXTINPUT_COLOR}
                           style={styles.valueText}

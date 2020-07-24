@@ -20,12 +20,14 @@ import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAs
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import Globals from '../Globals';
 import Toast from 'react-native-simple-toast';
+import GetData from '../reusableComponents/API/GetData';
 
 const baseUrl = Globals.baseUrl;
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 let DEFAULTS_OBJ = [];
 const HISTORY_CATEGORY_ID = -2;
 const SIMILARPRODUCTS_CATEGORY_ID = -3;
+const SALE_NAME = 'SALE';
 
 class CategoriesProduct extends Component {
   constructor(props) {
@@ -47,7 +49,7 @@ class CategoriesProduct extends Component {
     };
   }
 
-  loadData = (cid) => {
+  loadData = (cid, cname) => {
     if (cid == HISTORY_CATEGORY_ID) {
       //Cid of HISTORY
       var historyItems = this.props.route.params.items;
@@ -84,10 +86,14 @@ class CategoriesProduct extends Component {
       var promises = [];
       if (cid == SIMILARPRODUCTS_CATEGORY_ID) {
         //-3 is cid of SIMILAR PRODUCTS
-        promises.push(GetData(baseUrl + `api/similarproducts/${this.props.route.params.pid}&status=A`));
+        promises.push(GetData(baseUrl + `api/similarproducts/${this.props.route.params.pid}&status=A&page=${this.state.iteratedPage}`));
       } else {
         if (this.state.filters) {
           promises.push(GetData(baseUrl + `api/products?cid=${cid}&status=A${this.state.filters}&page=${this.state.iteratedPage}`));
+        }
+        else if (cname.includes(SALE_NAME)) {
+          //extraproducts API returns search instead of params
+          promises.push(GetData(baseUrl + `/api/extraproducts/?mode=on_sale&status=A&page=${this.state.iteratedPage}`))
         }
         else
           promises.push(GetData(baseUrl + `api/products?cid=${cid}&status=A&page=${this.state.iteratedPage}`));
@@ -97,14 +103,27 @@ class CategoriesProduct extends Component {
         .then((promiseResponses) => {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
-              this.setState({
-                totalProducts: parseFloat(
-                  responses[0].params.total_items,
-                ).toFixed(0),
-                totalItemsPerRequest: parseFloat(
-                  responses[0].params.items_per_page,
-                ).toFixed(0),
-              });
+              if (cname.includes(SALE_NAME)) {
+                // console.log(responses[0].products)
+                this.setState({
+                  totalProducts: parseFloat(
+                    responses[0].search.total_items,
+                  ).toFixed(0),
+                  totalItemsPerRequest: parseFloat(
+                    responses[0].search.items_per_page,
+                  ).toFixed(0),
+                });
+              }
+              else {
+                this.setState({
+                  totalProducts: parseFloat(
+                    responses[0].params.total_items,
+                  ).toFixed(0),
+                  totalItemsPerRequest: parseFloat(
+                    responses[0].params.items_per_page,
+                  ).toFixed(0),
+                });
+              }
               async function parseProducts() {
                 const tempProducts = [];
                 for (let i = 0; i < responses[0].products.length; i++) {
@@ -117,11 +136,12 @@ class CategoriesProduct extends Component {
                     base_price: parseFloat(
                       responses[0].products[i].base_price,
                     ).toFixed(2),
+                    list_price: responses[0].products[i].list_price && responses[0].products[i].list_price != 0 ? responses[0].products[i].list_price : null,
                     imageUrl:
                       responses[0].products[i].main_pair.detailed.image_path,
                     product_brand: responses[0].products[i].brand
                       ? responses[0].products[i].brand
-                      : DEFAULTS_OBJ.brand, 
+                      : DEFAULTS_OBJ.brand,
                     cname: catName, //Category name would be the same here.
                   });
                 }
@@ -169,7 +189,7 @@ class CategoriesProduct extends Component {
           iteratedPage: this.state.iteratedPage + 1,
           isLoadingMoreListData: true,
         },
-        () => this.loadData(this.state.cid),
+        () => this.loadData(this.state.cid, this.state.cname),
       );
     }
   };
@@ -189,7 +209,7 @@ class CategoriesProduct extends Component {
             iteratedPage: 1,
           },
           () => {
-            this.loadData(this.state.cid);
+            this.loadData(this.state.cid, this.state.cname);
           },
         );
       }
@@ -199,7 +219,7 @@ class CategoriesProduct extends Component {
       RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
         DEFAULTS_OBJ = JSON.parse(defaults);
 
-        this.loadData(this.state.cid);
+        this.loadData(this.state.cid, this.state.cname);
       });
     });
   }
@@ -226,10 +246,11 @@ class CategoriesProduct extends Component {
         pid={item.product_id}
         cname={item.cname}
         navigation={this.props.navigation}
-        imageUrl={{ uri: (item.imageUrl)?item.imageUrl:"" }}
+        imageUrl={{ uri: (item.imageUrl) ? item.imageUrl : "" }}
         name1={item.product}
         price1={'$' + item.price}
         price2={'$' + item.base_price}
+        list_price={item.list_price}
       />
     );
   };
@@ -241,10 +262,12 @@ class CategoriesProduct extends Component {
         pid={item.product_id}
         cname={item.cname}
         navigation={this.props.navigation}
-        imageUrl={{ uri: (item.imageUrl)?item.imageUrl:"" }}
+        imageUrl={{ uri: (item.imageUrl) ? item.imageUrl : "" }}
         name1={item.product}
         price1={'$' + item.price}
         price2={'$' + item.base_price}
+        list_price={item.list_price}
+
       />
     );
   };
@@ -253,6 +276,7 @@ class CategoriesProduct extends Component {
     this.props.navigation.navigate('Filter');
   };
   render() {
+    console.log("AAAAAA\n\n", this.state.products[0])
     return (
       <SafeAreaView style={styles.superMainContainer}>
         <Header navigation={this.props.navigation} rightIcon="search" />
