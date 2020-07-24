@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     image: { height: Height * 0.3, width: Width * 0.43, justifyContent: "center", borderRadius: 6 },
     mainText: { marginTop: 9, maxWidth: Width * 0.43, fontFamily: "Montserrat-Medium", fontSize: 14, lineHeight: 20, color: "#2d2d2f" },
     subText: { marginTop: 7, fontFamily: "Avenir-Book", fontSize: 14, lineHeight: 18, color: "#2967ff", maxWidth: Width * 0.43 },
-    subText2: { fontSize: 16, lineHeight: 20, fontFamily: "Montserrat-Medium", color: "#2d2d2f" }
+    subText2: { fontSize: 14, lineHeight: 20, fontFamily: "Montserrat-Medium", color: "#2d2d2f" }
 
 
 

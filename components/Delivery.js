@@ -698,7 +698,7 @@ class Delivery extends Component {
                   placeholderTextColor={TEXTINPUT_COLOR}
                   textContentType="fullStreetAddress"
                   style={styles.input}
-                  placeholder="Street address"
+                  placeholder="Address"
                   value={this.state.streetAddress}
                   multiline={true}
                   onChangeText={(text) => {
@@ -861,7 +861,7 @@ class Delivery extends Component {
                       placeholderTextColor={TEXTINPUT_COLOR}
                       textContentType="fullStreetAddress"
                       style={styles.input}
-                      placeholder="Street address"
+                      placeholder="Address"
                       value={this.state.s_streetAddress}
                       onChangeText={(text) => {
                         this.setState({ s_streetAddress: text });
