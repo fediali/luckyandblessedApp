@@ -25,9 +25,9 @@ class CategoriesProductListSingleItem extends PureComponent {
                     <Text style={[styles.mainText, styles.limitWidth]}>{this.props.name1}</Text>
                     <Text style={styles.mainText}>{this.props.price1}</Text>
                 </View>
-                <View style={styles.textContainer2}>
+                {/* <View style={styles.textContainer2}>
                     <Text style={[styles.subText, styles.colourGrey]}>{this.props.price2}</Text>
-                </View>
+                </View> */}
             </TouchableOpacity>
         )
     }
