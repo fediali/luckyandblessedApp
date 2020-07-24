@@ -228,10 +228,12 @@ export default class ProductPage extends Component {
       );
     }
     else {
+      console.log(this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,""))
+
       return (
         // FIXME: Padding on right side isn't appearing
-        <View style={{marginHorizontal: 15}}> 
-          <HTMLView value={this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"")} />
+        <View> 
+          <HTMLView value={this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"").replace(/>/g,"/>")} />
         </View>
       );
     }
