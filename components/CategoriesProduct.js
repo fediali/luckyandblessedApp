@@ -354,7 +354,8 @@ class CategoriesProduct extends Component {
                               />
                             )}
                         </TouchableOpacity>
-                        <TouchableOpacity
+                        {!this.state.cname.includes(SALE_NAME) && (
+                          <TouchableOpacity
                           style={styles.paddingLeftView}
                           onPress={this.navigateToFilter}>
                           <FastImage
@@ -362,6 +363,8 @@ class CategoriesProduct extends Component {
                             source={require('../static/Filter.png')}
                           />
                         </TouchableOpacity>
+                        )}
+                        
                       </View>
                     </View>
                   </>
