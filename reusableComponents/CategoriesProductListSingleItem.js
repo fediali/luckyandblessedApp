@@ -23,7 +23,11 @@ class CategoriesProductListSingleItem extends PureComponent {
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={[styles.mainText, styles.limitWidth]}>{this.props.name1}</Text>
+                    <View style={{flexDirection:"row"}}>
+                    {this.props.list_price?<Text style={styles.strikedMainText}>${this.props.list_price}</Text>:null}
                     <Text style={styles.mainText}>{this.props.price1}</Text>
+
+                    </View>
                 </View>
                 {/* <View style={styles.textContainer2}>
                     <Text style={[styles.subText, styles.colourGrey]}>{this.props.price2}</Text>
@@ -41,6 +45,8 @@ const styles = StyleSheet.create({
     textContainer: { paddingVertical: 9, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between" },
     textContainer2: { paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between" },
     mainText: { fontFamily: "Montserrat-Medium", fontSize: 14, lineHeight: 20, color: "#2d2d2f", },
+    strikedMainText: { fontFamily: "Montserrat-Medium", fontSize: 14, lineHeight: 20, color: "red",paddingHorizontal:4,textDecorationLine: 'line-through' },
+
     limitWidth: { maxWidth: Width * 0.65 },
     subText: { fontFamily: "Avenir-Book", fontSize: 14, lineHeight: 18, },
     colourGrey: { color: "#8d8d8e" },

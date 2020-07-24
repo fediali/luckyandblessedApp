@@ -104,6 +104,7 @@ class CategoriesProduct extends Component {
           Promise.all(promiseResponses.map((res) => res.json()))
             .then((responses) => {
               if (cname.includes(SALE_NAME)){
+                // console.log(responses[0].products)
                 this.setState({
                   totalProducts: parseFloat(
                     responses[0].search.total_items,
@@ -135,6 +136,7 @@ class CategoriesProduct extends Component {
                     base_price: parseFloat(
                       responses[0].products[i].base_price,
                     ).toFixed(2),
+                    list_price:responses[0].products[i].list_price && responses[0].products[i].list_price!=0?responses[0].products[i].list_price:null,
                     imageUrl:
                       responses[0].products[i].main_pair.detailed.image_path,
                     product_brand: responses[0].products[i].brand
@@ -248,6 +250,7 @@ class CategoriesProduct extends Component {
         name1={item.product}
         price1={'$' + item.price}
         price2={'$' + item.base_price}
+        list_price={item.list_price}
       />
     );
   };
@@ -271,6 +274,7 @@ class CategoriesProduct extends Component {
     this.props.navigation.navigate('Filter');
   };
   render() {
+    console.log("AAAAAA\n\n",this.state.products[0])
     return (
       <SafeAreaView style={styles.superMainContainer}>
         <Header navigation={this.props.navigation} rightIcon="search" />
