@@ -41,7 +41,7 @@ let Width = Dimensions.get("window").width
 let Height = Dimensions.get("window").height
 const styles = StyleSheet.create({
     imageView: { borderRadius: 6, backgroundColor: "#f6f6f6", width: Width * 0.88, alignSelf: "center" },
-    image: { alignSelf: "center", height: Height * 0.5, width: Width * 0.88 },
+    image: { alignSelf: "center", height: Height * 0.5, width: Width * 0.88, borderRadius: 6 },
     textContainer: { paddingVertical: 9, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between" },
     textContainer2: { paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between" },
     mainText: { fontFamily: "Montserrat-Medium", fontSize: 14, lineHeight: 20, color: "#2d2d2f", },

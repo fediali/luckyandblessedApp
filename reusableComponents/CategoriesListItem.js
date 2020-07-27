@@ -7,15 +7,21 @@ import {
     Dimensions
 } from 'react-native';
 import { Icon } from 'react-native-elements'
-
+import Accordion from 'react-native-collapsible/Accordion';
 import FastImage from 'react-native-fast-image'
-import Globals from '../Globals';
+const LOOKBOOK_CATEGORY_ID = -2;
 
 class CategoriesListItem extends PureComponent {
 
     navigateToProductPage = () => {
-        this.props.navigation.navigate("CategoriesProduct", { cid: [this.props.cid], cname: [this.props.name] })
+        console.log(this.props.name)
+        if (this.props.cid == LOOKBOOK_CATEGORY_ID)
+            this.props.navigation.navigate("LookbookRenderer", { html: [this.props.html], pageName: [this.props.name] })
+        else
+            this.props.navigation.navigate("CategoriesProduct", { cid: [this.props.cid], cname: [this.props.name] })
     }
+
+
     
     render() {
         //console.log(this.props.imageUrl)
@@ -25,7 +31,7 @@ class CategoriesListItem extends PureComponent {
                 {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
                 <View style={styles.paddingLeft}>
                     <Text style={styles.mainText}>{this.props.name}</Text>
-                    <Text style={styles.subText}>{this.props.quantity}</Text>
+                    {/* <Text style={styles.subText}>{this.props.quantity}</Text> */}
                 </View>
                 <View style={{ flex: 1, alignItems: "flex-end" }}>
                     <Icon
@@ -37,6 +43,7 @@ class CategoriesListItem extends PureComponent {
 
             </TouchableOpacity>
         )
+        
     }
 }
 let Width = Dimensions.get("window").width

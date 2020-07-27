@@ -18,6 +18,7 @@ import TaxID from "./components/TaxID"
 import Categories from "./components/Categories"
 import UserProfile from "./components/UserProfile"
 import Payment from "./components/Payment"
+import LookbookRenderer from "./components/LookbookRenderer"
 import Delivery from "./components/Delivery"
 import CompanyProfile from "./components/CompanyProfile"
 import CategoriesProduct from "./components/CategoriesProduct"
@@ -247,6 +248,7 @@ class App extends Component {
                   <Stack.Screen name="ShoppingCart" component={ShoppingCart} />
                   <Stack.Screen name="TrackOrders" component={TrackOrders} />
                   <Stack.Screen name="CategoriesProduct" component={CategoriesProduct} />
+                  <Stack.Screen name="LookbookRenderer" component={LookbookRenderer} />
                   <Stack.Screen name="Payment" component={Payment} />
                   <Stack.Screen name="Categories" component={Categories} />
                   <Stack.Screen name="TaxID" component={TaxID} />

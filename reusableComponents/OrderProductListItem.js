@@ -87,14 +87,15 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   thumbnailImage: {
-    height: 100,
-    width: 100,
+    height: Height * 0.20,
+    width: Width * 0.24,
+    borderRadius: 6
   },
-  thumbnailView: {
-    backgroundColor: '#f6f6f6',
-    borderRadius: 6,
-    justifyContent: 'center',
-  },
+  // thumbnailView: {
+  //   borderRadius: 6,
+  //   justifyContent: 'center',
+    
+  // },
   topLevelView: {
     flexDirection: 'row',
     justifyContent: 'space-between',

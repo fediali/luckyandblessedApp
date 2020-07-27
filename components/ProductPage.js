@@ -134,6 +134,9 @@ export default class ProductPage extends Component {
                   }
                 });
 
+                // let productSizes  = this.extractSizes(response[0].product_options)
+                // console.log("Product Size", productSizes)
+
                 this.setState({
                   isReady: true,
                   product_stock: parseInt(response[0].amount),
@@ -149,8 +152,9 @@ export default class ProductPage extends Component {
                     full_description: response[0].full_description,
                     composition: response[0].composition,
                     qty_content: response[0].qty_content,
+                    productCode: response[0].product_code,
                     sizes: response[0].sizes,
-                    sizeChart: response[2].description
+                    sizeChart: response[2].description,
 
                   },
                   similarProducts: response[1].products,
@@ -171,6 +175,18 @@ export default class ProductPage extends Component {
         console.log('Outer Promise', ex);
         Toast.show(ex.toString());
       });
+  }
+
+  extractSizes = (data) => {
+    let keys = Object.keys(data);
+    console.log(keys)
+    // keys.forEach(key => {
+    //   if ([key].option_name === 'SIZE'){
+    //     console.log("extracting",[key].product_id)
+    //     let variantKeys = Object.keys([key].variants);
+    //     return [key].variants.variantKeys[0].variant_name
+    //   }
+    // });
   }
 
   componentDidMount() {
@@ -214,8 +230,13 @@ export default class ProductPage extends Component {
     if (section.name == 'Description') {
       return (
         <View style={{ paddingHorizontal: 20 }}>
+          <View style={{ flexDirection: "row", marginBottom: 20 }}>
+              <Text>Product Code: </Text>
+              <Text>{this.state.data.productCode}</Text>
+          </View>
           <HTMLView value={this.state.data.full_description} />
           <HTMLView value={this.state.data.composition} />
+          
           {this.state.data.sizes ?
             <View style={{ flexDirection: "row" }}>
               <Text>Sizes: </Text>
@@ -228,10 +249,8 @@ export default class ProductPage extends Component {
       );
     }
     else {
-      console.log(this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,""))
 
       return (
-        // FIXME: Padding on right side isn't appearing
         <View> 
           <HTMLView value={this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"").replace(/>/g,"/>")} />
         </View>
@@ -348,7 +367,7 @@ export default class ProductPage extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{}}>
+                  <View>
                     <View style={[styles.mainPicture, styles.mainImageView]}>
                       <FastImage
                         style={styles.mainPicture}
@@ -561,6 +580,7 @@ const styles = StyleSheet.create({
     height: Width * 0.28,
     borderRadius: 6,
     marginRight: 15,
+    borderRadius: 6
   },
   descriptionText: {
     fontSize: 16,

@@ -295,7 +295,7 @@ class Payment extends Component {
       payment_info: transResponse,
       products: mproduct,
     };
-    PostData('http://dev.landbw.co/api/stores/1/orders', orderData)
+    PostData(baseUrl + 'api/stores/1/orders', orderData)
       .then((res) => res.json())
       .then((response) => {
         if (response.order_id) {
@@ -303,6 +303,8 @@ class Payment extends Component {
             orderId: response.order_id,
           });
         } else {
+          // console.log(orderData)
+          // console.log(response)
           Toast.show('Something went wrong');
         }
       });
@@ -401,7 +403,7 @@ class Payment extends Component {
         if (transResponse.transactionResponse.responseCode == 1) {
           let transData = {
             type: 'AUTH_ONLY',
-            transaction_id: MERCHANTAUTH_TRANSACTIONID,
+            transaction_id: transResponse.transactionResponse.transId,
             location: 'MobileApp',
           };
           this.placeOrder(user, CREDITCARTPAYMENTID, mproduct, transData);
@@ -434,7 +436,7 @@ class Payment extends Component {
   handleWebViewResponse = (data) => {
     if (data.title == 'Success') {
       this.setState({ paypalLink: null }, () => {
-        this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson());
+        // this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson());
       });
     } else if (data.title == 'Cancel') {
       {
