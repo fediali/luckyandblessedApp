@@ -6,9 +6,11 @@ import CategoriesListItem from "../reusableComponents/CategoriesListItem"
 import HeaderHorizontalListItem from "../reusableComponents/HeaderHorizontalListItem"
 import Globals from "../Globals"
 import Toast from 'react-native-simple-toast';
+import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 
 const baseUrl = Globals.baseUrl;
-
+const SELECTED_CATEGORY_ALL = -1;
+const LOOKBOOK_CATEGORY_ID = -2;
 class Categories extends Component {
 
     constructor(props) {
@@ -20,7 +22,8 @@ class Categories extends Component {
             cname: this.props.route.params.cname,
             categoryList: this.props.route.params.categoryList,
             isReady: false,
-            nextScreen: false
+            nextScreen: false,
+            showZeroProductScreen: false,
         }
 
     }
@@ -34,8 +37,23 @@ class Categories extends Component {
 
     onCategorySelect = (cid, cname) => {
         this.setState({ cid, cname })
-        if (cid == -1) {
+        if (cid == SELECTED_CATEGORY_ALL) {
             this.props.navigation.goBack()
+        }
+        else if (cid == LOOKBOOK_CATEGORY_ID){
+            this.setState({ isReady: false })
+
+            GetData(baseUrl + 'api/pages?page_id=67&visible=true&status=A&items_per_page=20')
+            .then(res => res.json())
+            .then(response => {
+                if (response.pages.length > 0){
+                    this.setState({ cid, cname, data: response.pages, isReady: true, showZeroProductScreen: false }); //SubCat of the selected category and categoryList is main categories
+                }
+                else {
+                    this.setState({showZeroProductScreen: true, isReady: true})
+                }
+            })
+              
         }
         else {
             this.setState({ isReady: false })
@@ -68,6 +86,11 @@ class Categories extends Component {
         return (
             <SafeAreaView style={styles.mainContainer}>
                 <Header navigation={this.props.navigation} centerText={this.state.cname} rightIcon="search" />
+                {this.state.showZeroProductScreen ? (
+                    <View style={styles.completeScreen}>
+                        <ZeroDataScreen />
+                    </View>
+                ) : (
                 <View>
                     <View style={styles.subContainer}>
                         <FlatList
@@ -85,26 +108,42 @@ class Categories extends Component {
                     </View>
                     {(!this.state.isReady && !this.state.nextScreen) ? <View><ActivityIndicator size="large" /></View> :
 
+                        (this.state.cid != LOOKBOOK_CATEGORY_ID ? (
+                            <FlatList
+                                style={styles.flatListCategories}
+                                data={this.state.data}
+                                keyExtractor={(item, index) => item.category_id}
+                                renderItem={({ item }) => (
 
-                        <FlatList
-                            style={styles.flatListCategories}
-                            data={this.state.data}
-                            keyExtractor={(item, index) => item.category_id}
-                            renderItem={({ item }) => (
+                                    (item.main_pair) ?
+                                        <CategoriesListItem key={item.category} navigation={this.props.navigation}
+                                            imageUrl={{ uri: (item.main_pair.detailed.image_path)?item.main_pair.detailed.image_path:Globals.noImageFoundURL }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
+                                        :
+                                        <CategoriesListItem key={item.category} navigation={this.props.navigation}
+                                            imageUrl={{ uri: Globals.noImageFoundURL }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
 
-                                (item.main_pair) ?
-                                    <CategoriesListItem key={item.category} navigation={this.props.navigation}
-                                        imageUrl={{ uri: (item.main_pair.detailed.image_path)?item.main_pair.detailed.image_path:Globals.noImageFoundURL }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
-                                    :
-                                    <CategoriesListItem key={item.category} navigation={this.props.navigation}
-                                        imageUrl={{ uri: Globals.noImageFoundURL }} quantity={item.product_count + " items"} cid={item.category_id} name={item.category} />
+                                )}
+                                ItemSeparatorComponent={this.renderSeparator}
 
-                            )}
-                            ItemSeparatorComponent={this.renderSeparator}
+                            />
+                        ) : (
+                            <FlatList
+                                style={styles.flatListCategories}
+                                data={this.state.data}
+                                keyExtractor={(item, index) => item.page_id}
+                                renderItem={({ item }) => (
+                                    <CategoriesListItem key={item.page_id} navigation={this.props.navigation}
+                                        imageUrl={{ uri: Globals.noImageFoundURL }} quantity={item.product_count + " items"} cid={LOOKBOOK_CATEGORY_ID} name={item.page} html={item.description} />
 
-                        />
+                                )}
+                                ItemSeparatorComponent={this.renderSeparator}
+
+                            />
+                        ))
+                        
                     }
                 </View>
+                )}
                 <Footer Key={Math.random()} navigation={this.props.navigation} />
             </SafeAreaView >
         )
@@ -114,6 +153,10 @@ class Categories extends Component {
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1, backgroundColor: "#fff",
+    },
+    completeScreen: {
+        width: '100%',
+        height: '100%',
     },
     subContainer: {
         flexDirection: "row",

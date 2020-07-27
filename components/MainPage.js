@@ -30,6 +30,7 @@ import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl;
 const SELECTED_CATEGORY_ALL = -1;
+const LOOKBOOK_CATEGORY_ID = -2;
 const STORAGE_PRODUCT_HISTORY_CATEGORY =
   Globals.STORAGE_PRODUCT_HISTORY_CATEGORY;
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
@@ -98,6 +99,10 @@ class MainPage extends Component {
                       category_id: '-1',
                       category: 'All',
                     });
+                    responses[1].categories.push({
+                      category_id: '-2',
+                      category: 'Lookbook',
+                    });
 
                     this.setState(
                       {
@@ -155,7 +160,21 @@ class MainPage extends Component {
     if (cname.includes(SALE_NAME)) {
       this.setState({isReady: false});
       this.props.navigation.navigate('CategoriesProduct', {cid, cname});
-    } else if (cid != SELECTED_CATEGORY_ALL) {
+    } 
+    else if (cid == LOOKBOOK_CATEGORY_ID){
+      GetData(baseUrl + 'api/pages?page_id=67&visible=true&status=A&items_per_page=20')
+      .then(res => res.json())
+      .then(response => {
+        this.props.navigation.navigate('Categories', {
+          cid: cid,
+          cname: cname,
+          subCats: response.pages,
+          categoryList: this.state.categoryList,
+        }); //SubCat of the selected category and categoryList is main categories
+      })
+      
+    }
+    else if (cid != SELECTED_CATEGORY_ALL) {
       this.setState({isReady: false});
       GetData(
         baseUrl +
