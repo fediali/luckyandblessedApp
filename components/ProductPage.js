@@ -342,7 +342,6 @@ export default class ProductPage extends Component {
     this.setState({
       uriImages: uriImages
     })
-    console.log( "UUUUUUUUUUUU=> ",this.state.uriImages);
   }
 
   render() {
