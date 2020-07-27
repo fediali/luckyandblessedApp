@@ -88,12 +88,12 @@ class SignIn extends Component {
               }
             })
             .catch((ex) => {
-              console.log('Inner Promise', ex);
+              console.log('Inner Promise signin', ex);
               Toast.show(ex.toString());
             });
         })
         .catch((ex) => {
-          console.log('Outer Promise', ex);
+          console.log('Outer Promise signin', ex);
           Toast.show(ex.toString());
         });
     }

@@ -25,9 +25,10 @@ import ProductPageSimilarListItem from '../reusableComponents/ProductPageSimilar
 import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
+import ImageView from "react-native-image-viewing";
+
 import Globals from '../Globals';
 import { WebView } from 'react-native-webview';
-
 const SIMILARPRODUCTS_CATEGORY_ID = -3;
 const SIMILARPRODUCTS_NAME = 'SIMILAR PRODUCTS';
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
@@ -72,6 +73,9 @@ export default class ProductPage extends Component {
       },
       similarProducts: [],
       showZeroProductScreen: false,
+      isVisible: false,
+      currentLargeImage: 0,
+      uriImages: []
     };
   }
 
@@ -156,6 +160,7 @@ export default class ProductPage extends Component {
                   similarProducts: response[1].products,
                   selectedQuantity: Number(response[0].min_qty),
                 });
+                this.mapImagesForEnlargement()
               })
               .catch((ex) => {
                 console.log(ex);
@@ -228,19 +233,23 @@ export default class ProductPage extends Component {
       );
     }
     else {
-      console.log(this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,""))
+      console.log(this.state.data.sizeChart.replace(/<p>/g, "").replace(/<[/]p>/g, ""))
 
       return (
         // FIXME: Padding on right side isn't appearing
-        <View> 
-          <HTMLView value={this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"").replace(/>/g,"/>")} />
+        <View>
+          <HTMLView value={this.state.data.sizeChart.replace(/<p>/g, "").replace(/<[/]p>/g, "").replace(/>/g, "/>")} />
         </View>
       );
     }
   };
 
-  appendImageToData = (val) => () => {
-    this.setState({ data: { ...this.state.data, mainImage: val } });
+  appendImageToData = (val, index) => () => {
+    this.setState({
+      data: { ...this.state.data, mainImage: val },
+      currentLargeImage: index
+    });
+
   };
 
   navigateToCategoryScreen = (cid, cname) => () => {
@@ -299,6 +308,24 @@ export default class ProductPage extends Component {
     }
   };
 
+  enlargeImage = (flag) => {
+    this.setState({ isVisible: flag })
+  }
+
+  mapImagesForEnlargement = () => {
+    let images = this.state.data.secondaryImages;
+    let uriImages = []
+    for (let i = 0; i < images.length; i++) {
+      uriImages.push({
+        uri: images[i]
+      })
+    }
+    this.setState({
+      uriImages: uriImages
+    })
+    console.log( "UUUUUUUUUUUU=> ",this.state.uriImages);
+  }
+
   render() {
 
     if (!this.state.isReady) {
@@ -348,13 +375,22 @@ export default class ProductPage extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{}}>
-                    <View style={[styles.mainPicture, styles.mainImageView]}>
+                  <View>
+                    <TouchableOpacity
+                      onPress={() => this.enlargeImage(true)}
+                      style={[styles.mainPicture, styles.mainImageView]}>
                       <FastImage
                         style={styles.mainPicture}
-                        source={{ uri: (this.state.data.mainImage)?this.state.data.mainImage:Globals.noImageFoundURL }}
-                        resizeMode="contain"/>
-                    </View>
+                        source={{ uri: (this.state.data.mainImage) ? this.state.data.mainImage : Globals.noImageFoundURL }}
+                        resizeMode="contain" />
+                    </TouchableOpacity>
+                    <ImageView
+                      images={this.state.uriImages}
+                      imageIndex={this.state.currentLargeImage}
+                      visible={this.state.isVisible}
+                      swipeToCloseEnabled={false}
+                      onRequestClose={() => this.enlargeImage(false)}
+                    />
                     <ScrollView
                       showsHorizontalScrollIndicator={false}
                       horizontal={true}
@@ -363,7 +399,7 @@ export default class ProductPage extends Component {
                         return (
                           <TouchableOpacity
                             key={num}
-                            onPress={this.appendImageToData(val)}>
+                            onPress={this.appendImageToData(val, num)}>
                             <FastImage
                               style={
                                 this.state.data.mainImage == val
@@ -373,7 +409,7 @@ export default class ProductPage extends Component {
                                   ]
                                   : styles.thumbnail
                               }
-                              source={{ uri: (val)?val:Globals.noImageFoundURL }}/>
+                              source={{ uri: (val) ? val : Globals.noImageFoundURL }} />
                           </TouchableOpacity>
                         );
                       })}
@@ -721,5 +757,14 @@ const styles = StyleSheet.create({
   similarProductTouch: {
     flex: 0.5,
     textAlign: 'right',
+  },
+  overlayCancel: {
+    padding: 20,
+    position: 'absolute',
+    right: 10,
+    top: 0,
+  },
+  cancelIcon: {
+    color: 'white',
   },
 });
