@@ -19,6 +19,7 @@ import { Icon } from 'react-native-elements';
 import Shimmer from 'react-native-shimmer';
 import GetData from '../reusableComponents/API/GetData';
 import HTMLView from 'react-native-htmlview';
+import HTML from 'react-native-render-html';
 import Toast from 'react-native-simple-toast';
 import FastImage from 'react-native-fast-image'
 import ProductPageSimilarListItem from '../reusableComponents/ProductPageSimilarListItem';
@@ -26,9 +27,7 @@ import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import ImageView from "react-native-image-viewing";
-
 import Globals from '../Globals';
-import { WebView } from 'react-native-webview';
 const SIMILARPRODUCTS_CATEGORY_ID = -3;
 const SIMILARPRODUCTS_NAME = 'SIMILAR PRODUCTS';
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
@@ -254,10 +253,15 @@ export default class ProductPage extends Component {
       );
     }
     else {
+      let htmlContent = this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"").replace(/>/g,"/>");
 
       return (
         <View> 
-          <HTMLView value={this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"").replace(/>/g,"/>")} />
+          <HTML 
+            html={htmlContent} 
+            imagesMaxWidth={Dimensions.get('window').width} 
+            tagsStyles= {{ img: { marginVertical: 10} }}
+          />
         </View>
       );
     }

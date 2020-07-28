@@ -642,7 +642,7 @@ class ShoppingCart extends Component {
               />
             </View>
           )}
-        <Footer selected="Shop" navigation={this.props.navigation} />
+        <Footer selected="Shop" Key={Math.random()} navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }

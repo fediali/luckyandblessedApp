@@ -30,7 +30,7 @@ class CategoriesListItem extends PureComponent {
                 <FastImage source={this.props.imageUrl} resizeMode="contain" style={styles.image} />
                 {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
                 <View style={styles.paddingLeft}>
-                    <Text style={styles.mainText}>{this.props.name}</Text>
+                    <Text style={styles.mainText}>{this.props.name.trim()}</Text>
                     {/* <Text style={styles.subText}>{this.props.quantity}</Text> */}
                 </View>
                 <View style={{ flex: 1, alignItems: "flex-end" }}>
