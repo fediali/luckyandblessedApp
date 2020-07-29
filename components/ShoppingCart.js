@@ -189,7 +189,7 @@ class FlatListItem extends Component {
               <Image
                 style={[innerStyles.itemImage]}
                 resizeMode="contain"
-                source={{ uri: (this.props.item.path)?this.props.item.path:Globals.noImageFoundURL }}
+                source={{ uri: (this.props.item.path) ? this.props.item.path : Globals.noImageFoundURL }}
               />
               <View style={innerStyles.listTextsContainerView}>
                 <View style={innerStyles.listRowView}>
@@ -379,7 +379,7 @@ class ShoppingCart extends Component {
           // console.log('No product found');
           this.setState({
             isReady: true,
-            isFetching:false
+            isFetching: false
           });
         } else {
           var promises = [];
@@ -449,6 +449,7 @@ class ShoppingCart extends Component {
                   cartData[i] = singleProduct;
                   orderItems[i] = singleOrderItem;
                 }
+                Globals.cartCount = parseInt( responses.cart_products);
 
                 this.setState({
                   totalCost: responses.total,
@@ -469,9 +470,8 @@ class ShoppingCart extends Component {
                   profile_id: responses.user_data.profile_id,
                   paymentLineItems: lineItems,
                   isReady: true,
-                  isFetching:false
+                  isFetching: false
                 });
-                Globals.cartCount = parseInt(this.state.totalCartProducts);
 
               })
               .catch((ex) => {

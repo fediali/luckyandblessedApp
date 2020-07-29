@@ -38,129 +38,33 @@ export default class ordersProduct extends PureComponent {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({ isReady: false });
-      this.getData(this.props.orderId);
     });
   }
-
-  getTrackingData = (shipmentID, index) => {
-    var promises = [];
-    promises.push(GetData(baseUrl + `api/shipments/${shipmentID}`));
-    Promise.all(promises)
-      .then((promiseResponses) => {
-        Promise.all(promiseResponses.map((res) => res.json()))
-          .then((responses) => {
-            this.setState({
-              trackingNumber: responses[0].tracking_number,
-              trackingURL: responses[0].carrier_info.tracking_url,
-            });
-          })
-          .catch((ex) => {
-            console.log('Inner Promise', ex);
-            // Toast.show(ex.toString())
-          });
-      })
-      .catch((ex) => {
-        console.log('Outer Promise', ex);
-        Toast.show(ex.toString());
-      });
-  };
-
-  getData = (orderId) => {
-    var promises = [];
-    promises.push(GetData(baseUrl + `api/orders/${orderId}`));
-
-    Promise.all(promises)
-      .then((promiseResponses) => {
-        Promise.all(promiseResponses.map((res) => res.json()))
-          .then((responses) => {
-            productGroupKeys = Object.keys(
-              responses[0].product_groups[0].products,
-            );
-            let productArray = [];
-            let jsonProducts = {};
-            //TODO: No Size attribute in response.
-            //TODO: No Color attribute in response.
-            for (var i = 0; i < productGroupKeys.length; i++) {
-              jsonProducts['itemNum'] = productGroupKeys[i].toString();
-              jsonProducts['totalPrice'] =
-                responses[0].product_groups[0].products[productGroupKeys[i]]
-                  .price *
-                responses[0].product_groups[0].products[productGroupKeys[i]]
-                  .amount;
-              jsonProducts['itemName'] =
-                responses[0].product_groups[0].products[
-                  productGroupKeys[i]
-                ].product;
-              jsonProducts['size'] = 'Not available';
-              jsonProducts['color'] = 'Not available';
-              jsonProducts['quantity'] =
-                responses[0].product_groups[0].products[
-                  productGroupKeys[i]
-                ].amount;
-              jsonProducts['unitPrice'] =
-                responses[0].product_groups[0].products[
-                  productGroupKeys[i]
-                ].price;
-              if (
-                'detailed' in
-                responses[0].product_groups[0].products[productGroupKeys[i]]
-                  .main_pair
-              ) {
-                jsonProducts['imageUrl'] =
-                  responses[0].product_groups[0].products[
-                    productGroupKeys[i]
-                  ].main_pair.detailed.image_path;
-              } else {
-                jsonProducts['imageUrl'] = Globals.noImageFoundURL;
-              }
-              if (responses[0].shipment_ids.length > 0) {
-                jsonProducts['shipment_id'] = responses[0].shipment_ids;
-                this.setState({ isTrackingReady: false });
-                this.getTrackingData(jsonProducts['shipment_id'], i);
-              } else {
-                this.setState({ isTrackingReady: true });
-              }
-              productArray[i] = jsonProducts;
-              jsonProducts = {};
-            }
-
-            this.setState({ orders: productArray, isReady: true });
-          })
-          .catch((ex) => {
-            console.log('Inner Promise', ex);
-            Toast.show(ex.toString())
-          });
-      })
-      .catch((ex) => {
-        console.log('Outer Promise', ex);
-        Toast.show(ex.toString());
-      });
-  };
 
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
-    if (!this.state.isReady) {
-      return (
-        <View style={styles.loader}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
-    }
+    // if (!this.state.isReady) {
+    //   return (
+    //     <View style={styles.loader}>
+    //       <ActivityIndicator size="large" />
+    //     </View>
+    //   );
+    // }
     return (
-      <View>
-        {this.state.orders.map((item, index) => {
+      <View >
+        {this.props.orders.map((item, index) => {
           return <OrderProductListItem key={index.toString()} data={item} />;
         })}
         <View style={styles.dividerLine}></View>
-        {this.state.trackingURL ?
+        {this.props.trackingURL ?
           <TouchableOpacity
             style={styles.trackingStyle}
             onPress={() => {
-              Linking.openURL(this.state.trackingURL);
+              Linking.openURL(this.props.trackingURL);
             }}>
             <Text style={styles.orderIdText}>
-              Track: {this.state.trackingNumber}
+              Track: {this.props.trackingNumber}
             </Text>
             <View style={styles.mar19}>
               <Icon size={20} name="right" type="antdesign" />

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Icon} from 'react-native-elements';
-import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Icon } from 'react-native-elements';
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import OrderProducts from '../reusableComponents/OrdersProduct';
 import Accordion from 'react-native-collapsible/Accordion';
 import Shimmer from 'react-native-shimmer';
@@ -35,12 +35,13 @@ export default class TrackOrders extends Component {
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
       showZeroProductScreen: false,
+      customOrders:[]
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({isReady: false});
+      this.setState({ isReady: false });
 
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
@@ -54,10 +55,10 @@ export default class TrackOrders extends Component {
     promises.push(
       GetData(
         baseUrl +
-          `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`,
+        `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`,
       ),
-      
-    ); 
+
+    );
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
@@ -170,8 +171,8 @@ export default class TrackOrders extends Component {
               {!this.state.activeSections.includes(index) ? (
                 <Icon size={20} name="right" type="antdesign" />
               ) : (
-                <Icon size={20} name="down" type="antdesign" />
-              )}
+                  <Icon size={20} name="down" type="antdesign" />
+                )}
             </View>
           </View>
         </TouchableOpacity>
@@ -181,18 +182,117 @@ export default class TrackOrders extends Component {
 
   _updateSections = (activeSections) => {
 
-    this.setState({activeSections});
+    this.setState({ activeSections });
+  };
+  getTrackingData = (shipmentID, index) => {
+    var promises = [];
+    promises.push(GetData(baseUrl + `api/shipments/${shipmentID}`));
+    Promise.all(promises)
+      .then((promiseResponses) => {
+        Promise.all(promiseResponses.map((res) => res.json()))
+          .then((responses) => {
+            this.setState({
+              trackingNumber: responses[0].tracking_number,
+              trackingURL: responses[0].carrier_info.tracking_url,
+            });
+          })
+          .catch((ex) => {
+            console.log('Inner Promise', ex);
+            // Toast.show(ex.toString())
+          });
+      })
+      .catch((ex) => {
+        console.log('Outer Promise', ex);
+        Toast.show(ex.toString());
+      });
   };
 
+  getDataCustom = (orderId) => {
+    var promises = [];
+    promises.push(GetData(baseUrl + `api/orders/${orderId}`));
+    Promise.all(promises)
+      .then((promiseResponses) => {
+        Promise.all(promiseResponses.map((res) => res.json()))
+          .then((responses) => {
+            console.log(responses[0])
+            productGroupKeys = Object.keys(
+              responses[0].product_groups[0].products,
+            );
+            let productArray = [];
+            let jsonProducts = {};
+            //TODO: No Size attribute in response.
+            //TODO: No Color attribute in response.
+            for (var i = 0; i < productGroupKeys.length; i++) {
+              jsonProducts['itemNum'] = productGroupKeys[i].toString();
+              jsonProducts['totalPrice'] =
+                responses[0].product_groups[0].products[productGroupKeys[i]]
+                  .price *
+                responses[0].product_groups[0].products[productGroupKeys[i]]
+                  .amount;
+              jsonProducts['itemName'] =
+                responses[0].product_groups[0].products[
+                  productGroupKeys[i]
+                ].product;
+              jsonProducts['size'] = 'Not available';
+              jsonProducts['color'] = 'Not available';
+              jsonProducts['quantity'] =
+                responses[0].product_groups[0].products[
+                  productGroupKeys[i]
+                ].amount;
+              jsonProducts['unitPrice'] =
+                responses[0].product_groups[0].products[
+                  productGroupKeys[i]
+                ].price;
+              if (
+                'detailed' in
+                responses[0].product_groups[0].products[productGroupKeys[i]]
+                  .main_pair
+              ) {
+                jsonProducts['imageUrl'] =
+                  responses[0].product_groups[0].products[
+                    productGroupKeys[i]
+                  ].main_pair.detailed.image_path;
+              } else {
+                jsonProducts['imageUrl'] = Globals.noImageFoundURL;
+              }
+              if (responses[0].shipment_ids.length > 0) {
+                jsonProducts['shipment_id'] = responses[0].shipment_ids;
+                this.setState({ isTrackingReady: false });
+                this.getTrackingData(jsonProducts['shipment_id'], i);
+              } else {
+                this.setState({ isTrackingReady: true });
+              }
+              productArray[i] = jsonProducts;
+              jsonProducts = {};
+            }
+
+            this.setState({ customOrders: productArray, customIsReady: true });
+          })
+          .catch((ex) => {
+            console.log('Inner Promise', ex);
+            Toast.show(ex.toString())
+          });
+      })
+      .catch((ex) => {
+        console.log('Outer Promise', ex);
+        Toast.show(ex.toString());
+      });
+  };
   _renderContent = (section, index) => {
-    if (this.state.activeSections.includes(index)){
+    if (this.state.activeSections.includes(index)) {
+      console.log("AAAAAAAAA",section.order_id)
+
+      this.getDataCustom(section.order_id);
       return (
-        <OrderProducts
-          orderId={section.order_id}
-        />
+          <OrderProducts
+            orderId={section.order_id}
+            orders={this.state.customOrders}
+            trackingNumber={this.state.trackingNumber}
+            trackingURL={this.state.trackingURL}
+          />
       );
     }
-    
+
   };
 
   render() {
@@ -232,7 +332,7 @@ export default class TrackOrders extends Component {
               renderHeader={this._renderHeader}
               renderContent={this._renderContent}
               onChange={this._updateSections}
-              // expandMultiple={true}
+            // expandMultiple={true}
             />
           </ScrollView>
 
@@ -260,12 +360,12 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     marginTop: 13,
   },
-  details: {flexDirection: 'row'},
-  marginIcon: {marginRight: 29},
-  iconView: {marginTop: 26},
-  seperator: {backgroundColor: '#f6f6f6', paddingTop: 1},
-  accordionStart: {paddingTop: 10},
-  bottomContainer: {paddingBottom: 59, backgroundColor: '#ffffff'},
+  details: { flexDirection: 'row' },
+  marginIcon: { marginRight: 29 },
+  iconView: { marginTop: 26 },
+  seperator: { backgroundColor: '#f6f6f6', paddingTop: 1 },
+  accordionStart: { paddingTop: 10 },
+  bottomContainer: { paddingBottom: 59, backgroundColor: '#ffffff' },
   orderDateText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
