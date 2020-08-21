@@ -190,7 +190,7 @@ class Payment extends Component {
     }
     formBody = formBody.join('&');
 
-    let req = new Request('https://api.sandbox.paypal.com/v1/oauth2/token', {
+    let req = new Request('https://api.paypal.com/v1/oauth2/token', {
       headers: {
         Authorization: Globals.PAYPAL_AUTH_TOKEN,
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -264,11 +264,13 @@ class Payment extends Component {
       },
     };
 
+
     this.getPaypalAuth()
       .then((res) => res.json())
       .then((response) => {
+        console.log("token", response)
         PostData(
-          'https://api.sandbox.paypal.com/v2/checkout/orders',
+          'https://api.paypal.com/v2/checkout/orders',
           data,
           response.access_token,
         ) //To create Order
@@ -395,11 +397,11 @@ class Payment extends Component {
     // changing orderitems array format to supported ones
     let mproduct = this.modifyProductJson();
 
-    PostData('https://apitest.authorize.net/xml/v1/request.api', data)
+    PostData('https://api.authorize.net/xml/v1/request.api', data)
       .then((res) => res.text())
       .then((responses) => {
         let transResponse = JSON.parse(responses.trim());
-
+        console.log(JSON.stringify(transResponse))
         if (transResponse.transactionResponse.responseCode == 1) {
           let transData = {
             type: 'AUTH_ONLY',
