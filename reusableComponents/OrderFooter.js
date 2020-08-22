@@ -17,8 +17,8 @@ export default class OrderFooter extends PureComponent {
             </Text>
           </View>
           <View style={innerStyles.orderRowView}>
-            <Text style={[innerStyles.lightText, innerStyles.orderGiftText]}>
-              Gift card / Promo applied:
+            <Text style={[styles.buttonText, innerStyles.orderAmountText]}>
+              {this.props.couponCode?this.props.couponCode: "Gift Card / Promo applied: "}
             </Text>
             <Text
               style={[innerStyles.lightText, innerStyles.orderAmountValueText]}>
