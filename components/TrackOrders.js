@@ -6,6 +6,7 @@ import {
   Dimensions,
   InteractionManager,
   Image,
+  ActivityIndicator
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
@@ -22,7 +23,7 @@ import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
-
+let orderOpened;
 export default class TrackOrders extends Component {
   constructor(props) {
     super(props);
@@ -279,19 +280,27 @@ export default class TrackOrders extends Component {
       });
   };
   _renderContent = (section, index) => {
+
     if (this.state.activeSections.includes(index)) {
       console.log("AAAAAAAAA",section.order_id)
-
-      this.getDataCustom(section.order_id);
+      if (section.order_id != orderOpened) {
+        orderOpened = section.order_id;
+        this.getDataCustom(section.order_id);
+      }
+  
       return (
-          <OrderProducts
-            orderId={section.order_id}
-            orders={this.state.customOrders}
-            trackingNumber={this.state.trackingNumber}
-            trackingURL={this.state.trackingURL}
-          />
+        <OrderProducts
+          orderId={section.order_id}
+          orders={this.state.customOrders}
+          trackingNumber={this.state.trackingNumber}
+          trackingURL={this.state.trackingURL}
+          isReady = {this.state.customIsReady}
+        />
       );
-    }
+          
+      }
+     
+    
 
   };
 

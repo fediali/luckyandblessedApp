@@ -274,6 +274,7 @@ class Payment extends Component {
         ) //To create Order
           .then((res) => res.json())
           .then((response) => {
+            console.log(response)
             this.setState({ paypalLink: response.links[1].href });
           })
           .catch((e) => {

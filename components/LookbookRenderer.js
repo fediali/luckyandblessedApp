@@ -22,6 +22,7 @@ export default class LookbookRenderer extends Component {
     }
     render() {
         // console.log(this.state.html)
+        let htmlContent = this.state.html.replace(/<p>/g,"").replace(/<[/]p>/g,"").replace(/>/g,"/>");
         if (!this.state.isReady) {
             return (
               <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -40,7 +41,7 @@ export default class LookbookRenderer extends Component {
                 <Header navigation={this.props.navigation} centerText={this.state.pageName} rightIcon="search" />
                 <ScrollView style={{flexGrow:1, marginVertical: 20, marginHorizontal: 15}} showsVerticalScrollIndicator={false}>
                     <HTML 
-                        html={this.state.html.replace(/<p>/g,"").replace(/<[/]p>/g,"").replace(/>/g,"/>")} 
+                        html={htmlContent} 
                         imagesMaxWidth={Dimensions.get('window').width} 
                         tagsStyles= {{ img: { marginVertical: 10} }}
                     />

@@ -44,13 +44,13 @@ export default class ordersProduct extends PureComponent {
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
-    // if (!this.state.isReady) {
-    //   return (
-    //     <View style={styles.loader}>
-    //       <ActivityIndicator size="large" />
-    //     </View>
-    //   );
-    // }
+    if (!this.props.isReady) {
+      return (
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
+    }
     return (
       <View >
         {this.props.orders.map((item, index) => {

@@ -162,6 +162,8 @@ class MainPage extends Component {
       this.props.navigation.navigate('CategoriesProduct', {cid, cname});
     } 
     else if (cid == LOOKBOOK_CATEGORY_ID){
+      this.setState({isReady: false});
+      
       GetData(baseUrl + 'api/pages?page_id=67&visible=true&status=A&items_per_page=20')
       .then(res => res.json())
       .then(response => {
