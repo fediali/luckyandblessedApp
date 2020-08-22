@@ -26,6 +26,7 @@ import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 import PutData from '../reusableComponents/API/PutData';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
+import GetData from '../reusableComponents/API/GetData';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
@@ -343,21 +344,18 @@ class ShoppingCart extends Component {
 
   };
   postPromoData = (user) => {
-    let data = {
-      user_id: user.user_id,
-      coupen_codes: this.state.promocode,
-    };
-    PostData(baseUrl + 'api/coupon', data)
+    GetData('http://dev.landbw.co/' + 'custom-api/coupon/'+this.state.promocode, true)
       .then((res) => res.json())
       .then((responses) => {
-        if (responses.status == 'Success') {
+        console.log(responses);
+        if (responses.status == 200) {
           this.setState({
-            discount: parseFloat(responses.discount).toFixed(2),
-            finalCost: parseFloat(responses.total).toFixed(2),
+            discount: parseFloat(responses.data.cart.subtotal_discount).toFixed(2),
+            finalCost: parseFloat(responses.data.cart.total).toFixed(2),
           });
           alert('Promocode Successfully Added!!');
         } else {
-          alert('Invalid Promocode');
+          alert('Invalid Promocode' + responses.message);
         }
       })
       .catch((ex) => {
@@ -542,6 +540,7 @@ class ShoppingCart extends Component {
           totalCost={this.state.totalCost}
           finalCost={this.state.finalCost}
           discount={this.state.discount}
+          couponCode = {this.state.promocode}
         />
         <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
           <TouchableOpacity
