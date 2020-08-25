@@ -8,6 +8,7 @@ import {
   Dimensions,
   ScrollView,
   FlatList,
+  Image,
   InteractionManager,
   TextInput,
 } from 'react-native';
@@ -74,7 +75,14 @@ export default class ProductPage extends Component {
       showZeroProductScreen: false,
       isVisible: false,
       currentLargeImage: 0,
-      uriImages: []
+      uriImages: [],
+      iconUriOptions: [],
+      selectedColor: [],
+      selectedColorSingle: '',
+      iconPids: [],
+      iconName: '',
+      iconColorNames: [],
+      selectedIndex: 0
     };
   }
 
@@ -82,7 +90,8 @@ export default class ProductPage extends Component {
     var promises = [];
     promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`));
-    promises.push(GetData(baseUrl + `api/pages/87`))
+    promises.push(GetData(baseUrl + `api/pages/87`));
+    promises.push(GetData(baseUrl+ `custom-api/product-variants/${this.state.pid[0]}`));
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
@@ -137,6 +146,29 @@ export default class ProductPage extends Component {
                   }
                 });
 
+                //set dropdown icon options
+                let variants = response[3].data.variants;
+                let iconOptions = []
+                let iconColors = []
+                let iconPids = []
+                let iconColorName = []
+
+                for(let i=0;i<variants.length;i++){
+                  if(variants[i].type == 'color'){
+                    let variantValues = variants[i].values;
+                    for(let j=0;j<variantValues.length;j++){
+                      if(variantValues[j].icon){
+                        iconOptions.push(variantValues[j].icon)
+                        iconColors.push(variantValues[j].color)
+                        iconPids.push(variantValues[j].bound_product_id)
+                        iconColorName.push(variantValues[j].name)
+                      }
+                      
+                    }
+                  }
+                }
+
+
                 // let productSizes  = this.extractSizes(response[0].product_options)
                 // console.log("Product Size", productSizes)
 
@@ -157,12 +189,18 @@ export default class ProductPage extends Component {
                     qty_content: response[0].qty_content,
                     productCode: response[0].product_code,
                     sizes: response[0].sizes,
-                    sizeChart: response[2].description,
-
+                    sizeChart: response[2].description
                   },
+                  iconUriOptions: iconOptions,
+                  selectedColor: iconColors,
                   similarProducts: response[1].products,
                   selectedQuantity: Number(response[0].min_qty),
+                  iconPids: iconPids,
+                  iconColorNames: iconColorName,
+                  selectedColorSingle: iconColors[this.state.selectedIndex],
+                  iconName: iconColorName[this.state.selectedIndex]
                 });
+
                 this.mapImagesForEnlargement()
               })
               .catch((ex) => {
@@ -183,7 +221,6 @@ export default class ProductPage extends Component {
 
   extractSizes = (data) => {
     let keys = Object.keys(data);
-    console.log(keys)
     // keys.forEach(key => {
     //   if ([key].option_name === 'SIZE'){
     //     console.log("extracting",[key].product_id)
@@ -474,24 +511,39 @@ export default class ProductPage extends Component {
                           />
                         )}
                     </View>
-
-                    {/* <View style={{flex: 2, marginLeft: 20}}>
+{/* heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee */}
+                    <View style={{flex: 1, marginLeft: 20}}>
+                    
                     <ModalDropdown
-                      options={['Male', 'Female', 'All']}
-                      hexCode={'#000'}
-                      defaultValue={'Green'}
+                      onSelect={(index) => {
+                              this.setState({
+                                selectedColorSingle: this.state.selectedColor[index],
+                                pid: [this.state.iconPids[index]],
+                                iconName: this.state.iconColorNames[index],
+                                selectedIndex: index,
+                                isReady: false
+                              },()=>{
+                                this.getData();
+                              })
+                            }}
+                      options={this.state.iconUriOptions}
+                      hexCode={this.state.selectedColorSingle}
+                      defaultValue={this.state.iconName}
                       style={styles.quantityModalStyle}
                       dropdownStyle={styles.colorModalDropdownStyle}
                       textStyle={styles.quantityModalTextStyle}
                       renderRow={(option, index, isSelected) => {
                         return (
-                          <Text style={styles.modalActualTextstyle}>
-                            {option}
-                          </Text>
+                            <Image
+                                style={styles.ColorModalStyle}
+                                // resizeMode='contain'
+                                resizeMode="cover"
+                                source={{uri: option}}
+                            />
                         );
                       }}
                     />
-                  </View> */}
+                  </View>
                   </View>
                   <View style={styles.addToCartView}>
                     <Text style={styles.minQuantityText}>
@@ -722,6 +774,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: 0.45 * Width //remove this when enable colour dropdown
   },
+  ColorModalStyle: {
+    width: 0.45 * Width, //remove this when enable colour dropdown
+    height: 30
+  },
   quantityModalDropdownStyle: {
     width: 0.35 * Width, //0.25 width
     height: 134,
@@ -731,6 +787,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     color: '#2d2d2f',
+    maxWidth: 60
   },
   colorModalDropdownStyle: {
     width: 0.5 * Width,
