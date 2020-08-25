@@ -58,6 +58,7 @@ class App extends Component {
     const enabled = await firebase.messaging().hasPermission();
     if (enabled) {
       this.getToken();
+
     } else {
       this.requestPermission();
     }
@@ -68,10 +69,21 @@ class App extends Component {
       await firebase.messaging().requestPermission();
       // User has authorised
       this.getToken();
-      firebase.
     } catch (error) {
       // User has rejected permissions
       console.log('permission rejected');
+    }
+  }
+
+  async getToken() {
+    let fcmToken = await AsyncStorage.getItem(STORAGE_FCM_TOKEN);
+    await subscribeToTopic()
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        // user has a device token
+        await AsyncStorage.setItem(STORAGE_FCM_TOKEN, fcmToken);
+      }
     }
   }
 
@@ -79,18 +91,6 @@ class App extends Component {
     firebase.messaging()
   .subscribeToTopic('weather')
   .then(() => console.log('Subscribed to topic!'));
-  }
-
-  async getToken() {
-    let fcmToken = await AsyncStorage.getItem(STORAGE_FCM_TOKEN);
-    if (!fcmToken) {
-      fcmToken = await firebase.messaging().getToken();
-      await subscribeToTopic();
-      if (fcmToken) {
-        // user has a device token
-        await AsyncStorage.setItem(STORAGE_FCM_TOKEN, fcmToken);
-      }
-    }
   }
 
   async createNotificationListeners() {
