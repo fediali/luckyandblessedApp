@@ -289,8 +289,10 @@ class MainPage extends Component {
               showsHorizontalScrollIndicator={false}
               renderItem={({item, index}) => (
                 <MainPageCollection
+                  navigation={this.props.navigation}
                   imageUrl={item.background.image}
                   text={item.text}
+                  cid={item.background.category_id}
                 />
               )}
             />

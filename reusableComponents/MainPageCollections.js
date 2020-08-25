@@ -9,13 +9,20 @@ import {
 import Globals from '../Globals';
 
 export default class MainPageCollections extends PureComponent {
+
+    navigateToProductPage=()=>{
+        console.log("Helllllooooooo", this.props.cid)
+        this.props.navigation.push("CategoriesProduct", { cid: this.props.cid, cname:this.props.text }) 
+    }
+
     render() {
         return (
-            <TouchableOpacity activeOpacity={0.9} style={innerStyles.borderRadiusSix}>
+            <TouchableOpacity activeOpacity={0.9} style={innerStyles.borderRadiusSix} onPress={this.navigateToProductPage}>
                 <ImageBackground
                     style={innerStyles.collectionImages}
+                    imageStyle={{ borderRadius: 6 }}
                     source={{ uri: (this.props.imageUrl)?this.props.imageUrl:Globals.noImageFoundURL }}
-                    resizeMode='stretch'
+                    resizeMode = "stretch"
                 >
                     <Text style={innerStyles.semiBoldText}>{this.props.text}</Text>
                 </ImageBackground>

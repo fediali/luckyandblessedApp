@@ -344,7 +344,9 @@ class ShoppingCart extends Component {
 
   };
   postPromoData = (user) => {
-    GetData('http://dev.landbw.co/' + 'custom-api/coupon/'+this.state.promocode, true)
+    let couponUrl = baseUrl + `custom-api/coupon/${this.state.promocode}?user_id=${user.user_id}`
+    console.log("AAAAAAAAAAABBBB", couponUrl)
+    GetData(couponUrl)
       .then((res) => res.json())
       .then((responses) => {
         console.log(responses);
@@ -355,7 +357,7 @@ class ShoppingCart extends Component {
           });
           alert('Promocode Successfully Added!!');
         } else {
-          alert('Invalid Promocode' + responses.message);
+          alert('Error ' + responses.message);
         }
       })
       .catch((ex) => {
