@@ -68,16 +68,24 @@ class App extends Component {
       await firebase.messaging().requestPermission();
       // User has authorised
       this.getToken();
+      firebase.
     } catch (error) {
       // User has rejected permissions
       console.log('permission rejected');
     }
   }
 
+  async subscribeToTopic () {
+    firebase.messaging()
+  .subscribeToTopic('weather')
+  .then(() => console.log('Subscribed to topic!'));
+  }
+
   async getToken() {
     let fcmToken = await AsyncStorage.getItem(STORAGE_FCM_TOKEN);
     if (!fcmToken) {
       fcmToken = await firebase.messaging().getToken();
+      await subscribeToTopic();
       if (fcmToken) {
         // user has a device token
         await AsyncStorage.setItem(STORAGE_FCM_TOKEN, fcmToken);
