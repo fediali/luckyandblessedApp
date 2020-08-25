@@ -56,6 +56,9 @@ class App extends Component {
 
   async checkPermission() {
     const enabled = await firebase.messaging().hasPermission();
+    console.log("We here")
+    firebase.messaging().subscribeToTopic('all')
+    .then(() => console.log('Subscribed to topic!'));
     if (enabled) {
       this.getToken();
 
@@ -77,7 +80,6 @@ class App extends Component {
 
   async getToken() {
     let fcmToken = await AsyncStorage.getItem(STORAGE_FCM_TOKEN);
-    await subscribeToTopic()
     if (!fcmToken) {
       fcmToken = await firebase.messaging().getToken();
       if (fcmToken) {
@@ -85,12 +87,6 @@ class App extends Component {
         await AsyncStorage.setItem(STORAGE_FCM_TOKEN, fcmToken);
       }
     }
-  }
-
-  async subscribeToTopic () {
-    firebase.messaging()
-  .subscribeToTopic('weather')
-  .then(() => console.log('Subscribed to topic!'));
   }
 
   async createNotificationListeners() {
