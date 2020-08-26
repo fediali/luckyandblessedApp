@@ -18,6 +18,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Modal,
+  Image,
   ActivityIndicator,
 } from 'react-native';
 
@@ -167,7 +168,9 @@ export default class ModalDropdown extends Component {
     const { disabled, accessible, children, textStyle,hexCode } = this.props;
     const { buttonText } = this.state;
 
+    console.log("Hellooooo",hexCode)
     return (
+
       <TouchableOpacity ref={button => this._button = button}
         disabled={disabled}
         accessible={accessible}
@@ -179,7 +182,7 @@ export default class ModalDropdown extends Component {
             <View style={[styles.button, { flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 15,alignItems:"center" }]}>
               <View style={{flexDirection:"row",alignItems:"center"}}>
                 {
-                  hexCode?<View style={{backgroundColor:hexCode,height:20,width:20,borderRadius:10,marginRight:10}}></View>:<View></View>
+                  hexCode?<Image source={{uri: hexCode}} style={{height:20,width:20,borderRadius:10,marginRight:10}}></Image>:<View></View>
                 }
                 <Text style={[styles.buttonText, textStyle]}
                   numberOfLines={1}

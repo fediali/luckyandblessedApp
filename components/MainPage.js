@@ -170,7 +170,7 @@ class MainPage extends Component {
         this.props.navigation.navigate('Categories', {
           cid: cid,
           cname: cname,
-          subCats: response.pages,
+          subCats: response.pages.reverse(),
           categoryList: this.state.categoryList,
         }); //SubCat of the selected category and categoryList is main categories
       })

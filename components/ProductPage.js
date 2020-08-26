@@ -88,6 +88,7 @@ export default class ProductPage extends Component {
 
   getData() {
     var promises = [];
+    console.log(this.state.pid[0])
     promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/pages/87`));
@@ -527,7 +528,7 @@ export default class ProductPage extends Component {
                               })
                             }}
                       options={this.state.iconUriOptions}
-                      hexCode={this.state.selectedColorSingle}
+                      hexCode={this.state.iconUriOptions[this.state.selectedIndex]}
                       defaultValue={this.state.iconName}
                       style={styles.quantityModalStyle}
                       dropdownStyle={styles.colorModalDropdownStyle}

@@ -47,7 +47,7 @@ class Categories extends Component {
             .then(res => res.json())
             .then(response => {
                 if (response.pages.length > 0){
-                    this.setState({ cid, cname, data: response.pages, isReady: true, showZeroProductScreen: false }); //SubCat of the selected category and categoryList is main categories
+                    this.setState({ cid, cname, data: response.pages.reverse(), isReady: true, showZeroProductScreen: false }); //SubCat of the selected category and categoryList is main categories
                 }
                 else {
                     this.setState({showZeroProductScreen: true, isReady: true})
