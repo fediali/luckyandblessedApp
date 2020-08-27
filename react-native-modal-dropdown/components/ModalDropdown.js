@@ -168,7 +168,6 @@ export default class ModalDropdown extends Component {
     const { disabled, accessible, children, textStyle,hexCode } = this.props;
     const { buttonText } = this.state;
 
-    console.log("Hellooooo",hexCode)
     return (
 
       <TouchableOpacity ref={button => this._button = button}
