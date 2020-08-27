@@ -133,8 +133,13 @@ android {
         applicationId "com.lbshoppingapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+<<<<<<< HEAD
         versionCode 5
         versionName "5"
+=======
+        versionCode 6
+        versionName "2.1"
+>>>>>>> e1c6adfa76d6bed9e457b501ecd041b58e621755
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general' // <--- insert this line
 

@@ -11,11 +11,17 @@
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
-      android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true" 
       tools:targetApi="28">
+     
+        <meta-data
+  android:name="com.google.firebase.messaging.default_notification_icon"
+  android:resource="@mipmap/ic_notification" />
+<meta-data
+  android:name="com.google.firebase.messaging.default_notification_color"
+  android:resource="@color/black" />
         <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
         <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
           <intent-filter>
