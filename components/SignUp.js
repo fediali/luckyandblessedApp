@@ -671,7 +671,7 @@ class SignUp extends Component {
               ? this.showErrorMessage(this.state.emailError)
               : null}
 
-            <View style={styles.inputView}>
+            <View style={innerStyles.passwordInputView}>
               <TextInput
                 placeholderTextColor={TEXTINPUT_COLOR}
                 textContentType="password"
@@ -683,7 +683,7 @@ class SignUp extends Component {
                   this.setState({password: text});
                 }}
               />
-              <TouchableOpacity activeOpacity={0.95} onPress={this.handlePasswordView}>
+              <TouchableOpacity activeOpacity={0.95} onPress={this.handlePasswordView} style={{alignItems:"center",paddingRight:10}}>
                 <Icon
                   size={22}
                   name={this.state.isPasswordVisible ? "md-eye" : "md-eye-off"}
@@ -696,7 +696,7 @@ class SignUp extends Component {
               ? this.showErrorMessage(this.state.passwordError)
               : null}
 
-            <View style={styles.inputView}>
+            <View style={innerStyles.passwordInputView}>
               <TextInput
                 placeholderTextColor={TEXTINPUT_COLOR}
                 textContentType="password"
@@ -708,7 +708,7 @@ class SignUp extends Component {
                   this.setState({confirmPassword: text});
                 }}
               />
-              <TouchableOpacity activeOpacity={0.95} onPress={this.handleConfirmPasswordView}>
+              <TouchableOpacity activeOpacity={0.95} onPress={this.handleConfirmPasswordView} style={{alignItems:"center",paddingRight:10}}>
                 <Icon
                   size={22}
                   name={this.state.isConfirmPasswordVisible ? "md-eye" : "md-eye-off"}
@@ -1460,6 +1460,15 @@ const innerStyles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
     marginTop: 15,
+  },
+  passwordInputView: {
+    flexDirection: 'row',
+    marginVertical: 10,
+    backgroundColor: "#f6f6f6",
+    borderRadius: 6,
+    alignItems: "center",
+    marginHorizontal: 15
+
   },
   loader: {flex: 1, alignItems: 'center', justifyContent: 'center'},
   loaderImage: {height: 200, width: 200},
