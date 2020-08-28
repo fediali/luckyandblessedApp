@@ -14,13 +14,15 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-companyProfile" translatesAutoresizingMaskIntoConstraints="NO" id="Mjs-aH-kpk">
-                    <rect key="frame" x="137.5" y="155.5" width="205" height="169"/>
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="Mjs-aH-kpk" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="to8-Yy-OnH"/>
-                <constraint firstItem="Mjs-aH-kpk" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="vl2-WX-9LV"/>
+                <constraint firstItem="Mjs-aH-kpk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="03D-aC-Q1o"/>
+                <constraint firstItem="Mjs-aH-kpk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="BQh-1w-3Pe"/>
+                <constraint firstAttribute="trailing" secondItem="Mjs-aH-kpk" secondAttribute="trailing" id="baV-Uf-cdc"/>
+                <constraint firstAttribute="bottom" secondItem="Mjs-aH-kpk" secondAttribute="bottom" id="cvR-28-1uO"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -28,6 +30,6 @@
         </view>
     </objects>
     <resources>
-        <image name="logo-companyProfile" width="205" height="169"/>
+        <image name="logo-companyProfile" width="682.5" height="682.5"/>
     </resources>
 </document>

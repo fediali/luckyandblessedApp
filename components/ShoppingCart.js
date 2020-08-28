@@ -225,9 +225,9 @@ class FlatListItem extends Component {
                     ${this.props.item.unitPrice}
                   </Text>
                 </View>
-                <Text style={innerStyles.lightText}>
+                {/* <Text style={innerStyles.lightText}>
                   SIZE: {this.props.item.sizes}
-                </Text>
+                </Text> */}
                 <Text style={innerStyles.lightText}>
                   Color: {this.props.item.selectedColor}
                 </Text>
