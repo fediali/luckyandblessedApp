@@ -93,6 +93,8 @@ export default class ProductPage extends Component {
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/pages/87`));
     promises.push(GetData(baseUrl+ `custom-api/product-variants/${this.state.pid[0]}`));
+    promises.push(GetData(baseUrl+ `api/options?product_id=${this.state.pid[0]}`));
+
     Promise.all(promises)
       .then((promiseResponses) => {
         Promise.all(promiseResponses.map((res) => res.json()))
@@ -170,8 +172,8 @@ export default class ProductPage extends Component {
                 }
 
 
-                // let productSizes  = this.extractSizes(response[0].product_options)
-                // console.log("Product Size", productSizes)
+                let productSizes  = this.extractSizes(response[4])
+                console.log("Product Size", productSizes)
 
                 this.setState({
                   isReady: true,
@@ -189,7 +191,7 @@ export default class ProductPage extends Component {
                     composition: response[0].composition,
                     qty_content: response[0].qty_content,
                     productCode: response[0].product_code,
-                    sizes: response[0].sizes,
+                    sizes: productSizes,
                     sizeChart: response[2].description
                   },
                   iconUriOptions: iconOptions,
@@ -221,14 +223,20 @@ export default class ProductPage extends Component {
   }
 
   extractSizes = (data) => {
+
     let keys = Object.keys(data);
-    // keys.forEach(key => {
-    //   if ([key].option_name === 'SIZE'){
-    //     console.log("extracting",[key].product_id)
-    //     let variantKeys = Object.keys([key].variants);
-    //     return [key].variants.variantKeys[0].variant_name
-    //   }
-    // });
+    console.log(keys[0])
+    keys.forEach(key => {
+      console.log("Hi", [key].option_name)
+      if ([key].option_name === 'SIZE'){
+        console.log("extracting",[key].product_id)
+        let variantKeys = Object.keys([key].variants);
+        console.log("SIZES", [key].variants.variantKeys[0].variant_name)
+        return [key].variants.variantKeys[0].variant_name
+      }
+    });
+    return "Not Available"
+
   }
 
   componentDidMount() {
@@ -546,11 +554,15 @@ export default class ProductPage extends Component {
                     />
                   </View>
                   </View>
-                  <View style={styles.addToCartView}>
                     <Text style={styles.minQuantityText}>
                       Minimum quantity for "{this.state.data.productName}" is{' '}
                       {this.state.data.min_qty}.
                   </Text>
+                  <View styles={styles.sizeText}>
+                    <Text style={styles.sizeHeading}>SIZES</Text>
+                    <Text style={styles.sizeValue}>2(S), 2(M), 2(L)</Text>
+                  </View>
+                  <View style={styles.addToCartView}>
                     <TouchableOpacity
                       style={styles.addToCartTouch}
                       disabled={this.state.disableAddToCartButton}
@@ -635,6 +647,26 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     letterSpacing: 0,
     textAlign: 'center',
+  },
+  sizeText: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flex: 1,
+    width: Width,
+    backgroundColor: '#34eb49',
+
+  },
+  sizeHeading: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 16,
+    fontStyle: 'normal',
+    lineHeight: 22,
+    letterSpacing: 0,
+  },
+  sizeValue: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 16,
+    lineHeight: 22,
   },
   mainContainer: {
     flex: 1,
@@ -812,6 +844,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Book',
     lineHeight: 18,
     color: '#8d8d8e',
+    marginTop: 17
   },
   addToCartText: {
     color: '#fff',

@@ -22,7 +22,6 @@ export default class MainPageCollections extends PureComponent {
                     style={innerStyles.collectionImages}
                     imageStyle={{ borderRadius: 6 }}
                     source={{ uri: (this.props.imageUrl)?this.props.imageUrl:Globals.noImageFoundURL }}
-                    resizeMode = "stretch"
                 >
                     <Text style={innerStyles.semiBoldText}>{this.props.text}</Text>
                 </ImageBackground>
@@ -40,7 +39,7 @@ const innerStyles = StyleSheet.create({
     },
     collectionImages: {
         width: Width * 0.85,
-        height: Height * 0.3,
+        height: 180,
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 5,
