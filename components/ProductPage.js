@@ -92,8 +92,8 @@ export default class ProductPage extends Component {
     promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/pages/87`));
-    promises.push(GetData(baseUrl+ `custom-api/product-variants/${this.state.pid[0]}`));
-    promises.push(GetData(baseUrl+ `api/options?product_id=${this.state.pid[0]}`));
+    promises.push(GetData(baseUrl + `custom-api/product-variants/${this.state.pid[0]}`));
+    promises.push(GetData(baseUrl + `api/options?product_id=${this.state.pid[0]}`));
 
     Promise.all(promises)
       .then((promiseResponses) => {
@@ -156,23 +156,23 @@ export default class ProductPage extends Component {
                 let iconPids = []
                 let iconColorName = []
 
-                for(let i=0;i<variants.length;i++){
-                  if(variants[i].type == 'color'){
+                for (let i = 0; i < variants.length; i++) {
+                  if (variants[i].type == 'color') {
                     let variantValues = variants[i].values;
-                    for(let j=0;j<variantValues.length;j++){
-                      if(variantValues[j].icon){
+                    for (let j = 0; j < variantValues.length; j++) {
+                      if (variantValues[j].icon) {
                         iconOptions.push(variantValues[j].icon)
                         iconColors.push(variantValues[j].color)
                         iconPids.push(variantValues[j].bound_product_id)
                         iconColorName.push(variantValues[j].name)
                       }
-                      
+
                     }
                   }
                 }
 
 
-                let productSizes  = this.extractSizes(response[4])
+                let productSizes = this.extractSizes(response[4])
                 console.log("Product Size", productSizes)
 
                 this.setState({
@@ -224,17 +224,21 @@ export default class ProductPage extends Component {
 
   extractSizes = (data) => {
 
+    console.log("extract sizes")
     let keys = Object.keys(data);
     console.log(keys[0])
-    keys.forEach(key => {
-      console.log("Hi", [key].option_name)
-      if ([key].option_name === 'SIZE'){
-        console.log("extracting",[key].product_id)
-        let variantKeys = Object.keys([key].variants);
-        console.log("SIZES", [key].variants.variantKeys[0].variant_name)
-        return [key].variants.variantKeys[0].variant_name
+    for (let i = 0; i < keys.length; i++) {
+      let key = keys[i]
+      console.log("Hi", data[key].option_name)
+      console.log(data[key].option_name, 'SIZE')
+      if (data[key].option_name === 'SIZE') {
+        console.log("extracting", data[key].product_id)
+        let variantKeys = Object.keys(data[key].variants);
+        console.log(variantKeys)
+        console.log("SIZES", data[key].variants[variantKeys[0]].variant_name)
+        return data[key].variants[variantKeys[0]].variant_name
       }
-    });
+    };
     return "Not Available"
 
   }
@@ -281,12 +285,12 @@ export default class ProductPage extends Component {
       return (
         <View style={{ paddingHorizontal: 20 }}>
           <View style={{ flexDirection: "row", marginBottom: 20 }}>
-              <Text>Product Code: </Text>
-              <Text>{this.state.data.productCode}</Text>
+            <Text>Product Code: </Text>
+            <Text>{this.state.data.productCode}</Text>
           </View>
           <HTMLView value={this.state.data.full_description} />
           <HTMLView value={this.state.data.composition} />
-          
+
           {this.state.data.sizes ?
             <View style={{ flexDirection: "row" }}>
               <Text>Sizes: </Text>
@@ -299,14 +303,14 @@ export default class ProductPage extends Component {
       );
     }
     else {
-      let htmlContent = this.state.data.sizeChart.replace(/<p>/g,"").replace(/<[/]p>/g,"").replace(/>/g,"/>");
+      let htmlContent = this.state.data.sizeChart.replace(/<p>/g, "").replace(/<[/]p>/g, "").replace(/>/g, "/>");
 
       return (
-        <View> 
-          <HTML 
-            html={htmlContent} 
-            imagesMaxWidth={Dimensions.get('window').width} 
-            tagsStyles= {{ img: { marginVertical: 10} }}
+        <View>
+          <HTML
+            html={htmlContent}
+            imagesMaxWidth={Dimensions.get('window').width}
+            tagsStyles={{ img: { marginVertical: 10 } }}
           />
         </View>
       );
@@ -409,6 +413,7 @@ export default class ProductPage extends Component {
         </View>
       );
     }
+
     return (
       <SafeAreaView style={styles.mainContainer}>
         <Header
@@ -520,47 +525,47 @@ export default class ProductPage extends Component {
                           />
                         )}
                     </View>
-{/* heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee */}
-                    <View style={{flex: 1, marginLeft: 20}}>
-                    
-                    <ModalDropdown
-                      onSelect={(index) => {
-                              this.setState({
-                                selectedColorSingle: this.state.selectedColor[index],
-                                pid: [this.state.iconPids[index]],
-                                iconName: this.state.iconColorNames[index],
-                                selectedIndex: index,
-                                isReady: false
-                              },()=>{
-                                this.getData();
-                              })
-                            }}
-                      options={this.state.iconUriOptions}
-                      hexCode={this.state.iconUriOptions[this.state.selectedIndex]}
-                      defaultValue={this.state.iconName}
-                      style={styles.quantityModalStyle}
-                      dropdownStyle={styles.colorModalDropdownStyle}
-                      textStyle={styles.quantityModalTextStyle}
-                      renderRow={(option, index, isSelected) => {
-                        return (
+                    {/* heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee */}
+                    <View style={{ flex: 1, marginLeft: 20 }}>
+
+                      <ModalDropdown
+                        onSelect={(index) => {
+                          this.setState({
+                            selectedColorSingle: this.state.selectedColor[index],
+                            pid: [this.state.iconPids[index]],
+                            iconName: this.state.iconColorNames[index],
+                            selectedIndex: index,
+                            isReady: false
+                          }, () => {
+                            this.getData();
+                          })
+                        }}
+                        options={this.state.iconUriOptions}
+                        hexCode={this.state.iconUriOptions[this.state.selectedIndex]}
+                        defaultValue={this.state.iconName}
+                        style={styles.quantityModalStyle}
+                        dropdownStyle={styles.colorModalDropdownStyle}
+                        textStyle={styles.quantityModalTextStyle}
+                        renderRow={(option, index, isSelected) => {
+                          return (
                             <Image
-                                style={styles.ColorModalStyle}
-                                // resizeMode='contain'
-                                resizeMode="cover"
-                                source={{uri: option}}
+                              style={styles.ColorModalStyle}
+                              // resizeMode='contain'
+                              resizeMode="cover"
+                              source={{ uri: option }}
                             />
-                        );
-                      }}
-                    />
+                          );
+                        }}
+                      />
+                    </View>
                   </View>
-                  </View>
-                    <Text style={styles.minQuantityText}>
-                      Minimum quantity for "{this.state.data.productName}" is{' '}
-                      {this.state.data.min_qty}.
+                  <Text style={styles.minQuantityText}>
+                    Minimum quantity for "{this.state.data.productName}" is{' '}
+                    {this.state.data.min_qty}.
                   </Text>
-                  <View styles={styles.sizeText}>
-                    <Text style={styles.sizeHeading}>SIZES</Text>
-                    <Text style={styles.sizeValue}>2(S), 2(M), 2(L)</Text>
+                  <View style={styles.sizeText}>
+                    <Text style={styles.sizeHeading}>SIZES:</Text>
+                    <Text style={styles.sizeValue}>{this.state.data.sizes}</Text>
                   </View>
                   <View style={styles.addToCartView}>
                     <TouchableOpacity
@@ -650,10 +655,10 @@ const styles = StyleSheet.create({
   },
   sizeText: {
     flexDirection: "row",
-    justifyContent: "space-between",
     flex: 1,
     width: Width,
-    backgroundColor: '#34eb49',
+    alignItems:"center",
+    justifyContent:"center"
 
   },
   sizeHeading: {
@@ -662,6 +667,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     lineHeight: 22,
     letterSpacing: 0,
+    paddingRight:5
   },
   sizeValue: {
     fontFamily: 'Avenir-Book',
