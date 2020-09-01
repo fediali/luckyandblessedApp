@@ -29,6 +29,7 @@ const baseUrl = Globals.baseUrl;
 const CODPAYMENTID = 17;
 const CREDITCARTPAYMENTID = 34;
 const PAYPALPAYMENTID = 20;
+const UPSSHIPPING = 15;
 const MERCHANTAUTH_NAME = Globals.MERCHANTAUTH_NAME;
 const MERCHANTAUTH_TRANSACTIONID = Globals.MERCHANTAUTH_TRANSACTIONID;
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
@@ -172,8 +173,13 @@ class Payment extends Component {
       }
       //PayPal
       else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
-      else if (this.state.paymentMode == 3)
-        this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson()); //Directly place order.
+      else if (this.state.paymentMode == 3){
+        let transData = {
+          type: 'AUTH_ONLY',
+          location: 'MobileApp',
+        };
+        this.placeOrder(gUser, CODPAYMENTID, this.modifyProductJson(), transData); //Directly place order.
+      }
     });
   };
 
@@ -293,7 +299,7 @@ class Payment extends Component {
   placeOrder = (user, payment_id, mproduct, transResponse = []) => {
     let orderData = {
       user_id: user.user_id,
-      shipping_id: '15', //UPS Shipping
+      shipping_id: UPSSHIPPING, //UPS Shipping
       payment_id,
       payment_info: transResponse,
       products: mproduct,
@@ -438,8 +444,13 @@ class Payment extends Component {
   };
   handleWebViewResponse = (data) => {
     if (data.title == 'Success') {
+      let transData = {
+        type: 'AUTH_ONLY',
+        transaction_id: 'Paypal',
+        location: 'MobileApp',
+      };
       this.setState({ paypalLink: null }, () => {
-        // this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson());
+        this.placeOrder(gUser, PAYPALPAYMENTID, this.modifyProductJson(), transData);
       });
     } else if (data.title == 'Cancel') {
       {
