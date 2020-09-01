@@ -78,6 +78,8 @@ class App extends Component {
 
   async getToken() {
     let fcmToken = await AsyncStorage.getItem(STORAGE_FCM_TOKEN);
+    firebase.messaging().subscribeToTopic('all')
+    .then(() => console.log('Subscribed to topic!'));
     if (!fcmToken) {
       firebase.messaging().subscribeToTopic('all')
     .then(() => console.log('Subscribed to topic!'));
