@@ -225,14 +225,14 @@ class FlatListItem extends Component {
                     ${this.props.item.unitPrice}
                   </Text>
                 </View>
-                {/* <Text style={innerStyles.lightText}>
-                  SIZE: {this.props.item.sizes}
-                </Text> */}
                 <Text style={innerStyles.lightText}>
                   Color: {this.props.item.selectedColor}
                 </Text>
                 <Text style={innerStyles.lightText}>
                   Quantity: {this.props.item.quantity}
+                </Text>
+                <Text style={innerStyles.lightText}>
+                  Size: {this.props.item.sizes}
                 </Text>
               </View>
             </View>
@@ -390,6 +390,10 @@ class ShoppingCart extends Component {
 
             promises.push(GetData(baseUrl + `api/products/${product_id}`));
           }
+          for (let i = 0; i < productsLength; i++) {
+            let product_id = responses.products[i].product_id;
+            promises.push(GetData(baseUrl + `api/options?product_id=${product_id}`));
+          }
 
           Promise.all(promises).then((promiseResponses) => {
             Promise.all(promiseResponses.map((res) => res.json()))
@@ -397,7 +401,9 @@ class ShoppingCart extends Component {
                 for (let i = 0; i < productsLength; i++) {
                   let singleProduct = {};
                   let singleLineITem = {};
-
+                  console.log("OO", prod[productsLength+i])
+                  let productSizes = this.extractSizes(prod[productsLength+i])
+                  console.log(productSizes)
                   singleProduct = {
                     itemNum: responses.products[i].item_id,
                     product_id: responses.products[i].product_id,
@@ -422,6 +428,8 @@ class ShoppingCart extends Component {
                     quantity: responses.products[i].amount,
                     unknownNum: responses.products[i].amount,
                     hexColor: '#05c2bd', //
+                    sizes:productSizes
+
                   };
                   if ('detailed' in responses.products[i].extra.main_pair) {
                     singleProduct.path =
@@ -429,7 +437,6 @@ class ShoppingCart extends Component {
                   } else {
                     singleProduct.path = Globals.noImageFoundURL;
                   }
-
                   singleLineITem = {
                     itemId: responses.products[i].product_id,
                     name: responses.products[i].product,
@@ -449,8 +456,8 @@ class ShoppingCart extends Component {
                   cartData[i] = singleProduct;
                   orderItems[i] = singleOrderItem;
                 }
-                Globals.cartCount = parseInt( responses.cart_products);
-
+                Globals.cartCount = parseInt(responses.cart_products);
+                
                 this.setState({
                   totalCost: responses.total,
                   finalCost: responses.total,
@@ -492,6 +499,26 @@ class ShoppingCart extends Component {
     });
   };
 
+  extractSizes = (data) => {
+
+    console.log("extract sizes")
+    let keys = Object.keys(data);
+    console.log(keys[0])
+    for (let i = 0; i < keys.length; i++) {
+      let key = keys[i]
+      console.log("Hi", data[key].option_name)
+      console.log(data[key].option_name, 'SIZE')
+      if (data[key].option_name === 'SIZE') {
+        console.log("extracting", data[key].product_id)
+        let variantKeys = Object.keys(data[key].variants);
+        console.log(variantKeys)
+        console.log("SIZES", data[key].variants[variantKeys[0]].variant_name)
+        return data[key].variants[variantKeys[0]].variant_name
+      }
+    };
+    return "Not Available"
+
+  }
   renderFlatListHeader = () => {
     var listHeader = (
       <View>
@@ -542,7 +569,7 @@ class ShoppingCart extends Component {
           totalCost={this.state.totalCost}
           finalCost={this.state.finalCost}
           discount={this.state.discount}
-          couponCode = {this.state.promocode}
+          couponCode={this.state.promocode}
         />
         <View style={[styles.buttonContainer, innerStyles.orderButtonView]}>
           <TouchableOpacity
