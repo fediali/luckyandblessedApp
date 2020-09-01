@@ -328,7 +328,7 @@ class MainPage extends Component {
                     style={innerStyles.gridImage}
                     // resizeMode='contain'
                     source={{
-                      uri: (this.state.newArrivals[0].main_pair.detailed.image_path)? 
+                      uri: (this.state.newArrivals[0].main_pair)? 
                         this.state.newArrivals[0].main_pair.detailed.image_path
                         : Globals.noImageFoundURL
                     }}

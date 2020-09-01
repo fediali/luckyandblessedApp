@@ -28,7 +28,7 @@ export default class MainPageTrendingListItem extends PureComponent {
                         <View style={innerStyles.innerTrendingView}>
                             <FastImage
                                 style={innerStyles.trendingImage}
-                                source={{ uri: (val.main_pair.detailed.image_path)?val.main_pair.detailed.image_path:Globals.noImageFoundURL }}
+                                source={{ uri: (val.main_pair)?val.main_pair.detailed.image_path:Globals.noImageFoundURL }}
                                 // resizeMode='contain'
                             />
                             <View style={innerStyles.innerInnerTrendingView}>

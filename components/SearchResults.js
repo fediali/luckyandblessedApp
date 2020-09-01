@@ -98,8 +98,22 @@ export default class SearchResults extends Component {
                     }
                   );
                   for (let i = 0; i < responses[0].products.length; i++) {
-                    if (responses[0].products[i].main_pair == null) {
-                      continue;
+                    if (responses[0].products[i].main_pair) {
+                      await tempProducts.push({
+                        product: responses[0].products[i].product,
+                        product_id: responses[0].products[i].product_id,
+                        price: parseFloat(responses[0].products[i].price).toFixed(
+                          2,
+                        ),
+                        base_price: parseFloat(
+                          responses[0].products[i].base_price,
+                        ).toFixed(2),
+                        imageUrl:
+                        Globals.noImageFoundURL,
+                        product_brand: responses[0].products[i].brand
+                          ? responses[0].products[i].brand
+                          : DEFAULTS_OBJ.brand,
+                      });
                     }
 
                     await tempProducts.push({

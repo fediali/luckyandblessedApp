@@ -88,7 +88,6 @@ export default class ProductPage extends Component {
 
   getData() {
     var promises = [];
-    console.log(this.state.pid[0])
     promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/pages/87`));
@@ -120,9 +119,17 @@ export default class ProductPage extends Component {
             }
             getArray()
               .then((secondaryImagesArray) => {
-                secondaryImagesArray.unshift(
-                  response[0].main_pair.detailed.image_path,
-                );
+                if ('detailed' in response[0].main_pair){
+                  secondaryImagesArray.unshift(
+                    response[0].main_pair.detailed.image_path,
+                  );
+                }
+                else {
+                  secondaryImagesArray.unshift(
+                    Globals.noImageFoundURL
+                  );
+                }
+                
 
                 // Stroing History of objects
                 RetrieveDataAsync('productHistoryList').then((value) => {
@@ -133,7 +140,7 @@ export default class ProductPage extends Component {
                     price: response[0].price,
                     base_price: response[0].base_price,
 
-                    mainImage: response[0].main_pair.detailed.image_path,
+                    mainImage: ('detailed' in response[0].main_pair) ? response[0].main_pair.detailed.image_path : Globals.noImageFoundURL,
                     pid: this.state.pid,
                     cname: response[0].category,
                     brand: response[0].brand,
@@ -182,7 +189,7 @@ export default class ProductPage extends Component {
                   data: {
                     productName: response[0].product,
                     price: response[0].price,
-                    mainImage: response[0].main_pair.detailed.image_path,
+                    mainImage: ('detailed' in response[0].main_pair) ? response[0].main_pair.detailed.image_path : Globals.noImageFoundURL,
                     secondaryImages: secondaryImagesArray,
                     min_qty: Number(response[0].min_qty),
                     max_qty: 18,//FIXME: get from api. till now api is returning max=0 which is wrong.
@@ -606,7 +613,7 @@ export default class ProductPage extends Component {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={({ item, index }) =>
-                    item.main_pair ? (
+                  item.main_pair ? (
                       <ProductPageSimilarListItem
                         pid={[item.product_id]}
                         cname={this.state.cname}
@@ -620,7 +627,7 @@ export default class ProductPage extends Component {
                           pid={item.product_id}
                           cname={this.state.cname}
                           imageUrl={
-                            'https://www.dhresource.com/0x0/f2/albu/g9/M00/25/59/rBVaVVxvaJmAeWPpAAE-IYplWiA081.jpg'
+                            Globals.noImageFoundURL
                           }
                           name={item.product}
                           navigation={this.props.navigation}
