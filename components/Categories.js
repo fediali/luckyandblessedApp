@@ -36,12 +36,13 @@ class Categories extends Component {
     }
 
     onCategorySelect = (cid, cname) => {
-        this.setState({ cid, cname })
+        this.setState({ cid, cname, isReady: false })
         if (cid == SELECTED_CATEGORY_ALL) {
-            this.props.navigation.goBack()
+            console.log("Here",cname, cid )
+
+            this.props.navigation.navigate("MainPage")
         }
         else if (cid == LOOKBOOK_CATEGORY_ID){
-            this.setState({ isReady: false })
 
             GetData(baseUrl + 'api/pages?page_id=67&visible=true&status=A&items_per_page=20')
             .then(res => res.json())
@@ -56,7 +57,6 @@ class Categories extends Component {
               
         }
         else {
-            this.setState({ isReady: false })
             GetData(baseUrl + `api/categories?visible=1&category_id=${cid}&get_images=true&status=A&items_per_page=20`).then(res => res.json()).then(
                 (responses) => {
                     if (responses.categories.length > 0) {
@@ -107,7 +107,7 @@ class Categories extends Component {
                         />
                     </View>
                     {(!this.state.isReady && !this.state.nextScreen) ? <View><ActivityIndicator size="large" /></View> :
-
+                        
                         (this.state.cid != LOOKBOOK_CATEGORY_ID ? (
                             <FlatList
                                 style={styles.flatListCategories}

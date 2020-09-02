@@ -93,10 +93,14 @@ class CategoriesProduct extends Component {
         }
         else if (cname.includes(SALE_NAME)) {
           //extraproducts API returns search instead of params
+          console.log("Sale")
           promises.push(GetData(baseUrl + `/api/extraproducts/?mode=on_sale&status=A&page=${this.state.iteratedPage}`))
         }
-        else
+        else{
+          console.log("Category")
           promises.push(GetData(baseUrl + `api/products?cid=${cid}&status=A&page=${this.state.iteratedPage}`));
+
+        }
       }
       let itr = this.state.iteratedPage;
       Promise.all(promises)
@@ -105,6 +109,7 @@ class CategoriesProduct extends Component {
             .then((responses) => {
               if (cname.includes(SALE_NAME)) {
                 // console.log(responses[0].products)
+                console.log("Sales")
                 this.setState({
                   totalProducts: parseFloat(
                     responses[0].search.total_items,
@@ -116,9 +121,9 @@ class CategoriesProduct extends Component {
               }
               else {
                 this.setState({
-                  totalProducts: parseFloat(
+                  totalProducts: (responses[0].params.total_items) ? parseFloat(
                     responses[0].params.total_items,
-                  ).toFixed(0),
+                  ).toFixed(0) : null,
                   totalItemsPerRequest: parseFloat(
                     responses[0].params.items_per_page,
                   ).toFixed(0),
@@ -127,7 +132,7 @@ class CategoriesProduct extends Component {
               async function parseProducts() {
                 const tempProducts = [];
                 for (let i = 0; i < responses[0].products.length; i++) {
-                  if (responses[0].products[i].main_pair ) {
+                  if (responses[0].products[i].main_pair == null ) {
                     await tempProducts.push({
                       product: responses[0].products[i].product,
                       product_id: responses[0].products[i].product_id,
@@ -293,7 +298,7 @@ class CategoriesProduct extends Component {
     this.props.navigation.navigate('Filter');
   };
   render() {
-    console.log("AAAAAA\n\n", this.state.products[0])
+    console.log("AAAAAA\n\n", this.state.totalProducts)
     return (
       <SafeAreaView style={styles.superMainContainer}>
         <Header navigation={this.props.navigation} rightIcon="search" />
@@ -313,9 +318,12 @@ class CategoriesProduct extends Component {
                       <Text style={styles.categoryNameText}>
                         {this.state.cname}
                       </Text>
-                      <Text style={styles.numCategoryText}>
+                      {this.state.totalProducts && (
+                        <Text style={styles.numCategoryText}>
                         {this.state.totalProducts} products
-                  </Text>
+                        </Text>
+                      )}
+                      
                     </View>
                     <View style={styles.horizontalImagesView}>
                       {/* <FastImage
