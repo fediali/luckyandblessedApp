@@ -29,6 +29,7 @@ import ProductPage from "./components/ProductPage"
 import MainPage from "./components/MainPage"
 import codePush from "react-native-code-push"
 import Filter from "./components/Filter"
+import Order from "./components/Order"
 import ThemeContext from "./reusableComponents/ThemeContext"
 import RetrieveDataAsync from './reusableComponents/AsyncStorage/RetrieveDataAsync'
 import BarCodeScanner from './components/BarCodeScanner'
@@ -263,6 +264,7 @@ class App extends Component {
                   <Stack.Screen name="SearchResults" component={SearchResults} />
                   <Stack.Screen name="BarCodeScanner" component={BarCodeScanner} />
                   <Stack.Screen name="Filter" component={Filter} />
+                  <Stack.Screen name="Order" component={Order} />
 
                 </>
 
