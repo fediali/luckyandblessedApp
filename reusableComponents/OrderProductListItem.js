@@ -6,7 +6,8 @@ import Globals from '../Globals';
 export default class OrderProductListItem extends PureComponent {
   render() {
     return (
-      <View style={styles.padBottom20}>
+      <View>
+        <View style={styles.seperator}></View>
         <View style={styles.topLevelView}>
           <View style={styles.mainfdRow}>
             <View style={styles.thumbnailView}>
@@ -32,10 +33,10 @@ export default class OrderProductListItem extends PureComponent {
                   ${this.props.data.unitPrice}
                 </Text>
               </View>
-              <Text style={styles.lightText}>SIZE: {this.props.data.size}</Text>
+              {/* <Text style={styles.lightText}>SIZE: {this.props.data.size}</Text>
               <Text style={styles.lightText}>
                 Color: {this.props.data.color}
-              </Text>
+              </Text> */}
               <Text style={[styles.lightText, styles.marb20]}>
                 Quantity: {this.props.data.quantity}
               </Text>
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     maxWidth: '60%',
   },
-
+  seperator: { backgroundColor: '#f6f6f6', paddingTop: 1 },
   lightText: {
     fontFamily: 'Avenir-Book',
     fontSize: 14,
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 20,
     width: "100%",
-
+    marginTop: 10
   },
   fdRow: { flexDirection: 'row', justifyContent: 'space-between',  width: Width * 0.65 },
   mainfdRow: { flexDirection: 'row', justifyContent: 'space-between' },

@@ -44,6 +44,7 @@ export default class ProductPage extends Component {
       activeSections: [],
       disableAddToCartButton: false,
       isReady: false,
+
       sections: [
         {
           id: 0,

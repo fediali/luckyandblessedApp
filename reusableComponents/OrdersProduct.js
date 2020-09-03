@@ -57,7 +57,7 @@ export default class ordersProduct extends PureComponent {
           return <OrderProductListItem key={index.toString()} data={item} />;
         })}
         <View style={styles.dividerLine}></View>
-        {this.props.trackingURL ?
+        {/* {this.props.trackingURL ?
           <TouchableOpacity
             style={styles.trackingStyle}
             onPress={() => {
@@ -72,10 +72,8 @@ export default class ordersProduct extends PureComponent {
           </TouchableOpacity>
 
           : <></>
-        }
-        <View style={styles.dividerLine}></View>
-
-        <View style={styles.divider}></View>
+        } */}
+        
       </View>
     );
   }

@@ -56,7 +56,7 @@ export default class TrackOrders extends Component {
     promises.push(
       GetData(
         baseUrl +
-        `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`,
+        `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`, 
       ),
 
     );

@@ -6,7 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Share,
-  StatusBar
+  StatusBar,
+  Linking
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 
@@ -34,7 +35,7 @@ class Header extends PureComponent {
   onShare = async () => {
     try {
       const result = await Share.share({
-        message: 'Check amazing products at LUCKY & BLESSED',
+        message: this.props.shareText,
       });
 
       if (result.action === Share.sharedAction) {
@@ -74,7 +75,17 @@ class Header extends PureComponent {
           <Icon size={30} name="ios-search" type="ionicon" color="#000" />
         </TouchableOpacity>
       );
-    } else if (this.props.rightIcon == 'share') {
+    } else if (this.props.rightIcon == 'trackOrder') {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            Linking.openURL(this.props.trackingURL);
+          }}>
+          <Icon size={30} name="truck-delivery" type="material-community" color="#000" />
+        </TouchableOpacity>
+      );
+    }
+     else if (this.props.rightIcon == 'share') {
       return (
         <TouchableOpacity onPress={this.onShare}>
           <Icon size={26} name="upload" type="feather" color="#000" />
