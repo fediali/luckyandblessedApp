@@ -158,7 +158,7 @@ export default class ProductPage extends Component {
                 });
 
                 //set dropdown icon options
-                let variants = response[3].data.variants;
+                let variants = response[3] ? response[3].data? response[3].data.variants : [] : []
                 let iconOptions = []
                 let iconColors = []
                 let iconPids = []

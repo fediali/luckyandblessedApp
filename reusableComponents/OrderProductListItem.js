@@ -33,13 +33,13 @@ export default class OrderProductListItem extends PureComponent {
                   ${this.props.data.unitPrice}
                 </Text>
               </View>
-              {/* <Text style={styles.lightText}>SIZE: {this.props.data.size}</Text>
-              <Text style={styles.lightText}>
+              {/* <Text style={styles.lightText}>
                 Color: {this.props.data.color}
               </Text> */}
               <Text style={[styles.lightText, styles.marb20]}>
                 Quantity: {this.props.data.quantity}
               </Text>
+              <Text style={styles.lightText}>SIZE: {this.props.data.size}</Text>
             </View>
           </View>
           <View></View>
@@ -108,6 +108,6 @@ const styles = StyleSheet.create({
   fdRow: { flexDirection: 'row', justifyContent: 'space-between',  width: Width * 0.65 },
   mainfdRow: { flexDirection: 'row', justifyContent: 'space-between' },
   priceTextView: { flexDirection: 'column', paddingHorizontal: 10 },
-  marb20: { marginBottom: 20 },
+  marb20: { marginBottom: 4 },
   mart4: { marginTop: 4 },
 });

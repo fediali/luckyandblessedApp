@@ -67,6 +67,7 @@
 
         getDataCustom = () => {
             var promises = [];
+            console.log("URLLLLL", baseUrl + `api/orders/${this.state.order_id}?page=${this.state.iteratedPage}`)
             promises.push(GetData(baseUrl + `api/orders/${this.state.order_id}?page=${this.state.iteratedPage}`));
             Promise.all(promises)
                 .then((promiseResponses) => {
@@ -92,7 +93,7 @@
                                     jsonProducts['itemNum'] = productGroupKeys[i].toString();
                                     jsonProducts['totalPrice'] = currentProduct.price * currentProduct.amount;
                                     jsonProducts['itemName'] = currentProduct.product;
-                                    jsonProducts['size'] = this.extractSizes(currentProduct.extra);
+                                    jsonProducts['size'] = this.extractSizes(responses[0].products[productGroupKeys[i]].extra.product_options_value);
                                     jsonProducts['color'] = 'Not available';
                                     jsonProducts['quantity'] = currentProduct.amount;
                                     jsonProducts['unitPrice'] = currentProduct.price;
@@ -141,14 +142,14 @@
         extractSizes = (data) => {
             console.log(data )
             //FIXME: Why data is incomplete?
-            // for (var i = 0; i < data.length; i++) {
-            //     console.log(data[i])
-            //     if (data[i].option_name === "SIZE"){
-
-            //         return data[i].variant_name
-            //     }
-            // }
-            // return "Not Available"
+            for (var i = 0; i < data.length; i++) {
+                console.log(data[i])
+                if (data[i].option_name === "SIZE"){
+                    console.log("SIZEss", data[i].variant_name)
+                    return data[i].variant_name
+                }
+            }
+            return "Not Available"
         
         }
 
