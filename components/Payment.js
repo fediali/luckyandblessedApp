@@ -27,7 +27,7 @@ import { WebView } from 'react-native-webview';
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
 const CODPAYMENTID = 17;
-const CREDITCARTPAYMENTID = 34;
+const CREDITCARTPAYMENTID = 38;
 const PAYPALPAYMENTID = 20;
 const UPSSHIPPING = 15;
 const MERCHANTAUTH_NAME = Globals.MERCHANTAUTH_NAME;
@@ -168,12 +168,13 @@ class Payment extends Component {
       //Handle Credit Cart payment
       if (this.state.paymentMode == 1) {
         if (this.isValid()) {
-          this.postCreditCardTransaction(gUser);
+          // this.postCreditCardTransaction(gUser);
+          this.postNmiTransaction(gUser)
         }
       }
       //PayPal
       else if (this.state.paymentMode == 2) this.handlePayPalTransaction(gUser);
-      else if (this.state.paymentMode == 3){
+      else if (this.state.paymentMode == 3) {
         let transData = {
           type: 'AUTH_ONLY',
           location: 'MobileApp',
@@ -182,6 +183,36 @@ class Payment extends Component {
       }
     });
   };
+
+  postNmiTransaction = (gUser) => {
+    this.setState({showCircleLoader: true})
+    let nmiUrl = `https://secure.networkmerchants.com/api/transact.php?username=${Globals.NMILogin}&password=${Globals.NMIPass}&type=auth&zipcode=75234&ccnumber=${this.state.cardNumber}&ccexp=${this.state.expMonth}${this.state.expYear}&cvv=${this.state.cardCode}&amount=${this.props.route.params.finalCost}`
+
+    PostData(nmiUrl)
+      .then((res) => res.text())
+      .then((response) => {
+        var resText = response.split("&")
+        var status = resText[1].substring(resText[1].indexOf("=") + 1)
+        var transId = resText[3].substring(resText[1].indexOf("=") + 1)
+
+        console.log(response.charAt(9))
+        if (response.charAt(9) == 1) {
+          Toast.show("Authorization successful. Please wait")
+          let transData = {
+            type: 'AUTH_ONLY',
+            transaction_id: transId,
+            location: 'MobileApp',
+          };
+          // changing orderitems array format to supported ones
+          let mproduct = this.modifyProductJson();
+          this.placeOrder(gUser, CREDITCARTPAYMENTID, mproduct, transData);
+        }
+        else {
+          Toast.show(status)
+        }
+      })
+
+  }
 
   getPaypalAuth = () => {
     var details = {
@@ -308,12 +339,15 @@ class Payment extends Component {
       .then((res) => res.json())
       .then((response) => {
         if (response.order_id) {
+          this.hideSpinner()
           this.props.navigation.navigate('ConfirmationSuccess', {
             orderId: response.order_id,
           });
         } else {
           // console.log(orderData)
-          // console.log(response)
+          console.log(response)
+          this.hideSpinner()
+
           Toast.show('Something went wrong');
         }
       });
@@ -693,7 +727,7 @@ class Payment extends Component {
                             <TextInput
                               placeholderTextColor={TEXTINPUT_COLOR}
                               style={[styles.textInput, styles.dateTextInput]}
-                              placeholder="yyyy"
+                              placeholder="yy"
                               keyboardType={'number-pad'}
                               onChangeText={(text) => {
                                 this.setState({ expYear: text });
