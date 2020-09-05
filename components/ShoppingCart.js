@@ -83,6 +83,7 @@ class FlatListItem extends Component {
             PostData(baseUrl + `api/removecart`, deleteData)
               .then((res) => res.json())
               .then((response) => {
+                // console.log("Delete api response", response)
                 Toast.show(response.message.toString());
                 //Refresh FlatList !
 

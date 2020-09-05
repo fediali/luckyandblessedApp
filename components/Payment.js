@@ -334,6 +334,7 @@ class Payment extends Component {
       payment_id,
       payment_info: transResponse,
       products: mproduct,
+      status: "O"
     };
     PostData(baseUrl + 'api/stores/1/orders', orderData)
       .then((res) => res.json())
