@@ -133,19 +133,18 @@ class FlatListItem extends Component {
     PutData(baseUrl + "api/addcart/" + this.props.item.itemNum, data)
       .then((res) => res.json())
       .then((response) => {
-        var productKey = Object.keys(response.cart_content.product_groups[0].products)[0]
-
+        var productKey = Object.keys(response.cart_content.product_groups[0].products)
         //to update the individual list item when quantity is changed inside cart
         let tempItemList = this.props.parentFlatList.state.itemList;
         tempItemList[this.props.index].price = (
-          parseFloat(response.cart_content.product_groups[0].products[productKey].amount) *
-          parseFloat(response.cart_content.product_groups[0].products[productKey].price)
+          parseFloat(response.cart_content.product_groups[0].products[productKey[this.props.index]].amount) *
+          parseFloat(response.cart_content.product_groups[0].products[productKey[this.props.index]].price)
         ).toFixed(2),
-          tempItemList[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey].amount
+          tempItemList[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey[this.props.index]].amount
 
         //update the line items too for payment purpose..
         let tempPaymentLineItems = this.props.parentFlatList.state.paymentLineItems;
-        tempPaymentLineItems[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey].amount
+        tempPaymentLineItems[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey[this.props.index]].amount
 
         this.props.parentFlatList.setState({
           totalCost: parseFloat(response.cart_content.display_subtotal).toFixed(2),//FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
