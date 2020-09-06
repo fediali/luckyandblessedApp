@@ -36,6 +36,9 @@ import OrderFooter from '../reusableComponents/OrderFooter';
 const STORAGE_USER = Globals.STORAGE_USER;
 const baseUrl = Globals.baseUrl;
 const usStates = Globals.usStates;
+const australiaStates = Globals.australiaStates;
+const canadaStates = Globals.canadaStates;
+const states = Globals.states;
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
 
 let gUser;
@@ -91,8 +94,8 @@ class Delivery extends Component {
       s_stateText: '',
       cityTown: '',
       s_cityTown: '',
-      b_country: 'AL',//because it's on first index so will be auto selected.. if user change it, then this will also be changed
-      s_country: 'AL',
+      b_country: 'US',//because it's on first index so will be auto selected.. if user change it, then this will also be changed
+      s_country: 'US',
       totalCost: this.props.route.params.totalCost,
       finalCost: this.props.route.params.finalCost,
       discount: this.props.route.params.discount,
@@ -270,7 +273,7 @@ class Delivery extends Component {
           (data.b_address = this.state.streetAddress.split(",")[0]), //TODO: Everything before first comma in b_address and everything after that is b_address_2
           (data.b_address_2 = this.state.streetAddress.split(',').slice(1).join(',')),
           (data.b_county = ''),
-          (data.b_country = 'US'),
+          (data.b_country = this.state.b_country),
           (data.b_city = this.state.cityTown),
           (data.b_state = this.state.stateText),
           (data.b_zipcode = this.state.zipCode),
@@ -292,7 +295,7 @@ class Delivery extends Component {
           (data.b_address = this.state.streetAddress.split(",")[0]),
           (data.b_address_2 = this.state.streetAddress.split(',').slice(1).join(',')),
           (data.b_county = ''),
-          (data.b_country = 'US'),
+          (data.b_country = this.state.b_country),
           (data.b_city = this.state.cityTown),
           (data.b_state = this.state.stateText),
           (data.b_zipcode = this.state.zipCode),
@@ -302,7 +305,7 @@ class Delivery extends Component {
           (data.s_address = this.state.s_streetAddress.split(",")[0]),
           (data.s_address_2 = this.state.s_streetAddress.split(',').slice(1).join(',')),
           (data.s_county = ''),
-          (data.s_country = 'US'),
+          (data.s_country = this.state.s_country),
           (data.s_city = this.state.s_cityTown),
           (data.s_state = this.state.s_stateText),
           (data.s_zipcode = this.state.s_zipCode),
@@ -496,11 +499,33 @@ class Delivery extends Component {
     );
   }
 
-  onStateModalSelect = (index) => {
-    this.setState({ stateText: usStates[index], s_country: usStates[index], b_country: usStates[index] });
+  onStateModalSelect = (option) => {
+    this.setState({ b_country: option });
   };
-  onShipStateModalSelect = (index) => {
-    this.setState({ s_stateText: usStates[index] });
+  onShipStateModalSelect = (option) => {
+    this.setState({ s_country: option });
+  };
+
+  onParentStateModalSelect = (option) => {
+    if (option == 'US') {
+      this.setState({ stateText: usStates[0] });
+    } else if (option == 'AU') {
+      this.setState({ stateText: australiaStates[0] });
+    } else if (option == 'CA') {
+      this.setState({ stateText: canadaStates[0] });
+    }
+    this.setState({ b_country: option });
+  };
+
+  onParentShipStateModalSelect = (option) => {
+    if (option == 'US') {
+      this.setState({ s_stateText: usStates[0] });
+    } else if (option == 'AU') {
+      this.setState({ s_stateText: australiaStates[0] });
+    } else if (option == 'CA') {
+      this.setState({ s_stateText: canadaStates[0] });
+    }
+    this.setState({ s_country: option });
   };
 
   selectProfile = (profile_id, profile_name) => () => {
@@ -573,6 +598,8 @@ class Delivery extends Component {
         </View>
       );
     }
+
+    console.log("STTTTTTTTTTTTTTTTT+> ", this.state.stateText);
 
     return (
       <SafeAreaView style={innerStyles.maincontainer}>
@@ -733,15 +760,15 @@ class Delivery extends Component {
               <View style={innerStyles.inputView}>
                 <View style={innerStyles.modalView}>
                   <ModalDropdown
-                    options={usStates}
+                    options={states}
                     defaultValue={
-                      this.state.stateText ? this.state.stateText : 'State'
+                      this.state.b_country ? this.state.b_country : 'country'
                     }
                     style={styles.input}
                     dropdownStyle={innerStyles.modalDropdownStyle}
                     textStyle={innerStyles.modalTextStyle}
-                    onSelect={(index) => {
-                      this.onStateModalSelect(index);
+                    onSelect={(index, option) => {
+                      this.onParentStateModalSelect(option);
                     }}
                     renderRow={(option, index, isSelected) => {
                       return (
@@ -750,18 +777,42 @@ class Delivery extends Component {
                     }}
                   />
                 </View>
-                <TextInput
-                  placeholderTextColor={TEXTINPUT_COLOR}
-                  textContentType = "postalCode"
-                  style={[styles.input, innerStyles.marginStart]}
-                  keyboardType={'phone-pad'}
-                  placeholder="Zip code"
-                  value={this.state.zipCode}
-                  onChangeText={(text) => {
-                    this.setState({ zipCode: text });
-                  }}
-                />
+                <View style={innerStyles.modalView}>
+                  <ModalDropdown
+                    options={
+                      (this.state.b_country == 'US') ? usStates
+                        : (this.state.b_country == 'AU') ? australiaStates
+                          : canadaStates
+                    }
+                    defaultValue={
+                      this.state.stateText ? this.state.stateText : 'State'
+                    }
+                    style={styles.input}
+                    dropdownStyle={innerStyles.modalDropdownStyle}
+                    textStyle={innerStyles.modalTextStyle}
+                    onSelect={(index, option) => {
+                      this.onStateModalSelect(option);
+                    }}
+                    renderRow={(option, index, isSelected) => {
+                      return (
+                        <Text style={[innerStyles.numText]}>{option}</Text>
+                      );
+                    }}
+                  />
+                </View>
+
               </View>
+              <TextInput
+                placeholderTextColor={TEXTINPUT_COLOR}
+                textContentType="postalCode"
+                style={[styles.input]}
+                keyboardType={'phone-pad'}
+                placeholder="Zip code"
+                value={this.state.zipCode}
+                onChangeText={(text) => {
+                  this.setState({ zipCode: text });
+                }}
+              />
               {this.state.stateTextError != '' ? (
                 this.showErrorMessage(this.state.stateTextError)
               ) : (
@@ -895,17 +946,17 @@ class Delivery extends Component {
                   <View style={innerStyles.inputView}>
                     <View style={innerStyles.modalView}>
                       <ModalDropdown
-                        options={usStates}
+                        options={states}
                         defaultValue={
-                          this.state.s_stateText
-                            ? this.state.s_stateText
-                            : 'State'
+                          this.state.s_country
+                            ? this.state.s_country
+                            : 'country'
                         }
                         style={styles.input}
                         dropdownStyle={innerStyles.modalDropdownStyle}
                         textStyle={innerStyles.modalTextStyle}
-                        onSelect={(index) => {
-                          this.onShipStateModalSelect(index);
+                        onSelect={(index, option) => {
+                          this.onParentShipStateModalSelect(option);
                         }}
                         renderRow={(option, index, isSelected) => {
                           return (
@@ -914,18 +965,87 @@ class Delivery extends Component {
                         }}
                       />
                     </View>
-                    <TextInput
-                      placeholderTextColor={TEXTINPUT_COLOR}
-                      textContentType="postalCode"
-                      style={[styles.input, innerStyles.marginStart]}
-                      keyboardType={'phone-pad'}
-                      placeholder="Zip code"
-                      value={this.state.s_zipCode}
-                      onChangeText={(text) => {
-                        this.setState({ s_zipCode: text });
-                      }}
-                    />
+                    <View style={innerStyles.modalView}>
+                      <ModalDropdown
+                        options={
+                          (this.state.s_country == 'US') ? usStates
+                            : (this.state.s_country == 'AU') ? australiaStates
+                              : canadaStates
+                        }
+                        defaultValue={
+                          this.state.s_stateText ? this.state.s_stateText : 'State'
+                        }
+                        style={styles.input}
+                        dropdownStyle={innerStyles.modalDropdownStyle}
+                        textStyle={innerStyles.modalTextStyle}
+                        onSelect={(index, option) => {
+                          this.onShipStateModalSelect(option);
+                        }}
+                        renderRow={(option, index, isSelected) => {
+                          return (
+                            <Text style={[innerStyles.numText]}>{option}</Text>
+                          );
+                        }}
+                      />
+                    </View>
+
+                    {/* 
+                      <View style={innerStyles.modalView}>
+                  <ModalDropdown
+                    options={states}
+                    defaultValue={
+                      this.state.b_country ? this.state.b_country : 'country'
+                    }
+                    style={styles.input}
+                    dropdownStyle={innerStyles.modalDropdownStyle}
+                    textStyle={innerStyles.modalTextStyle}
+                    onSelect={(index, option) => {
+                      this.onParentStateModalSelect(option);
+                    }}
+                    renderRow={(option, index, isSelected) => {
+                      return (
+                        <Text style={[innerStyles.numText]}>{option}</Text>
+                      );
+                    }}
+                  />
+                </View>
+                <View style={innerStyles.modalView}>
+                  <ModalDropdown
+                    options={
+                      (this.state.b_country == 'US')?usStates
+                      :(this.state.b_country == 'AU')?australiaStates
+                      :canadaStates
+                    }
+                    defaultValue={
+                      this.state.stateText ? this.state.stateText : 'State'
+                    }
+                    style={styles.input}
+                    dropdownStyle={innerStyles.modalDropdownStyle}
+                    textStyle={innerStyles.modalTextStyle}
+                    onSelect={(index, option) => {
+                      this.onStateModalSelect(option);
+                    }}
+                    renderRow={(option, index, isSelected) => {
+                      return (
+                        <Text style={[innerStyles.numText]}>{option}</Text>
+                      );
+                    }}
+                  />
+                </View>
+
+                    */}
                   </View>
+                  <TextInput
+                    placeholderTextColor={TEXTINPUT_COLOR}
+                    textContentType="postalCode"
+                    style={[styles.input]}
+                    keyboardType={'phone-pad'}
+                    placeholder="Zip code"
+                    value={this.state.s_zipCode}
+                    onChangeText={(text) => {
+                      this.setState({ s_zipCode: text });
+                    }}
+                  />
                   {this.state.s_stateTextError != '' ? (
                     this.showErrorMessage(this.state.s_stateTextError)
                   ) : (
@@ -1028,6 +1148,7 @@ const innerStyles = StyleSheet.create({
   inputView: {
     flexDirection: 'row',
     paddingVertical: 10,
+    justifyContent: 'space-between'
   },
   orderButtonView: {
     paddingHorizontal: 30,
@@ -1217,7 +1338,7 @@ const innerStyles = StyleSheet.create({
   alignCenter: {
     alignItems: 'center',
   },
-  
+
 });
 
 export default Delivery;

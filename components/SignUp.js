@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -17,9 +17,9 @@ import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
 import LogoSmall from './Styles/LogoSmall';
 import FastImage from 'react-native-fast-image';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import DocumentPicker from 'react-native-document-picker';
-import {Icon} from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import ModalDropdown from 'react-native-modal-dropdown';
 
 import RadioForm, {
@@ -33,13 +33,15 @@ var RNFS = require('react-native-fs');
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
-const usStates = Globals.usStates;
 var radio_props = [
-  {label: 'Yes', value: true},
-  {label: 'No', value: false},
+  { label: 'Yes', value: true },
+  { label: 'No', value: false },
 ];
 const baseUrl = Globals.baseUrl;
-
+const usStates = Globals.usStates;
+const australiaStates = Globals.australiaStates;
+const canadaStates = Globals.canadaStates;
+const states = Globals.states;
 let DEFAULTS_OBJ = [];
 
 class SignUp extends Component {
@@ -96,8 +98,8 @@ class SignUp extends Component {
       s_phoneNumber: '',
       s_phoneNumberError: '',
       sameShipping: true,
-      isConfirmPasswordVisible:false,
-      isPasswordVisible:false
+      isConfirmPasswordVisible: false,
+      isPasswordVisible: false
     };
 
     RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
@@ -144,7 +146,7 @@ class SignUp extends Component {
     /////////////////////////   Image Picker   ////////////////////////////
     const options = {
       title: 'Upload from..',
-      customButtons: [{name: 'document', title: 'Upload PDF file'}],
+      customButtons: [{ name: 'document', title: 'Upload PDF file' }],
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -192,7 +194,7 @@ class SignUp extends Component {
   signUpClick(showAlert = true) {
     console.log("SignUp Clicked")
     if (this.isValid()) {
-      this.setState({emailError: ''});
+      this.setState({ emailError: '' });
       //call signup API here
       console.log("input is Valid")
 
@@ -218,14 +220,14 @@ class SignUp extends Component {
             .slice(1)
             .join(',')),
           (data.b_county = ''),
-          (data.b_country = 'US'),
+          (data.b_country = this.state.b_country),
           (data.b_city = this.state.cityTown),
           (data.b_state = this.state.stateText),
           (data.b_zipcode = this.state.zipCode),
           (data.b_phone = this.state.phoneNumber),
           (data.is_same_shipping = 'Y');
       } else {
-        
+
 
         (data.b_firstname = this.state.billingFirstName),
           (data.b_lastname = this.state.billingLastName),
@@ -235,7 +237,7 @@ class SignUp extends Component {
             .slice(1)
             .join(',')),
           (data.b_county = ''),
-          (data.b_country = 'US'),
+          (data.b_country = this.state.b_country),
           (data.b_city = this.state.cityTown),
           (data.b_state = this.state.stateText),
           (data.b_zipcode = this.state.zipCode),
@@ -248,7 +250,7 @@ class SignUp extends Component {
             .slice(1)
             .join(',')),
           (data.s_county = ''),
-          (data.s_country = 'US'),
+          (data.s_country = this.state.s_country),
           (data.s_city = this.state.s_cityTown),
           (data.s_state = this.state.s_stateText),
           (data.s_zipcode = this.state.s_zipCode),
@@ -277,7 +279,7 @@ class SignUp extends Component {
                 date: today,
               };
               Toast.show('Please wait...');
-              
+
 
               PostData(baseUrl + 'api/salestaxid', taxIdData)
                 .then((res) => res.json())
@@ -285,7 +287,7 @@ class SignUp extends Component {
                   console.log("TaxID", response)
 
                   if (response.tax_id) {
-                    
+
                     Toast.show('Registered Successfully');
                     this.props.navigation.navigate('SignIn'); //Passing user Name
                     let subsData = {
@@ -362,7 +364,7 @@ class SignUp extends Component {
           },
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
@@ -373,31 +375,31 @@ class SignUp extends Component {
   isValid() {
     let validFlag = true;
     if (this.state.firstName == '') {
-      this.setState({firstNameError: 'First name is required.'});
+      this.setState({ firstNameError: 'First name is required.' });
       validFlag = false;
     } else {
-      this.setState({firstNameError: ''});
+      this.setState({ firstNameError: '' });
     }
 
     if (this.state.lastName == '') {
-      this.setState({lastNameError: 'Last name is required.'});
+      this.setState({ lastNameError: 'Last name is required.' });
       validFlag = false;
     } else {
-      this.setState({lastNameError: ''});
+      this.setState({ lastNameError: '' });
     }
 
     if (this.state.company == '') {
-      this.setState({companyError: 'Company name is required.'});
+      this.setState({ companyError: 'Company name is required.' });
       validFlag = false;
     } else {
-      this.setState({companyError: ''});
+      this.setState({ companyError: '' });
     }
 
     if (this.state.businessPhone == '') {
-      this.setState({businessPhoneError: 'Phone number is required.'});
+      this.setState({ businessPhoneError: 'Phone number is required.' });
       validFlag = false;
     } else {
-      this.setState({businessPhoneError: ''});
+      this.setState({ businessPhoneError: '' });
     }
 
     // if (this.state.mobile == '') {
@@ -408,25 +410,25 @@ class SignUp extends Component {
     // }
 
     if (this.state.email == '') {
-      this.setState({emailError: 'Email is required.'});
+      this.setState({ emailError: 'Email is required.' });
       validFlag = false;
     } else {
       let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
       if (emailRegex.test(this.state.email) === false) {
-        this.setState({emailError: 'Email is invalid.'});
+        this.setState({ emailError: 'Email is invalid.' });
         validFlag = false;
       } else {
-        this.setState({emailError: ''});
+        this.setState({ emailError: '' });
       }
     }
     if (this.state.password != this.state.confirmPassword) {
-      this.setState({nonMatchingPasswordError: 'Passwords do not match.'});
+      this.setState({ nonMatchingPasswordError: 'Passwords do not match.' });
       validFlag = false;
     } else {
-      this.setState({nonMatchingPasswordError: ''});
+      this.setState({ nonMatchingPasswordError: '' });
     }
     if (this.state.password == '') {
-      this.setState({passwordError: 'Password is required.'});
+      this.setState({ passwordError: 'Password is required.' });
       validFlag = false;
     } else {
       let passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{7,}$/;
@@ -437,131 +439,131 @@ class SignUp extends Component {
         });
         validFlag = false;
       } else {
-        this.setState({passwordError: ''});
+        this.setState({ passwordError: '' });
       }
     }
 
     if (this.state.confirmPassword == '') {
-      this.setState({confirmPasswordError: 'Confirm password is required.'});
+      this.setState({ confirmPasswordError: 'Confirm password is required.' });
       validFlag = false;
     } else {
-      this.setState({confirmPasswordError: ''});
+      this.setState({ confirmPasswordError: '' });
     }
 
     //Billing address
     if (this.state.billingFirstName == '') {
-      this.setState({billingFirstNameError: 'First Name is required.'});
+      this.setState({ billingFirstNameError: 'First Name is required.' });
       validFlag = false;
     } else {
-      this.setState({billingFirstNameError: ''});
+      this.setState({ billingFirstNameError: '' });
     }
 
     if (this.state.billingLastName == '') {
-      this.setState({billingLastNameError: 'Last Name is required.'});
+      this.setState({ billingLastNameError: 'Last Name is required.' });
       validFlag = false;
     } else {
-      this.setState({billingLastNameError: ''});
+      this.setState({ billingLastNameError: '' });
     }
-    
+
 
     if (this.state.streetAddress == '') {
-      this.setState({streetAddressError: 'Street address is required.'});
+      this.setState({ streetAddressError: 'Street address is required.' });
       validFlag = false;
     } else {
-      this.setState({streetAddressError: ''});
+      this.setState({ streetAddressError: '' });
     }
 
     if (this.state.cityTown == '') {
-      this.setState({cityTownError: 'City/Town is required.'});
+      this.setState({ cityTownError: 'City/Town is required.' });
       validFlag = false;
     } else {
-      this.setState({cityTownError: ''});
+      this.setState({ cityTownError: '' });
     }
 
     if (this.state.stateText == '') {
-      this.setState({stateTextError: 'State is required.'});
+      this.setState({ stateTextError: 'State is required.' });
       validFlag = false;
     } else {
-      this.setState({stateTextError: ''});
+      this.setState({ stateTextError: '' });
     }
 
     if (this.state.zipCode == '') {
-      this.setState({zipCodeError: 'Zip code is required.'});
+      this.setState({ zipCodeError: 'Zip code is required.' });
       validFlag = false;
     } else {
-      this.setState({zipCodeError: ''});
+      this.setState({ zipCodeError: '' });
     }
 
     if (this.state.email == '') {
-      this.setState({emailError: 'Email is required.'});
+      this.setState({ emailError: 'Email is required.' });
       validFlag = false;
     } else {
-      this.setState({emailError: ''});
+      this.setState({ emailError: '' });
     }
 
     if (this.state.phoneNumber == '') {
-      this.setState({phoneNumberError: 'Phone number is required.'});
+      this.setState({ phoneNumberError: 'Phone number is required.' });
       validFlag = false;
     } else {
-      this.setState({phoneNumberError: ''});
+      this.setState({ phoneNumberError: '' });
     }
 
     //Shipping address
     if (!this.state.sameShipping) {
       if (this.state.s_firstName == '') {
-        this.setState({s_firstNameError: 'First Name is required.'});
+        this.setState({ s_firstNameError: 'First Name is required.' });
         validFlag = false;
       } else {
-        this.setState({s_firstNameError: ''});
+        this.setState({ s_firstNameError: '' });
       }
 
       if (this.state.s_lastName == '') {
-        this.setState({s_lastNameError: 'Last Name is required.'});
+        this.setState({ s_lastNameError: 'Last Name is required.' });
         validFlag = false;
       } else {
-        this.setState({s_lastNameError: ''});
+        this.setState({ s_lastNameError: '' });
       }
 
       if (this.state.s_streetAddress == '') {
-        this.setState({s_streetAddressError: 'Street address is required.'});
+        this.setState({ s_streetAddressError: 'Street address is required.' });
         validFlag = false;
       } else {
-        this.setState({s_streetAddressError: ''});
+        this.setState({ s_streetAddressError: '' });
       }
 
       if (this.state.s_cityTown == '') {
-        this.setState({s_cityTownError: 'City/Town is required.'});
+        this.setState({ s_cityTownError: 'City/Town is required.' });
         validFlag = false;
       } else {
-        this.setState({s_cityTownError: ''});
+        this.setState({ s_cityTownError: '' });
       }
 
       if (this.state.s_stateText == '') {
-        this.setState({s_stateTextError: 'State is required.'});
+        this.setState({ s_stateTextError: 'State is required.' });
         validFlag = false;
       } else {
-        this.setState({s_stateTextError: ''});
+        this.setState({ s_stateTextError: '' });
       }
 
       if (this.state.s_zipCode == '') {
-        this.setState({s_zipCodeError: 'Zip code is required.'});
+        this.setState({ s_zipCodeError: 'Zip code is required.' });
         validFlag = false;
       } else {
-        this.setState({s_zipCodeError: ''});
+        this.setState({ s_zipCodeError: '' });
       }
 
       if (this.state.s_email == '') {
-        this.setState({s_emailError: 'Email is required.'});
+        this.setState({ s_emailError: 'Email is required.' });
         validFlag = false;
       } else {
-        this.setState({s_emailError: ''});
+        this.setState({ s_emailError: '' });
       }
 
       if (this.state.s_phoneNumber == '') {
-        this.setState({s_phoneNumberError: 'Phone number is required.'});
+        this.setState({ s_phoneNumberError: 'Phone number is required.' });
         validFlag = false;
       } else {
-        this.setState({s_phoneNumberError: ''});
+        this.setState({ s_phoneNumberError: '' });
       }
     }
 
@@ -591,26 +593,46 @@ class SignUp extends Component {
   };
 
   onRadioPress = (value) => {
-    this.setState({sameShipping: value});
+    this.setState({ sameShipping: value });
   };
 
-  onStateModalSelect = (index) => {
-    this.setState({
-      stateText: usStates[index],
-      s_country: usStates[index],
-      b_country: usStates[index],
-    });
+  onStateModalSelect = (option) => {
+    this.setState({ b_country: option });
   };
-  onShipStateModalSelect = (index) => {
-    this.setState({s_stateText: usStates[index]});
+  onShipStateModalSelect = (option) => {
+    this.setState({ s_country: option });
   };
 
-  handlePasswordView=()=>{
+
+  onParentStateModalSelect = (option) => {
+    if (option == 'US') {
+      this.setState({ stateText: usStates[0] });
+    } else if (option == 'AU') {
+      this.setState({ stateText: australiaStates[0] });
+    } else if (option == 'CA') {
+      this.setState({ stateText: canadaStates[0] });
+    }
+    this.setState({ b_country: option });
+  };
+
+
+  onParentShipStateModalSelect = (option) => {
+    if (option == 'US') {
+      this.setState({ s_stateText: usStates[0] });
+    } else if (option == 'AU') {
+      this.setState({ s_stateText: australiaStates[0] });
+    } else if (option == 'CA') {
+      this.setState({ s_stateText: canadaStates[0] });
+    }
+    this.setState({ s_country: option });
+  };
+
+  handlePasswordView = () => {
     this.setState(prevState => ({
       isPasswordVisible: !prevState.isPasswordVisible
     }));
   }
-  handleConfirmPasswordView=()=>{
+  handleConfirmPasswordView = () => {
     this.setState(prevState => ({
       isConfirmPasswordVisible: !prevState.isConfirmPasswordVisible
     }));
@@ -632,7 +654,7 @@ class SignUp extends Component {
                 placeholder="First Name"
                 autoCapitalize="words"
                 onChangeText={(text) => {
-                  this.setState({firstName: text});
+                  this.setState({ firstName: text });
                 }}
               />
             </View>
@@ -647,7 +669,7 @@ class SignUp extends Component {
                 placeholder="Last Name"
                 autoCapitalize="words"
                 onChangeText={(text) => {
-                  this.setState({lastName: text});
+                  this.setState({ lastName: text });
                 }}
               />
             </View>
@@ -663,7 +685,7 @@ class SignUp extends Component {
                 autoCapitalize="none"
                 placeholder="Email"
                 onChangeText={(text) => {
-                  this.setState({email: text.trim()});
+                  this.setState({ email: text.trim() });
                 }}
               />
             </View>
@@ -680,10 +702,10 @@ class SignUp extends Component {
                 autoCapitalize="none"
                 placeholder="Password"
                 onChangeText={(text) => {
-                  this.setState({password: text});
+                  this.setState({ password: text });
                 }}
               />
-              <TouchableOpacity activeOpacity={0.95} onPress={this.handlePasswordView} style={{alignItems:"center",paddingRight:10}}>
+              <TouchableOpacity activeOpacity={0.95} onPress={this.handlePasswordView} style={{ alignItems: "center", paddingRight: 10 }}>
                 <Icon
                   size={22}
                   name={this.state.isPasswordVisible ? "md-eye" : "md-eye-off"}
@@ -705,10 +727,10 @@ class SignUp extends Component {
                 autoCapitalize="none"
                 placeholder="Confirm password"
                 onChangeText={(text) => {
-                  this.setState({confirmPassword: text});
+                  this.setState({ confirmPassword: text });
                 }}
               />
-              <TouchableOpacity activeOpacity={0.95} onPress={this.handleConfirmPasswordView} style={{alignItems:"center",paddingRight:10}}>
+              <TouchableOpacity activeOpacity={0.95} onPress={this.handleConfirmPasswordView} style={{ alignItems: "center", paddingRight: 10 }}>
                 <Icon
                   size={22}
                   name={this.state.isConfirmPasswordVisible ? "md-eye" : "md-eye-off"}
@@ -732,7 +754,7 @@ class SignUp extends Component {
                 autoCapitalize="words"
                 placeholder="Company Name"
                 onChangeText={(text) => {
-                  this.setState({company: text});
+                  this.setState({ company: text });
                 }}
               />
             </View>
@@ -748,7 +770,7 @@ class SignUp extends Component {
                 autoCapitalize="none"
                 placeholder="Business Phone"
                 onChangeText={(text) => {
-                  this.setState({businessPhone: text});
+                  this.setState({ businessPhone: text });
                 }}
               />
             </View>
@@ -782,15 +804,15 @@ class SignUp extends Component {
                 placeholderTextColor={TEXTINPUT_COLOR}
                 value={this.state.billingFirstName}
                 onChangeText={(text) => {
-                  this.setState({billingFirstName: text});
+                  this.setState({ billingFirstName: text });
                 }}
               />
             </View>
             {this.state.billingFirstNameError != '' ? (
               this.showErrorMessage(this.state.billingFirstNameError)
             ) : (
-              <View></View>
-            )}
+                <View></View>
+              )}
             <View style={styles.inputView}>
               <TextInput
                 textContentType="name"
@@ -799,15 +821,15 @@ class SignUp extends Component {
                 placeholderTextColor={TEXTINPUT_COLOR}
                 value={this.state.billingLastName}
                 onChangeText={(text) => {
-                  this.setState({billingLastName: text});
+                  this.setState({ billingLastName: text });
                 }}
               />
             </View>
             {this.state.billingLastNameError != '' ? (
               this.showErrorMessage(this.state.billingLastNameError)
             ) : (
-              <View></View>
-            )}
+                <View></View>
+              )}
 
             <View style={styles.inputView}>
               <TextInput
@@ -818,15 +840,15 @@ class SignUp extends Component {
                 value={this.state.streetAddress}
                 multiline={true}
                 onChangeText={(text) => {
-                  this.setState({streetAddress: text});
+                  this.setState({ streetAddress: text });
                 }}
               />
             </View>
             {this.state.streetAddressError != '' ? (
               this.showErrorMessage(this.state.streetAddressError)
             ) : (
-              <View></View>
-            )}
+                <View></View>
+              )}
 
             <View style={styles.inputView}>
               <TextInput
@@ -836,56 +858,84 @@ class SignUp extends Component {
                 placeholder="City / Town"
                 value={this.state.cityTown}
                 onChangeText={(text) => {
-                  this.setState({cityTown: text});
+                  this.setState({ cityTown: text });
                 }}
               />
             </View>
             {this.state.cityTownError != '' ? (
               this.showErrorMessage(this.state.cityTownError)
             ) : (
-              <View></View>
-            )}
+                <View></View>
+              )}
 
             <View style={styles.inputView}>
               <View style={innerStyles.modalView}>
                 <ModalDropdown
-                  options={usStates}
+                  options={states}
+                  defaultValue={
+                    this.state.b_country ? this.state.b_country : 'country'
+                  }
+                  style={styles.input}
+                  dropdownStyle={innerStyles.modalDropdownStyle}
+                  textStyle={innerStyles.modalTextStyle}
+                  onSelect={(index, option) => {
+                    this.onParentStateModalSelect(option);
+                  }}
+                  renderRow={(option, index, isSelected) => {
+                    return (
+                      <Text style={[innerStyles.numText]}>{option}</Text>
+                    );
+                  }}
+                />
+              </View>
+              <View style={innerStyles.modalView}>
+                <ModalDropdown
+                  options={
+                    (this.state.b_country == 'US') ? usStates
+                      : (this.state.b_country == 'AU') ? australiaStates
+                        : canadaStates
+                  }
                   defaultValue={
                     this.state.stateText ? this.state.stateText : 'State'
                   }
                   style={styles.input}
                   dropdownStyle={innerStyles.modalDropdownStyle}
                   textStyle={innerStyles.modalTextStyle}
-                  onSelect={(index) => {
-                    this.onStateModalSelect(index);
+                  onSelect={(index, option) => {
+                    this.onStateModalSelect(option);
                   }}
                   renderRow={(option, index, isSelected) => {
                     return <Text style={[innerStyles.numText]}>{option}</Text>;
                   }}
                 />
               </View>
-              <TextInput
-                placeholderTextColor={TEXTINPUT_COLOR}
-                textContentType="postalCode"
-                style={[styles.input, innerStyles.marginStart]}
-                keyboardType={'phone-pad'}
-                placeholder="Zip code"
-                value={this.state.zipCode}
-                onChangeText={(text) => {
-                  this.setState({zipCode: text});
-                }}
-              />
+
             </View>
+            <View style={styles.inputView}>
+
+            <TextInput
+              placeholderTextColor={TEXTINPUT_COLOR}
+              textContentType="postalCode"
+              style={[styles.input]}
+              keyboardType={'phone-pad'}
+              placeholder="Zip code"
+              value={this.state.zipCode}
+              onChangeText={(text) => {
+                this.setState({ zipCode: text });
+              }}
+            />
+            </View>
+
             {this.state.stateTextError != '' ? (
               this.showErrorMessage(this.state.stateTextError)
             ) : (
-              <View></View>
-            )}
+                <View></View>
+              )}
             {this.state.zipCodeError != '' ? (
               this.showErrorMessage(this.state.zipCodeError)
             ) : (
-              <View></View>
-            )}
+                <View></View>
+              )}
             <View style={styles.inputView}>
               <TextInput
                 placeholderTextColor={TEXTINPUT_COLOR}
@@ -895,15 +945,15 @@ class SignUp extends Component {
                 keyboardType={'phone-pad'}
                 value={this.state.phoneNumber}
                 onChangeText={(text) => {
-                  this.setState({phoneNumber: text});
+                  this.setState({ phoneNumber: text });
                 }}
               />
             </View>
             {this.state.phoneNumberError != '' ? (
               this.showErrorMessage(this.state.phoneNumberError)
             ) : (
-              <View></View>
-            )}
+                <View></View>
+              )}
 
             <View style={styles.inputView}>
               <TextInput
@@ -914,15 +964,15 @@ class SignUp extends Component {
                 placeholder="Email address"
                 value={this.state.email}
                 onChangeText={(text) => {
-                  this.setState({email: text});
+                  this.setState({ email: text });
                 }}
               />
             </View>
             {this.state.emailError != '' ? (
               this.showErrorMessage(this.state.emailError)
             ) : (
-              <View></View>
-            )}
+                <View></View>
+              )}
 
             <Text style={innerStyles.sameShipping}>
               Billing and shipping addresses same
@@ -937,15 +987,15 @@ class SignUp extends Component {
                 labelStyle={innerStyles.labelStyle}
               />
             ) : (
-              <RadioForm
-                radio_props={radio_props}
-                initial={1}
-                onPress={this.onRadioPress}
-                formHorizontal={true}
-                style={innerStyles.radioButton}
-                labelStyle={innerStyles.labelStyle}
-              />
-            )}
+                <RadioForm
+                  radio_props={radio_props}
+                  initial={1}
+                  onPress={this.onRadioPress}
+                  formHorizontal={true}
+                  style={innerStyles.radioButton}
+                  labelStyle={innerStyles.labelStyle}
+                />
+              )}
 
             {!this.state.sameShipping && (
               <>
@@ -960,15 +1010,15 @@ class SignUp extends Component {
                     placeholder="First name"
                     value={this.state.s_firstName}
                     onChangeText={(text) => {
-                      this.setState({s_firstName: text});
+                      this.setState({ s_firstName: text });
                     }}
                   />
                 </View>
                 {this.state.s_firstNameError != '' ? (
                   this.showErrorMessage(this.state.s_firstNameError)
                 ) : (
-                  <View></View>
-                )}
+                    <View></View>
+                  )}
 
                 <View style={styles.inputView}>
                   <TextInput
@@ -978,15 +1028,15 @@ class SignUp extends Component {
                     placeholder="Last name"
                     value={this.state.s_lastName}
                     onChangeText={(text) => {
-                      this.setState({s_lastName: text});
+                      this.setState({ s_lastName: text });
                     }}
                   />
                 </View>
                 {this.state.s_lastNameError != '' ? (
                   this.showErrorMessage(this.state.s_lastNameError)
                 ) : (
-                  <View></View>
-                )}
+                    <View></View>
+                  )}
 
                 <View style={styles.inputView}>
                   <TextInput
@@ -996,15 +1046,15 @@ class SignUp extends Component {
                     placeholder="Street address"
                     value={this.state.s_streetAddress}
                     onChangeText={(text) => {
-                      this.setState({s_streetAddress: text});
+                      this.setState({ s_streetAddress: text });
                     }}
                   />
                 </View>
                 {this.state.s_streetAddressError != '' ? (
                   this.showErrorMessage(this.state.s_streetAddressError)
                 ) : (
-                  <View></View>
-                )}
+                    <View></View>
+                  )}
 
                 <View style={styles.inputView}>
                   <TextInput
@@ -1014,30 +1064,30 @@ class SignUp extends Component {
                     placeholder="City / Town"
                     value={this.state.s_cityTown}
                     onChangeText={(text) => {
-                      this.setState({s_cityTown: text});
+                      this.setState({ s_cityTown: text });
                     }}
                   />
                 </View>
                 {this.state.s_cityTownError != '' ? (
                   this.showErrorMessage(this.state.s_cityTownError)
                 ) : (
-                  <View></View>
-                )}
+                    <View></View>
+                  )}
 
                 <View style={styles.inputView}>
                   <View style={innerStyles.modalView}>
                     <ModalDropdown
-                      options={usStates}
+                      options={states}
                       defaultValue={
-                        this.state.s_stateText
-                          ? this.state.s_stateText
-                          : 'State'
+                        this.state.s_country
+                          ? this.state.s_country
+                          : 'country'
                       }
                       style={styles.input}
                       dropdownStyle={innerStyles.modalDropdownStyle}
                       textStyle={innerStyles.modalTextStyle}
-                      onSelect={(index) => {
-                        this.onShipStateModalSelect(index);
+                      onSelect={(index, option) => {
+                        this.onParentShipStateModalSelect(option);
                       }}
                       renderRow={(option, index, isSelected) => {
                         return (
@@ -1046,28 +1096,57 @@ class SignUp extends Component {
                       }}
                     />
                   </View>
-                  <TextInput
-                    placeholderTextColor={TEXTINPUT_COLOR}
-                    textContentType="postalCode"
-                    style={[styles.input, innerStyles.marginStart]}
-                    keyboardType={'phone-pad'}
-                    placeholder="Zip code"
-                    value={this.state.s_zipCode}
-                    onChangeText={(text) => {
-                      this.setState({s_zipCode: text});
-                    }}
-                  />
+                  <View style={innerStyles.modalView}>
+                    <ModalDropdown
+                      options={
+                        (this.state.s_country == 'US') ? usStates
+                          : (this.state.s_country == 'AU') ? australiaStates
+                            : canadaStates
+                      }
+                      defaultValue={
+                        this.state.s_stateText
+                          ? this.state.s_stateText
+                          : 'State'
+                      }
+                      style={styles.input}
+                      dropdownStyle={innerStyles.modalDropdownStyle}
+                      textStyle={innerStyles.modalTextStyle}
+                      onSelect={(index, option) => {
+                        this.onShipStateModalSelect(option);
+                      }}
+                      renderRow={(option, index, isSelected) => {
+                        return (
+                          <Text style={[innerStyles.numText]}>{option}</Text>
+                        );
+                      }}
+                    />
+                  </View>
+
+                </View>
+                <View style={styles.inputView}>
+
+                <TextInput
+                  placeholderTextColor={TEXTINPUT_COLOR}
+                  textContentType="postalCode"
+                  style={[styles.input]}
+                  keyboardType={'phone-pad'}
+                  placeholder="Zip code"
+                  value={this.state.s_zipCode}
+                  onChangeText={(text) => {
+                    this.setState({ s_zipCode: text });
+                  }}
+                />
                 </View>
                 {this.state.s_stateTextError != '' ? (
                   this.showErrorMessage(this.state.s_stateTextError)
                 ) : (
-                  <View></View>
-                )}
+                    <View></View>
+                  )}
                 {this.state.s_zipCodeError != '' ? (
                   this.showErrorMessage(this.state.s_zipCodeError)
                 ) : (
-                  <View></View>
-                )}
+                    <View></View>
+                  )}
                 <View style={styles.inputView}>
                   <TextInput
                     placeholderTextColor={TEXTINPUT_COLOR}
@@ -1077,15 +1156,15 @@ class SignUp extends Component {
                     keyboardType={'phone-pad'}
                     value={this.state.s_phoneNumber}
                     onChangeText={(text) => {
-                      this.setState({s_phoneNumber: text});
+                      this.setState({ s_phoneNumber: text });
                     }}
                   />
                 </View>
                 {this.state.s_phoneNumberError != '' ? (
                   this.showErrorMessage(this.state.s_phoneNumberError)
                 ) : (
-                  <View></View>
-                )}
+                    <View></View>
+                  )}
 
                 <View style={styles.inputView}>
                   <TextInput
@@ -1096,15 +1175,15 @@ class SignUp extends Component {
                     keyboardType="email-address"
                     value={this.state.s_email}
                     onChangeText={(text) => {
-                      this.setState({s_email: text});
+                      this.setState({ s_email: text });
                     }}
                   />
                 </View>
                 {this.state.s_emailError != '' ? (
                   this.showErrorMessage(this.state.s_emailError)
                 ) : (
-                  <View></View>
-                )}
+                    <View></View>
+                  )}
               </>
             )}
             <View style={styles.inputView}>
@@ -1227,19 +1306,19 @@ const innerStyles = StyleSheet.create({
     color: '#2d2d2f',
     fontFamily: 'Montserrat',
   },
-  arrowButton: {width: 10, height: 17, alignSelf: 'center'},
-  fillTaxView: {width: '100%', flexDirection: 'row'},
+  arrowButton: { width: 10, height: 17, alignSelf: 'center' },
+  fillTaxView: { width: '100%', flexDirection: 'row' },
   fillTaxID: {
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  buttonPadding: {paddingHorizontal: 15},
-  marginView: {marginTop: 10},
-  uploadFileImage: {width: 35, height: 47},
-  uploadFile: {alignItems: 'center', justifyContent: 'center'},
-  uploadFileView: {flexDirection: 'row'},
-  errorMessageText: {paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%'},
+  buttonPadding: { paddingHorizontal: 15 },
+  marginView: { marginTop: 10 },
+  uploadFileImage: { width: 35, height: 47 },
+  uploadFile: { alignItems: 'center', justifyContent: 'center' },
+  uploadFileView: { flexDirection: 'row' },
+  errorMessageText: { paddingHorizontal: 10, color: '#FF0000', maxWidth: '93%' },
   buttonSignUp: {
     width: '100%',
     backgroundColor: '#2d2d2f',
@@ -1279,6 +1358,7 @@ const innerStyles = StyleSheet.create({
   inputView: {
     flexDirection: 'row',
     paddingVertical: 10,
+    justifyContent: 'space-between'
   },
   orderButtonView: {
     paddingHorizontal: 30,
@@ -1286,7 +1366,7 @@ const innerStyles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
     paddingBottom: 20,
   },
-  padRight15: {marginRight: 15},
+  padRight15: { marginRight: 15 },
   buttonStyles: {
     paddingHorizontal: 30,
     width: '100%',
@@ -1311,6 +1391,7 @@ const innerStyles = StyleSheet.create({
     width: '42.7%',
     justifyContent: 'space-between',
     alignItems: 'center',
+    margin: 10,
   },
   modalStyle: {
     flex: 1,
@@ -1339,24 +1420,24 @@ const innerStyles = StyleSheet.create({
   radioButton: {
     alignSelf: 'center',
   },
-  priceText: {flex: 1, lineHeight: 30, textAlign: 'right'},
-  marginStart: {marginStart: 15},
-  alignRight: {flex: 1, textAlign: 'right'},
-  textBold: {fontSize: 18, lineHeight: 30},
-  orderViewNested: {flexDirection: 'row', paddingHorizontal: 20},
+  priceText: { flex: 1, lineHeight: 30, textAlign: 'right' },
+  marginStart: { marginStart: 15 },
+  alignRight: { flex: 1, textAlign: 'right' },
+  textBold: { fontSize: 18, lineHeight: 30 },
+  orderViewNested: { flexDirection: 'row', paddingHorizontal: 20 },
   plusIconStyle: {
     width: width * 0.08,
     height: height * 0.08,
   },
-  paddingHorizontal: {paddingHorizontal: 20},
+  paddingHorizontal: { paddingHorizontal: 20 },
   iconDoneStyle: {
     width: width * 0.12,
     height: height * 0.12,
     justifyContent: 'center',
   },
-  marginStart: {marginStart: 20},
-  buttonContainerAdd: {marginTop: 20, width: '100%'},
-  maincontainer: {flex: 1, backgroundColor: '#fff'},
+  marginStart: { marginStart: 20 },
+  buttonContainerAdd: { marginTop: 20, width: '100%' },
+  maincontainer: { flex: 1, backgroundColor: '#fff' },
   scrollView: {
     backgroundColor: '#fff',
     flexGrow: 1,
@@ -1470,10 +1551,10 @@ const innerStyles = StyleSheet.create({
     marginHorizontal: 15
 
   },
-  loader: {flex: 1, alignItems: 'center', justifyContent: 'center'},
-  loaderImage: {height: 200, width: 200},
-  textAlignLeft: {textAlign: 'left'},
-  textAlignCenter: {textAlign: 'center'},
+  loader: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  loaderImage: { height: 200, width: 200 },
+  textAlignLeft: { textAlign: 'left' },
+  textAlignCenter: { textAlign: 'center' },
   alignCenter: {
     alignItems: 'center',
   },
