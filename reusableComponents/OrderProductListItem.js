@@ -14,32 +14,32 @@ export default class OrderProductListItem extends PureComponent {
               <FastImage
                 style={[styles.thumbnailImage]}
                 resizeMode="contain"
-                source={{ uri: (this.props.data.imageUrl)?this.props.data.imageUrl:Globals.noImageFoundURL }}
+                source={{ uri: (this.props.data.item.imageUrl)?this.props.data.item.imageUrl:Globals.noImageFoundURL }}
               />
             </View>
 
             <View style={[styles.priceTextView]}>
               <View style={[styles.fdRow]}>
                 <Text style={[styles.itemNameText]}>
-                  {this.props.data.itemName}
+                  {this.props.data.item.itemName}
                 </Text>
                 <Text style={[styles.itemNameText]}>
-                  ${this.props.data.totalPrice}
+                  ${this.props.data.item.totalPrice}
                 </Text>
               </View>
               <View style={[styles.fdRow]}>
                 <Text style={[styles.itemUnitPriceText]}>Unit price</Text>
                 <Text style={[styles.lightText, styles.mart4]}>
-                  ${this.props.data.unitPrice}
+                  ${this.props.data.item.unitPrice}
                 </Text>
               </View>
               {/* <Text style={styles.lightText}>
                 Color: {this.props.data.color}
               </Text> */}
               <Text style={[styles.lightText, styles.marb20]}>
-                Quantity: {this.props.data.quantity}
+                Quantity: {this.props.data.item.quantity}
               </Text>
-              <Text style={styles.lightText}>SIZE: {this.props.data.size}</Text>
+              <Text style={styles.lightText}>SIZE: {this.props.data.item.size}</Text>
             </View>
           </View>
           <View></View>

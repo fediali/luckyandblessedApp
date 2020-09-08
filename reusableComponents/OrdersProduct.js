@@ -36,6 +36,7 @@ export default class ordersProduct extends PureComponent {
   }
 
   componentDidMount() {
+
     InteractionManager.runAfterInteractions(() => {
       this.setState({ isReady: false });
     });
@@ -44,6 +45,7 @@ export default class ordersProduct extends PureComponent {
   render() {
     let Height = Dimensions.get('window').height;
     let Width = Dimensions.get('window').width;
+
     if (!this.props.isReady) {
       return (
         <View style={styles.loader}>
@@ -51,12 +53,13 @@ export default class ordersProduct extends PureComponent {
         </View>
       );
     }
+
+
     return (
       <View >
-        {this.props.orders.map((item, index) => {
-          return <OrderProductListItem key={index.toString()} data={item} />;
-        })}
+        <OrderProductListItem key={this.props.orderId} data={this.props.order} />
         <View style={styles.dividerLine}></View>
+
         {/* {this.props.trackingURL ?
           <TouchableOpacity
             style={styles.trackingStyle}
@@ -73,7 +76,7 @@ export default class ordersProduct extends PureComponent {
 
           : <></>
         } */}
-        
+
       </View>
     );
   }
