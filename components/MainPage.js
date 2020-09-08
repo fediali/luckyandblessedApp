@@ -103,7 +103,10 @@ class MainPage extends Component {
                       category_id: '-2',
                       category: 'Lookbook',
                     });
-
+                    responses[1].categories.push({
+                      category_id: responses[0].home.logged.new_arrivals.category_id,
+                      category: 'New Arrivals',
+                    });
                     responses[1].categories=responses[1].categories.slice().sort(function(a, b){ 
                       return HEADER_ORDER.indexOf(a.category) - HEADER_ORDER.indexOf(b.category);
                     });
