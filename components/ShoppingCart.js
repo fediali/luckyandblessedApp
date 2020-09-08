@@ -322,6 +322,10 @@ class ShoppingCart extends Component {
   }
 
   componentDidMount() {
+
+    this.onComponentFocus = this.props.navigation.addListener('focus', () => {
+      this.onRefresh()
+    });
     InteractionManager.runAfterInteractions(() => {
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
@@ -622,6 +626,7 @@ class ShoppingCart extends Component {
     }
   };
   onRefresh = () => {
+    console.log("Refreshing")
     this.setState({ isFetching: true, }, () => {
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);

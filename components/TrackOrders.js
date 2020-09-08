@@ -23,6 +23,7 @@ import Toast from 'react-native-simple-toast';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen'
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
+var gUser = null;
 let orderOpened;
 export default class TrackOrders extends Component {
   constructor(props) {
@@ -46,17 +47,19 @@ export default class TrackOrders extends Component {
 
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
-        this.getData(JSON.parse(user));
+        gUser = JSON.parse(user)
+        this.getData();
       });
     });
   }
 
-  getData = (user) => {
+  getData = () => {
+    
     var promises = [];
     promises.push(
       GetData(
         baseUrl +
-        `api/orders?user_id=${user.user_id}&page=${this.state.iteratedPage}`, 
+        `api/orders?user_id=${gUser.user_id}&page=${this.state.iteratedPage}`, 
       ),
 
     );

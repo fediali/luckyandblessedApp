@@ -2,8 +2,15 @@ import React, {Component} from 'react';
 import {Text, View, SafeAreaView, StyleSheet, Image} from 'react-native';
 import Footer from '../reusableComponents/Footer';
 import {Icon} from 'react-native-elements';
+import Globals from '../Globals';
 
 export default class ConfirmationSuccess extends Component {
+
+  constructor(props) {
+    super(props);
+    Globals.cartCount = 0
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
@@ -30,7 +37,7 @@ export default class ConfirmationSuccess extends Component {
           <Text style={styles.orderText}>Order number: {this.props.route.params.orderId}</Text>
         </View>
 
-        <Footer  navigation={this.props.navigation}/>
+        <Footer Key={Math.random()} navigation={this.props.navigation}/>
       </SafeAreaView>
     );
   }
