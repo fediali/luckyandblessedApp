@@ -50,6 +50,7 @@ class Payment extends Component {
       profile_id: this.props.route.params.profile_id,
       paymentMode: 1,
       paypalLink: null,
+      paypalId: null,
       showCircleLoader: false,
       //Error related states
       cardNumberError: '',
@@ -314,7 +315,7 @@ class Payment extends Component {
           .then((res) => res.json())
           .then((response) => {
             console.log(response)
-            this.setState({ paypalLink: response.links[1].href });
+            this.setState({ paypalId:response.id, paypalLink: response.links[1].href });
           })
           .catch((e) => {
             Toast.show(e.toString());
@@ -481,7 +482,7 @@ class Payment extends Component {
     if (data.title == 'Success') {
       let transData = {
         type: 'AUTH_ONLY',
-        transaction_id: 'Paypal',
+        transaction_id: this.state.paypalId,
         location: 'MobileApp',
       };
       this.setState({ paypalLink: null }, () => {

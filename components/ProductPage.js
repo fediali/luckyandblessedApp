@@ -534,38 +534,40 @@ export default class ProductPage extends Component {
                         )}
                     </View>
                     {/* heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee */}
-                    <View style={{ flex: 1, marginLeft: 20 }}>
-
-                      <ModalDropdown
-                        onSelect={(index) => {
-                          this.setState({
-                            selectedColorSingle: this.state.selectedColor[index],
-                            pid: [this.state.iconPids[index]],
-                            iconName: this.state.iconColorNames[index],
-                            selectedIndex: index,
-                            isReady: false
-                          }, () => {
-                            this.getData();
-                          })
-                        }}
-                        options={this.state.iconUriOptions}
-                        hexCode={this.state.iconUriOptions[this.state.selectedIndex]}
-                        defaultValue={this.state.iconName}
-                        style={styles.quantityModalStyle}
-                        dropdownStyle={styles.colorModalDropdownStyle}
-                        textStyle={styles.quantityModalTextStyle}
-                        renderRow={(option, index, isSelected) => {
-                          return (
-                            <Image
-                              style={styles.ColorModalStyle}
-                              // resizeMode='contain'
-                              resizeMode="cover"
-                              source={{ uri: option }}
-                            />
-                          );
-                        }}
-                      />
-                    </View>
+                    {this.state.iconPids.length > 0 && (
+                      <View style={{ flex: 1, marginLeft: 20 }}>
+                        <ModalDropdown
+                          onSelect={(index) => {
+                            this.setState({
+                              selectedColorSingle: this.state.selectedColor[index],
+                              pid: [this.state.iconPids[index]],
+                              iconName: this.state.iconColorNames[index],
+                              selectedIndex: index,
+                              isReady: false
+                            }, () => {
+                              this.getData();
+                            })
+                          }}
+                          options={this.state.iconUriOptions}
+                          hexCode={this.state.iconUriOptions[this.state.selectedIndex]}
+                          defaultValue={this.state.iconName}
+                          style={styles.quantityModalStyle}
+                          dropdownStyle={styles.colorModalDropdownStyle}
+                          textStyle={styles.quantityModalTextStyle}
+                          renderRow={(option, index, isSelected) => {
+                            return (
+                              <Image
+                                style={styles.ColorModalStyle}
+                                // resizeMode='contain'
+                                resizeMode="cover"
+                                source={{ uri: option }}
+                              />
+                            );
+                          }}
+                        />
+                        </View>
+                    )}
+                    
                   </View>
                   <Text style={styles.minQuantityText}>
                     Minimum quantity for "{this.state.data.productName}" is{' '}

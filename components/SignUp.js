@@ -873,7 +873,7 @@ class SignUp extends Component {
                 <ModalDropdown
                   options={states}
                   defaultValue={
-                    this.state.b_country ? this.state.b_country : 'country'
+                    this.state.b_country ? this.state.b_country : 'Country'
                   }
                   style={styles.input}
                   dropdownStyle={innerStyles.modalDropdownStyle}
@@ -1081,7 +1081,7 @@ class SignUp extends Component {
                       defaultValue={
                         this.state.s_country
                           ? this.state.s_country
-                          : 'country'
+                          : 'Country'
                       }
                       style={styles.input}
                       dropdownStyle={innerStyles.modalDropdownStyle}
