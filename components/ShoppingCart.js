@@ -324,7 +324,30 @@ class ShoppingCart extends Component {
   componentDidMount() {
 
     this.onComponentFocus = this.props.navigation.addListener('focus', () => {
-      this.onRefresh()
+      this.setState({deletedRowKey: null,
+        itemList: [],
+        orderItems: [],
+        totalCost: 0,//does not include promo cost
+        finalCost: 0,//calculated after promo added
+        totalCartProducts: 0,
+        s_userAddress: '',
+        b_userAddress: '',
+        b_userAddress_1: '', //storing it seperate, as its needed by payment screen
+        b_userAddress_2: '',
+        b_zipCode: '',
+        b_country: '',
+        showZeroProductScreen: false,
+        promocode: '',
+        discount: 0,
+        paymentLineItems: [],
+        isReady: false,
+        profile_id: null,
+        isFetching: false,})
+
+      RetrieveDataAsync(STORAGE_USER).then((user) => {
+        gUser = JSON.parse(user);
+        this.getData(gUser);
+      });
     });
     InteractionManager.runAfterInteractions(() => {
       // Retriving the user_id

@@ -169,7 +169,7 @@ class Payment extends Component {
       //Handle Credit Cart payment
       if (this.state.paymentMode == 1) {
         if (this.isValid()) {
-          // this.postCreditCardTransaction(gUser);
+          // this.postAuthorizeNetTransaction(gUser);
           this.postNmiTransaction(gUser)
         }
       }
@@ -367,7 +367,7 @@ class Payment extends Component {
     return mproduct;
   };
 
-  postCreditCardTransaction = (user) => {
+  postAuthorizeNetTransaction = (user) => {
     let paymentItems = this.props.route.params.paymentLineItems;
     //Max length allowed for product name is 31 characters
     paymentItems.map((item) => {

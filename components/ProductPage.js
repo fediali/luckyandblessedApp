@@ -70,7 +70,8 @@ export default class ProductPage extends Component {
         full_description: '',
         composition: '',
         sizes: '',
-        sizeChart: ''
+        sizeChart: '',
+        frontend_urls: null
       },
       similarProducts: [],
       showZeroProductScreen: false,
@@ -89,7 +90,7 @@ export default class ProductPage extends Component {
 
   getData() {
     var promises = [];
-    promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}`));
+    promises.push(GetData(baseUrl + `api/products/${this.state.pid[0]}?get_frontend_urls=1`));
     promises.push(GetData(baseUrl + `api/similarproducts/${this.state.pid[0]}`));
     promises.push(GetData(baseUrl + `api/pages/87`));
     promises.push(GetData(baseUrl + `custom-api/product-variants/${this.state.pid[0]}`));
@@ -188,6 +189,7 @@ export default class ProductPage extends Component {
                   product_stock: parseInt(response[0].amount),
                   cname: response[0].category,
                   data: {
+                    frontend_urls:response[0].url,
                     productName: response[0].product,
                     price: response[0].price,
                     mainImage: ('detailed' in response[0].main_pair) ? response[0].main_pair.detailed.image_path : Globals.noImageFoundURL,
@@ -428,6 +430,7 @@ export default class ProductPage extends Component {
           centerText={this.state.cname}
           rightIcon="share"
           navigation={this.props.navigation}
+          shareText = {this.state.data.frontend_urls ? this.state.data.frontend_urls : "Check out the amazing products at https://landbapparel.com/"}
         />
         {this.state.showZeroProductScreen ? (
           <View style={styles.completeScreen}>
