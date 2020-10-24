@@ -18,6 +18,8 @@ class CategoriesProductListDoubleItem extends PureComponent {
             <TouchableOpacity activeOpacity={0.9} style={styles.button} onPress={this.navigateToProductPage}>
                 <FastImage source={(this.props.imageUrl!="")?this.props.imageUrl:require("../static/imagenotfound.png")} style={styles.image} />
                 {/* orignal width is 0.12 currently 0.30 due to long height image, height is 0.26 currently 0.20 */}
+                <Text style={styles.mainText}>{this.props.name1}</Text>
+
                 <View style={{ flexDirection: "row" }}>
                     {this.props.list_price ? <Text style={styles.strikedMainText}>${this.props.list_price}</Text> : null}
                     <Text style={styles.mainText}>{this.props.price1}</Text>
