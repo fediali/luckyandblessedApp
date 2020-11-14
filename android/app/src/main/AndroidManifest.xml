@@ -15,13 +15,17 @@
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true" 
       tools:targetApi="28">
+
+      <meta-data
+        android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+        android:value="barcode" />
      
-        <meta-data
-  android:name="com.google.firebase.messaging.default_notification_icon"
-  android:resource="@mipmap/ic_notification" />
-<meta-data
-  android:name="com.google.firebase.messaging.default_notification_color"
-  android:resource="@color/black" />
+      <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@mipmap/ic_notification" />
+      <meta-data
+        android:name="com.google.firebase.messaging.default_notification_color"
+        android:resource="@color/black" />
         <service android:name="io.invertase.firebase.messaging.RNFirebaseBackgroundMessagingService" />
         <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
           <intent-filter>

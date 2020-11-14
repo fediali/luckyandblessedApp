@@ -1,10 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import {Text, View, StyleSheet, Alert} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Toast from 'react-native-simple-toast';
 
@@ -23,14 +18,18 @@ export default class BarCodeScanner extends Component {
     this.onComponentFocus = this.props.navigation.addListener('focus', () => {
       this.setState({barCodeRead: false});
     });
-
   }
 
   onBarCodeRead = (barcode) => {
-    if (!this.state.barCodeRead) {
-      this.setState({barCodeRead: true});
-      Toast.show("Barcode read successfully")
-      this.props.navigation.navigate('SearchResults', {barcode});
+    if (barcode.barcodes[0]) {
+      console.log(barcode.barcodes[0].data);
+      if (!this.state.barCodeRead) {
+        this.setState({barCodeRead: true});
+        Toast.show('Barcode read successfully');
+        this.props.navigation.navigate('SearchResults', {
+          barcode: barcode.barcodes[0],
+        });
+      }
     }
   };
 
@@ -42,7 +41,10 @@ export default class BarCodeScanner extends Component {
           type={RNCamera.Constants.Type.back}
           flashMode={RNCamera.Constants.FlashMode.auto}
           captureAudio={false}
-          onBarCodeRead={this.onBarCodeRead}
+          onGoogleVisionBarcodesDetected={this.onBarCodeRead}
+          googleVisionBarcodeType={
+            RNCamera.Constants.GoogleVisionBarcodeDetection.BarcodeType.ALL
+          }
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
             message: 'We need your permission to use your camera',
