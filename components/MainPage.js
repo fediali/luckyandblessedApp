@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   ScrollView,
@@ -27,9 +27,8 @@ import FastImage from 'react-native-fast-image';
 import ThemeContext from '../reusableComponents/ThemeContext';
 import Globals from '../Globals';
 import Toast from 'react-native-simple-toast';
-import { greaterThan } from 'react-native-reanimated';
-import Swiper from 'react-native-swiper'
-
+import {greaterThan} from 'react-native-reanimated';
+import Swiper from 'react-native-swiper';
 
 const baseUrl = Globals.baseUrl;
 const SELECTED_CATEGORY_ALL = -1;
@@ -44,7 +43,19 @@ const SALE_NAME = 'SALE';
 const HISTORY_CATEGORY_ID = -2;
 const STORAGE_USER = Globals.STORAGE_USER;
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
-const HEADER_ORDER = ["ALL", "New Arrivals", "Women's", "Women's Plus", "Men's", "Men's Plus", "SALE", "Accessories", "Kids", "Footwear", "Lookbook"]
+const HEADER_ORDER = [
+  'ALL',
+  'New Arrivals',
+  "Women's",
+  "Women's Plus",
+  "Men's",
+  "Men's Plus",
+  'SALE',
+  'Accessories',
+  'Kids',
+  'Footwear',
+  'Lookbook',
+];
 class MainPage extends Component {
   constructor(props) {
     super(props);
@@ -66,7 +77,7 @@ class MainPage extends Component {
   componentDidMount() {
     this.onComponentFocus = this.props.navigation.addListener('focus', () => {
       RetrieveDataAsync(STORAGE_PRODUCT_HISTORY_CATEGORY).then((value) => {
-        this.setState({ history: JSON.parse(value) });
+        this.setState({history: JSON.parse(value)});
       });
     });
 
@@ -84,13 +95,13 @@ class MainPage extends Component {
               promisesNew.push(
                 GetData(
                   baseUrl +
-                  `api/products?cid=${responses[0].home.logged.new_arrivals.category_id}&status=A&items_per_page=4`,
+                    `api/products?cid=${responses[0].home.logged.new_arrivals.category_id}&status=A&items_per_page=4`,
                 ),
               );
               promisesNew.push(
                 GetData(
                   baseUrl +
-                  `api/products?cid=${responses[0].home.logged.trending.category_id}&status=A&items_per_page=6`,
+                    `api/products?cid=${responses[0].home.logged.trending.category_id}&status=A&items_per_page=6`,
                 ),
               ); //Category id for store.
               Promise.all(promisesNew)
@@ -107,12 +118,18 @@ class MainPage extends Component {
                       category: 'Lookbook',
                     });
                     responses[1].categories.push({
-                      category_id: responses[0].home.logged.new_arrivals.category_id,
+                      category_id:
+                        responses[0].home.logged.new_arrivals.category_id,
                       category: 'New Arrivals',
                     });
-                    responses[1].categories = responses[1].categories.slice().sort(function (a, b) {
-                      return HEADER_ORDER.indexOf(a.category) - HEADER_ORDER.indexOf(b.category);
-                    });
+                    responses[1].categories = responses[1].categories
+                      .slice()
+                      .sort(function (a, b) {
+                        return (
+                          HEADER_ORDER.indexOf(a.category) -
+                          HEADER_ORDER.indexOf(b.category)
+                        );
+                      });
                     this.setState(
                       {
                         collections: responses[0].home.logged.sliders,
@@ -144,7 +161,7 @@ class MainPage extends Component {
                           } else {
                             Globals.cartCount = Number(responses.cart_products);
                           }
-                          this.setState({ isReady: true });
+                          this.setState({isReady: true});
                         });
                     });
                   });
@@ -167,29 +184,29 @@ class MainPage extends Component {
   }
   onCategorySelect = (cid, cname) => {
     if (cname.includes(SALE_NAME)) {
-      this.setState({ isReady: false });
-      this.props.navigation.navigate('CategoriesProduct', { cid, cname });
-    }
-    else if (cid == LOOKBOOK_CATEGORY_ID) {
-      this.setState({ isReady: false });
+      this.setState({isReady: false});
+      this.props.navigation.navigate('CategoriesProduct', {cid, cname});
+    } else if (cid == LOOKBOOK_CATEGORY_ID) {
+      this.setState({isReady: false});
 
-      GetData(baseUrl + 'api/pages?page_id=67&visible=true&status=A&items_per_page=20')
-        .then(res => res.json())
-        .then(response => {
+      GetData(
+        baseUrl +
+          'api/pages?page_id=67&visible=true&status=A&items_per_page=20',
+      )
+        .then((res) => res.json())
+        .then((response) => {
           this.props.navigation.navigate('Categories', {
             cid: cid,
             cname: cname,
             subCats: response.pages.reverse(),
             categoryList: this.state.categoryList,
           }); //SubCat of the selected category and categoryList is main categories
-        })
-
-    }
-    else if (cid != SELECTED_CATEGORY_ALL) {
-      this.setState({ isReady: false });
+        });
+    } else if (cid != SELECTED_CATEGORY_ALL) {
+      this.setState({isReady: false});
       GetData(
         baseUrl +
-        `api/categories?visible=1&category_id=${cid}&get_images=true&status=A&items_per_page=20`,
+          `api/categories?visible=1&category_id=${cid}&get_images=true&status=A&items_per_page=20`,
       )
         .then((res) => res.json())
         .then((responses) => {
@@ -202,18 +219,18 @@ class MainPage extends Component {
               categoryList: this.state.categoryList,
             }); //SubCat of the selected category and categoryList is main categories
           } else
-            this.props.navigation.navigate('CategoriesProduct', { cid, cname });
+            this.props.navigation.navigate('CategoriesProduct', {cid, cname});
           // setting isReady to true after 1s, so after comming back it is not on loading
         })
         .catch((ex) => {
           console.log('Outer Promise', ex);
           Toast.show(ex.toString());
-          this.setState({ isReady: true });
+          this.setState({isReady: true});
         });
     }
 
     setTimeout(() => {
-      this.setState({ isReady: true });
+      this.setState({isReady: true});
     }, 1000);
   };
 
@@ -222,19 +239,19 @@ class MainPage extends Component {
   }
 
   enableNewsLetter = (flag) => () => {
-    this.setState({ showNewsletter: flag });
+    this.setState({showNewsletter: flag});
   };
 
   navigateToCategoryScreen = (cid, cname) => () => {
-    this.props.navigation.navigate('CategoriesProduct', { cid, cname });
+    this.props.navigation.navigate('CategoriesProduct', {cid, cname});
   };
 
   navigateToHistoryCategoryScreen = (cid, cname, items) => () => {
-    this.props.navigation.navigate('CategoriesProduct', { cid, cname, items });
+    this.props.navigation.navigate('CategoriesProduct', {cid, cname, items});
   };
 
   navigateToProductScreen = (pid, cname) => () => {
-    this.props.navigation.navigate('ProductPage', { pid, cname });
+    this.props.navigation.navigate('ProductPage', {pid, cname});
   };
 
   mapTrendingList(tList, sliceValue) {
@@ -243,7 +260,7 @@ class MainPage extends Component {
     for (var i = 0; i < tList.length / sliceValue; i++) {
       tempList.push(tList.slice(i * sliceValue, i * sliceValue + sliceValue));
     }
-    this.setState({ trending: tempList });
+    this.setState({trending: tempList});
   }
 
   render() {
@@ -264,8 +281,18 @@ class MainPage extends Component {
       );
     }
 
-    const nextButton = <FastImage source={require('../static/arrow-right.png')} style={innerStyles.nextButton} />;
-    const prevButton = <FastImage source={require('../static/arrow-left.png')} style={innerStyles.prevButton} />;
+    const nextButton = (
+      <FastImage
+        source={require('../static/arrow-right.png')}
+        style={innerStyles.nextButton}
+      />
+    );
+    const prevButton = (
+      <FastImage
+        source={require('../static/arrow-left.png')}
+        style={innerStyles.prevButton}
+      />
+    );
 
     return (
       <SafeAreaView style={[styles.parentContainer]}>
@@ -276,7 +303,7 @@ class MainPage extends Component {
           person={contextType._currentValue.username}
           rightIcon="search"
         />
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('CategorySlider')}><Text>Slider</Text></TouchableOpacity>
+
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={innerStyles.scrollContainer}>
@@ -287,7 +314,7 @@ class MainPage extends Component {
               horizontal={true}
               extraData={this.selectedCategory}
               showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => (
+              renderItem={({item, index}) => (
                 <HeaderHorizontalListItem
                   cid={this.state.selectedCategory}
                   index={index}
@@ -296,7 +323,13 @@ class MainPage extends Component {
                 />
               )}
             />
-            <Swiper nextButton={nextButton} prevButton={prevButton} style={innerStyles.wrapper} showsButtons={true} autoplay={true} showsPagination={false}>
+            {/* <Swiper
+              nextButton={nextButton}
+              prevButton={prevButton}
+              style={innerStyles.wrapper}
+              showsButtons={true}
+              autoplay={true}
+              showsPagination={false}>
               <View style={innerStyles.slide1}>
                 <FastImage
                   style={innerStyles.slide}
@@ -318,14 +351,13 @@ class MainPage extends Component {
                   source={require('../static/slide3.jpg')}
                 />
               </View>
-
-            </Swiper>
-            {/* <FlatList
+            </Swiper> */}
+            <FlatList
               keyExtractor={(item) => item.background.image}
               data={this.state.collections}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => (
+              renderItem={({item, index}) => (
                 <MainPageCollection
                   navigation={this.props.navigation}
                   imageUrl={item.background.image}
@@ -333,7 +365,7 @@ class MainPage extends Component {
                   cid={item.background.category_id}
                 />
               )}
-            /> */}
+            />
 
             <View style={innerStyles.headerView}>
               <Text
@@ -366,9 +398,10 @@ class MainPage extends Component {
                     style={innerStyles.gridImage}
                     // resizeMode='contain'
                     source={{
-                      uri: (this.state.newArrivals[0].main_pair) ?
-                        this.state.newArrivals[0].main_pair.detailed.image_path
-                        : Globals.noImageFoundURL
+                      uri: this.state.newArrivals[0].main_pair
+                        ? this.state.newArrivals[0].main_pair.detailed
+                            .image_path
+                        : Globals.noImageFoundURL,
                     }}
                   />
                   <Text
@@ -394,8 +427,8 @@ class MainPage extends Component {
                       uri: this.state.newArrivals[1].main_pair.detailed
                         .image_path
                         ? this.state.newArrivals[1].main_pair.detailed
-                          .image_path
-                        : Globals.noImageFoundURL
+                            .image_path
+                        : Globals.noImageFoundURL,
                     }}
                   />
                   <Text
@@ -422,8 +455,8 @@ class MainPage extends Component {
                       uri: this.state.newArrivals[2].main_pair.detailed
                         .image_path
                         ? this.state.newArrivals[2].main_pair.detailed
-                          .image_path
-                        : Globals.noImageFoundURL
+                            .image_path
+                        : Globals.noImageFoundURL,
                     }}
                   />
                   <Text
@@ -449,8 +482,8 @@ class MainPage extends Component {
                       uri: this.state.newArrivals[3].main_pair.detailed
                         .image_path
                         ? this.state.newArrivals[3].main_pair.detailed
-                          .image_path
-                        : Globals.noImageFoundURL
+                            .image_path
+                        : Globals.noImageFoundURL,
                     }}
                   />
                   <Text
@@ -488,7 +521,7 @@ class MainPage extends Component {
               data={this.state.trending}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => {
+              renderItem={({item, index}) => {
                 return (
                   <MainPageTrendingListItem
                     listItem={item}
@@ -524,7 +557,7 @@ class MainPage extends Component {
                   data={this.state.history}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
-                  renderItem={({ item, index }) => (
+                  renderItem={({item, index}) => (
                     <MainPageHistoryListItem
                       pid={item.pid[0]}
                       cname={item.cname}
@@ -553,7 +586,7 @@ class MainPage extends Component {
                     />
                   </TouchableOpacity>
                 </View>
-                <View style={[styles.inputView, { paddingHorizontal: 10 }]}>
+                <View style={[styles.inputView, {paddingHorizontal: 10}]}>
                   <TextInput
                     textContentType="emailAddress"
                     keyboardType="email-address"
@@ -766,26 +799,25 @@ const innerStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'orange'
-
+    backgroundColor: 'orange',
   },
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
   },
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#92BBD9'
+    backgroundColor: '#92BBD9',
   },
   text: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 export default MainPage;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   ScrollView,
@@ -22,62 +22,85 @@ import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAs
 import FastImage from 'react-native-fast-image';
 import ThemeContext from '../reusableComponents/ThemeContext';
 import Globals from '../Globals';
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
 import Toast from 'react-native-simple-toast';
 
 class CategorySlider extends Component {
-
-
   navigateToCategoryScreen = (cid, cname) => () => {
-    this.props.navigation.navigate('CategoriesProduct', { cid, cname });
+    this.props.navigation.navigate('CategoriesProduct', {cid, cname});
   };
 
   navigateToHistoryCategoryScreen = (cid, cname, items) => () => {
-    this.props.navigation.navigate('CategoriesProduct', { cid, cname, items });
+    this.props.navigation.navigate('CategoriesProduct', {cid, cname, items});
   };
 
   navigateToProductScreen = (pid, cname) => () => {
-    this.props.navigation.navigate('ProductPage', { pid, cname });
+    this.props.navigation.navigate('ProductPage', {pid, cname});
   };
 
-
-
   render() {
-    const nextButton = <FastImage source={require('../static/arrow-right.png')} style={innerStyles.nextButton} />;
-    const prevButton = <FastImage source={require('../static/arrow-left.png')} style={innerStyles.prevButton} />;
+    const nextButton = (
+      <FastImage
+        source={require('../static/arrow-right.png')}
+        style={innerStyles.nextButton}
+      />
+    );
+    const prevButton = (
+      <FastImage
+        source={require('../static/arrow-left.png')}
+        style={innerStyles.prevButton}
+      />
+    );
+
+    const data = [
+      {image: require('../static/slide1.jpg')},
+      {image: require('../static/slide2.jpg')},
+      {image: require('../static/slide3.jpg')},
+    ];
+
     return (
       <SafeAreaView style={[styles.parentContainer]}>
+        <Swiper
+          nextButton={nextButton}
+          prevButton={prevButton}
+          style={innerStyles.wrapper}
+          showsButtons={true}
+          autoplay={true}
+          showsPagination={false}>
+          {data.map((image) => (
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('MainPage')}
+              style={innerStyles.slide1}>
+              <FastImage
+                style={innerStyles.slide}
+                resizeMode="cover"
+                source={image.image}
+              />
+            </TouchableOpacity>
+          ))}
 
-        <Swiper nextButton={nextButton} prevButton={prevButton} style={innerStyles.wrapper} showsButtons={true} autoplay={true} showsPagination={false}>
-          <View style={innerStyles.slide1}>
+          {/* <View style={innerStyles.slide1}>
             <FastImage
               style={innerStyles.slide}
               resizeMode="cover"
               source={require('../static/slide1.jpg')}
             />
           </View>
-          <View style={innerStyles.slide2}>
-            <FastImage
-              style={innerStyles.slide}
-              resizeMode="cover"
-              source={require('../static/slide2.jpg')}
-            />
-          </View>
+
           <View style={innerStyles.slide3}>
             <FastImage
               style={innerStyles.slide}
               resizeMode="cover"
               source={require('../static/slide3.jpg')}
             />
-          </View>
-
+          </View> */}
         </Swiper>
 
-        <Footer
+        {/* <Footer
           Key={Math.random()}
           selected="Home"
           navigation={this.props.navigation}
-        />
+        /> */}
       </SafeAreaView>
     );
   }
@@ -133,25 +156,24 @@ const innerStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#97CAE5'
+    backgroundColor: '#97CAE5',
   },
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#92BBD9'
+    backgroundColor: '#92BBD9',
   },
   text: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 export default CategorySlider;

@@ -12,15 +12,29 @@ end
 
 # Post Install processing for Flipper
 def flipper_post_install(installer)
-  installer.pods_project.targets.each do |target|
-    if target.name == 'YogaKit'
-      target.build_configurations.each do |config|
-        config.build_settings['SWIFT_VERSION'] = '4.1'
+    installer.pods_project.targets.each do |target|
+      if target.name == 'YogaKit'
+        target.build_configurations.each do |config|
+          config.build_settings['SWIFT_VERSION'] = '4.1'
+        end
       end
     end
+    file_name = Dir.glob("*.xcodeproj")[0]
+    app_project = Xcodeproj::Project.open(file_name)
+    app_project.native_targets.each do |target|
+      target.build_configurations.each do |config|
+        cflags = config.build_settings['OTHER_CFLAGS'] || '$(inherited) '
+        unless cflags.include? '-DFB_SONARKIT_ENABLED=1'
+          puts 'Adding -DFB_SONARKIT_ENABLED=1 in OTHER_CFLAGS...'
+          cflags << '-DFB_SONARKIT_ENABLED=1'
+        end
+        config.build_settings['OTHER_CFLAGS'] = cflags
+      end
+      app_project.save
+    end
+    installer.pods_project.save
   end
-end
-
+  
 target 'LBShoppingApp' do
   # Pods for LuckyandBlessed
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
@@ -50,6 +64,7 @@ target 'LBShoppingApp' do
   pod 'ReactCommon/callinvoker', :path => "../node_modules/react-native/ReactCommon"
   pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga', :modular_headers => true
+  
 
   pod 'react-native-camera', path: '../node_modules/react-native-camera', subspecs: [
   'BarcodeDetectorMLKit']
@@ -79,7 +94,14 @@ target 'LBShoppingApp' do
   # you should disable these next few lines.
   add_flipper_pods!
   post_install do |installer|
-    flipper_post_install(installer)
+    find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm", 
+    "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules") 
+    find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
+         "RCTBridgeModuleNameForClass(strongModule))", "RCTBridgeModuleNameForClass(Class(strongModule)))")
+         find_and_replace("Pods/Flipper-Folly/folly/synchronization/DistributedMutex-inl.h",
+             "  atomic_notify_one(state);", "  folly::atomic_notify_one(state);") 
+      flipper_post_install(installer)    
+    
   end
 end
 
@@ -91,3 +113,26 @@ target 'LBShoppingApp-tvOS' do
     # Pods for testing
   end
 end
+
+# post_install do |installer|    
+    ## Fix for XCode 12.5 
+    #    find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm", 
+    #    "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules") 
+    #    find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
+    #         "RCTBridgeModuleNameForClass(strongModule))", "RCTBridgeModuleNameForClass(Class(strongModule)))") 
+    #      flipper_post_install(installer)    
+    #     end
+
+
+def find_and_replace(dir, findstr, replacestr)
+    Dir[dir].each do |name|
+        text = File.read(name)
+        replace = text.gsub(findstr,replacestr)
+        if text != replace
+            puts "Fix: " + name
+            File.open(name, "w") { |file| file.puts replace }
+            STDOUT.flush
+        end
+    end
+    Dir[dir + '*/'].each(&method(:find_and_replace))
+  end

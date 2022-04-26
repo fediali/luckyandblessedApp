@@ -6425,11 +6425,10 @@ react-native-md5@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-native-md5/-/react-native-md5-1.0.0.tgz#2320be24d674938ae5ef4f492698edbbfa0e0205"
   integrity sha1-IyC+JNZ0k4rl709JJpjtu/oOAgU=
 
-react-native-modal-dropdown@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-1.0.2.tgz#3e1efae5a5eacc42f44ac96468ea2f1b5bb0d759"
-  integrity sha512-X13RbwoQdaOb9Ffi7fjRVwh9OXauXIJhum0uXGzYZLMyoCQ5yt5cxf27P/YZbdh80Fb7bdPx6vTA4PTpUK2WDQ==
+"react-native-modal-dropdown@file:react-native-modal-dropdown":
+  version "0.7.0"
   dependencies:
+    deprecated-react-native-listview "0.0.6"
     prop-types "^15.6.0"
 
 react-native-ratings@^6.3.0:
