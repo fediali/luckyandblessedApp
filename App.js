@@ -38,6 +38,8 @@ import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
 import GetData from './reusableComponents/API/GetData';
 import Toast from 'react-native-simple-toast';
+import CategorySlider from "./components/CategorySlider"
+
 
 const STORAGE_FCM_TOKEN = Globals.STORAGE_FCM_TOKEN;
 
@@ -265,6 +267,7 @@ class App extends Component {
                   <Stack.Screen name="BarCodeScanner" component={BarCodeScanner} />
                   <Stack.Screen name="Filter" component={Filter} />
                   <Stack.Screen name="Order" component={Order} />
+                  <Stack.Screen name="CategorySlider" component={CategorySlider} />
 
                 </>
 

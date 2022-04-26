@@ -26,8 +26,10 @@ import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAs
 import FastImage from 'react-native-fast-image';
 import ThemeContext from '../reusableComponents/ThemeContext';
 import Globals from '../Globals';
-import Swiper from 'react-native-swiper'
 import Toast from 'react-native-simple-toast';
+import { greaterThan } from 'react-native-reanimated';
+import Swiper from 'react-native-swiper'
+
 
 const baseUrl = Globals.baseUrl;
 const SELECTED_CATEGORY_ALL = -1;
@@ -264,16 +266,18 @@ class MainPage extends Component {
 
     const nextButton = <FastImage source={require('../static/arrow-right.png')} style={innerStyles.nextButton} />;
     const prevButton = <FastImage source={require('../static/arrow-left.png')} style={innerStyles.prevButton} />;
+
     return (
       <SafeAreaView style={[styles.parentContainer]}>
-        {/* <Header
+        <Header
           navigation={this.props.navigation}
           centerText="Welcome"
           homepage={true}
           person={contextType._currentValue.username}
           rightIcon="search"
-        /> */}
-        {/* <ScrollView
+        />
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('CategorySlider')}><Text>Slider</Text></TouchableOpacity>
+        <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={innerStyles.scrollContainer}>
           <View style={styles.subParentContainer}>
@@ -292,7 +296,31 @@ class MainPage extends Component {
                 />
               )}
             />
-            <FlatList
+            <Swiper nextButton={nextButton} prevButton={prevButton} style={innerStyles.wrapper} showsButtons={true} autoplay={true} showsPagination={false}>
+              <View style={innerStyles.slide1}>
+                <FastImage
+                  style={innerStyles.slide}
+                  resizeMode="cover"
+                  source={require('../static/slide1.jpg')}
+                />
+              </View>
+              <View style={innerStyles.slide2}>
+                <FastImage
+                  style={innerStyles.slide}
+                  resizeMode="cover"
+                  source={require('../static/slide2.jpg')}
+                />
+              </View>
+              <View style={innerStyles.slide3}>
+                <FastImage
+                  style={innerStyles.slide}
+                  resizeMode="cover"
+                  source={require('../static/slide3.jpg')}
+                />
+              </View>
+
+            </Swiper>
+            {/* <FlatList
               keyExtractor={(item) => item.background.image}
               data={this.state.collections}
               horizontal={true}
@@ -305,7 +333,7 @@ class MainPage extends Component {
                   cid={item.background.category_id}
                 />
               )}
-            />
+            /> */}
 
             <View style={innerStyles.headerView}>
               <Text
@@ -436,7 +464,7 @@ class MainPage extends Component {
                 </TouchableOpacity>
               </View>
             </View>
- 
+
             <View style={innerStyles.headerViewTrending}>
               <Text
                 style={[
@@ -468,7 +496,7 @@ class MainPage extends Component {
                   />
                 );
               }}
-            /> 
+            />
             {this.state.history != null ? (
               <>
                 <View style={innerStyles.headerView}>
@@ -509,8 +537,8 @@ class MainPage extends Component {
                 />
               </>
             ) : (
-                <></>
-              )}
+              <></>
+            )}
             {this.state.showNewsletter == true ? (
               <View style={innerStyles.newsLetterMainView}>
                 <View style={innerStyles.newsLetterInnerView}>
@@ -559,40 +587,16 @@ class MainPage extends Component {
                 </View>
               </View>
             ) : (
-                <View></View>
-              )}
+              <View></View>
+            )}
           </View>
-        </ScrollView> */}         
-        <Swiper nextButton={nextButton} prevButton={prevButton} style={innerStyles.wrapper} showsButtons={true} autoplay={true} showsPagination={false}>
-          <View style={innerStyles.slide1}> 
-            <FastImage
-            style={innerStyles.slide}
-            resizeMode="cover"
-            source={require('../static/slide1.jpg')}
-          />
-          </View>
-          <View style={innerStyles.slide2}>
-          <FastImage
-            style={innerStyles.slide}
-            resizeMode="cover"
-            source={require('../static/slide2.jpg')}
-          />
-          </View>
-          <View style={innerStyles.slide3}>
-          <FastImage
-            style={innerStyles.slide}
-            resizeMode="cover"
-            source={require('../static/slide3.jpg')}
-          />
-          </View>
-         
-        </Swiper>
-        
-        {/* <Footer
+        </ScrollView>
+
+        <Footer
           Key={Math.random()}
           selected="Home"
           navigation={this.props.navigation}
-        /> */}
+        />
       </SafeAreaView>
     );
   }
@@ -602,19 +606,17 @@ const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
-  nextButton: {
-    height:25,
-    width:25,
-    marginRight:25,
-  },
-  prevButton: {
-    height:25,
-    width:25,
-    marginLeft:25,
-  },
   slide: {
-    height:'100%',
-    width:'100%', 
+    height: 'auto',
+    width: '100%',
+  },
+  mainSliderView: {
+    flex: 1,
+    backgroundColor: 'green',
+    height: 'auto',
+    width: '100%',
+    marginLeft: 25,
+    marginRight: 25,
   },
   scrollContainer: {
     backgroundColor: '#fff',
@@ -763,14 +765,15 @@ const innerStyles = StyleSheet.create({
   slide1: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center', 
+    alignItems: 'center',
+    backgroundColor: 'orange'
 
   },
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#97CAE5'
+    backgroundColor: 'black'
   },
   slide3: {
     flex: 1,
