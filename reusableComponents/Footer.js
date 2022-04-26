@@ -55,7 +55,7 @@ class Footer extends Component {
                                 size={32}
                                 name='home'
                                 type='entypo'
-                                color="#d0d0d0"
+                                color="#000"
                             />}
                     </TouchableOpacity>
                     <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("ShoppingCart") }}>
@@ -91,7 +91,7 @@ class Footer extends Component {
                                 size={35}
                                 name='truck'
                                 type='material-community'
-                                color="#d0d0d0"
+                                color="#000"
                             />}
                     </TouchableOpacity>
                     <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("UserProfile") }}>
@@ -107,7 +107,7 @@ class Footer extends Component {
                                 size={35}
                                 name='ios-person'
                                 type='ionicon'
-                                color="#d0d0d0"
+                                color="#000"
                             />}
                     </TouchableOpacity>
                     <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("CompanyProfile") }}>
@@ -123,7 +123,7 @@ class Footer extends Component {
                                 size={35}
                                 name='md-information-circle-outline'
                                 type='ionicon'
-                                color="#d0d0d0"
+                                color="#000"
                             />}
                     </TouchableOpacity>
                 </View>
@@ -134,7 +134,7 @@ class Footer extends Component {
 
 const innerStyles = StyleSheet.create({
     mainViewStyle: {
-        backgroundColor: "#fff",
+        backgroundColor: "transparent",
         position: "absolute",
         bottom: 0,
         width: "100%",
