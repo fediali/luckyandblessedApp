@@ -26,6 +26,7 @@ import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAs
 import FastImage from 'react-native-fast-image';
 import ThemeContext from '../reusableComponents/ThemeContext';
 import Globals from '../Globals';
+import Swiper from 'react-native-swiper'
 import Toast from 'react-native-simple-toast';
 
 const baseUrl = Globals.baseUrl;
@@ -107,7 +108,7 @@ class MainPage extends Component {
                       category_id: responses[0].home.logged.new_arrivals.category_id,
                       category: 'New Arrivals',
                     });
-                    responses[1].categories=responses[1].categories.slice().sort(function(a, b){ 
+                    responses[1].categories = responses[1].categories.slice().sort(function (a, b) {
                       return HEADER_ORDER.indexOf(a.category) - HEADER_ORDER.indexOf(b.category);
                     });
                     this.setState(
@@ -260,16 +261,19 @@ class MainPage extends Component {
         </View>
       );
     }
+
+    const nextButton = <FastImage source={require('../static/arrow-right.png')} style={innerStyles.nextButton} />;
+    const prevButton = <FastImage source={require('../static/arrow-left.png')} style={innerStyles.prevButton} />;
     return (
       <SafeAreaView style={[styles.parentContainer]}>
-        <Header
+        {/* <Header
           navigation={this.props.navigation}
           centerText="Welcome"
           homepage={true}
           person={contextType._currentValue.username}
           rightIcon="search"
-        />
-        <ScrollView
+        /> */}
+        {/* <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={innerStyles.scrollContainer}>
           <View style={styles.subParentContainer}>
@@ -432,8 +436,7 @@ class MainPage extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-
-            {/*trending header*/}
+ 
             <View style={innerStyles.headerViewTrending}>
               <Text
                 style={[
@@ -465,8 +468,7 @@ class MainPage extends Component {
                   />
                 );
               }}
-            />
-            {/* history header*/}
+            /> 
             {this.state.history != null ? (
               <>
                 <View style={innerStyles.headerView}>
@@ -560,12 +562,37 @@ class MainPage extends Component {
                 <View></View>
               )}
           </View>
-        </ScrollView>
-        <Footer
+        </ScrollView> */}         
+        <Swiper nextButton={nextButton} prevButton={prevButton} style={innerStyles.wrapper} showsButtons={true} autoplay={true} showsPagination={false}>
+          <View style={innerStyles.slide1}> 
+            <FastImage
+            style={innerStyles.slide}
+            resizeMode="cover"
+            source={require('../static/slide1.jpg')}
+          />
+          </View>
+          <View style={innerStyles.slide2}>
+          <FastImage
+            style={innerStyles.slide}
+            resizeMode="cover"
+            source={require('../static/slide2.jpg')}
+          />
+          </View>
+          <View style={innerStyles.slide3}>
+          <FastImage
+            style={innerStyles.slide}
+            resizeMode="cover"
+            source={require('../static/slide3.jpg')}
+          />
+          </View>
+         
+        </Swiper>
+        
+        {/* <Footer
           Key={Math.random()}
           selected="Home"
           navigation={this.props.navigation}
-        />
+        /> */}
       </SafeAreaView>
     );
   }
@@ -575,6 +602,20 @@ const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
+  nextButton: {
+    height:25,
+    width:25,
+    marginRight:25,
+  },
+  prevButton: {
+    height:25,
+    width:25,
+    marginLeft:25,
+  },
+  slide: {
+    height:'100%',
+    width:'100%', 
+  },
   scrollContainer: {
     backgroundColor: '#fff',
     flexGrow: 1,
@@ -718,6 +759,30 @@ const innerStyles = StyleSheet.create({
     textAlign: 'center',
     margin: 30,
   },
+  wrapper: {},
+  slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center', 
+
+  },
+  slide2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#97CAE5'
+  },
+  slide3: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#92BBD9'
+  },
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold'
+  }
 });
 
 export default MainPage;

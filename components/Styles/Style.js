@@ -64,3 +64,4 @@ export default StyleSheet.create({
   logoImageLoader: {height: 200, width: 200},
   loader: {flex: 1, alignItems: 'center', justifyContent: 'center'},
 });
+

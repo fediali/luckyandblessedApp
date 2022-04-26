@@ -18,6 +18,7 @@ import Globals from '../Globals';
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
+import Video from 'react-native-video';
 
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
 const baseUrl = Globals.baseUrl;
@@ -110,7 +111,7 @@ export default class WalkThrough extends Component {
           style={styles.images}
           key={index}
           resizeMode="contain"
-          source={{ uri: (img)?img:Globals.noImageFoundURL }}
+          source={{ uri: (img) ? img : Globals.noImageFoundURL }}
         />,
       );
     });
@@ -139,15 +140,15 @@ export default class WalkThrough extends Component {
             resizeMode="contain"
             source={require('../static/logo-walkthrough.png')}
           />
-          <View style={styles.imageContainer}>
+          {/* <View style={styles.imageContainer}>
             <ScrollView
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               {featuredImages}
             </ScrollView>
-          </View>
+          </View> */}
 
-          <View style={styles.texts}>
+          {/* <View style={styles.texts}>
             <Text style={styles.newCollection}>{this.state.headerText}</Text>
             <View style={styles.youAreRegistering}>
               <Text style={styles.text1}>You are registering for a</Text>
@@ -156,7 +157,17 @@ export default class WalkThrough extends Component {
                 <Text style={styles.text1}>{' account.'}</Text>
               </View>
             </View>
-          </View>
+          </View> */}
+
+          <Video
+            source={require('../assets/video/vide.mp4')}
+            rate={1.0}
+            volume={1.0}
+            muted={true}
+            resizeMode={"cover"}
+            repeat
+            style={styles.video}
+          />
 
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -184,8 +195,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: '30.6%',
-    height: '10.5%',
+    width: '40.6%',
+    height: '20.5%',
     marginTop: 15,
     // backgroundColor:"#ffe"
     // marginLeft: 128,
@@ -250,7 +261,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 23,
     // marginLeft: 32,
+    bottom:30,
+    position:'absolute',
   },
+  video: { position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, zIndex:-1,},
+
   buttonRegisterNow: {
     // width: '38.4%', no need to give height and width to button
     // height: '5.4%',
