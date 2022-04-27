@@ -58,27 +58,7 @@ class Footer extends Component {
                                 color="#000"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("ShoppingCart") }}>
-                        {this.state.selected == "Shop" ?
-                            <ImageBackground style={innerStyles.imageStyle} source={require('../static/cartSelected.png')}>
-                                <View style={{ height: 16, width: 28, backgroundColor: "#000", borderRadius: 8, marginLeft: 10, marginTop: -5, alignItems: "center", justifyContent: "center" }}>
-                                    <Text style={{ fontFamily: "Avenir-Medium", color: "#fff", fontSize: 12, lineHeight: 16 }}>
-                                    {Globals.cartCount}
-                                </Text>
-                                </View>
-                            </ImageBackground>
-                            :
-                            <ImageBackground style={innerStyles.imageStyle} source={require('../static/cart.png')}>
-                                <View style={{ height: 15, width: 25, backgroundColor: "#000", borderRadius: 8, marginLeft: 10, marginTop: -5, alignItems: "center", justifyContent: "center" }}>
-                                    <Text style={{ fontFamily: "Avenir-Medium", color: "#fff", fontSize: 12, lineHeight: 16 }}>
-                                        {Globals.cartCount}
-                                </Text>
-                                </View>
-                            </ImageBackground>
-                        }
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("TrackOrders") }}>
+                    {/* <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("TrackOrders") }}>
                         {this.state.selected == "Van" ?
                             <Icon
                                 size={35}
@@ -93,7 +73,39 @@ class Footer extends Component {
                                 type='material-community'
                                 color="#000"
                             />}
+                    </TouchableOpacity> */}
+                      <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("SearchResults") }}>
+                        {this.state.selected == "Search" ?
+                            <ImageBackground style={innerStyles.imageStyle} source={require('../static/searchSelected.png')}>
+                                
+                            </ImageBackground>
+                            :
+                            <ImageBackground style={innerStyles.imageStyle} source={require('../static/search.png')}>
+                                
+                            </ImageBackground>
+                        }
                     </TouchableOpacity>
+                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("ShoppingCart") }}>
+                        {this.state.selected == "Shop" ?
+                            <ImageBackground style={innerStyles.imageStyle} source={require('../static/cartSelected.png')}>
+                                <View style={{ height: 16, width: 28, backgroundColor: "#000", borderRadius: 8, marginLeft: 15, marginTop: -7, alignItems: "center", justifyContent: "center" }}>
+                                    <Text style={{ fontFamily: "Avenir-Medium", color: "#fff", fontSize: 12, lineHeight: 16 }}>
+                                    {Globals.cartCount}
+                                </Text>
+                                </View>
+                            </ImageBackground>
+                            :
+                            <ImageBackground style={innerStyles.imageStyle} source={require('../static/cart.png')}>
+                                <View style={{ height: 15, width: 25, backgroundColor: "#000", borderRadius: 8, marginLeft: 15, marginTop: -7, alignItems: "center", justifyContent: "center" }}>
+                                    <Text style={{ fontFamily: "Avenir-Medium", color: "#fff", fontSize: 12, lineHeight: 16 }}>
+                                        {Globals.cartCount}
+                                </Text>
+                                </View>
+                            </ImageBackground>
+                        }
+                    </TouchableOpacity>
+
+                   
                     <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("UserProfile") }}>
                         {this.state.selected == "Person" ?
                             <Icon
@@ -110,7 +122,7 @@ class Footer extends Component {
                                 color="#000"
                             />}
                     </TouchableOpacity>
-                    <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("CompanyProfile") }}>
+                    {/* <TouchableOpacity style={innerStyles.touchPad} onPress={() => { this.navigateToScreen("CompanyProfile") }}>
                         {this.state.selected == "Info" ?
                             <Icon
                                 size={35}
@@ -125,7 +137,7 @@ class Footer extends Component {
                                 type='ionicon'
                                 color="#000"
                             />}
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View >
         )

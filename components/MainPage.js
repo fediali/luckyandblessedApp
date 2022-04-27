@@ -293,6 +293,11 @@ class MainPage extends Component {
         style={innerStyles.prevButton}
       />
     );
+    const data = [
+      {image: require('../static/slide1.jpg')},
+      {image: require('../static/slide2.jpg')},
+      {image: require('../static/slide3.jpg')},
+    ];
 
     return (
       <SafeAreaView style={[styles.parentContainer]}>
@@ -303,6 +308,13 @@ class MainPage extends Component {
           person={contextType._currentValue.username}
           rightIcon="search"
         />
+        <View style={innerStyles.logoView}>
+          <FastImage
+            source={require('../static/logo-main.png')}
+            style={innerStyles.logomain}
+            resizeMode="contain"
+          />
+        </View>
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -323,36 +335,39 @@ class MainPage extends Component {
                 />
               )}
             />
-            {/* <Swiper
-              nextButton={nextButton}
-              prevButton={prevButton}
-              style={innerStyles.wrapper}
-              showsButtons={true}
-              autoplay={true}
-              showsPagination={false}>
-              <View style={innerStyles.slide1}>
-                <FastImage
-                  style={innerStyles.slide}
-                  resizeMode="cover"
-                  source={require('../static/slide1.jpg')}
-                />
-              </View>
-              <View style={innerStyles.slide2}>
-                <FastImage
-                  style={innerStyles.slide}
-                  resizeMode="cover"
-                  source={require('../static/slide2.jpg')}
-                />
-              </View>
-              <View style={innerStyles.slide3}>
-                <FastImage
-                  style={innerStyles.slide}
-                  resizeMode="cover"
-                  source={require('../static/slide3.jpg')}
-                />
-              </View>
-            </Swiper> */}
-            <FlatList
+            <View style={innerStyles.swiperView}>
+              <Swiper
+                height={500}
+                nextButton={nextButton}
+                prevButton={prevButton}
+                style={innerStyles.wrapper}
+                showsButtons={true}
+                autoplay={true}
+                showsPagination={false}>
+                {data.map((img) => {
+                  const {image} = img;
+                  return (
+                    <TouchableOpacity
+                      onPress={() => this.props.navigation.navigate('MainPage')}
+                      style={innerStyles.slide1}>
+                      <FastImage
+                        style={innerStyles.slide}
+                        resizeMode="cover"
+                        source={image}
+                      />
+                    </TouchableOpacity>
+                  );
+                })}
+              </Swiper>
+            </View>
+
+            <View style={innerStyles.titleView}>
+              <Text style={innerStyles.titleSwiper}>
+                Girls Baby Blue Hi-Low Dress $3.00
+              </Text>
+            </View>
+
+            {/* <FlatList
               keyExtractor={(item) => item.background.image}
               data={this.state.collections}
               horizontal={true}
@@ -365,7 +380,7 @@ class MainPage extends Component {
                   cid={item.background.category_id}
                 />
               )}
-            />
+            /> */}
 
             <View style={innerStyles.headerView}>
               <Text
@@ -639,8 +654,36 @@ const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
+  titleView: {
+    flex: 1,
+    width: '100%',
+  },
+  titleSwiper: {
+    marginVertical: 10,
+    textAlign: 'left',
+    marginHorizontal: 15,
+  },
+  nextButton: {
+    height: 25,
+    width: 25,
+    marginRight: 25,
+  },
+  prevButton: {
+    height: 25,
+    width: 25,
+    marginLeft: 25,
+  },
+
+  logoView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logomain: {
+    width: '50%',
+    height: 100,
+  },
   slide: {
-    height: 'auto',
+    flex: 1,
     width: '100%',
   },
   mainSliderView: {
@@ -794,24 +837,28 @@ const innerStyles = StyleSheet.create({
     textAlign: 'center',
     margin: 30,
   },
-  wrapper: {},
+  swiperView: {
+    paddingHorizontal: 16,
+    flex: 1,
+  },
+  wrapper: {
+    // marginHorizontal:25,
+  },
   slide1: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'orange',
+    width: '100%',
   },
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black',
   },
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#92BBD9',
   },
   text: {
     color: '#fff',

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   FlatList,
@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Icon } from 'react-native-elements';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Icon} from 'react-native-elements';
 import SearchResultListItem from '../reusableComponents/SearchResultListItem';
 import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
-import Globals from "../Globals"
+import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Toast from 'react-native-simple-toast';
+import FastImage from 'react-native-fast-image';
 
 const baseUrl = Globals.baseUrl;
 const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
@@ -40,11 +41,11 @@ export default class SearchResults extends Component {
   }
 
   componentDidMount() {
-
-
     this.onComponentFocus = this.props.navigation.addListener('focus', () => {
       if (this.props.route.params) {
-        this.setState({ searchText: this.props.route.params.barcode.data }, () => this.searchText())
+        this.setState({searchText: this.props.route.params.barcode.data}, () =>
+          this.searchText(),
+        );
       }
     });
     InteractionManager.runAfterInteractions(() => {
@@ -75,7 +76,7 @@ export default class SearchResults extends Component {
       promises.push(
         GetData(
           baseUrl +
-          `api/products?q=${this.state.searchText}&search_app=Y&page=${this.state.iteratedPage}&status=A`,
+            `api/products?q=${this.state.searchText}&search_app=Y&page=${this.state.iteratedPage}&status=A`,
         ),
       );
       let itr = this.state.iteratedPage;
@@ -86,30 +87,25 @@ export default class SearchResults extends Component {
               let parseProducts = async () => {
                 const tempProducts = [];
                 if (responses[0].products.length == 0) {
-                  this.setState(
-                    {
-                      showZeroProductScreen: true,
-                    }
-                  );
+                  this.setState({
+                    showZeroProductScreen: true,
+                  });
                 } else {
-                  this.setState(
-                    {
-                      showZeroProductScreen: false,
-                    }
-                  );
+                  this.setState({
+                    showZeroProductScreen: false,
+                  });
                   for (let i = 0; i < responses[0].products.length; i++) {
                     if (responses[0].products[i].main_pair) {
                       await tempProducts.push({
                         product: responses[0].products[i].product,
                         product_id: responses[0].products[i].product_id,
-                        price: parseFloat(responses[0].products[i].price).toFixed(
-                          2,
-                        ),
+                        price: parseFloat(
+                          responses[0].products[i].price,
+                        ).toFixed(2),
                         base_price: parseFloat(
                           responses[0].products[i].base_price,
                         ).toFixed(2),
-                        imageUrl:
-                        Globals.noImageFoundURL,
+                        imageUrl: Globals.noImageFoundURL,
                         product_brand: responses[0].products[i].brand
                           ? responses[0].products[i].brand
                           : DEFAULTS_OBJ.brand,
@@ -202,58 +198,84 @@ export default class SearchResults extends Component {
 
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <Header centerText="Search" navigation={this.props.navigation} rightIcon="scanner" />
+        {/* <Header
+          centerText="Search"
+          navigation={this.props.navigation}
+          rightIcon="scanner"
+        /> */}
+        <View style={styles.logoView}>
+          <FastImage
+            source={require('../static/logo-main.png')}
+            style={styles.logomain}
+            resizeMode="contain"
+          />
+        </View>
+        {/* <FlatList
+          keyExtractor={(item) => item.category_id}
+          data={this.state.categoryList}
+          horizontal={true}
+          extraData={this.selectedCategory}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({item, index}) => (
+            <HeaderHorizontalListItem
+              cid={this.state.selectedCategory}
+              index={index}
+              item={item}
+              onCategorySelect={this.onCategorySelect}
+            />
+          )}
+        /> */}
+
         <View style={styles.mainView}>
           <View style={styles.inputView}>
-            <View style={styles.innerView}>
+            {/* <View style={styles.innerView}>
               <Icon
                 size={20}
                 name="ios-search"
                 type="ionicon"
                 color="#bababa"
               />
-            </View>
+            </View> */}
 
             <TextInput
               placeholderTextColor={TEXTINPUT_COLOR}
               style={styles.inputText}
-              placeholder="Search"
+              placeholder="SEARCH"
               returnKeyType="search"
               selectTextOnFocus={true}
               value={this.state.searchText}
               onFocus={this.searchTextBoxClicked}
-              onChangeText={(searchText) => this.setState({ searchText })}
+              onChangeText={(searchText) => this.setState({searchText})}
               onEndEditing={this.searchText}
             />
           </View>
 
           {this.state.showZeroProductScreen ? (
-
             <ZeroDataScreen />
           ) : (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.marTop15}
-                data={this.state.products}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <SearchResultListItem
-                    key={item.product_id}
-                    pid={item.product_id}
-                    navigation={this.props.navigation}
-                    imageUrl={{ uri: item.imageUrl }}
-                    name1={item.product}
-                    price1={'$' + item.price}
-                  />
-                )}
-                ItemSeparatorComponent={this.renderSeparator}
-                onEndReachedThreshold={0.01}
-                onEndReached={this.handleLoadMore}
-                ListFooterComponent={this.ListFooter}
-              />
-            )}
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.marTop15}
+              data={this.state.products}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <SearchResultListItem
+                  key={item.product_id}
+                  pid={item.product_id}
+                  navigation={this.props.navigation}
+                  imageUrl={{uri: item.imageUrl}}
+                  name1={item.product}
+                  price1={'$' + item.price}
+                />
+              )}
+              ItemSeparatorComponent={this.renderSeparator}
+              onEndReachedThreshold={0.01}
+              onEndReached={this.handleLoadMore}
+              ListFooterComponent={this.ListFooter}
+            />
+          )}
         </View>
-        <Footer navigation={this.props.navigation} />
+        <Footer navigation={this.props.navigation} selected="Search" />
       </SafeAreaView>
     );
   }
@@ -262,13 +284,21 @@ export default class SearchResults extends Component {
 let Height = Dimensions.get('window').height;
 let Width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
+  logoView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logomain: {
+    width: '50%',
+    height: 100,
+  },
   mainContainer: {
     flex: 1,
     backgroundColor: '#ffffff',
   },
   mainView: {
     marginHorizontal: 20,
-    flex: 1
+    flex: 1,
   },
   innerView: {
     marginVertical: 9.8,
@@ -279,17 +309,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir-Book',
     fontSize: 16,
     lineHeight: 22,
-    color: '#2d2d2f',
+    color: '#000',
     paddingVertical: 7,
     width: Width * 0.893,
   },
   inputView: {
     flexDirection: 'row',
-    backgroundColor: '#f6f6f6',
-    paddingHorizontal: 20,
-    borderRadius: 18,
+    paddingHorizontal: 10,
     marginTop: 4,
     marginBottom: 8,
+    borderBottomColor: '#000',
+    borderBottomWidth: 1,
   },
   thumbnailImage: {
     height: 110,
@@ -316,7 +346,7 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     marginTop: 6,
   },
-  marTop15: { marginTop: 15 },
+  marTop15: {marginTop: 15},
   marBottom60: {
     marginBottom: 100,
   },
@@ -324,5 +354,5 @@ const styles = StyleSheet.create({
     marginBottom: 108,
     height: 100,
   },
-  seperator: { paddingBottom: 20 },
+  seperator: {paddingBottom: 20},
 });
