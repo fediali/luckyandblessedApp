@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Share,
   StatusBar,
-  Linking
+  Linking,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
+import LogoSmall from '../components/Styles/LogoSmall';
 
 /* How to use Custom Header
 
@@ -81,11 +82,15 @@ class Header extends PureComponent {
           onPress={() => {
             Linking.openURL(this.props.trackingURL);
           }}>
-          <Icon size={30} name="truck-delivery" type="material-community" color="#000" />
+          <Icon
+            size={30}
+            name="truck-delivery"
+            type="material-community"
+            color="#000"
+          />
         </TouchableOpacity>
       );
-    }
-     else if (this.props.rightIcon == 'share') {
+    } else if (this.props.rightIcon == 'share') {
       return (
         <TouchableOpacity onPress={this.onShare}>
           <Icon size={26} name="upload" type="feather" color="#000" />
@@ -116,42 +121,46 @@ class Header extends PureComponent {
           }}>
           <Icon size={30} name="ios-barcode" type="ionicon" color="#000" />
         </TouchableOpacity>
-      )
-    }
-     else {
+      );
+    } else {
       return <View style={styles.iconStyle}></View>;
     }
   }
   render() {
     return (
-      <View style={styles.topLevelView}>
-        <View style={styles.subParent}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+      <View>
+        <View style={styles.topLevelView}>
+          <View style={styles.subParent}>
+            <StatusBar backgroundColor="#fff" barStyle="dark-content" />
 
-          {this.props.homepage ? (
-            <View style={styles.backView}></View>
-          ) : (
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  this.navigateBack();
-                }}>
-                <Icon size={30} name="arrow-left" type="feather" />
-              </TouchableOpacity>
-            </View>
-          )}
+            {this.props.homepage ? (
+              <View style={styles.backView}></View>
+            ) : (
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.navigateBack();
+                  }}>
+                  <Icon size={30} name="arrow-left" type="feather" />
+                </TouchableOpacity>
+              </View>
+            )}
 
-          {this.props.homepage ? (
-            <View style={styles.homePageCenterText}>
-              <Text style={styles.centerText}>{this.props.centerText}</Text>
-              <Text style={styles.homePersonText}>{this.props.person}</Text>
-            </View>
-          ) : (
-            <View>
-              <Text style={styles.centerText}>{this.props.centerText}</Text>
-            </View>
-          )}
-          <View>{this.getRightIcon()}</View>
+            {/* {this.props.homepage ? (
+              <View style={styles.homePageCenterText}>
+                <Text style={styles.centerText}>{this.props.centerText}</Text>
+                <Text style={styles.homePersonText}>{this.props.person}</Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={styles.centerText}>{this.props.centerText}</Text>
+              </View>
+            )} */}
+            {/* <View>{this.getRightIcon()}</View> */}
+          </View>
+        </View>
+        <View style={styles.headerLogo}>
+          <LogoSmall />
         </View>
       </View>
     );
@@ -189,6 +198,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
     lineHeight: 22,
+  },
+  headerLogo: {
+    //padding: 5,
+    // lineHeight: 50,
+
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'gray',
   },
   homePageCenterText: {marginTop: 5, alignItems: 'center'},
 });
