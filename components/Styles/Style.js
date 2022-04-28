@@ -12,18 +12,17 @@ export default StyleSheet.create({
     backgroundColor: "#fff"
   },
   input: {
-    borderRadius: 6,
-    backgroundColor: '#f6f6f6',
+    backgroundColor: '#d0d0d0',
     flex: 1,
     paddingHorizontal: 15,
     paddingVertical: 10,
     fontFamily: 'Avenir-Book',
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 24,
     letterSpacing: 0,
-    color: '#2d2d2f'
+    color: '#fff'
   },
   customTextBold: {
     fontFamily: 'Montserrat-SemiBold',
@@ -36,11 +35,11 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'column',
-    width: '100%'
+    width: '80%'
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 18,
+    fontSize: 14,
     fontStyle: 'normal',
     lineHeight: 22,
     letterSpacing: 0,

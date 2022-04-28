@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
   InteractionManager,
   ToastAndroid,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Toast from 'react-native-simple-toast';
 import Shimmer from 'react-native-shimmer';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -27,6 +27,8 @@ import PutData from '../reusableComponents/API/PutData';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import GetData from '../reusableComponents/API/GetData';
+import Tabs from 'react-native-tabs';
+import FastImage from 'react-native-fast-image';
 
 const STORAGE_USER = Globals.STORAGE_USER;
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
@@ -51,11 +53,11 @@ class FlatListItem extends Component {
 
   onDeleteClose = () => {
     if (this.state.activeRowKey != null) {
-      this.setState({ activeRowKey: null });
+      this.setState({activeRowKey: null});
     }
   };
   onDeleteOpen = () => {
-    this.setState({ activeRowKey: this.props.item.itemNum });
+    this.setState({activeRowKey: this.props.item.itemNum});
   };
 
   onDeletePress = () => {
@@ -88,25 +90,30 @@ class FlatListItem extends Component {
                 //Refresh FlatList !
 
                 //Also delete the data from relevant places..
-                let tempPaymentLineItems = this.props.parentFlatList.state.paymentLineItems;
+                let tempPaymentLineItems =
+                  this.props.parentFlatList.state.paymentLineItems;
                 tempPaymentLineItems.splice(this.props.index, 1);
                 let tempOrderItems = this.props.parentFlatList.state.orderItems;
                 tempOrderItems.splice(this.props.index, 1);
 
                 this.props.parentFlatList.setState({
-                  totalCost: parseFloat(response.cart.display_subtotal).toFixed(2),
+                  totalCost: parseFloat(response.cart.display_subtotal).toFixed(
+                    2,
+                  ),
                   totalCartProducts: response.cart.amount,
                   finalCost: parseFloat(response.cart.total).toFixed(2),
                   paymentLineItems: tempPaymentLineItems,
-                  orderItems: tempOrderItems
-                })
-                Globals.cartCount = parseInt(this.props.parentFlatList.state.totalCartProducts);
+                  orderItems: tempOrderItems,
+                });
+                Globals.cartCount = parseInt(
+                  this.props.parentFlatList.state.totalCartProducts,
+                );
                 this.props.parentFlatList.refreshFlatList(deletingRow);
               });
           },
         },
       ],
-      { cancelable: true },
+      {cancelable: true},
     );
   };
 
@@ -117,7 +124,7 @@ class FlatListItem extends Component {
   };
 
   onAvailableSizesModalSelect = (index, option, item) => {
-    Globals.cartCount += (option - item.quantity)
+    Globals.cartCount += option - item.quantity;
     var data = {
       products: {
         [item.product_id]: {
@@ -130,30 +137,51 @@ class FlatListItem extends Component {
       },
     };
 
-    PutData(baseUrl + "api/addcart/" + this.props.item.itemNum, data)
+    PutData(baseUrl + 'api/addcart/' + this.props.item.itemNum, data)
       .then((res) => res.json())
       .then((response) => {
-        var productKey = Object.keys(response.cart_content.product_groups[0].products)
+        var productKey = Object.keys(
+          response.cart_content.product_groups[0].products,
+        );
         //to update the individual list item when quantity is changed inside cart
         let tempItemList = this.props.parentFlatList.state.itemList;
-        tempItemList[this.props.index].price = (
-          parseFloat(response.cart_content.product_groups[0].products[productKey[this.props.index]].amount) *
-          parseFloat(response.cart_content.product_groups[0].products[productKey[this.props.index]].price)
-        ).toFixed(2),
-          tempItemList[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey[this.props.index]].amount
+        (tempItemList[this.props.index].price = (
+          parseFloat(
+            response.cart_content.product_groups[0].products[
+              productKey[this.props.index]
+            ].amount,
+          ) *
+          parseFloat(
+            response.cart_content.product_groups[0].products[
+              productKey[this.props.index]
+            ].price,
+          )
+        ).toFixed(2)),
+          (tempItemList[this.props.index].quantity =
+            response.cart_content.product_groups[0].products[
+              productKey[this.props.index]
+            ].amount);
 
         //update the line items too for payment purpose..
-        let tempPaymentLineItems = this.props.parentFlatList.state.paymentLineItems;
-        tempPaymentLineItems[this.props.index].quantity = response.cart_content.product_groups[0].products[productKey[this.props.index]].amount
+        let tempPaymentLineItems =
+          this.props.parentFlatList.state.paymentLineItems;
+        tempPaymentLineItems[this.props.index].quantity =
+          response.cart_content.product_groups[0].products[
+            productKey[this.props.index]
+          ].amount;
 
         this.props.parentFlatList.setState({
-          totalCost: parseFloat(response.cart_content.display_subtotal).toFixed(2),//FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
+          totalCost: parseFloat(response.cart_content.display_subtotal).toFixed(
+            2,
+          ), //FIXME: assumed that display_subtotal = totalCost.... And total = FinalCost
           totalCartProducts: response.cart_content.amount,
           finalCost: parseFloat(response.cart_content.total).toFixed(2),
           itemList: tempItemList,
-          paymentLineItems: tempPaymentLineItems
-        })
-        Globals.cartCount = parseInt(this.props.parentFlatList.state.totalCartProducts);
+          paymentLineItems: tempPaymentLineItems,
+        });
+        Globals.cartCount = parseInt(
+          this.props.parentFlatList.state.totalCartProducts,
+        );
         Toast.show(`${item.name} quantity updated`);
       });
     // this.setState({ stateText: usStates[index] , s_country: usStates[index], b_country: usStates[index]});
@@ -187,11 +215,17 @@ class FlatListItem extends Component {
         <View style={[innerStyles.itemView, innerStyles.whiteBackground]}>
           <View style={innerStyles.listMainView}>
             <View style={innerStyles.listInnerView}>
-              <Image
-                style={[innerStyles.itemImage]}
-                resizeMode="contain"
-                source={{ uri: (this.props.item.path) ? this.props.item.path : Globals.noImageFoundURL }}
-              />
+              <View style={{flex: 1, width: Width * 0.1}}>
+                <Image
+                  style={[innerStyles.itemImage]}
+                  resizeMode="cover"
+                  source={{
+                    uri: this.props.item.path
+                      ? this.props.item.path
+                      : Globals.noImageFoundURL,
+                  }}
+                />
+              </View>
               <View style={innerStyles.listTextsContainerView}>
                 <View style={innerStyles.listRowView}>
                   <Text
@@ -234,34 +268,34 @@ class FlatListItem extends Component {
                 <Text style={innerStyles.lightText}>
                   Size: {this.props.item.sizes}
                 </Text>
+                <TouchableOpacity
+                  style={[innerStyles.bottomSelectors, innerStyles.halfFlex]}>
+                  <View style={innerStyles.modalView}>
+                    <ModalDropdown
+                      options={this.props.item.availableSizes}
+                      defaultValue={this.props.item.unknownNum}
+                      style={innerStyles.modalStyle}
+                      dropdownStyle={innerStyles.modalDropdownStyle}
+                      textStyle={innerStyles.modalTextStyle}
+                      onSelect={(index, option = this.props.item) => {
+                        this.onAvailableSizesModalSelect(
+                          index,
+                          option,
+                          this.props.item,
+                        );
+                      }}
+                      renderRow={(option, index, isSelected) => {
+                        return (
+                          <Text style={[innerStyles.numText]}>{option}</Text>
+                        );
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
               </View>
             </View>
 
             <View style={[innerStyles.horizontalView]}>
-              <TouchableOpacity
-                style={[innerStyles.bottomSelectors, innerStyles.halfFlex]}>
-                <View style={innerStyles.modalView}>
-                  <ModalDropdown
-                    options={this.props.item.availableSizes}
-                    defaultValue={this.props.item.unknownNum}
-                    style={innerStyles.modalStyle}
-                    dropdownStyle={innerStyles.modalDropdownStyle}
-                    textStyle={innerStyles.modalTextStyle}
-                    onSelect={(index, option = this.props.item) => {
-                      this.onAvailableSizesModalSelect(
-                        index,
-                        option,
-                        this.props.item,
-                      );
-                    }}
-                    renderRow={(option, index, isSelected) => {
-                      return (
-                        <Text style={[innerStyles.numText]}>{option}</Text>
-                      );
-                    }}
-                  />
-                </View>
-              </TouchableOpacity>
               {/* Product colour not available rn */}
               {/* <TouchableOpacity style={[innerStyles.bottomSelectors, innerStyles.colorModalTouch]}>
                                 <View style={innerStyles.modalView}>
@@ -301,8 +335,8 @@ class ShoppingCart extends Component {
       deletedRowKey: null,
       itemList: [],
       orderItems: [],
-      totalCost: 0,//does not include promo cost
-      finalCost: 0,//calculated after promo added
+      totalCost: 0, //does not include promo cost
+      finalCost: 0, //calculated after promo added
       totalCartProducts: 0,
       s_userAddress: '',
       b_userAddress: '',
@@ -317,18 +351,18 @@ class ShoppingCart extends Component {
       isReady: false,
       profile_id: null,
       isFetching: false,
-
+      activeTab: 0,
     };
   }
 
   componentDidMount() {
-
     this.onComponentFocus = this.props.navigation.addListener('focus', () => {
-      this.setState({deletedRowKey: null,
+      this.setState({
+        deletedRowKey: null,
         itemList: [],
         orderItems: [],
-        totalCost: 0,//does not include promo cost
-        finalCost: 0,//calculated after promo added
+        totalCost: 0, //does not include promo cost
+        finalCost: 0, //calculated after promo added
         totalCartProducts: 0,
         s_userAddress: '',
         b_userAddress: '',
@@ -342,7 +376,8 @@ class ShoppingCart extends Component {
         paymentLineItems: [],
         isReady: false,
         profile_id: null,
-        isFetching: false,})
+        isFetching: false,
+      });
 
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);
@@ -366,20 +401,23 @@ class ShoppingCart extends Component {
   };
 
   deleteItem = (index) => {
-    Globals.cartCount -= this.state.itemList[index].quantity
+    Globals.cartCount -= this.state.itemList[index].quantity;
     this.state.itemList.splice(index, 1);
-
   };
   postPromoData = (user) => {
-    let couponUrl = baseUrl + `custom-api/coupon/${this.state.promocode}?user_id=${user.user_id}`
-    console.log("AAAAAAAAAAABBBB", couponUrl)
+    let couponUrl =
+      baseUrl +
+      `custom-api/coupon/${this.state.promocode}?user_id=${user.user_id}`;
+    console.log('AAAAAAAAAAABBBB', couponUrl);
     GetData(couponUrl)
       .then((res) => res.json())
       .then((responses) => {
         console.log(responses);
         if (responses.status == 200) {
           this.setState({
-            discount: parseFloat(responses.data.cart.subtotal_discount).toFixed(2),
+            discount: parseFloat(responses.data.cart.subtotal_discount).toFixed(
+              2,
+            ),
             finalCost: parseFloat(responses.data.cart.total).toFixed(2),
           });
           alert('Promocode Successfully Added!!');
@@ -406,7 +444,7 @@ class ShoppingCart extends Component {
           // console.log('No product found');
           this.setState({
             isReady: true,
-            isFetching: false
+            isFetching: false,
           });
         } else {
           var promises = [];
@@ -419,7 +457,9 @@ class ShoppingCart extends Component {
           }
           for (let i = 0; i < productsLength; i++) {
             let product_id = responses.products[i].product_id;
-            promises.push(GetData(baseUrl + `api/options?product_id=${product_id}`));
+            promises.push(
+              GetData(baseUrl + `api/options?product_id=${product_id}`),
+            );
           }
 
           Promise.all(promises).then((promiseResponses) => {
@@ -428,9 +468,11 @@ class ShoppingCart extends Component {
                 for (let i = 0; i < productsLength; i++) {
                   let singleProduct = {};
                   let singleLineITem = {};
-                  console.log("OO", prod[productsLength+i])
-                  let productSizes = this.extractSizes(prod[productsLength+i])
-                  console.log(productSizes)
+                  console.log('OO', prod[productsLength + i]);
+                  let productSizes = this.extractSizes(
+                    prod[productsLength + i],
+                  );
+                  console.log(productSizes);
                   singleProduct = {
                     itemNum: responses.products[i].item_id,
                     product_id: responses.products[i].product_id,
@@ -455,8 +497,7 @@ class ShoppingCart extends Component {
                     quantity: responses.products[i].amount,
                     unknownNum: responses.products[i].amount,
                     hexColor: '#05c2bd', //
-                    sizes:productSizes
-
+                    sizes: productSizes,
                   };
                   if ('detailed' in responses.products[i].extra.main_pair) {
                     singleProduct.path =
@@ -484,7 +525,7 @@ class ShoppingCart extends Component {
                   orderItems[i] = singleOrderItem;
                 }
                 Globals.cartCount = parseInt(responses.cart_products);
-                
+
                 this.setState({
                   totalCost: responses.total,
                   finalCost: responses.total,
@@ -504,18 +545,20 @@ class ShoppingCart extends Component {
                   profile_id: responses.user_data.profile_id,
                   paymentLineItems: lineItems,
                   isReady: true,
-                  isFetching: false
+                  isFetching: false,
                 });
-
               })
               .catch((ex) => {
                 console.log('Get Specific Product Exception ' + ex);
-                Toast.show(ex.toString())
-              }
-              );
+                Toast.show(ex.toString());
+              });
           });
         }
-      }).catch(e => { Toast.show(e.toString()); console.log(e) });
+      })
+      .catch((e) => {
+        Toast.show(e.toString());
+        console.log(e);
+      });
   };
 
   refreshFlatList = (deletedKey) => {
@@ -527,31 +570,29 @@ class ShoppingCart extends Component {
   };
 
   extractSizes = (data) => {
-
-    console.log("extract sizes")
+    console.log('extract sizes');
     let keys = Object.keys(data);
-    console.log(keys[0])
+    console.log(keys[0]);
     for (let i = 0; i < keys.length; i++) {
-      let key = keys[i]
-      console.log("Hi", data[key].option_name)
-      console.log(data[key].option_name, 'SIZE')
+      let key = keys[i];
+      console.log('Hi', data[key].option_name);
+      console.log(data[key].option_name, 'SIZE');
       if (data[key].option_name === 'SIZE') {
-        console.log("extracting", data[key].product_id)
+        console.log('extracting', data[key].product_id);
         let variantKeys = Object.keys(data[key].variants);
-        console.log(variantKeys)
-        console.log("SIZES", data[key].variants[variantKeys[0]].variant_name)
-        return data[key].variants[variantKeys[0]].variant_name
+        console.log(variantKeys);
+        console.log('SIZES', data[key].variants[variantKeys[0]].variant_name);
+        return data[key].variants[variantKeys[0]].variant_name;
       }
-    };
-    return "Not Available"
-
-  }
+    }
+    return 'Not Available';
+  };
   renderFlatListHeader = () => {
     var listHeader = (
       <View>
         <View style={innerStyles.listHeaderPad}>
-          <Text style={innerStyles.mainTextBold}>Your bag</Text>
-          <Text style={innerStyles.lightText}>
+          {/* <Text style={innerStyles.mainTextBold}>Your bag</Text> */}
+          <Text style={innerStyles.itemText}>
             You have {this.state.totalCartProducts} items in your bag
           </Text>
         </View>
@@ -567,11 +608,11 @@ class ShoppingCart extends Component {
         <View style={innerStyles.promoView}>
           <View style={styles.inputView}>
             <TextInput
-              placeholderTextColor={TEXTINPUT_COLOR}
+              placeholderTextColor="#fff"
               style={[styles.input]}
-              placeholder="Gift Or Promo code"
+              placeholder="GIFT OR PROMO CODE"
               onChangeText={(text) => {
-                this.setState({ promocode: text });
+                this.setState({promocode: text});
               }}
             />
             <TouchableOpacity
@@ -649,14 +690,14 @@ class ShoppingCart extends Component {
     }
   };
   onRefresh = () => {
-    console.log("Refreshing")
-    this.setState({ isFetching: true, }, () => {
+    console.log('Refreshing');
+    this.setState({isFetching: true}, () => {
       RetrieveDataAsync(STORAGE_USER).then((user) => {
         gUser = JSON.parse(user);
         this.getData(gUser);
       });
     });
-  }
+  };
   render() {
     if (!this.state.isReady) {
       return (
@@ -672,18 +713,71 @@ class ShoppingCart extends Component {
       );
     }
 
+    const data = [
+      {
+        image: require('../static/slide2.jpg'),
+        text: 'Jeans | Regular & Plus',
+        Price: '$400',
+      },
+      {
+        image: require('../static/slide2.jpg'),
+        text: 'Jeans | Regular & Plus',
+        Price: '$400',
+      },
+      {
+        image: require('../static/slide2.jpg'),
+        text: 'Jeans | Regular & Plus',
+        Price: '$400',
+      },
+    ];
+
     return (
       <SafeAreaView style={innerStyles.itemView}>
         <Header navigation={this.props.navigation} />
+        <View style={{...innerStyles.tabContainer}}>
+          <TouchableOpacity
+            onPress={() => this.setState({activeTab: 0})}
+            style={
+              this.state.activeTab === 0
+                ? {...innerStyles.activeTab}
+                : {...innerStyles.inactiveTab}
+            }>
+            <Text
+              style={
+                this.state.activeTab === 0
+                  ? {...innerStyles.activeTabText}
+                  : {...innerStyles.inactiveTabText}
+              }>
+              Your Bag
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.setState({activeTab: 1})}
+            style={
+              this.state.activeTab === 1
+                ? {...innerStyles.activeTab}
+                : {...innerStyles.inactiveTab}
+            }>
+            <Text
+              style={
+                this.state.activeTab === 1
+                  ? {...innerStyles.activeTabText}
+                  : {...innerStyles.inactiveTabText}
+              }>
+              Your Order
+            </Text>
+          </TouchableOpacity>
+        </View>
         {this.state.showZeroProductScreen ? (
           <ZeroDataScreen />
         ) : (
-            <View style={styles.parentContainer}>
+          <View style={styles.parentContainer}>
+            {this.state.activeTab === 0 ? (
               <FlatList
                 keyExtractor={(item) => item.itemNum.toString()}
                 data={this.state.itemList}
                 numColumns={1}
-                renderItem={({ item, index }) => {
+                renderItem={({item, index}) => {
                   return (
                     <FlatListItem
                       item={item}
@@ -696,9 +790,19 @@ class ShoppingCart extends Component {
                 onRefresh={this.onRefresh}
                 refreshing={this.state.isFetching}
               />
-            </View>
-          )}
-        <Footer selected="Shop" Key={Math.random()} navigation={this.props.navigation} />
+            ) : null}
+            {this.state.activeTab === 1 ? (
+              <View style={innerStyles.containerOrder}>
+               <Text>orderItems</Text>
+              </View>
+            ) : null}
+          </View>
+        )}
+        <Footer
+          selected="Shop"
+          Key={Math.random()}
+          navigation={this.props.navigation}
+        />
       </SafeAreaView>
     );
   }
@@ -708,6 +812,42 @@ const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
+  gridImage: {
+    width: Width * 0.427,
+    height: Height * 0.28,
+  },
+  productName: {
+    fontFamily: 'Montserrat',
+    fontSize: 14, 
+    color: '#2d2d2f',
+  },
+  price: {
+    fontFamily: 'Montserrat',
+    fontSize: 14, 
+    color: '#2d2d2f',
+  },
+  containerOrder: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    paddingHorizontal: 10,
+  },
+  item: {
+    width: '44%', // is 50% of container width
+    marginHorizontal: 10, 
+    marginBottom: 20,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+    marginTop: 20,
+  },
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   mainTextBold: {
     fontFamily: 'Montserrat-Bold',
     fontSize: 30,
@@ -727,12 +867,27 @@ const innerStyles = StyleSheet.create({
     letterSpacing: 1,
     color: '#8d8d8e',
   },
+  itemText: {
+    fontFamily: 'Avenir-Book',
+    fontSize: 14,
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 18,
+    letterSpacing: 1,
+    color: '#8d8d8e',
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
   itemView: {
     flex: 1,
   },
   itemImage: {
-    width: Width * 0.2,
-    height: Height * 0.15,
+    // width: Width * 0.2,
+    // height: Height * 0.15,
+    width: '100%',
+    height:250,
     alignSelf: 'center',
   },
   rowStyling: {
@@ -747,11 +902,13 @@ const innerStyles = StyleSheet.create({
   },
   itemNameText: {
     fontFamily: 'Montserrat-Medium',
-    fontSize: 16,
+    fontSize: 15,
     fontStyle: 'normal',
     lineHeight: 20,
     letterSpacing: 0,
     color: '#2d2d2f',
+    textTransform: 'uppercase',
+    fontWeight: '600',
   },
   itemUnitPriceText: {
     fontFamily: 'Avenir-Book',
@@ -759,7 +916,7 @@ const innerStyles = StyleSheet.create({
     fontStyle: 'normal',
     lineHeight: 18,
     letterSpacing: 0,
-    color: '#2967ff',
+    color: '#1bbfc7',
   },
   horizontalView: {
     flexDirection: 'row',
@@ -768,10 +925,12 @@ const innerStyles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   bottomSelectors: {
-    paddingVertical: 10,
-    borderRadius: 6,
-    backgroundColor: '#f6f6f6',
+    marginVertical: 15,
+    paddingTop: 5,
+    paddingBottom: 8,
+    backgroundColor: '#d0d0d0',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   numText: {
     fontFamily: 'Avenir-Book',
@@ -801,11 +960,13 @@ const innerStyles = StyleSheet.create({
   giftButton: {
     height: Height * 0.073,
     width: Width * 0.267,
-    borderRadius: 6,
-    backgroundColor: '#ffa601',
+    backgroundColor: 'transparent',
     marginStart: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: '#000',
+    borderWidth: 1,
+    color: '#fff',
   },
   checkoutInfoText: {
     fontFamily: 'Avenir',
@@ -826,12 +987,13 @@ const innerStyles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
   },
   buttonPaymentMethod: {
-    width: '100%',
-    backgroundColor: '#2967ff',
-    borderRadius: 6,
+    width: '60%',
+    backgroundColor: '#000',
     paddingVertical: 15,
     paddingHorizontal: 30,
     marginTop: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   whiteBackground: {
     backgroundColor: '#ffffff',
@@ -851,6 +1013,7 @@ const innerStyles = StyleSheet.create({
   listRowView: {
     flexDirection: 'row',
     paddingBottom: 4,
+    paddingTop: 4,
   },
   listRowNameText: {
     textAlign: 'left',
@@ -861,7 +1024,7 @@ const innerStyles = StyleSheet.create({
     flex: 1,
   },
   halfFlex: {
-    flex: 0.5,
+    // flex: 0.5,
   },
   modalView: {
     flexDirection: 'row',
@@ -871,8 +1034,7 @@ const innerStyles = StyleSheet.create({
   },
   modalStyle: {
     flex: 1,
-    padding: 5,
-    borderRadius: 6,
+    paddingTop: 7,
   },
   modalDropdownStyle: {
     width: '30%',
@@ -889,8 +1051,10 @@ const innerStyles = StyleSheet.create({
     fontFamily: 'Avenir-Book',
     fontSize: 18,
     lineHeight: 24,
-    color: '#2d2d2f',
+    color: '#fff',
     paddingRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalInnerView: {
     width: 25,
@@ -908,9 +1072,10 @@ const innerStyles = StyleSheet.create({
     marginStart: 40,
   },
   giftButtonText: {
-    color: '#ffffff',
-    fontSize: 18,
+    color: '#000',
+    fontSize: 16,
     lineHeight: 22,
+    textTransform: 'uppercase',
   },
   listHeaderPad: {
     paddingHorizontal: 20,
@@ -933,20 +1098,50 @@ const innerStyles = StyleSheet.create({
     lineHeight: 30,
     textAlign: 'right',
   },
-  shippingText: { fontFamily: 'Avenir-Medium', fontSize: 16 },
+  shippingText: {fontFamily: 'Avenir-Medium', fontSize: 16},
   orderGiftText: {
     lineHeight: 30,
   },
   orderButtonView: {
     paddingHorizontal: 30,
     width: '100%',
-    backgroundColor: '#f6f6f6',
     paddingBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   orderButtonText: {
     color: '#ffffff',
     fontSize: 18,
     lineHeight: 22,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#fff',
+  },
+  activeTab: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+  },
+  inactiveTab: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+  },
+  activeTabText: {
+    color: '#000',
+    fontSize: 15,
+    textTransform: 'uppercase',
+    fontFamily: 'Montserrat-Bold',
+  },
+  inactiveTabText: {
+    fontSize: 15,
+    color: '#ccc',
+    textTransform: 'uppercase',
+    fontFamily: 'Montserrat-Bold',
   },
 });
 export default ShoppingCart;

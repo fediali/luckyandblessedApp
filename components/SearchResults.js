@@ -4,6 +4,7 @@ import {
   FlatList,
   StyleSheet,
   TextInput,
+  Text,
   Dimensions,
   InteractionManager,
   ActivityIndicator,
@@ -37,6 +38,7 @@ export default class SearchResults extends Component {
       isLoadingMoreListData: false,
       searchText: null,
       showZeroProductScreen: false,
+      searchDropdown: false,
     };
   }
 
@@ -67,6 +69,13 @@ export default class SearchResults extends Component {
       totalProducts: 0,
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
+      searchDropdown: true,
+    });
+  };
+
+  onSubmitSearch = () => {
+    this.setState({
+      searchDropdown: false,
     });
   };
 
@@ -195,7 +204,11 @@ export default class SearchResults extends Component {
   render() {
     if (this.state.showZeroProductScreen) {
     }
-
+    const data = [
+      {text: 'Jeans | Regular & Plus'},
+      {text: 'Jeans | Regular & Plus'},
+      {text: 'Jeans | Regular & Plus'},
+    ];
     return (
       <SafeAreaView style={styles.mainContainer}>
         {/* <Header
@@ -247,8 +260,16 @@ export default class SearchResults extends Component {
               onFocus={this.searchTextBoxClicked}
               onChangeText={(searchText) => this.setState({searchText})}
               onEndEditing={this.searchText}
+              onSubmitEditing={this.onSubmitSearch}
             />
           </View>
+          {this.state.searchDropdown == true ? (
+            <View style={styles.searchDropdown}>
+              {data.map(({text}) => (
+                <Text style={styles.dropdownList}>{text}</Text>
+              ))}
+            </View>
+          ) : null}
 
           {this.state.showZeroProductScreen ? (
             <ZeroDataScreen />
@@ -284,6 +305,8 @@ export default class SearchResults extends Component {
 let Height = Dimensions.get('window').height;
 let Width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
+  searchDropdown: {},
+  dropdownList: {fontWeight: '500', marginVertical: 5},
   logoView: {
     alignItems: 'center',
     justifyContent: 'center',

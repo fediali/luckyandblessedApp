@@ -55,7 +55,6 @@ const innerStyles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     width: '100%',
-    backgroundColor: '#f6f6f6'
   },
   orderRowView: {
     flexDirection: 'row', paddingHorizontal: 20, justifyContent: "space-between"
