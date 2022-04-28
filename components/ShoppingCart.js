@@ -887,7 +887,7 @@ const innerStyles = StyleSheet.create({
     // width: Width * 0.2,
     // height: Height * 0.15,
     width: '100%',
-    height: '100%',
+    height:250,
     alignSelf: 'center',
   },
   rowStyling: {
