@@ -159,9 +159,9 @@ class Header extends PureComponent {
             {/* <View>{this.getRightIcon()}</View> */}
           </View>
         </View>
-        <View style={styles.headerLogo}>
+        {/* <View style={styles.headerLogo}>
           <LogoSmall />
-        </View>
+        </View> */}
       </View>
     );
   }
