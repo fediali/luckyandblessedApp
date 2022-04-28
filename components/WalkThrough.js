@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,19 +8,19 @@ import {
   SafeAreaView,
   ScrollView,
   InteractionManager,
-  StatusBar
+  StatusBar,
 } from 'react-native';
 import Shimmer from 'react-native-shimmer';
 import GlobalStyles from './Styles/Style';
-import FastImage from 'react-native-fast-image'
-import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync'
+import FastImage from 'react-native-fast-image';
+import StoreDataAsync from '../reusableComponents/AsyncStorage/StoreDataAsync';
 import Globals from '../Globals';
 import firebase from 'react-native-firebase';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-simple-toast';
 import Video from 'react-native-video';
 
-const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS
+const STORAGE_DEFAULTS = Globals.STORAGE_DEFAULTS;
 const baseUrl = Globals.baseUrl;
 
 export default class WalkThrough extends Component {
@@ -71,7 +71,7 @@ export default class WalkThrough extends Component {
 
   navigateScreen = (screen) => () => {
     this.props.navigation.navigate(screen);
-  }
+  };
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       var promises = [];
@@ -83,12 +83,11 @@ export default class WalkThrough extends Component {
               this.setState({
                 isReady: true,
                 images: responses[0].home.not_logged.sliders,
-                headerText: responses[0].home.not_logged.header
+                headerText: responses[0].home.not_logged.header,
               });
 
               this.checkPermission();
-              StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then(
-              )
+              StoreDataAsync(STORAGE_DEFAULTS, responses[0].defaults).then();
             })
             .catch((ex) => {
               console.log('Inner Promise', ex);
@@ -111,7 +110,7 @@ export default class WalkThrough extends Component {
           style={styles.images}
           key={index}
           resizeMode="contain"
-          source={{ uri: (img) ? img : Globals.noImageFoundURL }}
+          source={{uri: img ? img : Globals.noImageFoundURL}}
         />,
       );
     });
@@ -160,11 +159,11 @@ export default class WalkThrough extends Component {
           </View> */}
 
           <Video
-            source={require('../assets/video/vide.mp4')}
+            source={require('../assets/video/intro-video.mp4')}
             rate={1.0}
             volume={1.0}
             muted={true}
-            resizeMode={"cover"}
+            resizeMode={'cover'}
             repeat
             style={styles.video}
           />
@@ -172,12 +171,12 @@ export default class WalkThrough extends Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.buttonRegisterNow}
-              onPress={this.navigateScreen("SignUp")}>
+              onPress={this.navigateScreen('SignUp')}>
               <Text style={styles.registerButtonText}>Register now</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonLogIn}
-              onPress={this.navigateScreen("SignIn")}>
+              onPress={this.navigateScreen('SignIn')}>
               <Text style={styles.loginButtonText}>Log-in</Text>
             </TouchableOpacity>
           </View>
@@ -256,15 +255,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#2d2d2f',
   },
-  wholeSaleAccountTV: { flexDirection: 'row' },
+  wholeSaleAccountTV: {flexDirection: 'row'},
   buttonContainer: {
     flexDirection: 'row',
     marginTop: 23,
     // marginLeft: 32,
-    bottom:30,
-    position:'absolute',
+    bottom: 30,
+    position: 'absolute',
   },
-  video: { position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, zIndex:-1,},
+  video: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: -1,
+  },
 
   buttonRegisterNow: {
     // width: '38.4%', no need to give height and width to button
