@@ -77,23 +77,7 @@ class CategorySlider extends Component {
                 source={image.image}
               />
             </TouchableOpacity>
-          ))}
-
-          {/* <View style={innerStyles.slide1}>
-            <FastImage
-              style={innerStyles.slide}
-              resizeMode="cover"
-              source={require('../static/slide1.jpg')}
-            />
-          </View>
-
-          <View style={innerStyles.slide3}>
-            <FastImage
-              style={innerStyles.slide}
-              resizeMode="cover"
-              source={require('../static/slide3.jpg')}
-            />
-          </View> */}
+          ))} 
         </Swiper>
 
         {/* <Footer

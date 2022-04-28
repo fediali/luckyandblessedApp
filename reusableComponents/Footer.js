@@ -148,7 +148,7 @@ class Footer extends Component {
               <Icon size={35} name="ios-person" type="ionicon" color="#000" />
             )}
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={innerStyles.touchPad}
             onPress={() => {
               this.navigateToScreen('CompanyProfile');
@@ -168,7 +168,7 @@ class Footer extends Component {
                 color="#000"
               />
             )}
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     );
