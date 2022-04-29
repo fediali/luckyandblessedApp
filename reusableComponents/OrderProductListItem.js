@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     lineHeight: 18,
     letterSpacing: 0,
-    color: '#2967ff',
+    color: '#1bbfc7',
     marginVertical: 4,
   },
   thumbnailImage: {

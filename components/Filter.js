@@ -282,7 +282,7 @@ class Filter extends Component {
                                         size={23}
                                         name='check'
                                         type='feather'
-                                        color='#2967ff'
+                                        color='#1bbfc7'
                                     />
                                 </TouchableOpacity>
                                 :
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     msbText: { fontFamily: "Montserrat-SemiBold" },
     abText: { fontFamily: "Avenir-Book" },
     allItemsView: { backgroundColor: "#f6f6f6", marginBottom: 50, paddingTop: 20, alignItems: "center", paddingBottom: 20 },
-    allItemsTouch: { backgroundColor: "#2967ff", alignItems: "center", width: "90%", borderRadius: 6 },
+    allItemsTouch: { backgroundColor: "#1bbfc7", alignItems: "center", width: "90%", borderRadius: 6 },
     allItemsText: { color: "#fff", paddingVertical: 11, fontSize: 18, lineHeight: 22, fontFamily: "Montserrat-SemiBold" }
 })
 

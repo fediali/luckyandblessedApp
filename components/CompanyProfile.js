@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
   },
   buttonSignIn: {
-    backgroundColor: '#2967ff',
+    backgroundColor: '#1bbfc7',
     borderRadius: 6,
   },
   buttonText: {

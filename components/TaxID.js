@@ -745,7 +745,7 @@ const innerStyles = StyleSheet.create({
     fontFamily: 'Avenir-Book',
     fontSize: 12,
     lineHeight: 24,
-    color: '#2967FF',
+    color: '#1bbfc7',
   },
 });
 

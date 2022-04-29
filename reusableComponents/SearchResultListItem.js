@@ -58,7 +58,7 @@ const innerStyles = StyleSheet.create({
       color: '#2d2d2f',
     },
     categoriesText: {
-      color: '#2967ff',
+      color: '#1bbfc7',
       fontFamily: 'Avenir-Book',
       fontSize: 14,
       lineHeight: 18,
