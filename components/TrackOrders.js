@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,
     lineHeight: 22,
-    color: '#2967ff',
+    color: '#1bbfc7',
     marginTop: 13,
   },
   subText: {

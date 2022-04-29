@@ -375,7 +375,7 @@ class CategoriesProduct extends Component {
                           size={25}
                           name="grid"
                           type="feather"
-                          color="#2967ff"
+                          color="#1bbfc7"
                         />
                       )}
                     </TouchableOpacity>
@@ -391,7 +391,7 @@ class CategoriesProduct extends Component {
                           size={25}
                           name="square"
                           type="feather"
-                          color="#2967ff"
+                          color="#1bbfc7"
                         />
                       ) : (
                         <Icon

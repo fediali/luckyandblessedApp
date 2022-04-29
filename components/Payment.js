@@ -989,7 +989,7 @@ const styles = StyleSheet.create({
   },
   orderTouch: {
     width: '100%',
-    backgroundColor: '#2967ff',
+    backgroundColor: '#1bbfc7',
     borderRadius: 6,
     paddingVertical: 15,
     paddingHorizontal: 30,

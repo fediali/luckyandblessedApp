@@ -63,7 +63,7 @@ const innerStyles = StyleSheet.create({
         lineHeight: 24,
         letterSpacing: 0,
         textAlign: "right",
-        color: '#2967ff'
+        color: '#1bbfc7'
     },
     brandText: {
         fontSize: 14,

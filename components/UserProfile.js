@@ -361,7 +361,7 @@ export default class UserProfile extends Component {
                     size={10}
                     name="edit"
                     type="entypo"
-                    color="#2967ff"
+                    color="#1bbfc7"
                   />
                 </View>
               </TouchableOpacity>

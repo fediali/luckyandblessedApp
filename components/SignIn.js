@@ -259,7 +259,7 @@ class SignIn extends Component {
             <ActivityIndicator
               style={{marginTop: 30}}
               size="large"
-              color="#2967ff"
+              color="#1bbfc7"
             />
           ) : null}
         </View>
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   buttonSignIn: {
-    backgroundColor: '#2967ff',
+    backgroundColor: '#1bbfc7',
     borderRadius: 6,
     paddingVertical: 11,
     paddingHorizontal: 38,
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     letterSpacing: 0,
     textAlign: 'center',
-    color: '#2967ff',
+    color: '#1bbfc7',
     marginTop: 20,
   },
   passwordInputView: {

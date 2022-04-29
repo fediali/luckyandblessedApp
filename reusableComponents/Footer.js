@@ -46,7 +46,7 @@ class Footer extends Component {
               this.navigateToScreen('MainPage');
             }}>
             {this.state.selected == 'Home' ? (
-              <Icon size={32} name="home" type="entypo" color="#2967ff" />
+              <Icon size={32} name="home" type="entypo" color="#1bbfc7" />
             ) : (
               <Icon size={32} name="home" type="entypo" color="#000" />
             )}
@@ -136,7 +136,7 @@ class Footer extends Component {
                 size={35}
                 name="truck"
                 type="material-community"
-                color="#2967ff"
+                color="#1bbfc7"
               />
             ) : (
               <Icon
@@ -157,7 +157,7 @@ class Footer extends Component {
                 size={35}
                 name="ios-person"
                 type="ionicon"
-                color="#2967ff"
+                color="#1bbfc7"
               />
             ) : (
               <Icon size={35} name="ios-person" type="ionicon" color="#000" />
@@ -173,7 +173,7 @@ class Footer extends Component {
                 size={35}
                 name="md-information-circle-outline"
                 type="ionicon"
-                color="#2967ff"
+                color="#1bbfc7"
               />
             ) : (
               <Icon

@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 28,
   },
-  subText: {fontSize: 14, lineHeight: 18, color: '#2967ff'},
+  subText: {fontSize: 14, lineHeight: 18, color: '#1bbfc7'},
   paddingLeft: {paddingLeft: 20},
 });
 

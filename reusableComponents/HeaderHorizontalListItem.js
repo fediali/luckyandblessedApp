@@ -46,7 +46,7 @@ styles = StyleSheet.create(
             marginHorizontal: 10,
         },
         selected:{
-            color: "#2967ff"
+            color: "#1bbfc7"
         },
         TopLevelView: { marginVertical: 10, color: "#000" }
     }

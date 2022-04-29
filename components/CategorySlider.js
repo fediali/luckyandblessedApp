@@ -60,6 +60,7 @@ class CategorySlider extends Component {
 
     return (
       <SafeAreaView style={[styles.parentContainer]}>
+        <StatusBar backgroundColor="transparent" translucent={true} />
         <Swiper
           nextButton={nextButton}
           prevButton={prevButton}
@@ -76,8 +77,22 @@ class CategorySlider extends Component {
                 resizeMode="cover"
                 source={image.image}
               />
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  bottom: 60,
+                  backgroundColor: 'tranparent',
+                  borderColor:'#fff',
+                  borderWidth:1,
+                  paddingHorizontal: 30,
+                  paddingVertical: 12,
+                }}>
+                <Text style={{color: '#fff', fontFamily: 'Montserrat-Medium'}}>
+                  Shop Now
+                </Text>
+              </TouchableOpacity>
             </TouchableOpacity>
-          ))} 
+          ))}
         </Swiper>
 
         {/* <Footer
@@ -116,7 +131,7 @@ const innerStyles = StyleSheet.create({
   },
   buttonSubmit: {
     width: '100%',
-    backgroundColor: '#2967ff',
+    backgroundColor: '#1bbfc7',
     borderRadius: 6,
     paddingVertical: 15,
     paddingHorizontal: 30,

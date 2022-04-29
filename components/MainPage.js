@@ -682,6 +682,7 @@ const innerStyles = StyleSheet.create({
   logomain: {
     width: '50%',
     height: 100,
+    marginTop: 40,
   },
   slide: {
     flex: 1,
@@ -734,7 +735,7 @@ const innerStyles = StyleSheet.create({
     lineHeight: 24,
     letterSpacing: 0,
     textAlign: 'right',
-    color: '#2967ff',
+    color: '#1bbfc7',
   },
   brandText: {
     fontSize: 14,
@@ -819,7 +820,7 @@ const innerStyles = StyleSheet.create({
   },
   buttonSubmit: {
     width: '100%',
-    backgroundColor: '#2967ff',
+    backgroundColor: '#1bbfc7',
     borderRadius: 6,
     paddingVertical: 15,
     paddingHorizontal: 30,

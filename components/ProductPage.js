@@ -746,7 +746,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     letterSpacing: 0,
     textAlign: 'right',
-    color: '#2967ff',
+    color: '#1bbfc7',
   },
   gridItemNameAndPriceText: {
     fontFamily: 'Montserrat-Medium',
@@ -805,7 +805,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   customThumbnailImage: {
-    borderColor: '#2967ff',
+    borderColor: '#1bbfc7',
     borderWidth: 2,
   },
   productOptionsView: {
@@ -873,7 +873,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
   },
   addToCartTouch: {
-    backgroundColor: '#2967ff',
+    backgroundColor: '#1bbfc7',
     alignItems: 'center',
     width: '100%',
     borderRadius: 6,

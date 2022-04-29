@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     limitWidth: { maxWidth: Width * 0.65 },
     subText: { fontFamily: "Avenir-Book", fontSize: 14, lineHeight: 18, },
     colourGrey: { color: "#8d8d8e" },
-    colorBlue: { color: "#2967ff", maxWidth: Width * 0.65 }
+    colorBlue: { color: "#1bbfc7", maxWidth: Width * 0.65 }
 
 
 
