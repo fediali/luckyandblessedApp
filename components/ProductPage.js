@@ -873,7 +873,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-SemiBold',
   },
   addToCartTouch: {
-    backgroundColor: '#1bbfc7',
+    backgroundColor: '#000',
     alignItems: 'center',
     width: '100%',
     borderRadius: 6,

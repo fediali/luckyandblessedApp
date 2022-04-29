@@ -131,7 +131,8 @@ export default class WalkThrough extends Component {
 
     return (
       <SafeAreaView style={GlobalStyles.parentContainer}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+                <StatusBar backgroundColor="transparent" translucent={true} />
+
 
         <View style={styles.subContainer}>
           <FastImage
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
   logo: {
     width: '40.6%',
     height: '20.5%',
-    marginTop: 15,
+    marginTop: 25,
     // backgroundColor:"#ffe"
     // marginLeft: 128,
     // marginRight: 132.1,

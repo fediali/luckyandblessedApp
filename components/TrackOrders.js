@@ -224,9 +224,7 @@ export default class TrackOrders extends Component {
             <Text style={styles.inactiveTabText}>PROFILE</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            //  onPress={this.props.navigation.navigate('TaxID', {
-            //   fromUserProfile: false,
-            // })}
+            onPress={() => this.props.navigation.navigate('TaxID')}
             style={styles.activeTab}>
             <Text style={styles.inactiveTabText}>TAX ID</Text>
           </TouchableOpacity>
