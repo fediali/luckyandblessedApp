@@ -159,7 +159,7 @@ export default class WalkThrough extends Component {
           </View> */}
 
           <Video
-            source={require('../assets/video/intro-video.mp4')}
+            source={{uri: 'https://revamp.landbw.co/storage/intro-video-1.mp4'}}
             rate={1.0}
             volume={1.0}
             muted={true}
