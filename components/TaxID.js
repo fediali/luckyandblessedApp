@@ -41,7 +41,6 @@ class TaxID extends Component {
     var mm = String(dateToday.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = dateToday.getFullYear();
     dateToday = mm + ' - ' + dd + ' - ' + yyyy;
-
     this.state = {
       newValue1: '',
       newValue2: '',
@@ -74,15 +73,17 @@ class TaxID extends Component {
   }
 
   componentDidMount() {
-    if (this.props.route.params.fromUserProfile) {
-      this.setState({isReady: false, fromUserProfile: true, isEditable: false});
-      InteractionManager.runAfterInteractions(() => {
-        RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
-          DEFAULTS_OBJ = JSON.parse(defaults);
-        });
-
-        this.getTaxId();
+    // if (this.props.route.params.fromUserProfile) {
+    this.setState({isReady: false, fromUserProfile: true, isEditable: false});
+    InteractionManager.runAfterInteractions(() => {
+      RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
+        DEFAULTS_OBJ = JSON.parse(defaults);
       });
+
+      this.getTaxId();
+    });
+    if (this.getTaxId()) {
+      this.getTaxId();
     } else {
       RetrieveDataAsync(STORAGE_DEFAULTS).then((defaults) => {
         DEFAULTS_OBJ = JSON.parse(defaults);
@@ -161,6 +162,7 @@ class TaxID extends Component {
   }
 
   submitClick = () => {
+    return this.props.route.params.fromUserProfile;
     if (this.props.route.params.fromUserProfile)
       this.props.navigation.navigate('UserProfile');
     //Passing user Name
@@ -348,7 +350,7 @@ class TaxID extends Component {
 
               <View style={{...innerStyles.tabContainer}}>
                 <TouchableOpacity
-                  onPress={() =>  this.props.navigation.navigate('UserProfile')}
+                  onPress={() => this.props.navigation.navigate('UserProfile')}
                   style={innerStyles.activeTab}>
                   <Text style={innerStyles.inactiveTabText}>PROFILE</Text>
                 </TouchableOpacity>
@@ -358,7 +360,7 @@ class TaxID extends Component {
                   <Text style={innerStyles.activeTabText}>TAX ID</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() =>  this.props.navigation.navigate('TrackOrders')}
+                  onPress={() => this.props.navigation.navigate('TrackOrders')}
                   style={innerStyles.activeTab}>
                   <Text style={innerStyles.inactiveTabText}>MY ORDERS</Text>
                 </TouchableOpacity>
@@ -606,9 +608,9 @@ let Height = Dimensions.get('window').height;
 let Width = Dimensions.get('window').width;
 
 const innerStyles = StyleSheet.create({
-  logoView: { 
+  logoView: {
     alignItems: 'center',
-    justifyContent: 'center', 
+    justifyContent: 'center',
   },
   logomain: {
     width: '50%',

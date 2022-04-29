@@ -163,9 +163,9 @@ export default class UserProfile extends Component {
       });
     });
   }
-  _updateSection1 = (activeSection1) => { 
+  _updateSection1 = (activeSection1) => {
     this.setState({activeSection1});
-  }; 
+  };
 
   copyToClipboard = (content) => () => {
     Clipboard.setString(content.toString());
@@ -173,7 +173,7 @@ export default class UserProfile extends Component {
   };
   _renderContent = (section, index) => {
     if (this.state.activeSection1.includes(index)) {
-      console.log(this.state.activeSection1.includes(index),'Section Index');
+      console.log(this.state.activeSection1.includes(index), 'Section Index');
       if (section.title === 'Referral Link') {
         return (
           <TouchableOpacity onPress={this.copyToClipboard(section.content)}>
@@ -338,7 +338,8 @@ export default class UserProfile extends Component {
               <Text style={styles.activeTabText}>PROFILE</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={this.props.navigation.navigate('TaxID', {})}
+              //   onPress={this.props.navigation.navigate('TaxID', {})}
+              onPress={() => this.props.navigation.navigate('TaxID')}
               style={styles.activeTab}>
               <Text style={styles.inactiveTabText}>TAX ID</Text>
             </TouchableOpacity>
@@ -403,7 +404,7 @@ export default class UserProfile extends Component {
             renderContent={this._renderContent}
             onChange={this._updateSection1}
             expandMultiple={true}
-          /> 
+          />
 
           <ProfileText
             navigation={this.props.navigation}
@@ -427,7 +428,7 @@ export default class UserProfile extends Component {
         <Footer selected="Person" navigation={this.props.navigation} />
       </SafeAreaView>
     );
-    console.log(this._renderContent,'asdsasadsadsadsad');
+    console.log(this._renderContent, 'asdsasadsadsadsad');
   }
 }
 
