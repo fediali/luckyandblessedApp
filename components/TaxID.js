@@ -587,7 +587,7 @@ class TaxID extends Component {
                   onPress={this.submitClick}>
                   {this.state.fromUserProfile ? (
                     <Text style={[styles.buttonText, innerStyles.submitText]}>
-                      Go Back
+                      GoBack
                     </Text>
                   ) : (
                     <Text style={[styles.buttonText, innerStyles.submitText]}>
