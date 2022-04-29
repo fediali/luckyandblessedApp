@@ -455,7 +455,6 @@ class MainPage extends Component {
                     ${parseFloat(this.state.newArrivals[1].price).toFixed(2)}
                   </Text>
                 </TouchableOpacity>
-                
               </View>
               <View style={innerStyles.gridCell}>
                 <TouchableOpacity
@@ -676,6 +675,7 @@ const innerStyles = StyleSheet.create({
   },
 
   logoView: {
+    marginTop: -55,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -54,6 +54,21 @@ class Footer extends Component {
           <TouchableOpacity
             style={innerStyles.touchPad}
             onPress={() => {
+              this.navigateToScreen('SearchResults');
+            }}>
+            {this.state.selected == 'Search' ? (
+              <ImageBackground
+                style={innerStyles.imageStyle}
+                source={require('../static/searchSelected.png')}></ImageBackground>
+            ) : (
+              <ImageBackground
+                style={innerStyles.imageStyle}
+                source={require('../static/search.png')}></ImageBackground>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={innerStyles.touchPad}
+            onPress={() => {
               this.navigateToScreen('ShoppingCart');
             }}>
             {this.state.selected == 'Shop' ? (
@@ -111,7 +126,7 @@ class Footer extends Component {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={innerStyles.touchPad}
             onPress={() => {
               this.navigateToScreen('TrackOrders');
@@ -131,7 +146,7 @@ class Footer extends Component {
                 color="#000"
               />
             )}
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={innerStyles.touchPad}
             onPress={() => {

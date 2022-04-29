@@ -27,7 +27,7 @@ import PutData from '../reusableComponents/API/PutData';
 import Globals from '../Globals';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import GetData from '../reusableComponents/API/GetData';
-import Tabs from 'react-native-tabs';
+// import Tabs from 'react-native-tabs';
 import FastImage from 'react-native-fast-image';
 
 const STORAGE_USER = Globals.STORAGE_USER;
@@ -793,7 +793,7 @@ class ShoppingCart extends Component {
             ) : null}
             {this.state.activeTab === 1 ? (
               <View style={innerStyles.containerOrder}>
-               <Text>orderItems</Text>
+                <Text>orderItems</Text>
               </View>
             ) : null}
           </View>
@@ -818,12 +818,12 @@ const innerStyles = StyleSheet.create({
   },
   productName: {
     fontFamily: 'Montserrat',
-    fontSize: 14, 
+    fontSize: 14,
     color: '#2d2d2f',
   },
   price: {
     fontFamily: 'Montserrat',
-    fontSize: 14, 
+    fontSize: 14,
     color: '#2d2d2f',
   },
   containerOrder: {
@@ -835,7 +835,7 @@ const innerStyles = StyleSheet.create({
   },
   item: {
     width: '44%', // is 50% of container width
-    marginHorizontal: 10, 
+    marginHorizontal: 10,
     marginBottom: 20,
   },
   instructions: {
@@ -887,7 +887,7 @@ const innerStyles = StyleSheet.create({
     // width: Width * 0.2,
     // height: Height * 0.15,
     width: '100%',
-    height:250,
+    height: 250,
     alignSelf: 'center',
   },
   rowStyling: {
