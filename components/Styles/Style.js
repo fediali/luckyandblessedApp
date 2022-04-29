@@ -1,5 +1,4 @@
-import { StyleSheet } from 'react-native';
-
+import {StyleSheet} from 'react-native';
 
 //Main Container, logoImageLoader and Loader are used throughout
 export default StyleSheet.create({
@@ -9,21 +8,21 @@ export default StyleSheet.create({
   },
   subParentContainer: {
     alignItems: 'center',
-    backgroundColor: "#fff"
+    backgroundColor: '#fff',
   },
   input: {
     backgroundColor: '#ebebeb',
     flex: 1,
     paddingHorizontal: 15,
     paddingVertical: 7,
-    borderRadius:10,
+    borderRadius: 10,
     fontFamily: 'Avenir-Book',
     fontSize: 14,
     fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 24,
     letterSpacing: 0,
-    color: '#606060'
+    color: '#606060',
   },
   customTextBold: {
     fontFamily: 'Montserrat-SemiBold',
@@ -36,7 +35,7 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'column',
-    width: '80%'
+    width: '80%',
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
@@ -54,7 +53,7 @@ export default StyleSheet.create({
   line: {
     borderBottomColor: 'black',
     borderBottomWidth: 0.3,
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   smallLogoImage: {
     width: '20%',
@@ -64,4 +63,3 @@ export default StyleSheet.create({
   logoImageLoader: {height: 200, width: 200},
   loader: {flex: 1, alignItems: 'center', justifyContent: 'center'},
 });
-

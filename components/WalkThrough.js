@@ -131,9 +131,6 @@ export default class WalkThrough extends Component {
 
     return (
       <SafeAreaView style={GlobalStyles.parentContainer}>
-                <StatusBar backgroundColor="transparent" translucent={true} />
-
-
         <View style={styles.subContainer}>
           <FastImage
             style={styles.logo}

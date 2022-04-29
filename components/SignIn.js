@@ -301,14 +301,14 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   buttonSignUp: {
-    backgroundColor: '#2d2d2f',
+    backgroundColor: '#000',
     borderRadius: 6,
     paddingVertical: 11,
     paddingHorizontal: 38,
     marginRight: 15,
   },
   buttonSignIn: {
-    backgroundColor: '#1bbfc7',
+    backgroundColor: '#000',
     borderRadius: 6,
     paddingVertical: 11,
     paddingHorizontal: 38,

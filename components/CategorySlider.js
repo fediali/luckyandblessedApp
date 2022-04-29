@@ -82,12 +82,14 @@ class CategorySlider extends Component {
                   position: 'absolute',
                   bottom: 60,
                   backgroundColor: 'tranparent',
-                  borderColor:'#fff',
-                  borderWidth:1,
+                  borderColor: '#fff',
+                  borderWidth: 1,
                   paddingHorizontal: 30,
                   paddingVertical: 12,
                 }}>
-                <Text style={{color: '#fff', fontFamily: 'Montserrat-Medium'}}>
+                <Text
+                  style={{color: '#fff', fontFamily: 'Montserrat-Medium'}}
+                  onPress={() => this.props.navigation.navigate('MainPage')}>
                   Shop Now
                 </Text>
               </TouchableOpacity>
