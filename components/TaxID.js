@@ -20,7 +20,7 @@ import LogoSmall from './Styles/LogoSmall';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
 import Shimmer from 'react-native-shimmer';
-import FastImage from 'react-native-fast-image'
+import FastImage from 'react-native-fast-image';
 import GetData from '../reusableComponents/API/GetData';
 import GlobalStyles from './Styles/Style';
 import {WebView} from 'react-native-webview';
@@ -69,7 +69,7 @@ class TaxID extends Component {
       dateToday: dateToday,
       isReady: true,
       fromUserProfile: false,
-      isEditable: true
+      isEditable: true,
     };
   }
 
@@ -172,7 +172,6 @@ class TaxID extends Component {
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
 
-     
       PostData(this.props.route.params.url, this.props.route.params.data)
         .then((res) => res.json())
         .then((response) => {
@@ -182,7 +181,7 @@ class TaxID extends Component {
           console.log('Promise exception', ex);
           Toast.show(ex.toString());
         });
-      
+
       //The timeout below is because of signImage (As calling saveImage triggers the onSave where setState is done)
     }
   };
@@ -205,7 +204,6 @@ class TaxID extends Component {
       timestamp: +new Date(),
     };
 
-    
     PostData(baseUrl + 'api/salestaxid', data)
       .then((res) => res.json())
       .then((response) => {
@@ -216,7 +214,6 @@ class TaxID extends Component {
         Toast.show(err.toString());
         console.log(err);
       });
-    
   }
 
   isValid() {
@@ -330,23 +327,50 @@ class TaxID extends Component {
 
     return (
       <SafeAreaView style={styles.parentContainer}>
-        <Header navigation={this.props.navigation} />
+        {/* <Header navigation={this.props.navigation} /> */}
         <ScrollView contentContainerStyle={innerStyles.scrollViewStyles}>
           <View style={[styles.parentContainer, innerStyles.scrollMargin]}>
+            <View style={innerStyles.logoView}>
+              <FastImage
+                source={require('../static/logo-main.png')}
+                style={innerStyles.logomain}
+                resizeMode="contain"
+              />
+            </View>
             <View style={styles.subParentContainer}>
-              <LogoSmall />
+              {/* <LogoSmall /> */}
 
               {/* keyboardType={Device.isAndroid ? "numeric" : "number-pad"}
                */}
-              <Text style={[styles.customTextBold, innerStyles.textMargin]}>
+              {/* <Text style={[styles.customTextBold, innerStyles.textMargin]}>
                 Use & Sale Tax Form
-              </Text>
+              </Text> */}
+
+              <View style={{...innerStyles.tabContainer}}>
+                <TouchableOpacity
+                  onPress={() =>  this.props.navigation.navigate('UserProfile')}
+                  style={innerStyles.activeTab}>
+                  <Text style={innerStyles.inactiveTabText}>PROFILE</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  // onPress={() => this.setState({activeTab: 0})}
+                  style={innerStyles.activeTab}>
+                  <Text style={innerStyles.activeTabText}>TAX ID</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>  this.props.navigation.navigate('TrackOrders')}
+                  style={innerStyles.activeTab}>
+                  <Text style={innerStyles.inactiveTabText}>MY ORDERS</Text>
+                </TouchableOpacity>
+              </View>
               {this.state.taxIdUrl ? (
                 <View style={{flex: 1}}>
                   <View style={{flex: 10, marginBottom: 20}}>
                     <WebView source={{uri: this.state.taxIdUrl}}></WebView>
                   </View>
-                  <Text style={styles.input}>TaxID form is being downloaded</Text>
+                  <Text style={styles.input}>
+                    TaxID form is being downloaded
+                  </Text>
                 </View>
               ) : (
                 <>
@@ -515,37 +539,36 @@ class TaxID extends Component {
                   </Text>
                   {this.state.isEditable && (
                     <View
-                    style={[
-                      innerStyles.customInputView,
-                      innerStyles.customDim,
-                    ]}>
-                    <View style={innerStyles.customView}>
-                      <Text style={innerStyles.signText}>Sign Below:</Text>
-                      <TouchableOpacity onPress={this.resetSign.bind(this)}>
-                        <Text style={innerStyles.resetSignature}>Reset</Text>
-                      </TouchableOpacity>
+                      style={[
+                        innerStyles.customInputView,
+                        innerStyles.customDim,
+                      ]}>
+                      <View style={innerStyles.customView}>
+                        <Text style={innerStyles.signText}>Sign Below:</Text>
+                        <TouchableOpacity onPress={this.resetSign.bind(this)}>
+                          <Text style={innerStyles.resetSignature}>Reset</Text>
+                        </TouchableOpacity>
+                      </View>
+                      <SignatureCapture
+                        style={innerStyles.signCap}
+                        ref="sign"
+                        showBorder={true}
+                        backgroundColor={'#f6f6f6'}
+                        contentSize="10"
+                        onSaveEvent={this._onSaveEvent}
+                        onDragEvent={this._onDragEvent.bind(this)}
+                        saveImageFileInExtStorage={false}
+                        showNativeButtons={false}
+                        showTitleLabel={true}
+                        viewMode={'portrait'}
+                        maxStrokeWidth={8}
+                        minStrokeWidth={7}
+                      />
+                      {this.state.signError != ''
+                        ? this.showErrorMessage(this.state.signError)
+                        : null}
                     </View>
-                    <SignatureCapture
-                      style={innerStyles.signCap}
-                      ref="sign"
-                      showBorder={true}
-                      backgroundColor={'#f6f6f6'}
-                      contentSize="10"
-                      onSaveEvent={this._onSaveEvent}
-                      onDragEvent={this._onDragEvent.bind(this)}
-                      saveImageFileInExtStorage={false}
-                      showNativeButtons={false}
-                      showTitleLabel={true}
-                      viewMode={'portrait'}
-                      maxStrokeWidth={8}
-                      minStrokeWidth={7}
-                    />
-                    {this.state.signError != ''
-                      ? this.showErrorMessage(this.state.signError)
-                      : null}
-                  </View>
                   )}
-                  
 
                   <Text
                     style={[
@@ -560,16 +583,15 @@ class TaxID extends Component {
                 <TouchableOpacity
                   style={[innerStyles.buttonSubmit]}
                   onPress={this.submitClick}>
-                    {this.state.fromUserProfile ? (
-                      <Text style={[styles.buttonText, innerStyles.submitText]}>
-                        Go Back
-                      </Text>
-                    ) : (
-                      <Text style={[styles.buttonText, innerStyles.submitText]}>
-                        Submit
-                      </Text>
-                    )}
-                  
+                  {this.state.fromUserProfile ? (
+                    <Text style={[styles.buttonText, innerStyles.submitText]}>
+                      Go Back
+                    </Text>
+                  ) : (
+                    <Text style={[styles.buttonText, innerStyles.submitText]}>
+                      Submit
+                    </Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </View>
@@ -584,6 +606,39 @@ let Height = Dimensions.get('window').height;
 let Width = Dimensions.get('window').width;
 
 const innerStyles = StyleSheet.create({
+  logoView: { 
+    alignItems: 'center',
+    justifyContent: 'center', 
+  },
+  logomain: {
+    width: '50%',
+    height: 100,
+  },
+  inactiveTabText: {
+    fontSize: 15,
+    color: '#ccc',
+    textTransform: 'uppercase',
+    fontFamily: 'Montserrat-Bold',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#fff',
+    marginBottom: 8,
+  },
+  activeTab: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 6,
+  },
+  activeTabText: {
+    color: '#000',
+    fontSize: 15,
+    textTransform: 'uppercase',
+    fontFamily: 'Montserrat-Bold',
+  },
   customText1: {
     fontFamily: 'Avenir',
     fontSize: 16,
@@ -661,16 +716,24 @@ const innerStyles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
   },
-  buttonView: {paddingHorizontal: 30, marginTop: 20, width: '100%'},
+  buttonView: {
+    paddingHorizontal: 30,
+    marginTop: 20,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   dateText: {width: '100%', textAlign: 'left'},
   signCap: {borderRadius: 6, borderColor: '#000', flex: 1},
   buttonSubmit: {
-    width: '100%',
-    backgroundColor: '#2967ff',
+    width: '60%',
+    backgroundColor: '#000000',
     borderRadius: 6,
     paddingVertical: 15,
     paddingHorizontal: 30,
     marginTop: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   divider: {
     marginTop: 15,

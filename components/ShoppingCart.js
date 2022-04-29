@@ -793,7 +793,17 @@ class ShoppingCart extends Component {
             ) : null}
             {this.state.activeTab === 1 ? (
               <View style={innerStyles.containerOrder}>
-                <Text>orderItems</Text>
+                {data.map(({image, text, Price}) => (
+                  <View style={innerStyles.item}>
+                    <FastImage
+                      style={innerStyles.gridImage}
+                      resizeMode="cover"
+                      source={image}
+                    />
+                    <Text style={innerStyles.productName}>{text}</Text>
+                    <Text style={innerStyles.price}>{Price}</Text>
+                  </View>
+                ))}
               </View>
             ) : null}
           </View>

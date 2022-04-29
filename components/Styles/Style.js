@@ -12,17 +12,18 @@ export default StyleSheet.create({
     backgroundColor: "#fff"
   },
   input: {
-    backgroundColor: '#d0d0d0',
+    backgroundColor: '#ebebeb',
     flex: 1,
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 7,
+    borderRadius:10,
     fontFamily: 'Avenir-Book',
     fontSize: 14,
     fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 24,
     letterSpacing: 0,
-    color: '#fff'
+    color: '#606060'
   },
   customTextBold: {
     fontFamily: 'Montserrat-SemiBold',

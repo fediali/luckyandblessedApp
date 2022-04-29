@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -6,13 +6,17 @@ import {
   Dimensions,
   InteractionManager,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import Header from '../reusableComponents/Header';
 import Footer from '../reusableComponents/Footer';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Icon } from 'react-native-elements';
-import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Icon} from 'react-native-elements';
+import {
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+} from 'react-native-gesture-handler';
 import OrderProducts from '../reusableComponents/OrdersProduct';
 import Accordion from 'react-native-collapsible/Accordion';
 import Shimmer from 'react-native-shimmer';
@@ -20,7 +24,8 @@ import GlobalStyles from './Styles/Style';
 import RetrieveDataAsync from '../reusableComponents/AsyncStorage/RetrieveDataAsync';
 import Globals from '../Globals';
 import Toast from 'react-native-simple-toast';
-import ZeroDataScreen from '../reusableComponents/ZeroDataScreen'
+import FastImage from 'react-native-fast-image';
+import ZeroDataScreen from '../reusableComponents/ZeroDataScreen';
 const baseUrl = Globals.baseUrl;
 const STORAGE_USER = Globals.STORAGE_USER;
 var gUser = null;
@@ -37,31 +42,29 @@ export default class TrackOrders extends Component {
       totalItemsPerRequest: 0,
       isLoadingMoreListData: false,
       showZeroProductScreen: false,
-      customOrders: []
+      customOrders: [],
     };
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.setState({ isReady: false });
+      this.setState({isReady: false});
 
       // Retriving the user_id
       RetrieveDataAsync(STORAGE_USER).then((user) => {
-        gUser = JSON.parse(user)
+        gUser = JSON.parse(user);
         this.getData();
       });
     });
   }
 
   getData = () => {
-    
     var promises = [];
     promises.push(
       GetData(
         baseUrl +
-        `api/orders?user_id=${gUser.user_id}&page=${this.state.iteratedPage}`, 
+          `api/orders?user_id=${gUser.user_id}&page=${this.state.iteratedPage}`,
       ),
-
     );
 
     Promise.all(promises)
@@ -72,11 +75,9 @@ export default class TrackOrders extends Component {
             parseProducts = async () => {
               const tempOrders = [];
               if (responses[0].orders.length == 0) {
-                this.setState(
-                  {
-                    showZeroProductScreen: true,
-                  }
-                );
+                this.setState({
+                  showZeroProductScreen: true,
+                });
               } else {
                 let newOrders = responses[0].orders.map((ord) => {
                   let mlist = [
@@ -131,7 +132,7 @@ export default class TrackOrders extends Component {
           })
           .catch((ex) => {
             console.log('Inner Promise', ex);
-            Toast.show(ex.toString())
+            Toast.show(ex.toString());
           });
       })
       .catch((ex) => {
@@ -158,16 +159,16 @@ export default class TrackOrders extends Component {
   };
 
   navigateToOrderScreen = (orderID) => {
-    this.props.navigation.push("Order", { oid: orderID })
-  }
+    this.props.navigation.push('Order', {oid: orderID});
+  };
 
-  _renderContent = ({ item }) => {
-
+  _renderContent = ({item}) => {
     return (
-      <TouchableOpacity onPress={() => this.navigateToOrderScreen(item.order_id)}>
+      <TouchableOpacity
+        onPress={() => this.navigateToOrderScreen(item.order_id)}>
         <View style={styles.seperator}></View>
 
-        <View activeOpacity={0.6} style={styles.order} >
+        <View activeOpacity={0.6} style={styles.order}>
           <Text style={styles.orderIdText}>{'#' + item.order_id}</Text>
 
           <View style={styles.details}>
@@ -184,7 +185,6 @@ export default class TrackOrders extends Component {
       </TouchableOpacity>
     );
   };
-
 
   render() {
     let Height = Dimensions.get('window').height;
@@ -206,15 +206,40 @@ export default class TrackOrders extends Component {
 
     return (
       <SafeAreaView style={GlobalStyles.parentContainer}>
-        <Header
+        {/* <Header
           centerText="Your orders"
           navigation={this.props.navigation}
-        />
+        /> */}
+        <View style={styles.logoView}>
+          <FastImage
+            source={require('../static/logo-main.png')}
+            style={styles.logomain}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={{...styles.tabContainer}}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('UserProfile')}
+            style={styles.activeTab}>
+            <Text style={styles.inactiveTabText}>PROFILE</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            //  onPress={this.props.navigation.navigate('TaxID', {
+            //   fromUserProfile: false,
+            // })}
+            style={styles.activeTab}>
+            <Text style={styles.inactiveTabText}>TAX ID</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            // onPress={() => this.props.navigation.navigate('TrackOrders')}
+            style={styles.activeTab}>
+            <Text style={styles.activeTabText}>MY ORDERS</Text>
+          </TouchableOpacity>
+        </View>
 
-        {this.state.showZeroProductScreen ?
+        {this.state.showZeroProductScreen ? (
           <ZeroDataScreen />
-          :
-
+        ) : (
           <FlatList
             data={this.state.orders}
             keyExtractor={(item, index) => item.order_id}
@@ -222,19 +247,51 @@ export default class TrackOrders extends Component {
             onEndReached={this.handleLoadMore}
             onEndReachedThreshold={20}
           />
-        }
+        )}
         <View style={styles.bottomContainer}></View>
 
         <Footer selected="Van" navigation={this.props.navigation} />
       </SafeAreaView>
     );
-
   }
 }
 
 let Height = Dimensions.get('window').height;
 let Width = Dimensions.get('window').width;
 const styles = StyleSheet.create({
+  logoView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logomain: {
+    width: '50%',
+    height: 100,
+  },
+  inactiveTabText: {
+    fontSize: 15,
+    color: '#ccc',
+    textTransform: 'uppercase',
+    fontFamily: 'Montserrat-Bold',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#fff',
+    marginBottom: 15,
+  },
+  activeTab: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 6,
+  },
+  activeTabText: {
+    color: '#000',
+    fontSize: 15,
+    textTransform: 'uppercase',
+    fontFamily: 'Montserrat-Bold',
+  },
   order: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -247,12 +304,12 @@ const styles = StyleSheet.create({
     color: '#2d2d2f',
     marginTop: 13,
   },
-  details: { flexDirection: 'row' },
-  marginIcon: { marginRight: 29 },
-  iconView: { marginTop: 26 },
-  seperator: { backgroundColor: '#f6f6f6', paddingTop: 1 },
-  accordionStart: { paddingTop: 10 },
-  bottomContainer: { paddingBottom: 59, backgroundColor: '#ffffff' },
+  details: {flexDirection: 'row'},
+  marginIcon: {marginRight: 29},
+  iconView: {marginTop: 26},
+  seperator: {backgroundColor: '#f6f6f6', paddingTop: 1},
+  accordionStart: {paddingTop: 10},
+  bottomContainer: {paddingBottom: 59, backgroundColor: '#ffffff'},
   orderDateText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 18,

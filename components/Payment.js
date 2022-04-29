@@ -817,12 +817,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 22,
     color: '#2d2d2f',
+    textTransform:'uppercase',
   },
   textButton: {
     fontFamily: 'Avenir-Book',
     fontSize: 18,
     lineHeight: 24,
-    color: '#2967ff',
+    color: '#1bbfc7',
   },
   textInput: {
     backgroundColor: '#f6f6f6',
@@ -871,6 +872,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'column',
     width: '100%',
+    justifyContent:'center',
+    alignItems:'center',
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
@@ -881,18 +884,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   buttonPaymentMethod: {
-    width: '100%',
-    backgroundColor: '#2967ff',
-    borderRadius: 6,
+    width: '60%',
+    backgroundColor: '#000',
     paddingVertical: 15,
     paddingHorizontal: 30,
     marginTop: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   paymentText: {
-    fontFamily: 'Montserrat-Bold',
-    fontSize: 30,
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 20,
     lineHeight: 36,
     color: '#2d2d2f',
+    textTransform:'uppercase',
   },
   secureCheckoutText: {
     fontFamily: 'Avenir-Book',
@@ -935,6 +940,7 @@ const styles = StyleSheet.create({
   },
   monikaWillemsText: {
     width: width * 0.6,
+    color:'grey',
   },
   promoAndCreditCardView: {
     marginTop: 36,
