@@ -21,6 +21,8 @@ import Globals from '../Globals';
 import ThemeContext from '../reusableComponents/ThemeContext';
 import PutData from '../reusableComponents/API/PutData';
 import LogoSmall from './Styles/LogoSmall';
+import FastImage from 'react-native-fast-image';
+
 const baseUrl = Globals.baseUrl;
 
 const TEXTINPUT_COLOR = Globals.Colours.TEXT_INPUT_PLACEHOLDER_COLOR;
@@ -171,10 +173,20 @@ class SignIn extends Component {
   render() {
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
-
+        <StatusBar backgroundColor="transparent" translucent={true} />
+        <View style={styles.bgView}>
+          <FastImage
+            style={styles.bgImage}
+            resizeMode="cover"
+            source={require('../static/loginBg.png')}
+          />
+        </View>
+        <Text style={styles.welcomeText}>
+          Welcome! Sign in or create an account to checkout, access order
+          history and more.
+        </Text>
         <View style={styles.subContainer}>
-          <LogoSmall />
+          {/* <LogoSmall /> */}
           {/* <Image
             style={{
               width: '53%',
@@ -184,6 +196,7 @@ class SignIn extends Component {
             resizeMode=""
             source={require('../static/logo-signIn.png')}
           /> */}
+
           <View style={styles.emailInputView}>
             <TextInput
               placeholderTextColor={TEXTINPUT_COLOR}
@@ -239,14 +252,14 @@ class SignIn extends Component {
               onPress={() => {
                 this.props.navigation.navigate('SignUp');
               }}>
-              <Text style={styles.buttonText}>Sign up</Text>
+              <Text style={styles.buttonText}>JOIN NOW</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonSignIn}
               onPress={() => {
                 this.signInClick();
               }}>
-              <Text style={styles.buttonText}>Sign in</Text>
+              <Text style={styles.buttonText}>SIGN IN</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
@@ -268,6 +281,21 @@ class SignIn extends Component {
   }
 }
 const styles = StyleSheet.create({
+  welcomeText: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 14,
+    textAlign: 'center',
+    paddingHorizontal: 30,
+    marginVertical: 25,
+  },
+  bgImage: {
+    height: '100%',
+    width: '100%',
+  },
+  bgView: {
+    height: '54%',
+    width: '100%',
+  },
   errorTextMainView: {
     width: '100%',
     flexDirection: 'row',
@@ -302,20 +330,18 @@ const styles = StyleSheet.create({
   },
   buttonSignUp: {
     backgroundColor: '#000',
-    borderRadius: 6,
     paddingVertical: 11,
     paddingHorizontal: 38,
     marginRight: 15,
   },
   buttonSignIn: {
     backgroundColor: '#000',
-    borderRadius: 6,
     paddingVertical: 11,
-    paddingHorizontal: 38,
+    paddingHorizontal: 32,
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     fontStyle: 'normal',
     lineHeight: 22,
@@ -339,16 +365,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginTop: 15,
     backgroundColor: '#f6f6f6',
-    marginHorizontal: 40,
-    borderRadius: 6,
+    marginHorizontal: 25,
     alignItems: 'center',
   },
   emailInputView: {
     flexDirection: 'row',
     paddingHorizontal: 15,
     backgroundColor: '#f6f6f6',
-    marginHorizontal: 40,
-    borderRadius: 6,
+    marginHorizontal: 25,
   },
 });
 
