@@ -257,7 +257,7 @@ export default class SearchResults extends Component {
               returnKeyType="search"
               selectTextOnFocus={true}
               value={this.state.searchText}
-              onFocus={this.searchTextBoxClicked}
+              //   onFocus={this.searchTextBoxClicked}
               onChangeText={(searchText) => this.setState({searchText})}
               onEndEditing={this.searchText}
               onSubmitEditing={this.onSubmitSearch}

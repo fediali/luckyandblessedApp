@@ -158,8 +158,9 @@ export default class WalkThrough extends Component {
 
           <Video
             source={{uri: 'https://revamp.landbw.co/storage/intro-video-1.mp4'}}
-            rate={1.0}
-            volume={1.0}
+            ref={(ref) => {
+              this.player = ref;
+            }}
             muted={true}
             resizeMode={'cover'}
             repeat

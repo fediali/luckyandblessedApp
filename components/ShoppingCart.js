@@ -751,7 +751,7 @@ class ShoppingCart extends Component {
               Your Bag
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => this.setState({activeTab: 1})}
             style={
               this.state.activeTab === 1
@@ -766,7 +766,7 @@ class ShoppingCart extends Component {
               }>
               Your Order
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         {this.state.showZeroProductScreen ? (
           <ZeroDataScreen />

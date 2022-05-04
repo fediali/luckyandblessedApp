@@ -65,6 +65,7 @@
 		B8F4E5DF99EC44AF8F6F36A8 /* Avenir-LightOblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 993C1D40355E4A90B79B11BE /* Avenir-LightOblique.ttf */; };
 		B9DAA83C763645D580F5A879 /* SF-Pro-Display-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = AF5A3421B3E947E3BF16DB4A /* SF-Pro-Display-Medium.otf */; };
 		BDAA607435574E54AE9404E8 /* SF-Pro-Display-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9341B9D1CC204300A64AF735 /* SF-Pro-Display-BlackItalic.otf */; };
+		C1A3C0D22822E46500264F29 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C1A3C0D12822E46500264F29 /* libswiftWebKit.tbd */; };
 		CCE8D251C32948BDACB57B27 /* SF-Pro-Display-Ultralight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3D2EF7ED6FF74DDCAAF80D13 /* SF-Pro-Display-Ultralight.otf */; };
 		CEA6374B1EB745E4A3295476 /* SF-Pro-Display-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2A5FFF4A35264F0E9F87B77C /* SF-Pro-Display-Light.otf */; };
 		D37D022AF7BE4B6DBA2AEEE0 /* Tahoma.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 8B3840C25E8447A987EF50E3 /* Tahoma.TTF */; };
@@ -169,6 +170,7 @@
 		B25D7BA00F9A43CDB3446E6F /* Avenir-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Medium.ttf"; path = "../assets/fonts/Avenir-Medium.ttf"; sourceTree = "<group>"; };
 		BC51FA7B5D4A468289197123 /* Avenir-Roman.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Roman.ttf"; path = "../assets/fonts/Avenir-Roman.ttf"; sourceTree = "<group>"; };
 		BEF22183634C49DEAAF70248 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		C1A3C0D12822E46500264F29 /* libswiftWebKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftWebKit.tbd; path = usr/lib/swift/libswiftWebKit.tbd; sourceTree = SDKROOT; };
 		CA0F24EDA1D544B999B8FA53 /* Avenir-Heavy.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-Heavy.ttf"; path = "../assets/fonts/Avenir-Heavy.ttf"; sourceTree = "<group>"; };
 		CA387B091CB845DA8A8249BD /* SF-Pro-Display-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Display-Black.otf"; path = "../assets/fonts/SF-Pro-Display-Black.otf"; sourceTree = "<group>"; };
 		CA6D637DCA58497082C42C96 /* Avenir-MediumOblique.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir-MediumOblique.ttf"; path = "../assets/fonts/Avenir-MediumOblique.ttf"; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1A3C0D22822E46500264F29 /* libswiftWebKit.tbd in Frameworks */,
 				DA443769041F7EF99F686612 /* libPods-LBShoppingApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -269,6 +272,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1A3C0D12822E46500264F29 /* libswiftWebKit.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				CE3EFDA2BB1820CE7F861E8A /* libPods-LBShoppingApp.a */,
@@ -1005,7 +1009,7 @@
 				CODE_SIGN_ENTITLEMENTS = LBShoppingApp/LBShoppingApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = VJV7Q46Y54;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1015,6 +1019,10 @@
 				INFOPLIST_FILE = LBShoppingApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
 				MARKETING_VERSION = 0.1.0;
 				OTHER_CFLAGS = (
 					"$(inherited)",
@@ -1043,11 +1051,15 @@
 				CODE_SIGN_ENTITLEMENTS = LBShoppingApp/LBShoppingApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = VJV7Q46Y54;
 				INFOPLIST_FILE = LBShoppingApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SDKROOT)/usr/lib/swift",
+				);
 				MARKETING_VERSION = 0.1.0;
 				OTHER_CFLAGS = (
 					"$(inherited)",

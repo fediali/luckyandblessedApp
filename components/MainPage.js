@@ -29,6 +29,7 @@ import Globals from '../Globals';
 import Toast from 'react-native-simple-toast';
 import {greaterThan} from 'react-native-reanimated';
 import Swiper from 'react-native-swiper';
+import ProductPageSimilarListItem from '../reusableComponents/ProductPageSimilarListItem';
 
 const baseUrl = Globals.baseUrl;
 const SELECTED_CATEGORY_ALL = -1;
@@ -181,6 +182,7 @@ class MainPage extends Component {
           Toast.show(ex.toString());
         });
     });
+    console.log(this.state.trending, 'trending datA');
   }
   onCategorySelect = (cid, cname) => {
     if (cname.includes(SALE_NAME)) {
@@ -400,7 +402,36 @@ class MainPage extends Component {
                 <Text style={[innerStyles.showAllText]}>Show All</Text>
               </TouchableOpacity>
             </View>
-            <View style={innerStyles.gridView}>
+            <View style={[innerStyles.headerView, innerStyles.carousel]}>
+              <FlatList
+                keyExtractor={(item) => item.product_id}
+                data={this.state.newArrivals}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({item, index}) =>
+                  item.main_pair ? (
+                    <ProductPageSimilarListItem
+                      pid={[item.product_id]}
+                      cname={this.state.cname}
+                      imageUrl={item.main_pair.detailed.image_path}
+                      name={item.product}
+                      price={parseFloat(item.price).toFixed(2)}
+                      navigation={this.props.navigation}
+                    />
+                  ) : (
+                    //If No product image
+                    <ProductPageSimilarListItem
+                      pid={item.product_id}
+                      cname={this.state.cname}
+                      imageUrl={Globals.noImageFoundURL}
+                      name={item.product}
+                      navigation={this.props.navigation}
+                    />
+                  )
+                }
+              />
+            </View>
+            {/* <View style={innerStyles.gridView}>
               <View style={innerStyles.gridCell}>
                 <TouchableOpacity
                   activeOpacity={0.9}
@@ -511,9 +542,9 @@ class MainPage extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
 
-            <View style={innerStyles.headerViewTrending}>
+            {/* <View style={innerStyles.headerViewTrending}>
               <Text
                 style={[
                   styles.buttonText,
@@ -529,7 +560,35 @@ class MainPage extends Component {
                 )}>
                 <Text style={[innerStyles.showAllText]}>Show All</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
+
+            {/* <FlatList
+              keyExtractor={(item) => item.product_id}
+              data={this.state.trending}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({item, index}) =>
+                item.main_pair ? (
+                  <ProductPageSimilarListItem
+                    pid={[item.product_id]}
+                    cname={this.state.cname}
+                    imageUrl={item.main_pair.detailed.image_path}
+                    name={item.product}
+                    price={parseFloat(item.price).toFixed(2)}
+                    navigation={this.props.navigation}
+                  />
+                ) : (
+                  //If No product image
+                  <ProductPageSimilarListItem
+                    pid={item.product_id}
+                    cname={this.state.cname}
+                    imageUrl={Globals.noImageFoundURL}
+                    name={item.product}
+                    navigation={this.props.navigation}
+                  />
+                )
+              }
+            />
 
             <FlatList
               keyExtractor={(item) => item[0].product_id.toString()}
@@ -544,7 +603,7 @@ class MainPage extends Component {
                   />
                 );
               }}
-            />
+            /> */}
             {this.state.history != null ? (
               <>
                 <View style={innerStyles.headerView}>
@@ -654,6 +713,9 @@ const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
 
 const innerStyles = StyleSheet.create({
+  carousel: {
+    height: 'auto',
+  },
   titleView: {
     flex: 1,
     width: '100%',
@@ -730,12 +792,12 @@ const innerStyles = StyleSheet.create({
   },
   showAllText: {
     fontFamily: 'Avenir-Book',
-    fontSize: 18,
+    fontSize: 15,
     fontStyle: 'normal',
     lineHeight: 24,
     letterSpacing: 0,
     textAlign: 'right',
-    color: '#1bbfc7',
+    color: '#000',
   },
   brandText: {
     fontSize: 14,

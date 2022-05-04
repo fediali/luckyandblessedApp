@@ -39,7 +39,7 @@ class CategoriesProduct extends Component {
       cname: this.props.route.params.cname,
       selected: 0, //Here 0,1,2,3 corresponds to NewArrivals,LookBook,Kids,Sale
       products: [],
-      singleItem: true,
+      singleItem: false,
       isReady: false,
       totalProducts: 0,
       totalItemsPerRequest: 0,

@@ -39,7 +39,7 @@ export default StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 14,
+    fontSize: 15,
     fontStyle: 'normal',
     lineHeight: 22,
     letterSpacing: 0,
