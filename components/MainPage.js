@@ -11,6 +11,7 @@ import {
   InteractionManager,
   SafeAreaView,
   StatusBar,
+  Image,
 } from 'react-native';
 import styles from './Styles/Style';
 import Header from '../reusableComponents/Header';
@@ -431,6 +432,17 @@ class MainPage extends Component {
                 }
               />
             </View>
+            <Image
+              source={require('../static/slide2.jpg')}
+              style={innerStyles.productImg}
+              resizeMode="cover"
+            />
+            <View style={innerStyles.productView}>
+              <Text style={innerStyles.productLeft}>
+                Girls Baby Blue Hi-Low Dress
+              </Text>
+              <Text style={innerStyles.productRight}>$3.00</Text>
+            </View>
             {/* <View style={innerStyles.gridView}>
               <View style={innerStyles.gridCell}>
                 <TouchableOpacity
@@ -720,6 +732,12 @@ const innerStyles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
+  productView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  productLeft: {textAlign: 'left', width: '75%', paddingLeft: 20},
+  productRight: {textAlign: 'right', width: '25%', paddingRight: 20},
   titleSwiper: {
     marginVertical: 10,
     textAlign: 'left',
@@ -745,6 +763,12 @@ const innerStyles = StyleSheet.create({
     width: '50%',
     height: 100,
     marginTop: 40,
+  },
+  productImg: {
+    width: '90%',
+    height: 500,
+    marginTop: 10,
+    marginHorizontal: 30,
   },
   slide: {
     flex: 1,
